@@ -1,0 +1,36 @@
+<% @page_title = "Sökresultat #{@query}"  -%>
+<% @page_id = 'pages-search' -%>
+<div id="content">
+  <section>
+    <% if @search %>
+      <% if @search.total > 0 %>
+        <h1><%= @search.total %> träffar hittades på ”<%= @query %>”</h1>
+        <% @search.results.each do |hit| %>
+          <% if hit.is_a?(Page) %>
+            <%= render :partial => hit.field_set.template.views.in_list, :locals => { :page => hit } %>
+          <% elsif hit.is_a?(Magazine) %>
+            <article class="magazine">
+              <% hit.cover.tap do |cover| -%>
+              <span class="cover">
+                <%= image_tag(display_image_path(:size => 'c137x190', :id => hit.cover, :format => hit.cover.extname)) if hit.cover %>
+              </span>
+              <% end if hit.cover -%>
+              <h1><%= link_to hit.name, magazine_path(hit.slug), :class => 'name' %></h1>
+              <p class="description"><%= hit.content_description %></p>
+              <% if hit.segment.present? %>
+                <p class="segment">Segment: <%= link_to hit.segment.name, segment_path(hit.segment.slug) %></p>
+              <% end %>
+              <span class="edition">
+                <%= hit.edition_code_name %>
+                <%= number_with_delimiter(hit.ts_edition_number, :separator => " ", :delimiter => ",") if hit.ts_edition_number > 0 %>
+              </span>
+            </article>
+          <% end %>
+        <% end %>
+        <%= will_paginate @search.results, :next_label => 'Nästa', :prev_label => 'Föregående' %>
+      <% else %>
+      <p>Inga sidor hittades på sökningen ”<%= @query %>”</p>
+      <% end %>
+    <% end %>
+  </section>
+</div>

@@ -1,0 +1,50 @@
+<% @page_title = 'Sidor' -%>
+<% @page_class = 'layout3' -%>
+<%= render :partial => 'admin/pages/sub_nav' %>
+<div id="workspace">
+  <% if @current_tags.any? -%>
+  <div class="header">
+    <h1>Sidor märkta med: <%= @current_tags.join(', ')%></h1>
+  </div>
+  <% else %>
+  <div class="header">
+    <h1>Sidor</h1>
+    <% if @field_set.present? && @field_set.pages_sortable? %>
+    <span class="away">
+      <%= link_to "Sortera sidor", pages_admin_field_set_path(@field_set) %>
+    </span>
+    <% end %>
+  </div>
+  <div class="tools">
+    <div class="add">
+      <span class="label">Lägg till:</span>
+      <% @field_sets.each do |field_set| -%>
+        <%= link_to field_set.title, (!@filters[:with_parent] ? new_admin_page_path(:page => { :field_set_id => field_set.id }) : new_admin_page_path(:page => { :field_set_id => field_set, :parent_id => @filters[:with_parent].split(',')[0], :parent_type => @filters[:with_parent].split(',')[1] })), :class => 'new' %>
+      <% end if @field_sets.any? %>
+    </div>
+    <% form_tag admin_pages_path, :method => :get do |f| %>
+    <div class="sort">
+      <label for="filters_order_by">Sortering:</label>
+      <% @filters.except(:order_by).each do |filter, value| -%>
+        <%= hidden_field_tag "filters[#{filter}]", value %>
+      <% end -%>
+        <%= select_tag 'filters[order_by]', options_for_select({ 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, @filters[:order_by]) %>
+        <input type="submit" value="Välj" style="display:none;" id="filters_order_by_submit">
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+  <div id="content">
+    <ul class="items">
+    <% @pages.each do |page| %>
+      <li>
+      <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
+      </li>
+    <% end %>
+    <%= will_paginate(@pages) if @pages.respond_to?(:total_pages) %>
+    </ul>
+  </div>
+</div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'porthos/assets', 'porthos/asset_usages', 'porthos/pages', :cache => 'pages' %>
+<% end %>

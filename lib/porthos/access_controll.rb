@@ -1,6 +1,6 @@
 module Porthos
   module AccessControl
-    
+
     # Inclusion hook to make #previous_view_path
     # available as ActionView helper methods.
     # Inclusion hook to make #current_user and #logged_in?
@@ -33,18 +33,18 @@ module Porthos
     def logged_in?
       current_user != :false
     end
-  
+
     # Accesses the current user from the session.
     def current_user
       @current_user ||= (session[:user] && User.find_by_id(session[:user])) || :false
     end
-  
+
     # Store the given user in the session.
     def current_user=(new_user)
       session[:user] = (new_user.nil? || new_user.is_a?(Symbol)) ? nil : new_user.id
       @current_user = new_user
     end
-  
+
     # Check if the user is authorized.
     #
     # Override this method in your controllers if you want to restrict access
@@ -80,7 +80,7 @@ module Porthos
       self.current_user ||= User.authenticate(username, passwd) || :false if username && passwd
       logged_in? && authorized? ? true : access_denied
     end
-  
+
     # Redirect as appropriate when an access request fails.
     #
     # The default action is to redirect to the login screen.
@@ -93,7 +93,7 @@ module Porthos
       respond_to do |accepts|
         accepts.html do
           store_location
-          redirect_to login_path
+          redirect_to admin_login_path
         end
         accepts.xml do
           headers["Status"]           = "Unauthorized"
@@ -102,15 +102,15 @@ module Porthos
         end
       end
       false
-    end  
-  
+    end
+
     # Store the URI of the current request in the session.
     #
     # We can return to this location by calling #redirect_back_or_default.
     def store_location(return_url = nil)
       session[:return_to] = return_url ? return_url : request.request_uri
     end
-  
+
     # Redirect to the URI stored by the most recent store_location call or
     # to the passed default.
     def redirect_back_or_default(default)
@@ -137,7 +137,7 @@ module Porthos
     def get_auth_data
       auth_key  = @@http_auth_headers.detect { |h| request.env.has_key?(h) }
       auth_data = request.env[auth_key].to_s.split unless auth_key.blank?
-      return auth_data && auth_data[0] == 'Basic' ? Base64.decode64(auth_data[1]).split(':')[0..1] : [nil, nil] 
+      return auth_data && auth_data[0] == 'Basic' ? Base64.decode64(auth_data[1]).split(':')[0..1] : [nil, nil]
     end
   end
 end

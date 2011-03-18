@@ -30,8 +30,8 @@ module Porthos
         end
       end
       false
-    end  
-  
+    end
+
     def restfull_path_for(object, options = {})
       action = options.delete(:action)
       unless object.respond_to?(:superclass)
@@ -43,7 +43,7 @@ module Porthos
       url = ['admin', action, base].compact.join('_').to_sym
       self.send url, options
     end
-  
+
     # Overide the authenitcated system authorized do only admit admins
     def authorized?
       current_user.admin?

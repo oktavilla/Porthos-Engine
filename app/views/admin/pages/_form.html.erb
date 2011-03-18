@@ -1,0 +1,41 @@
+<%= f.hidden_field :field_set_id %>
+<label for="page_title"><%= f.object.field_set && f.object.field_set.page_label.present? ? f.object.field_set.page_label : "Titel" %></label>
+<div class="fullwidth">
+  <%= f.text_field :title, :class => "title" %>
+</div>
+<label for="page_slug">Sidans address</label>
+<div class="fullwidth">
+  <%= f.text_field :slug, :class => "slug" %>
+</div>
+
+<% f.fields_for :custom_fields do |custom_fields| %>
+  <% f.object.field_set.fields.each do |field| -%>
+    <%= form_field_for_custom_field(f.object, custom_fields, field) unless field.is_a?(ReversedPageAssociationField) %>
+  <% end -%>
+<% end if f.object.field_set && f.object.field_set.fields.any? -%>
+
+<label for="page_tag_names">
+  Nyckelord (ej obligatoriskt)
+  <span class="form_help">separera nyckelord med mellanslag</span>
+</label>
+<div class="fullwidth">
+<%= f.text_field :tag_names, :id => 'page_tag_names' %>
+</div>
+
+<% if not defined?(in_nodes_edit) %>
+<!--
+
+Not necessary in all installations, needs to be better communicated.
+
+<label for="page_restricted" class="contains-input">
+  <%= f.check_box :restricted %> Kräv inloggning
+</label>
+-->
+<% end %>
+<!--
+
+Removed until solved properly.
+
+<label for="page_title">Publiceringsdatum</label>
+<%= f.datetime_select :published_on, :order => [:day, :month, :year] %>
+-->

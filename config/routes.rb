@@ -1,5 +1,23 @@
 Rails.application.routes.draw do
   filter :url_resolver
+  namespace :admin do
+    root :to => 'pages#index'
+    match 'login' => 'sessions#new', :as => 'login'
+    match '/logout' => 'sessions#destroy', :as => 'logout'
+    resources :sessions
+    resources :pages do
+      collection do
+        get 'search'
+        put 'sort'
+      end
+      member do
+        put 'publish'
+        get 'comments'
+      end
+      resources :custom_attributes
+      resources :custom_associations
+    end
+  end
 end
 # ActionController::Routing::Routes.draw do |map|
 #   # filter :url_resolver

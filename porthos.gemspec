@@ -17,6 +17,9 @@ Gem::Specification.new do |s|
   s.add_dependency "will_paginate"
   s.add_dependency 'sunspot_rails'
   s.add_dependency 'delayed_job'
+  s.add_dependency 'acts_as_list'
+  s.add_dependency 'sunspot'
+  s.add_dependency 'sunspot_rails'
 
   # Dev dependencies
   s.add_dependency "shoulda"

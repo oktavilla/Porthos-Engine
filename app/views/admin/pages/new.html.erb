@@ -1,0 +1,34 @@
+<% @page_title = "Skapa en ny sida" %>
+<% @page_class = "AB content" -%>
+<div id="workspace">
+  <div class="header">
+    <h1>Lägg till <%= @page.field_set ? @page.field_set.title.downcase : 'sida' %></h1>
+  </div>
+  <div id="content">
+    <%= error_messages_for :node %>
+    <%= error_messages_for :page %>
+    <% form_for @page, :url => admin_pages_path, :html => { :id => 'page', :class => 'new' } do |f| %>
+      <%= f.hidden_field :field_set_id %>
+      <label for="page_title"><%= f.object.field_set && f.object.field_set.page_label.present? ? f.object.field_set.page_label : "Ge sidan en titel" %></label>
+      <div class="fullwidth">
+        <%= f.text_field :title, :class => "title" %>
+      </div>
+      <div class="slug_field">
+        <label for="page_slug">Adress:</label>
+        <%= "#{request.host}/#{@page.field_set.node.slug}/" if @page.field_set && @page.field_set.node %>
+        <%= f.text_field :slug, :class => "slug" %>
+      </div>
+      <div class="submit">
+        <%= f.submit "Skapa sidan", :class => 'commit' %> eller <%= link_to "avbryt", previous_view_path(admin_pages_path) %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'porthos/jquery/jquery' %>
+  <%= javascript_include_tag 'porthos/wymeditor/jquery.wymeditor.min', 'porthos/wymeditor/lang/sv', 'porthos/wymeditor/plugins/hovertools/jquery.wymeditor.hovertools', 'porthos/wymeditor/plugins/tidy/jquery.wymeditor.tidy' %>
+  <%= javascript_include_tag 'porthos/wymeditor/lang/sv' %>
+  <%= javascript_include_tag 'porthos/wymeditor/plugins/hovertools/jquery.wymeditor.hovertools' %>
+  <%= javascript_include_tag 'porthos/editor' %>
+  <%= javascript_include_tag 'porthos/pages' %>
+<% end %>

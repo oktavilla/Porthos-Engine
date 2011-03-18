@@ -13,7 +13,8 @@ class PorthosMigration < ActiveRecord::Migration
     end
 
     add_index "nodes", ["slug"], :name => "index_nodes_on_slug"
-    add_index "nodes", ["resource_id", "resource_type"], :name => "index_nodes_on_resource_id_and_resource_type"
+    add_index "nodes", ["controller", "action", "resource_id", "resource_type"], :name => "index_nodes_on_controller_and_action_and_resource"
+    add_index "nodes", ["resource_type", "resource_id"], :name => "index_nodes_on_resource_type_and_resource_id"
   end
 
   def self.down

@@ -1,0 +1,46 @@
+<div id="sub_nav">
+  <% form_for :asset, :url => search_admin_pages_path, :html => { :method => :get } do |f| %>
+  <div class="search fullwidth">
+    <%= text_field_tag :query, (@query || 'Sök efter sidor'), :class => "search_query", :id=> "search_query" %>
+    <%= submit_tag "Sök", :style => "display:none" %>
+  </div>
+  <% end %>
+  <ul class="filter">
+    <li<%= ' class="current"' if @filters[:with_field_set].blank? %>><%= link_to "Alla", admin_pages_path(:filters => @filters.except(:with_field_set)) %></li>
+    <% FieldSet.all(:order => 'position').each do |field_set| -%>
+    <li<%= ' class="current"' if @filters[:with_field_set].to_i == field_set.id %>><%= link_to field_set.title, admin_pages_path(:filters => @filters.merge(:with_field_set => field_set.id)) %></li>
+    <% end -%>
+  </ul>
+  <div class="label">Status</div>
+  <ul class="filter">
+    <li<%= ' class="current"' if !@filters[:published] %>>
+      <%= link_to "Alla", admin_pages_path(:filters => @filters.except(:published)) %>
+    </li>
+    <li<%= ' class="current"' if @filters[:published]%>>
+      <%= link_to "Utkast", admin_pages_path(:filters => @filters.merge(:published => false)) %> (<%= Page.unpublished.count %>)
+    </li>
+  </ul>
+  <div class="label">Senast ändrad av</div>
+  <ul class="filter">
+    <li<%= ' class="current"' unless @filters[:updated_by] %>>
+      <%= link_to "Alla", admin_pages_path(:filters => @filters.except(:updated_by)) %>
+    </li>
+    <% User.recent_contributers.sort_by(&:first_name).each do |user| -%>
+      <li<%= ' class="current"' if @filters[:updated_by].to_i == user.id %>>
+        <%= link_to user.short_name, admin_pages_path(:filters => @filters.merge(:updated_by => user.id)) %>
+      </li>
+    <% end -%>
+  </ul>
+<% if @tags && @tags.any? -%>
+  <div class="label">Nyckelord</div>
+  <ul class="tags alphabetical">
+    <% @tags.sort_by(&:name).group_by { |tag| tag.name[0...1].upcase }.each do |first_letter, tags| -%>
+      <li>
+        <span class="letter"><%= first_letter %></span>
+        <% tags.each do |tag| -%>
+          <%= !@current_tags.include?(tag.name) ? link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') : link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags].dup - [tag.name])), :class => 'tag current') -%><%= ', ' unless tag == tags.last -%>
+        <% end -%>
+      </li>
+    <% end -%>
+  </ul><% end -%>
+</div>

@@ -8,7 +8,7 @@ class PorthosGenerator < ActiveRecord::Generators::Base
   end
 
   def generate_migration
-    migration_template "porthos_migration.rb", "db/migrate/#{migration_file_name}"
+    migration_template "porthos_migration.rb.erb", "db/migrate/#{migration_file_name}"
   end
 
   protected

@@ -1,0 +1,29 @@
+<% @page_title = 'Sidor' -%>
+<% @page_class = 'layout3' -%>
+<%= render :partial => 'admin/pages/sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1>Sökresultat för ”<%= @query %>”</h1>
+  </div>
+  <div class="tools">
+    <div class="add">
+      Lägg till:
+      <% @field_sets.each do |field_set| -%>
+        <%= link_to field_set.title, (!@filters[:with_parent] ? new_admin_page_path(:page => { :field_set_id => field_set.id }) : new_admin_page_path(:page => { :field_set_id => field_set, :parent_id => @filters[:with_parent].split(',')[0], :parent_type => @filters[:with_parent].split(',')[1] })), :class => 'new' %>
+      <% end if @field_sets.any? %>
+    </div>
+  </div>
+  <div id="content">
+    <ul class="items">
+    <% @search.results.each do |page| %>
+      <li>
+        <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
+      </li>
+    <% end %>
+    </ul>
+    <%= will_paginate @search.results, :prev_label => "« Föregående", :next_label => "Nästa »" %>
+  </div>
+</div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'porthos/assets', 'porthos/asset_usages', 'porthos/pages', :cache => 'pages' %>
+<% end %>

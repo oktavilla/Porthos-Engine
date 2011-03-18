@@ -1,0 +1,17 @@
+<% form_tag admin_sessions_path do -%>
+  <fieldset class="compact">
+    <label for="login">Användarnamn</label>
+    <div class="fullwidth">
+      <%= text_field_tag 'login' %>
+    </div>
+    <label for="password">Lösenord</label>
+    <div class="fullwidth">
+      <%= password_field_tag 'password' %>
+    </div>
+  </fieldset>
+  <label class="remember_me" for="remember_me">
+    <%= check_box_tag 'remember_me' %>
+    kom ihåg mig på den här datorn
+  </label>
+  <fieldset class="submit"><%= submit_tag 'Logga in' %></fieldset>
+<% end -%>

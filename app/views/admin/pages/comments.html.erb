@@ -1,0 +1,32 @@
+<% @page_class = "layout1" -%>
+<% @page_title = "Kommentarer för sidan ”#{@page.title}”" -%>
+<style type="text/css">
+  .comments .created_at, 
+  .comments .ip_address,
+  .comments .spam_score,
+  .comments a {display: block;}
+
+  .comments .created_at,
+  .comments .commentable a,
+  .comments .reference {padding-left: 22px;}
+  .comments .name { 
+    color: #000;
+    font-weight: bold; }
+  .comments .reference {
+    font-weight:bold;
+    font-size:16px; }
+  .comments .is_spam { background: url(/graphics/porthos/icons/16_failed.png) no-repeat transparent; background-position:0 3px; }
+  .comments .spam .is_spam {
+    background: none; 
+    color: #f00;
+    font-weight: bold;}
+</style>
+<div id="workspace">
+  <div class="header">
+    <h1>Kommentarer för sidan ”<%= @page.title %>”</h1>
+    <%= link_to "Redigera sidan", admin_page_path(:id => @page) %>
+  </div>
+  <div id="content">
+    <%= render :partial => "admin/comments/table", :locals => { :comments => @page.comments.find(:all, :order => 'created_at DESC'), :return_to => comments_admin_page_path(@page.id) } %>
+  </div>
+</div>

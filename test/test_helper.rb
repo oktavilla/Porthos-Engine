@@ -19,6 +19,7 @@ Capybara.default_driver   = :rack_test
 Capybara.default_selector = :css
 
 # Run any available migration
+`cd test/dummy; rm db/migrations/2*.rb;rails g porthos CreatePorthosTables`
 ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
 
 # Load support files

@@ -301,6 +301,8 @@
       unable_to_find: Kunde inte hitta sidtypen
       saved: Dina ändringar är sparade
       active: "är nu publicerad och syns på webbplatsen"
+    admin_contents:
+      deleted: Innehållet raderats
     admin_comments:
       saved: Din kommentar har sparats
       published: Din kommentar har sparats och publicerats

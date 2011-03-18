@@ -1,0 +1,60 @@
+<% @page_title = 'Sveriges största branschorganisation inom mediesektorn' -%>
+<% @page_class = 'home layout2' %>
+<% @page_id    = @renderer.page_id -%>
+<div id="content">
+  <% if @renderer.teasers.any? -%>
+  <section class="teasers">
+    <ul>
+    <% @renderer.teasers.each do |teaser| -%>
+      <li class="teaser <%= [teaser.display_type_key, teaser.css_class].join(' ') %>" style="background: url(<%= display_image_path(:size => teaser.image_size, :id => teaser.images.primary, :format => teaser.images.primary.extname) if teaser.images.primary %>) 0 0 no-repeat">
+        <div class="content">
+          <h1><%= teaser.link.present? ? link_to(teaser.title, teaser.link) : teaser.title %></h1>
+          <%= teaser.body %>
+        </div>
+      </li>
+    <% end -%>
+    </ul>
+  </section>
+  <% end -%>
+  <% if @renderer.magazines.any? -%>
+  <section class="magazines">
+    <ul><% @renderer.magazines.each do |magazine| -%><li><a href="<%= magazine_path(magazine) %>">
+        <% magazine.cover.tap do |cover| -%>
+        <span class="cover">
+          <img src="<%= display_image_path(:size => 'w92', :id => cover, :format => cover.extname) %>" alt="<%= magazine.name %>">
+        </span>
+        <% end if magazine.cover -%>
+        <span class="title"><%= magazine.name %></span>
+      </a></li><% end -%></ul>
+    <p>Läser din målgrupp någon av våra <%= Magazine.count %> tidskrifter? Det tror vi.</p>
+  </section>
+  <% end -%>
+  <div id="c_1">
+    <section class="vcalendar">
+      <h1 class="label">Om oss</h1>
+      <p class="introduction"><%= SiteSetting.value_for(:introduction) %></p>
+      <h1 class="label">Kalendarium</h1>
+    <% @renderer.calender_posts.each do |page| -%>
+      <% cache page.in_list_cache_key do %>
+      <%= render :partial => page.field_set.template.views.in_list, :locals => { :page => page } %>
+      <% end %>
+    <% end -%>
+    <% if @renderer.calender_posts_count > 5 %>
+      <div class="more">
+        <a href="/kalendarium">Fler i kalendariet</a>
+      </div>
+    <% end %>
+    <%= render :partial => 'pages/contents/modules/app_teaser/content' %>
+    </section>
+  </div>
+  <div id="c_2">
+    <section class="hfeed">
+      <h1 class="label">Senaste från Sveriges Tidskrifter</h1>
+    <% @renderer.pages.each do |page| -%>
+      <% cache page.in_list_cache_key do %>
+        <%= render :partial => page.field_set.template.views.in_list, :locals => { :page => page } %>
+      <% end %>
+    <% end -%>
+    </section>
+  </div>
+</div>

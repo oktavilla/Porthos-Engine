@@ -1,4 +1,3 @@
 Dummy::Application.routes.draw do
-  resources :tests
-  filter :url_resolver
+  resources :posts
 end

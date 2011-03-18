@@ -2,7 +2,7 @@
 module Porthos
   require 'porthos/engine' if defined?(Rails)
 end
-
+require 'porthos/url_resolver'
 require 'porthos/admin'
 require 'porthos/public'
 require 'porthos/access_controll'

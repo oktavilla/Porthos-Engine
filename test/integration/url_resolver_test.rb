@@ -19,7 +19,8 @@ class UrlResolverTest < Test::Unit::TestCase
   end
 
   context "When getting a custom url" do
-    context 'for a collection' do
+
+    context 'for an index action' do
       setup do
         @node = Factory(:node, :controller => 'posts', :action => 'index')
       end
@@ -33,6 +34,35 @@ class UrlResolverTest < Test::Unit::TestCase
         get @node.url
         assert_equal "posts", params[:controller]
         assert_equal "index", params[:action]
+      end
+    end
+
+    context 'with custom parameters' do
+      setup do
+        @node = Factory(:node, :url => '/blog', :controller => 'posts', :action => 'index')
+        Porthos::Routing.rules += [
+          {
+            :test => /(^.*)\/(\d{4})\-(\d{2})\-(\d{2})/,
+            :matches => ['url', 'year', 'month', 'day']
+          },
+          {
+            :test => /(^.*)\/(\d{4})\-(\d{2})/,
+            :matches => ['url', 'year', 'month']
+          },
+          {
+            :test => /(^.*)\/(\d{4})/,
+            :matches => ['url', 'year']
+          }
+        ]
+      end
+
+      should 'recognize the params' do
+        get "#{@node.url}/2011-01-02"
+        assert_equal "posts", params[:controller]
+        assert_equal "index", params[:action]
+        assert_equal '2011', params[:year]
+        assert_equal '01', params[:month]
+        assert_equal '02', params[:day]
       end
     end
 

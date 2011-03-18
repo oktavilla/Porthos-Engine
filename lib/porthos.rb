@@ -1,4 +1,3 @@
-
 module Porthos
   require 'porthos/engine' if defined?(Rails)
 end

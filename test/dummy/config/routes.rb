@@ -1,3 +1,3 @@
 Dummy::Application.routes.draw do
-  resources :posts
+  resources :test_posts
 end

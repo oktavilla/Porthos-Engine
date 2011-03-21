@@ -45,8 +45,6 @@ class User < ActiveRecord::Base
     :group => 'assets.created_by_id'
   }
 
-  acts_as_filterable
-
   named_scope :filter_role , lambda { |role_name| {
     :include => 'roles',
     :conditions => (role_name.blank? ? [] : ["roles.name = ?", role_name])

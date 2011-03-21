@@ -31,4 +31,8 @@ module PorthosApplicationHelper
     end
   end
 
+  def installation_specific_stylesheet_link_tag
+    path = File.join(Rails.root, 'public/stylesheets/porthos_extensions.css')
+    stylesheet_link_tag(js_file) if File.exists?(path)
+  end
 end

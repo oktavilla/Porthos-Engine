@@ -51,7 +51,7 @@ class Page < ActiveRecord::Base
   scope :unpublished, lambda {
     where("published_on IS NULL OR published_on > ?", Time.now)
   }
-  
+
   scope :published, lambda {
     where("published_on <= ?", Time.now)
   }

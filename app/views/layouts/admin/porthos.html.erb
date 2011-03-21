@@ -5,10 +5,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="<%= request_forgery_protection_token %>" id="authenticity-token" content="<%= form_authenticity_token %>">
   <title><%= @page_title if @page_title %></title>
-  <%= stylesheet_link_tag 'porthos/elements', 'porthos/layout', 'porthos/wymeditor', 'application', :cache => 'porthos' %>
+  <%= stylesheet_link_tag 'porthos/elements', 'porthos/layout', 'porthos/wymeditor', 'application' %>
   <%= installation_specific_stylesheet_link_tag %>
 </head>
-<body<%= body_attributes %>>
+<body<%= raw body_attributes %>>
 <%= flash_messages %>
 <div id="nav">
   <%= render :partial => 'layouts/admin/account_nav' %>
@@ -17,9 +17,6 @@
 <div id="wrap">
 <%= yield %>
 </div>
-<%= javascript_include_tag 'named_routes' %>
-<%= javascript_include_tag (Rails.env.production? ? 'http://ajax.googleapis.com/ajax/libs/prototype/1.6.1.0/prototype.js' : 'porthos/prototype') %>
-<%= javascript_include_tag 'porthos/effects', 'porthos/controls', 'porthos/dragdrop', 'porthos/lowpro', 'porthos/lib', 'porthos/application', :cache => 'admin' %>
 <%= yield :javascripts %>
 </body>
 </html>

@@ -56,13 +56,7 @@ class User < ActiveRecord::Base
 
   after_save :commit_to_sunspot
 
-  def validate
-    if file and file.size.nonzero?
-      unless Asset::IMAGE_FORMATS.include?(File.extname(file.original_filename).gsub(/\./,'').downcase.to_sym)
-        errors[:file] = t(:unkown_format, :scope => [:app, :images_asset])
-      end
-    end
-  end
+  validate :valid_file
 
   def name
     "#{first_name} #{last_name}"
@@ -169,6 +163,15 @@ class User < ActiveRecord::Base
   end
 
 protected
+
+  def valid_file
+    if file and file.size.nonzero?
+      unless Asset::IMAGE_FORMATS.include?(File.extname(file.original_filename).gsub(/\./,'').downcase.to_sym)
+        errors[:file] = t(:unkown_format, :scope => [:app, :images_asset])
+      end
+    end
+  end
+
   # before filter
   def encrypt_password
     return if password.blank?

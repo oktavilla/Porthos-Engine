@@ -4,7 +4,10 @@ class FieldSet < ActiveRecord::Base
                         :handle
 
   validates_uniqueness_of :title,
-                          :handle
+                          :case_sensitive => false
+
+  validates_uniqueness_of :handle,
+                          :case_sensitive => false
 
   has_many :fields,
            :order => 'fields.position',
@@ -15,7 +18,7 @@ class FieldSet < ActiveRecord::Base
            :include => [:custom_attributes, :custom_associations]
 
   has_one :node,
-          :conditions => { :controller => 'pages', 'action' => 'index' }
+          :conditions => { :controller => 'pages', :action => 'index' }
 
   acts_as_list
 
@@ -46,7 +49,7 @@ class FieldSet < ActiveRecord::Base
 protected
 
   def parameterize_handle
-    self.handle = handle.parameterize
+    self.handle = handle.parameterize if handle.present?
   end
 
 end

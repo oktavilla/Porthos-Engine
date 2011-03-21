@@ -7,12 +7,14 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.string   "action"
       t.string   "resource_type"
       t.integer  "resource_id"
+      t.integer  "field_set_id"
       t.datetime "created_at"
       t.datetime "updated_at"
       t.boolean  "restricted", :default => false
     end
 
     add_index "nodes", ["url"], :name => "index_nodes_on_url"
+    add_index "nodes", ["field_set_id"], :name => "index_nodes_on_field_set_id"
     add_index "nodes", ["resource_id", "resource_type"], :name => "index_nodes_on_resource_id_and_resource_type"
 
     create_table "content_images", :force => true do |t|

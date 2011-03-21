@@ -30,6 +30,11 @@ Factory.define :field do |f|
   f.handle { Factory.next(:title) }
 end
 
+Factory.define :page do |f|
+  f.title { Factory.next(:title) }
+  f.association :field_set
+end
+
 # Factories for url resolver
 Factory.define :test_post do |f|
 end

@@ -2,20 +2,22 @@ class Admin::PagesController < ApplicationController
   include Porthos::Admin
   before_filter :login_required
 
-  def index
-    @filters = {
-      :order_by => 'updated_at desc'
-    }.merge((params[:filters] || {}).to_options)
+  has_scope :whith_field_set
+  has_scope :created_by
+  has_scope :updated_by
+  has_scope :order_by, :default => 'updated_at desc'
+  has_scope :published, :type => :boolean
 
+  def index
     @field_sets = FieldSet.all(:order => 'position')
-    @field_set = FieldSet.find(@filters[:with_field_set]) if @filters[:with_field_set].present?
+    @field_set = FieldSet.find(params[:with_field_set]) if params[:with_field_set].present?
 
     @tags = Tag.on('Page')
     @current_tags = params[:tags] || []
     @related_tags = @current_tags.any? ? Page.find_related_tags(@current_tags) : []
 
     @pages = unless @current_tags.any?
-      Page.filter(@filters).paginate({
+      apply_scopes(Page).paginate({
         :page     => (params[:page] || 1),
         :per_page => (params[:per_page] || 25)
       })

@@ -19,16 +19,16 @@
     <div class="add">
       <span class="label">Lägg till:</span>
       <% @field_sets.each do |field_set| -%>
-        <%= link_to field_set.title, (!@filters[:with_parent] ? new_admin_page_path(:page => { :field_set_id => field_set.id }) : new_admin_page_path(:page => { :field_set_id => field_set, :parent_id => @filters[:with_parent].split(',')[0], :parent_type => @filters[:with_parent].split(',')[1] })), :class => 'new' %>
+        <%= link_to field_set.title, (!current_scopes[:with_parent] ? new_admin_page_path(:page => { :field_set_id => field_set.id }) : new_admin_page_path(:page => { :field_set_id => field_set, :parent_id => current_scopes[:with_parent].split(',')[0], :parent_type => current_scopes[:with_parent].split(',')[1] })), :class => 'new' %>
       <% end if @field_sets.any? %>
     </div>
     <% form_tag admin_pages_path, :method => :get do |f| %>
     <div class="sort">
       <label for="filters_order_by">Sortering:</label>
-      <% @filters.except(:order_by).each do |filter, value| -%>
+      <% current_scopes.except(:order_by).each do |filter, value| -%>
         <%= hidden_field_tag "filters[#{filter}]", value %>
       <% end -%>
-        <%= select_tag 'filters[order_by]', options_for_select({ 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, @filters[:order_by]) %>
+        <%= select_tag 'filters[order_by]', options_for_select({ 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, current_scopes[:order_by]) %>
         <input type="submit" value="Välj" style="display:none;" id="filters_order_by_submit">
     </div>
     <% end %>
@@ -45,6 +45,3 @@
     </ul>
   </div>
 </div>
-<% content_for :javascripts do %>
-  <%= javascript_include_tag 'porthos/assets', 'porthos/asset_usages', 'porthos/pages', :cache => 'pages' %>
-<% end %>

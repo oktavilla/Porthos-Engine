@@ -68,24 +68,24 @@ class Page < ActiveRecord::Base
 
   scope :updated_latest, where('updated_at > created_at').order('updated_at DESC')
 
-  scope :filter_with_field_set, lambda { |field_set_id|
+  scope :with_field_set, lambda { |field_set_id|
     where("field_set_id = ?", field_set_id)
   }
 
-  scope :filter_created_by, lambda { |user_id|
+  scope :created_by, lambda { |user_id|
     where("created_by_id = ?", user_id)
   }
 
-  scope :filter_updated_by, lambda { |user_id|
+  scope :updated_by, lambda { |user_id|
     where("updated_by_id = ?", user_id)
   }
 
-  scope :filter_order_by, lambda { |order_by_string|
+  scope :order_by, lambda { |order_by_string|
     order(order_by_string)
   }
 
-  scope :filter_published, lambda { |*is_published|
-    if is_published.flatten.first
+  scope :published, lambda { |is_published|
+    if is_published
       where('published_on > ?', Time.now)
     else
       where('published_on IS NULL or published_on < ?', Time.now)
@@ -103,7 +103,6 @@ class Page < ActiveRecord::Base
 
   acts_as_list :scope => 'field_set_id'
   acts_as_taggable
-  acts_as_filterable
 
   searchable :auto_index => false do
     integer :field_set_id

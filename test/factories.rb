@@ -1,4 +1,9 @@
 # Sequences
+
+Factory.sequence :title do |i|
+  "A random title #{i}"
+end
+
 Factory.sequence :url do |i|
   "/where/am/#{i}"
 end
@@ -13,6 +18,19 @@ Factory.define :node do |f|
   f.action "index"
 end
 
+Factory.define :field_set do |f|
+  f.title "Default"
+  f.page_label "Default page"
+  f.handle 'default'
+end
+
+Factory.define :field do |f|
+  f.association :field_set
+  f.label { Factory.next(:title) }
+  f.handle { Factory.next(:title) }
+end
+
+# Factories for url resolver
 Factory.define :test_post do |f|
 end
 

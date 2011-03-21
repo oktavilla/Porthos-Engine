@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     match 'login' => 'sessions#new', :as => 'login'
     match '/logout' => 'sessions#destroy', :as => 'logout'
     resources :sessions
+    resources :users
+    resources :site_settings
+    resources :nodes
     resources :pages do
       collection do
         get 'search'
@@ -17,6 +20,8 @@ Rails.application.routes.draw do
       resources :custom_attributes
       resources :custom_associations
     end
+    resources :assets
+    resources :comments
   end
 end
 # ActionController::Routing::Routes.draw do |map|

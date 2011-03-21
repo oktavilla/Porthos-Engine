@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
         select('DISTINCT users.*').
         from('assets').
         joins('LEFT JOIN users ON users.id = assets.created_by_id').
-        conditions('assets.created_by_id IS NOT NULL AND users.id IS NOT NULL').
+        where('assets.created_by_id IS NOT NULL AND users.id IS NOT NULL').
         group('assets.created_by_id')
 
   acts_as_filterable

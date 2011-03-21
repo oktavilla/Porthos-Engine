@@ -28,29 +28,27 @@ class User < ActiveRecord::Base
 
   before_save :encrypt_password, :save_avatar
 
-  named_scope :recent_contributers, {
-    :select => 'DISTINCT users.*',
-    :from   => 'pages',
-    :joins  => 'LEFT JOIN users ON users.id = pages.updated_by_id',
-    :conditions => "pages.updated_by_id IS NOT NULL AND users.id IS NOT NULL",
-    :order  => "pages.updated_by_id DESC",
-    :group  => 'pages.updated_by_id'
-  }
+  scope :recent_contributers,
+        select('DISTINCT users.*').
+        from('pages').
+        joins('LEFT JOIN users ON users.id = pages.updated_by_id').
+        where('pages.updated_by_id IS NOT NULL AND users.id IS NOT NULL').
+        order('pages.updated_by_id DESC').
+        group('pages.updated_by_id')
 
-  named_scope :recent_uploaders, {
-    :select => 'DISTINCT users.*',
-    :from   => 'assets',
-    :joins  => 'LEFT JOIN users ON users.id = assets.created_by_id',
-    :conditions => 'assets.created_by_id IS NOT NULL AND users.id IS NOT NULL',
-    :group => 'assets.created_by_id'
-  }
+  scope :recent_uploaders,
+        select('DISTINCT users.*').
+        from('assets').
+        joins('LEFT JOIN users ON users.id = assets.created_by_id').
+        conditions('assets.created_by_id IS NOT NULL AND users.id IS NOT NULL').
+        group('assets.created_by_id')
 
   acts_as_filterable
 
-  named_scope :filter_role , lambda { |role_name| {
-    :include => 'roles',
-    :conditions => (role_name.blank? ? [] : ["roles.name = ?", role_name])
-  }}
+  scope :filter_role , lambda { |role_name|
+    scoped = includes('roles')
+    role_name.blank? ? scoped : scoped.where("roles.name = ?", role_name)
+  }
 
   searchable :auto_index => false do
     text :first_name, :last_name, :email

@@ -48,60 +48,53 @@ class Page < ActiveRecord::Base
            :as => :commentable,
            :order => 'comments.created_at'
 
-  named_scope :unpublished,
-              :conditions => ["published_on IS NULL OR published_on > NOW()"]
+  scope :unpublished, lambda {
+    where("published_on IS NULL OR published_on > ?", Time.now)
+  }
+  
+  scope :published, lambda {
+    where("published_on <= ?", Time.now)
+  }
 
-  named_scope :published, lambda {{
-    :conditions => ["published_on <= ?", Time.now]
-  }}
+  scope :published_within, lambda { |from, to|
+    where("published_on BETWEEN ? AND ?", from.to_s(:db), to.to_s(:db))
+  }
 
-  named_scope :published_within, lambda { |from, to| {
-    :conditions => [
-      "published_on BETWEEN ? AND ?",
-      from.to_s(:db),
-      to.to_s(:db)
-    ]
-  }}
+  scope :include_restricted, lambda { |restricted|
+    where('restricted = ? or restricted = ?', restricted, false)
+  }
 
-  named_scope :include_restricted, lambda { |restricted| {
-    :conditions => ['restricted = ? or restricted = ?', restricted, false]
-  }}
+  scope :created_latest, order('created_at DESC')
 
-  named_scope :created_latest,
-              :order => 'created_at DESC'
+  scope :updated_latest, where('updated_at > created_at').order('updated_at DESC')
 
-  named_scope :updated_latest,
-              :conditions => 'updated_at > created_at',
-              :order => 'updated_at DESC'
+  scope :filter_with_field_set, lambda { |field_set_id|
+    where("field_set_id = ?", field_set_id)
+  }
 
-  named_scope :filter_with_field_set, lambda { |field_set_id| {
-    :conditions => ["field_set_id = ?", field_set_id]
-  }}
+  scope :filter_created_by, lambda { |user_id|
+    where("created_by_id = ?", user_id)
+  }
 
-  named_scope :filter_created_by, lambda { |user_id| {
-    :conditions => ["created_by_id = ?", user_id]
-  }}
+  scope :filter_updated_by, lambda { |user_id|
+    where("updated_by_id = ?", user_id)
+  }
 
-  named_scope :filter_updated_by, lambda { |user_id| {
-    :conditions => ["updated_by_id = ?", user_id]
-  }}
+  scope :filter_order_by, lambda { |order_by_string|
+    order(order_by_string)
+  }
 
-  named_scope :filter_order_by, lambda { |order| {
-    :order => order
-  }}
-
-  named_scope :filter_published, lambda {|*is_published|
+  scope :filter_published, lambda { |*is_published|
     if is_published.flatten.first
-      { :conditions => 'published_on > NOW()' }
+      where('published_on > ?', Time.now)
     else
-      { :conditions => 'published_on IS NULL or published_on < NOW()' }
+      where('published_on IS NULL or published_on < ?', Time.now)
     end
   }
 
-  named_scope :with_custom_attributes_field, lambda { |ca_field| {
-    :joins => "left join custom_attributes as #{ca_field} on #{ca_field}.context_type = 'Page' and
-               #{ca_field}.context_id = pages.id and #{ca_field}.handle = '#{ca_field}'"
-  }}
+  scope :with_custom_attributes_field, lambda { |ca_field|
+    joins("left join custom_attributes as #{ca_field} on #{ca_field}.context_type = 'Page' and #{ca_field}.context_id = pages.id and #{ca_field}.handle = '#{ca_field}'")
+  }
 
   before_create :set_created_by
   before_save   :set_layout_attributes,

@@ -14,9 +14,9 @@ class CustomAssociation < ActiveRecord::Base
                         :handle,
                         :relationship
 
-  named_scope :with_field, lambda { |field_id| {
-    :conditions => ['field_id = ?', field_id]
-  }}
+  scope :with_field, lambda { |field_id|
+    where('field_id = ?', field_id)
+  }
 
   before_validation :parameterize_handle
 

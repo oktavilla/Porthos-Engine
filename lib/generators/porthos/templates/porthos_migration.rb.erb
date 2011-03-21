@@ -189,6 +189,30 @@ class <%= migration_class_name %> < ActiveRecord::Migration
     end
 
     add_index "users", ["avatar_id"], :name => "index_users_on_avatar_id"
+
+    create_table "delayed_jobs", :force => true do |t|
+      t.integer  "priority",   :default => 0
+      t.integer  "attempts",   :default => 0
+      t.text     "handler"
+      t.string   "last_error"
+      t.datetime "run_at"
+      t.datetime "locked_at"
+      t.datetime "failed_at"
+      t.string   "locked_by"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+    # Create default admin user
+
+    admin_role = Role.create(:name => 'Admin')
+    public_role = Role.create(:name => 'Public')
+    site_admin_role = Role.create(:name => 'SiteAdmin')
+    admin_user = User.create(:login => 'admin', :password => 'password', :password_confirmation => 'password', :first_name => 'Admin', :last_name => 'Admin', :email => 'admin@example.com')
+    UserRole.create(:role_id => admin_role.id, :user_id => admin_user.id)
+    UserRole.create(:role_id => site_admin_role.id, :user_id => admin_user.id)
   end
 
   def self.down

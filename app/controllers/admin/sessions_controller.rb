@@ -1,4 +1,4 @@
-# This controller handles the login/logout function of the site.  
+# This controller handles the login/logout function of the site.
 class Admin::SessionsController < ApplicationController
   include Porthos::Admin
 

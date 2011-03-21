@@ -2,14 +2,22 @@ require 'routing_filter'
 module RoutingFilter
   class UrlResolver < Filter
     def around_recognize(path, env, &block)
+      custom_params = {}
+      matches = Porthos::Routing.recognize(path)
+      matches.delete(:url).tap do |recognized_url|
+        path.replace recognized_url
+        custom_params.merge!(matches)
+      end if matches[:url]
+
       if node = Node.find_by_url(path)
-        rest_params = { :controller => node.controller, :action => node.action }
-        rest_params[:id] = node.resource_id if node.resource_id.present?
-        path.replace('/' + rest_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
+        mapping_params = { :controller => node.controller, :action => node.action }
+        mapping_params[:id] = node.resource_id if node.resource_id.present?
+        path.replace('/' + mapping_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
       end
 
       yield.tap do |params|
-        params.merge!(rest_params) if node
+        params.merge!(custom_params)
+        params.merge!(mapping_params) if node
       end
     end
 

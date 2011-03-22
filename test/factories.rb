@@ -35,6 +35,11 @@ Factory.define :page do |f|
   f.association :field_set
 end
 
+Factory.define :custom_attribute do |f|
+  f.association :context, :factory => :page
+  f.association :field
+end
+
 # Factories for url resolver
 Factory.define :test_post do |f|
 end

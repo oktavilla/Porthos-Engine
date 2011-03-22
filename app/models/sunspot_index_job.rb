@@ -1,3 +1,4 @@
+unless defined?(SunspotIndexJob)
 class SunspotIndexJob < Struct.new(:model_name, :model_id)
   def perform
     begin
@@ -11,4 +12,5 @@ class SunspotIndexJob < Struct.new(:model_name, :model_id)
       false
     end
   end
+end
 end

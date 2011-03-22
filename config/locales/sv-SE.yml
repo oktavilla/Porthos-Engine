@@ -316,3 +316,4 @@
         small: Liten
     validators:
       bad_email_format: har fel format
+      bad_redirect_format: måste börja med ett /-tecken

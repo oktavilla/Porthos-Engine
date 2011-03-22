@@ -1,0 +1,16 @@
+<% @page_class = @renderer.layout_class -%>
+<% @page_title = @renderer.title -%>
+<% @page_id = 'pages-show' -%>
+<div id="content">
+  <h1><%= @renderer.page.title %></h1>
+  <p class="date"><%= l @renderer.page.published_on, :format => :long %></p>
+  <%= @renderer.page.body %>
+<% (1..@renderer.page.column_count).each do |column| %>
+  <div id="c_<%= column %>" class="column">
+  <% @renderer.page.contents.active.find_all { |content| content.column_position == column }.each do |content| -%>
+    <%= render_page_content(@renderer.page, content) %>
+  <% end -%>
+  </div>
+<% end %>
+  <%= render :partial => 'pages/templates/blog/archive', :locals => { :renderer => @renderer } %>
+</div>

@@ -287,43 +287,43 @@ protected
     end
   end
   alias_method_chain :method_missing, :find_custom_attributes
-  #
-  # def method_missing_with_find_custom_associations(method, *args)
-  #   # Check that we dont match any other method_missing hacks before we start query the database
-  #   begin
-  #     method_missing_without_find_custom_associations(method, *args)
-  #   rescue
-  #     if args.size == 0
-  #       handle = method.to_s.gsub(/\?/, '')
-  #       if field = fields.detect { |field| field.handle == handle }
-  #         match = field.target_handle.blank? ? custom_associations_by_handle(handle) : custom_association_contexts_by_handle(field.target_handle)
-  #         if match.any?
-  #           unless field.target_handle.present?
-  #             match.first.relationship == 'one_to_one' ? match.first.target : CustomAssociationProxy.new({
-  #               :target_class => match.first.target_type.constantize,
-  #               :target_ids   => match.collect { |m| m.target_id }
-  #             })
-  #           else
-  #             field.relationship == 'one_to_one' ? match.first.context : CustomAssociationProxy.new({
-  #               :target_class => match.first.context_type.constantize,
-  #               :target_ids   => match.collect { |m| m.context_id }
-  #             })
-  #           end
-  #         # Do we have a matching field but no records, return nil for
-  #         # page.handle ? do stuff in the views
-  #         else
-  #           nil
-  #         end
-  #       else
-  #         # no match raise method missing again
-  #         method_missing_without_find_custom_associations(method, *args)
-  #       end
-  #     else
-  #       method_missing_without_find_custom_associations(method, *args)
-  #     end
-  #   end
-  # end
-  # alias_method_chain :method_missing, :find_custom_associations
+
+  def method_missing_with_find_custom_associations(method, *args)
+    # Check that we dont match any other method_missing hacks before we start query the database
+    begin
+      method_missing_without_find_custom_associations(method, *args)
+    rescue
+      if args.size == 0
+        handle = method.to_s.gsub(/\?/, '')
+        if field = fields.detect { |field| field.handle == handle }
+          match = field.target_handle.blank? ? custom_associations_by_handle(handle) : custom_association_contexts_by_handle(field.target_handle)
+          if match.any?
+            unless field.target_handle.present?
+              match.first.relationship == 'one_to_one' ? match.first.target : CustomAssociationProxy.new({
+                :target_class => match.first.target_type.constantize,
+                :target_ids   => match.collect { |m| m.target_id }
+              })
+            else
+              field.relationship == 'one_to_one' ? match.first.context : CustomAssociationProxy.new({
+                :target_class => match.first.context_type.constantize,
+                :target_ids   => match.collect { |m| m.context_id }
+              })
+            end
+          # Do we have a matching field but no records, return nil for
+          # page.handle ? do stuff in the views
+          else
+            nil
+          end
+        else
+          # no match raise method missing again
+          method_missing_without_find_custom_associations(method, *args)
+        end
+      else
+        method_missing_without_find_custom_associations(method, *args)
+      end
+    end
+  end
+  alias_method_chain :method_missing, :find_custom_associations
 
 private
 

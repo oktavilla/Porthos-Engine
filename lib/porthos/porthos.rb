@@ -7,7 +7,12 @@ module Porthos
     $last_benchmark = cur
     result
   end
+
+  def self.root
+    File.expand_path(File.dirname(__FILE__)+'../../..')
+  end
 end
+
 require 'porthos/access_controll'
 require 'porthos/model_restrictions'
 require 'porthos/routing'

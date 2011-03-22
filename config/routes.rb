@@ -5,10 +5,18 @@ Rails.application.routes.draw do
     match 'login' => 'sessions#new', :as => 'login'
     match '/logout' => 'sessions#destroy', :as => 'logout'
     resources :sessions
+
     resources :users
+
     resources :site_settings
+    resources :content_lists
+    resources :field_sets
+    resources :redirects
+    resources :tags
+    resources :content_modules
+
     resources :nodes
-    resources :pages do
+    resources :pages doGE
       collection do
         get 'search'
         put 'sort'

@@ -14,6 +14,8 @@ class FieldSetTest < ActiveSupport::TestCase
     should validate_uniqueness_of(:title).case_insensitive
     should validate_uniqueness_of(:handle).case_insensitive
 
+    should parameterize_attribute :handle
+
     should have_many(:fields).dependent(:destroy)
 
     should have_many(:pages).dependent(:destroy)

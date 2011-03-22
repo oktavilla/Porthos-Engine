@@ -16,12 +16,7 @@ class FieldTest < ActiveSupport::TestCase
     should validate_presence_of :field_set_id
     should validate_presence_of :label
     should validate_presence_of :handle
-
-    should 'parameterize handle' do
-      handle = 'A New Handle'
-      @field.update_attributes(:handle => handle)
-      assert_equal handle.parameterize, @field.handle
-    end
+    should parameterize_attribute :handle
 
     should 'not allow handles that is currently methods on a Page object' do
       @field.handle = Page.new.public_methods.first.to_s

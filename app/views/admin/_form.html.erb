@@ -1,0 +1,4 @@
+<label for="content_module_name">Skriv ett beskrivande namn för modulen</label>
+<%= f.text_field :name %>
+<label for="content_module_template">Välj vilken modul du vill använda</label>
+<%= f.select :template, @content_module.available_templates.collect { |t| [t.humanize, t] } %>

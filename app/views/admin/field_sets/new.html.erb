@@ -1,0 +1,19 @@
+<% @page_title = 'Ny sidtyp' %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1>Ny sidtyp</h1>
+    </div>
+    <div id="content">
+      <% form_for :field_set, :url => admin_field_sets_path do |f| %>
+        <%= render :partial => 'form', :locals => { :f => f } %>
+        <div class="submit">
+          <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_field_sets_path) %>
+        </div>
+      <% end %>
+    </div>
+  </div>

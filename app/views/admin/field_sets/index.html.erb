@@ -1,0 +1,43 @@
+<% @page_title = 'Sidtyper' %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1>Alla sidtyper</h1>
+    </div>
+    <div class="tools">
+      <div class="add">
+        <%= link_to "Lägg till sidtyp", new_admin_field_set_path, :class => "new" %>
+      </div>
+    </div>
+    <div id="content">
+    <% if @field_sets.any? -%>
+      <table class="sortable">
+        <thead>
+          <tr>
+            <th class="placeholder"></th>
+            <th>Namn</th>
+            <th>Handle</th>
+            <th>Template</th>
+          </tr>
+        </thead>
+        <tbody id="field_sets">
+        <% @field_sets.each do |field_set| %>
+          <tr id="field_set_<%= field_set.id %>">
+            <td class="handle"><span class="drag_handle"></span></td>
+            <td class="title"><%= link_to field_set.title, admin_field_set_path(field_set) %></td>
+            <td><%= field_set.handle %></td>
+            <td><%= field_set.template_name %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    <% end -%>
+    </div>
+  </div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'porthos/field_sets' %>
+<% end %>

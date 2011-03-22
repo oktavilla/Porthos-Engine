@@ -1,0 +1,19 @@
+<% @page_class = 'layout2' %>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1>Ändra: <%= @tag.name %></h1>
+    <%= link_to "Radera", admin_tag_path(@tag), :method => :delete, :confirm => "Ta bort nyckelorder #{@tag.name} och alla referenser till det?" %>
+  </div>
+  <div id="content">
+    <% form_for :tag, :url => admin_tag_path(@tag), :html => { :method => :put } do |f| %>
+      <%= f.error_messages %>
+      <%= f.text_field :name %>
+      <div class="submit">
+        <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_tag_path(@tag)) %>
+      </div>
+    <% end %>
+  </div>
+</div>

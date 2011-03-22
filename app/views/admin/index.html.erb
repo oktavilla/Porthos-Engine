@@ -1,0 +1,24 @@
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1>Innehållsmoduler</h1>
+    </div>
+    <div class="tools">
+      <div class="add">
+        <%= link_to "Lägg till modul", new_admin_content_module_path, :class => 'new' %>
+      </div>
+    </div>
+    <div id="content">
+      <% nested_list_of @content_modules, {}, :class => 'items' do |content_module| %>
+        <span class="title"><%= content_module.name %></span>
+        <div class="edit">
+          <%= link_to "Ändra", edit_admin_content_module_path(content_module) %>
+          <%= link_to "Ta bort", admin_content_module_path(content_module), :method => :delete, :confirm => "Är du säker? Detta kommer att ta bort denna modul från alla sidor där den förekommer.", :class => 'delete' %>
+        </div>
+      <% end %>
+    </div>
+  </div>

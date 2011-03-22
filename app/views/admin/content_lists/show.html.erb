@@ -1,0 +1,113 @@
+<% @page_title = "Delat innehåll > #{@content_list.name}" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1><%= @content_list.name %></h1>
+  </div>
+  <div class="tools">
+     <div class="sort_contents add controls">
+        <a id="add_content" class="new" href="#">Lägg till innehåll</a>
+      <% if @content_list.contents.any? and false -%>
+        <%= link_to("Sortera innehåll", sort_admin_contents_path, :id => 'sort_contents', :class => 'sort fr') %>
+        <%= display_indicator :id => 'page_contents_indicator' %>
+      <% end -%>
+     </div>
+  </div>
+  <div class="sub_controls" style="display:none;">
+    <ul>
+      <li>
+        <a class="text ContentTextfield new_content" href="<%= new_admin_content_path(:content => { :context_id => @content_list.id, :context_type => 'ContentList', :context_id => @content_list.id, :context_type => 'ContentList', :resource_type => 'ContentTextfield' }) %>">Text</a>
+      </li>
+      <li>
+        <a class="teasers ContentTeaser new_content" href="<%= new_admin_content_path(:collection => 1, :content => { :context_id => @content_list.id, :context_type => 'ContentList', :resource_type => 'ContentTeaser' }) %>">Puff</a>
+      </li>
+    </ul>
+  </div>
+  <div id="contents_container" class="page_layout">
+    <ul class="contents items sortable" id="contents">
+    <% @content_list.contents.each do |content| -%>
+      <li class="<%= "#{content.resource_type} content " unless content.collection? %><%= ' collection' if content.collection? %> sortable <%= content.resource_type.underscore %>_wrapper<%= content.active? ? ' active' : ' inactive' %>" id="content_<%= content.id %>">
+      <span class="draghandle"></span>
+      <span class="inactive_proxy"></span>
+      <% unless content.collection? -%>
+        <%= render :partial => content.resource_template, :locals => { :resource => content.resource, :content => content } %>
+      <% else %>
+        <%= render :partial => content.collection_template, :locals => { :content => content } %>
+      <% end %>
+      <% unless content.collection? -%>
+        <div class="edit">
+          <% if content.module? and content.resource.has_settings? %>
+            <%= link_to("Inställningar", settings_admin_content_path(content), :class => (!content.collection? ? 'settings' : 'settings')) %>
+          <% end %>
+          <%= link_to("Ändra", edit_admin_content_path(content)) if not content.module? %>
+          <%= link_to content.active? ? 'Dölj' : 'Visa', toggle_admin_content_path(content), :method => :put, :class => 'visibility' %>
+          <%= link_to "Ta bort", admin_content_path(content), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+        </div>
+      <% end %>
+      </li>
+    <% end -%>
+    </ul>
+  </div>
+</div>
+<% content_for :javascripts do %>
+<script type="text/javascript">
+  Event.onReady(function() {
+    var Contents = Class.create({
+      initialize: function(element) {
+        this.element = $(element);
+        this.sortables = $$('ul.sortable');
+        this.observeSorting();
+      },
+      
+      observeSorting: function() {
+        this.element.addClassName('sorting');
+        var teaser_collections = $$('ul.teasers');
+        this.sortables.reverse().each(function(sortable) {
+          sortable.isTeaserContainer = sortable.hasClassName('teasers');
+          if (sortable.isTeaserContainer) {
+            sortable_containment = teaser_collections;
+          } else {
+            sortable_containment = sortable;
+          }
+          Sortable.create(sortable, {
+            containment : sortable_containment,
+            dropOnEmpty : true,
+            hoverclass  : 'drop_target',
+            scroll      : window,
+            handle      : 'draghandle',
+            only        : 'sortable',
+            onUpdate    : this.sort.bindAsEventListener(this)
+          });
+        }.bind(this));
+      },
+      
+      sort: function(event) {
+        this.sortables.each(function(sortable) {
+          var params = '';
+          if (sortable.isTeaserContainer) {
+            params = '&parent_id=' + encodeURIComponent(Porthos.extractId(sortable.id));
+          }
+          new Ajax.Request(Routing.sort_admin_contents_path(), {
+            method: 'put',
+            parameters: Sortable.serialize(sortable, {
+              name: 'contents'
+            }) + params
+          });
+        }.bind(this));
+      }
+    });
+    
+    new Contents('contents_container');
+    
+    $('add_content').observe('click', function(event) {
+      $$('div.sub_controls').invoke('toggle');
+      event.stop();
+    });
+    
+  });
+</script>
+<% end %>

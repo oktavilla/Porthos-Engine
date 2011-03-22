@@ -1,0 +1,57 @@
+<% @page_title = "Sidtyper > #{@field_set.title}" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1><%= @field_set.title %></h1>
+      <span class="away">
+        <%= link_to "Inställningar", edit_admin_field_set_path(@field_set), :class => 'edit_settings action' %>
+        <%= link_to "Alla sidtyper", admin_field_sets_path, :class => 'action' %>
+        <% if @field_set.pages_sortable? %>
+        <%= link_to "Sortera sidor", pages_admin_field_set_path(@field_set), :class => 'action' %>
+        <% end %>
+      </span>
+    </div>
+    <div class="tools">
+      <div class="add">
+        <%= link_to "Lägg till fält", new_admin_field_set_field_path(@field_set), :class => "new" %>
+      </div>
+    </div>
+    <div id="content">
+      <% if @field_set.fields.any? -%>
+      <table id="fields_for_field_set_<%= @field_set.id %>" class="sortable">
+        <thead>
+          <tr>
+            <th class="placeholder"></th>
+            <th>Namn</th>
+            <th>Fältnamn</th>
+            <th>Typ</th>
+            <th>Obligatorisk?</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+        <tbody id="fields">
+          <% @field_set.fields.each do |field| -%>
+          <tr class="field" id="field_<%= field.id %>">
+            <td class="handle"><span class="drag_handle"></span></td>
+            <td class="label"><%= field.label %></td>
+            <td><%= field.handle %></td>
+            <td><%= field.class.human_name %></td>
+            <td><%= field.required? ? 'Ja' : 'Nej' %></td>
+            <td><%= link_to "Ändra", edit_admin_field_set_field_path(@field_set, field) %></td>
+            <td><%= link_to "Ta bort", admin_field_set_field_path(@field_set, field), :method => :delete, :confirm => "Vill du verkligen ta bort #{field.label}? Fältet och dess infomation kommer tas bort från alla #{@field_set.title} sidor." %>
+          </tr>
+          <% end -%>
+        </tbody>
+      </table>
+      <% else -%>
+      <p class="notice">Det finns inga fält skapade än.</p>
+      <% end -%>
+    </div>
+  </div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'porthos/field_sets' %>
+<% end %>

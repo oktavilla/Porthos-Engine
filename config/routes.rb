@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
   filter :url_resolver
+  resources :pages do
+    member do
+      get 'preview'
+      post 'comment'
+    end
+  end
+
   namespace :admin do
     root :to => 'pages#index'
     match 'login' => 'sessions#new', :as => 'login'
@@ -10,13 +17,20 @@ Rails.application.routes.draw do
 
     resources :site_settings
     resources :content_lists
-    resources :field_sets
+    resources :field_sets do
+      put 'sort'
+      resources :fields do
+        collection do
+          put 'sort'
+        end
+      end
+    end
     resources :redirects
     resources :tags
     resources :content_modules
 
     resources :nodes
-    resources :pages doGE
+    resources :pages do
       collection do
         get 'search'
         put 'sort'
@@ -28,6 +42,18 @@ Rails.application.routes.draw do
       resources :custom_attributes
       resources :custom_associations
     end
+    resources :contents do
+      collection do
+        put 'sort'
+      end
+      member do
+        put 'toggle'
+        get 'settings'
+      end
+    end
+    resources :content_modules
+    resources :content_lists
+
     resources :assets
     resources :comments
   end

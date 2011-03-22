@@ -1,0 +1,21 @@
+<% @page_class = 'layout2' %>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1>Nyckelord</h1>
+  </div>
+  <div class="tools">
+    <div class="add">
+      <%= link_to "Nytt nyckelord", new_admin_tag_path, :class => 'new' %>
+    </div>
+  </div>
+  <div id="content">
+    <ul>
+    <% @tags.each do |tag| -%>
+      <li><%= link_to tag.name, admin_tag_path(tag) %></li>
+    <% end -%>
+    </ul>
+  </div>
+</div>

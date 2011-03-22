@@ -1,0 +1,12 @@
+<div class="textfield">
+  <% case resource.filter
+      when 'wymeditor' -%>
+      <%= resource.body %>
+  <%  when 'html' -%>
+    <%= resource.body %>
+  <%  when 'textile' -%>
+    <%= textilize resource.body %>
+  <%  else -%>
+    <%= resource.body %>
+  <% end -%>
+</div>

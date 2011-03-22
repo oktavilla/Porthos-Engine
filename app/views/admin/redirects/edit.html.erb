@@ -1,0 +1,25 @@
+<% @page_title = 'Ändra vidarebefordring' -%>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1>Ändra vidarebefordring</h1>
+    </div>
+    <div id="content">
+      <% form_for :redirect, :url => admin_redirect_path(@redirect), :html => {:method => :put, :class => "tiny" } do |f| %>
+        <%= error_messages_for :redirect %>
+        <label for="redirect_path">Från</label>
+        <%= f.text_field :path %>
+        <p class="form_help after">Vilken address som ska vidarebefordras, t.ex. /ge-en-gava</p>
+        <label for="redirect_target">Till</label>
+        <%= f.text_field :target %>
+        <p class="form_help after">Vilken address som besökaren ska vidarebefordras till, t.ex. /stod-oss/ge-en-gava</p>
+        <div class="submit">
+          <%= submit_tag 'Spara' %> eller <%= link_to "avbryt", admin_redirects_path %>
+        </div>
+      <% end %>
+    </div>
+  </div>

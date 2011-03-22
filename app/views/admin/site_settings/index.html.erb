@@ -1,0 +1,45 @@
+<% @page_title = "Inställningar" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1>Inställningar</h1>
+    </div>
+    <div class="tools">
+      <div class="add">
+        <%= link_to "Skapa ny inställning", new_admin_site_setting_path, :class => 'new' %>
+      </div>
+    </div>
+    <div id="content">
+      <% if @site_settings.any? %>  
+        <table>
+          <thead>
+            <tr>
+              <th>Namn</th>
+              <th>Värde</th>
+              <th colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody id="site_settings">
+        <% @site_settings.each do |setting| %>  
+          <tr class="<%= cycle 'odd', 'even' %>">
+            <td><%= setting.name %></td>
+            <td><%= html_escape setting.value %></td>
+            <td>
+              <%= link_to "Ändra", edit_admin_site_setting_path(setting) %>
+            </td>
+            <td>
+              <%= link_to "Radera", admin_site_setting_path(setting), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %>
+            </td>
+          </tr>
+        <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p class="blank-slate">Det finns inga inställningar inlagda än.</p>
+      <% end %>
+    </div>
+  </div>

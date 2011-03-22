@@ -1,0 +1,13 @@
+<span><strong>Förhandsgranskning</strong> av sidan ”<%= link_to @page.title, "/#{@page.node.slug}" %>”.
+<% if @page.node.inactive? %>
+  Sidan är avstängd.
+<% else %>
+  Sidan finns på <code><%= "#{request.protocol}#{request.host}/#{@page.node.slug}" %></code> och 
+  <% if @page.node.active? %>
+    är synlig i navigationen.
+  <% elsif @page.node.hidden? %>  
+    syns inte i navigationen men är tillgänglig på internet.
+  <% end %>
+<% end %>
+</span>
+<%= link_to "Tillbaka till redigeringsläget &rarr;", admin_page_path(@page.id), :class => 'edit' %>

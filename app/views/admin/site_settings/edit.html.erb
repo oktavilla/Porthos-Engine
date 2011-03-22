@@ -1,0 +1,20 @@
+<% @page_title = "Ändra inställning" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1>Ändra inställning</h1>
+    </div>
+    <div id="content">
+      <% form_for @site_setting, :url => admin_site_setting_path(@site_setting), :html => {:method => :put, :class => "tiny" } do |f| %>
+        <%= error_messages_for :redirect %>
+        <%= render :partial => 'form', :locals => {:f => f} %>
+        <div class="submit">
+          <%= submit_tag 'Spara' %> eller <%= link_to "avbryt", admin_site_settings_path %>
+        </div>
+      <% end %>
+    </div>
+  </div>

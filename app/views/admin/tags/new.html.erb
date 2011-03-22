@@ -1,0 +1,18 @@
+<% @page_class = 'layout2' %>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1>Nytt nyckelord</h1>
+  </div>
+  <div id="content">
+    <% form_for :tag, :url => admin_tags_path do |f| %>
+      <%= f.error_messages %>
+      <%= f.text_field :name %>
+      <div class="submit">
+        <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_tags_path) %>
+      </div>
+    <% end %>
+  </div>
+</div>

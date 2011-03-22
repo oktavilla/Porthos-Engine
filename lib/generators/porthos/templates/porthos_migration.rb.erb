@@ -58,6 +58,13 @@ class <%= migration_class_name %> < ActiveRecord::Migration
     add_index "contents", ["context_id", "context_type", "position"], :name => "index_contents_on_context_id_and_context_type_and_position"
     add_index "contents", ["parent_id"], :name => "index_contents_on_parent_id"
 
+    create_table "content_modules", :force => true do |t|
+      t.string   "name"
+      t.string   "template"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
     create_table "custom_associations", :force => true do |t|
       t.integer  "context_id"
       t.string   "context_type"
@@ -239,6 +246,23 @@ class <%= migration_class_name %> < ActiveRecord::Migration
     end
 
     add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
+
+    create_table 'site_settings', :force => true do |t|
+      t.string 'name'
+      t.string 'value'
+      t.datetime 'created_at'
+      t.datetime 'updated_at'
+    end
+    add_index :site_settings, :name, :name => 'site_settings_name'
+
+    create_table "redirects", :force => true do |t|
+      t.string   "path"
+      t.string   "target"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index "redirects", ["path"], :name => "index_redirects_on_path"
 
     # Create default admin user
 

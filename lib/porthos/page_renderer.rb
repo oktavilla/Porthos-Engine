@@ -8,18 +8,26 @@ module Porthos
       self.available_methods.push *methods
     end
 
-    attr_reader :params
-    attr_reader :field_set
+    class_inheritable_accessor :required_objects
+    self.required_objects = [:field_set]
 
-    def initialize(field_set, params)
-      @field_set = field_set
-      @params = params
+    attr_reader :controller,
+                :params,
+                :objects
+
+    def initialize(controller, objects = {})
+      @controller = controller
+      @params     = controller.params
+      @objects    = objects.to_options
+      validate_required_objects
+      create_instance_variables_for_objects
       self.available_methods.each { |m| self.send(m) } # pre fetch everything before render time
+      after_initialize
       self
     end
 
     def layout_class
-      @page_class ||= @field_set.handle
+      @layout_class ||= @field_set.handle
     end
 
     def title
@@ -30,6 +38,28 @@ module Porthos
       'pages-index'
     end
 
-    register_methods :layout_class, :title, :page_id
+    def logged_in?
+      controller.send(:logged_in?)
+    end
+
+  protected
+
+    def after_initialize
+    end
+
+    def validate_required_objects
+      object_keys = @objects.keys
+      self.class.required_objects.each do |object_name|
+        raise "Missing required object #{object_name.to_s}" unless object_keys.include?(object_name)
+      end
+    end
+
+    def create_instance_variables_for_objects
+      objects.each do |key, object|
+        self.class.send(:attr_reader, key)
+        instance_variable_set("@#{key.to_s}".to_sym, object)
+      end
+    end
+
   end
 end

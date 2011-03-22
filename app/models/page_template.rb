@@ -9,18 +9,15 @@ class PageTemplate
               :full_path,
               :settings
 
-  def initialize(directory)
-    @handle = directory
-    @path = File.join(self.class.root_path, directory)
-    @full_path = File.join(self.class.root_directory, directory)
-    @template_file = File.join(full_path, 'template.yml')
-    if File.exists?(@template_file)
-      @settings = YAML::load(File.read(@template_file))
-    else
-      raise "No settings file included for the template #{directory}"
-    end
-    @name = settings['name'] || directory
-    require File.join(@full_path, "#{directory}_renderer")
+  def initialize(name)
+    @full_path = PageTemplate.available_template_paths[name]
+    @path = @full_path.gsub(/(.*)app\/views\//,'')
+    @template_file = File.join(@full_path, 'template.yml')
+    raise "Template not found (template.yml missing from #{@path})" unless File.exists?(@template_file)
+    @handle = name
+    @settings = YAML::load(File.read(@template_file))
+    @name = settings['name']
+    require File.join(@full_path, "#{@handle}_renderer")
   end
 
   def views
@@ -38,13 +35,25 @@ class PageTemplate
   class << self
 
     def all
-      @all ||= Dir.entries(self.root_directory).reject { |f| f[0...1] == "." }.collect do |dir|
-        self.new(dir)
-      end
+      @all ||= available_template_paths.any? ? available_template_paths.collect {|name, path| self.new(name) } : []
     end
 
-    def root_directory
-      File.join(Rails.root, 'app', 'views', root_path)
+    def available_template_paths
+      available_template_paths = {}
+      root_directories.each do |root_path|
+        if Dir.exists?(root_path)
+          Dir.entries(root_path).reject { |f| f[0...1] == "." }.collect do |template_path|
+            unless available_template_paths.has_key?(File.basename(template_path))
+              available_template_paths[template_path] = File.join(root_path, template_path)
+            end
+          end
+        end
+      end
+      available_template_paths
+    end
+
+    def root_directories
+      [File.join(Rails.root, 'app', 'views', root_path), File.join(Porthos.root, 'app', 'views', root_path)]
     end
 
     def root_path
@@ -53,6 +62,10 @@ class PageTemplate
 
     def default
       self.new('default')
+    end
+
+    def find(template_handle)
+      self.all.detect{|template| template.handle == template_handle }
     end
 
   end

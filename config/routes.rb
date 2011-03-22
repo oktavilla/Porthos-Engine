@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     resources :content_modules
 
     resources :nodes
-    resources :pages doGE
+    resources :pages do
       collection do
         get 'search'
         put 'sort'

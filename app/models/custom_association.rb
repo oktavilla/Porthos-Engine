@@ -25,7 +25,7 @@ class CustomAssociation < ActiveRecord::Base
 protected
 
   def parameterize_handle
-    self.handle = handle.parameterize
+    self.handle = handle.parameterize if handle.present?
   end
 
 end

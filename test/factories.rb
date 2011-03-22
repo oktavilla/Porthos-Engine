@@ -34,6 +34,9 @@ Factory.define :field do |f|
   f.handle { Factory.next(:title) }
 end
 
+Factory.define :string_field, :parent => :field do |f|
+end
+
 Factory.define :page do |f|
   f.association :field_set
   f.title { Factory.next(:title) }
@@ -42,6 +45,9 @@ end
 Factory.define :custom_attribute do |f|
   f.association :context, :factory => :page
   f.association :field
+end
+
+Factory.define :string_attribute, :class => StringAttribute, :parent => :custom_attribute do |f|
 end
 
 Factory.define :custom_association do |f|

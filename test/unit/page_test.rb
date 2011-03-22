@@ -42,4 +42,26 @@ class PageTest < ActiveSupport::TestCase
       assert @page.published?
     end
   end
+
+  context 'A page with custom attributes' do
+    setup do
+      @field_set = Factory(:field_set)
+      @field = Factory(:string_field, :field_set => @field_set, :handle => 'field_handle_name')
+      @page = Factory(:page, :field_set => @field_set)
+      @custom_attribute = Factory(:string_attribute, {
+        :field => @field,
+        :context => @page,
+        :handle => @field.handle,
+        :value => 'The name of this page'
+      })
+    end
+
+    should 'make custom attributes accessible by their handles' do
+      assert @page.respond_to?(:field_handle_name)
+      assert_equal @custom_attribute.value, @page.field_handle_name
+      assert @page.respond_to?(:field_handle_name?)
+      assert @page.field_handle_name?
+    end
+
+  end
 end

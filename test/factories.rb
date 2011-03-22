@@ -4,6 +4,10 @@ Factory.sequence :title do |i|
   "A random title #{i}"
 end
 
+Factory.sequence :handle do |i|
+  "handle_#{i}"
+end
+
 Factory.sequence :url do |i|
   "/where/am/#{i}"
 end
@@ -30,9 +34,28 @@ Factory.define :field do |f|
   f.handle { Factory.next(:title) }
 end
 
+Factory.define :string_field, :parent => :field do |f|
+end
+
 Factory.define :page do |f|
-  f.title { Factory.next(:title) }
   f.association :field_set
+  f.title { Factory.next(:title) }
+end
+
+Factory.define :custom_attribute do |f|
+  f.association :context, :factory => :page
+  f.association :field
+end
+
+Factory.define :string_attribute, :class => StringAttribute, :parent => :custom_attribute do |f|
+end
+
+Factory.define :custom_association do |f|
+  f.association :context, :factory => :page
+  f.association :target, :factory => :page
+  f.association :field
+  f.handle { Factory.next(:handle) }
+  f.relationship 'one_to_one'
 end
 
 # Factories for url resolver

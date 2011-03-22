@@ -16,6 +16,15 @@ Factory.sequence :email do |i|
   "person#{i}@mash-app.com"
 end
 
+Factory.define :user do |f|
+  f.first_name 'Richie'
+  f.last_name 'Hawtin'
+  f.email 'richie@hawtin.com'
+  f.login 'admin'
+  f.password 'password'
+  f.password_confirmation 'password'
+end
+
 Factory.define :node do |f|
   f.url { Factory.next(:url) }
   f.controller "pages"

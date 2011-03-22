@@ -1,6 +1,7 @@
 class Content < ActiveRecord::Base
   belongs_to :context,
-             :polymorphic => true
+             :polymorphic => true,
+             :touch => true
   belongs_to :resource,
              :polymorphic => true
   belongs_to :content_collection,
@@ -10,14 +11,13 @@ class Content < ActiveRecord::Base
   scope :active, where("contents.active = ?", true)
 
   acts_as_list :scope => 'context_id = \'#{context_id}\' AND context_type = \'#{context_type}\' AND column_position = \'#{column_position}\' AND parent_id #{(parent_id.blank? ? "IS NULL" : (" = " + parent_id.to_s))}'
-  
+
   acts_as_settingable
-  
+
   attr_accessor :multiple_restrictions
-  
-  after_save :notify_context,
-             :set_restrictions
-  
+
+  after_save :set_restrictions
+
   before_destroy do |content|
     content.resource.destroy if content.resource and not content.module?
   end
@@ -36,7 +36,7 @@ class Content < ActiveRecord::Base
   def text?
     resource_type == 'ContentTextfield'
   end
-  
+
   def module?
     resource_type == 'ContentModule'
   end
@@ -65,22 +65,16 @@ class Content < ActiveRecord::Base
 
   def collection?
     self.is_a?(ContentCollection)
-  end  
+  end
   def viewable_by(user)
     !self.restrictions.detect { |r| r.denies?(user) }
   end
-  
+
   def restricted?
     !restrictions_count.nil? && restrictions_count > 0
   end
-  
-protected
 
-  def notify_context
-    if context && context.respond_to?(:updated_at)
-      context.updated_at = Time.now and context.save
-    end
-  end
+protected
 
   def set_restrictions
     self.restrictions.destroy_all

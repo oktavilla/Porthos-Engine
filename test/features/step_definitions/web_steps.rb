@@ -110,6 +110,10 @@ Then /^(?:|I )should see "([^"]*)"$/ do |text|
   end
 end
 
+Then /^(?:|I )should see element "([^\"]*)"$/ do |selector|
+  assert page.has_selector?(selector)
+end
+
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
   regexp = Regexp.new(regexp)
 

@@ -1,6 +1,6 @@
 Then /^I should be logged out$/ do
   Given %{I go to the admin pages page}
-  Then %{I should be on the login page}
+  Then %{I should be on the admin login page}
 end
 
 Given /^I have one\s+user "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
@@ -12,11 +12,11 @@ Given /^I have one\s+user "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
 end
 
 Given /^I am logged in$/ do
-  username    = 'admin'
+  username    = 'my_user'
   password = 'secretpass'
   Given %{I have one user "#{username}" with password "#{password}"}
-  And %{I go to the login page}
-  And %{I fill in "user_email" with "#{username}"}
-  And %{I fill in "user_password" with "#{password}"}
-  And %{I press "user_submit"}
+  And %{I go to the admin login page}
+  And %{I fill in "login" with "#{username}"}
+  And %{I fill in "password" with "#{password}"}
+  And %{I press "commit"}
 end

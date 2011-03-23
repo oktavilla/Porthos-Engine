@@ -14,13 +14,13 @@ module Porthos
 
     # after_filter
     def remember_uri
-      session[:last_viewed] = params[:return_to] || request.request_uri
+      session[:last_viewed] = params[:return_to] || request.fullpath
     end
 
     def previous_view_path(default_path = '/')
       if params[:return_to]
         params[:return_to]
-      elsif session[:last_viewed] and session[:last_viewed] != request.request_uri
+      elsif session[:last_viewed] and session[:last_viewed] != request.fullpath
         session[:last_viewed]
       else
         default_path
@@ -108,7 +108,7 @@ module Porthos
     #
     # We can return to this location by calling #redirect_back_or_default.
     def store_location(return_url = nil)
-      session[:return_to] = return_url ? return_url : request.request_uri
+      session[:return_to] = return_url ? return_url : request.fullpath
     end
 
     # Redirect to the URI stored by the most recent store_location call or

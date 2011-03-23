@@ -24,6 +24,7 @@ require File.expand_path("../../../test_helper.rb",  __FILE__)
 #
 require 'capybara'
 require 'cucumber/rails'
+require 'pickle'
 
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd

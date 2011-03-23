@@ -18,9 +18,11 @@ require "capybara/rails"
 Capybara.default_driver   = :rack_test
 Capybara.default_selector = :css
 
-# Run any available migration
-`cd test/dummy; rm db/migrate/*_create_porthos_tables.rb;rails g porthos CreatePorthosTables`
-ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
+# Run any available migration (in silience)
+silence_stream(STDOUT) do
+  `cd #{Porthos.root.join('test')}/dummy; rm db/migrate/*_create_porthos_tables.rb;rails g porthos CreatePorthosTables`
+  ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
+end
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

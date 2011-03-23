@@ -3,6 +3,12 @@
     var Porthos = {};
   }
   Porthos.Helpers = {
+    extract_id: new RegExp(/^\d/i),
+
+    extractId: function(string) {
+      return string.replace(Porthos.Helpers.extract_id,'');
+    },
+
     parameterize: function(string) {
       var source = $.trim(string.toLowerCase()),
           from = "åäöàáäâèéëêìíïîòóöôùúüûÑñÇç·/_,:;",
@@ -36,4 +42,78 @@
       });
     }
   };
+
+  Porthos.Page = (function() {
+    var Ready = function(container) {
+      var $container = $(container),
+          $columns_container = $container.find('div.page_layout'),
+          page_id = Porthos.Helpers.extractId($columns_container.attr('id')),
+          columns = $columns_container.find('div.column').map(function() {
+            var $column = $(this);
+            $column.delegate('a.add', 'click', function(event) {
+              event.preventDefault();
+              $(this).toggleClass('active');
+              $column.find('div.sub_controls').toggle();
+            });
+
+            return {
+              container: $column,
+              position : Porthos.Helpers.extractId($column.attr('id')),
+              element  : $column.find('ul.contents').get(0)
+            };
+          });
+
+      $container.delegate('div.header a.toggler', 'click', function(event) {
+        event.preventDefault();
+        $container.find('div.header').toggle();
+      });
+
+      Porthos.Helpers.cloneAsUrl('#page_title', '#page_slug');
+
+      $('#content').delegate('div.edit a.change, div.edit a.add, a.cancel', 'click', function(event) {
+        event.preventDefault();
+        var $element = $(this),
+            $parent  = $element.closest('div.page_content'),
+            query    = 'form';
+        if (!$parent.hasClass('one_to_many')) {
+          query += ', div.container';
+        }
+        $parent.find(query).toggle();
+      });
+
+      $('#page_publish_on_date a.toggle_publish_date, #page_published_on_form a').click(function(event) {
+        event.preventDefault();
+        $('#page_current_publish_on_date, #page_published_on_form').toggle();
+      });
+
+      $('#page_tags a').click(function(event) {
+        event.preventDefault();
+        $('#page_tags_list, #page_tags_form').toggle();
+      });
+
+      $('#page_category').delegate('a.change, a.cancel', 'click', function(event) {
+        event.preventDefault();
+        $('#category_view, #choose_page_category_form').toggle();
+      });
+
+      $('#new_category, #page_categories_form a').click(function(event) {
+        event.preventDefault();
+        $('#choose_page_category_form, #page_categories_form').toggle();
+      });
+
+    };
+
+    return {
+      init: function() {
+        $(document).ready(function() {
+          $('#pages_view.show #workspace').each(function() {
+            Ready(this);
+          });
+        });
+      }
+    };
+  }());
+
+  Porthos.Page.init();
+
 })(jQuery);

@@ -22,7 +22,7 @@
         <%= link_to field_set.title, (!current_scopes[:with_parent] ? new_admin_page_path(:page => { :field_set_id => field_set.id }) : new_admin_page_path(:page => { :field_set_id => field_set, :parent_id => current_scopes[:with_parent].split(',')[0], :parent_type => current_scopes[:with_parent].split(',')[1] })), :class => 'new' %>
       <% end if @field_sets.any? %>
     </div>
-    <% form_tag admin_pages_path, :method => :get do |f| %>
+    <%= form_tag admin_pages_path, :method => :get do |f| %>
     <div class="sort">
       <label for="filters_order_by">Sortering:</label>
       <% current_scopes.except(:order_by).each do |filter, value| -%>

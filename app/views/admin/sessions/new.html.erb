@@ -1,4 +1,4 @@
-<% form_tag admin_sessions_path do -%>
+<%= form_tag admin_sessions_path do -%>
   <fieldset class="compact">
     <label for="login">Användarnamn</label>
     <div class="fullwidth">
@@ -13,5 +13,5 @@
     <%= check_box_tag 'remember_me' %>
     kom ihåg mig på den här datorn
   </label>
-  <fieldset class="submit"><%= submit_tag 'Logga in' %></fieldset>
+  <fieldset class="submit"><%= submit_tag 'Logga in', :id => 'commit' %></fieldset>
 <% end -%>

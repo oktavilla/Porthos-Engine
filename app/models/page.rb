@@ -101,6 +101,8 @@ class Page < ActiveRecord::Base
                 :generate_slug
   before_update :set_updated_by
 
+  after_initialize :create_namespaced_tagging_methods
+
   acts_as_list :scope => 'field_set_id'
   acts_as_taggable
 
@@ -253,7 +255,7 @@ protected
     index_node && (index_node.restricted? || index_node.ancestors.detect { |n| n.restricted? })
   end
 
-  def after_initialize
+  def create_namespaced_tagging_methods
     if field_set.present? && field_set.allow_categories?
       self.class.create_namespaced_tagging_methods_for(field_set.handle)
     end

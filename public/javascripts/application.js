@@ -54,11 +54,11 @@
     };
 
     var Ready = function() {
-      var $container = $('#field_types');
-      $('#field_type').bind('change', function(event) {
-        Switch($(this).val(), $container);
-      });
-      Switch($('#field_type').val(), $container);
+      var $container = $('#field_types'),
+          $type = $('#field_type').bind('change', function(event) {
+            Switch($(this).val(), $container);
+          });
+      Switch($type.val(), $container);
     };
 
     return {
@@ -109,6 +109,8 @@
         }
         $parent.find(query).toggle();
       });
+
+      $('textarea.editor').ckeditor();
 
       $('#page_publish_on_date a.toggle_publish_date, #page_published_on_form a').click(function(event) {
         event.preventDefault();

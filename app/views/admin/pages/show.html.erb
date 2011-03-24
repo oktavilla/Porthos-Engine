@@ -196,7 +196,7 @@
          when 'StringField' -%>
           <div class="container">
             <h2 class="field_label"><%= field.label %></h2>
-            <div class="content"><%= custom_attribute.value %></div>
+            <div class="content"><%=raw custom_attribute.value %></div>
             <div class="edit"><a href="#" class="change">Ändra</a></div>
           </div>
           <% unless custom_attribute.new_record? -%>
@@ -225,7 +225,7 @@
         <div class="container">
           <h2 class="field_label"><%= field.label %></h2>
           <div class="content">
-            <%= !field.allow_rich_text? ? simple_format(custom_attribute.value) : custom_attribute.value %>
+            <%=raw !field.allow_rich_text? ? simple_format(custom_attribute.value) : custom_attribute.value %>
           </div>
           <div class="edit"><a href="#" class="change">Ändra</a></div>
         </div>
@@ -361,5 +361,6 @@
   </div>
 </div>
 <% content_for :javascripts do %>
+  <%= javascript_include_tag 'ckeditor/ckeditor', 'ckeditor/adapters/jquery' %>
   <%= javascript_include_tag 'application' %>
 <% end %>

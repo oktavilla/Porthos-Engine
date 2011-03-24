@@ -11,7 +11,6 @@
   </ol>
 <% end -%>
 <% form_for :comment, :url => comment_page_path(:id => @page.id, :slug => @node.slug), :html => { :method => :post } do |f| %>
-  <%= error_messages_for :comment %>
   <fieldset>
     <%= hidden_field_tag 'return_to', request.request_uri %>
     <legend>Har du något att säga?</legend>

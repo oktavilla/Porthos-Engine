@@ -2,6 +2,12 @@ class Tag < ActiveRecord::Base
   has_many :taggings, :dependent => :destroy
   has_many :taggables, :through => :taggings
 
+  scope :namespaced_to, lambda { |namespace|
+    joins('LEFT OUTER JOIN taggings ON taggings.tag_id = tags.id').
+    where("taggings.namespace = ?", namespace).
+    group('name')
+  }
+
   scope :popular,
         select("tags.*, COUNT(taggings.tag_id) as num_taggings").
         joins("LEFT OUTER JOIN taggings ON taggings.tag_id = tags.id").
@@ -14,7 +20,9 @@ class Tag < ActiveRecord::Base
     group('tags.name')
   }
 
-  validates_uniqueness_of :name
+  validates :name,
+            :presence => true,
+            :uniqueness => true
 
   before_validation :format_name
 
@@ -33,7 +41,7 @@ class Tag < ActiveRecord::Base
 protected
 
   def format_name
-    self.name = name.mb_chars.strip.downcase
+    self.name = name.mb_chars.strip.downcase if name.present?
   end
 
 end

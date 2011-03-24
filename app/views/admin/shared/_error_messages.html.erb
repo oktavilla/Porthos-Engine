@@ -1,11 +1,7 @@
-<% if target.errors.any? %>
-<div class="errors">
-  <h2><%= target.errors.count > 1 ? t(:other, :scope => [:activerecord, :errors, :template, :header], :model => target) :
-                                    t(:one, :scope => [:activerecord, :errors, :template, :header], :model => target) %></h2>
-  <ul>
-  <% target.errors.full_messages.each do |msg| %>
-    <li><%= msg %></li>
-  <% end %>
+<% if object && object.errors.any? %>
+  <ul class="error_messages">
+    <% object.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
   </ul>
-</div>
 <% end %>

@@ -279,7 +279,7 @@ protected
     rescue
       handle = method.to_s.gsub(/\?/, '')
       # raise if we do not have a matching field
-      method_missing_without_find_custom_attributes(method, *args) unless fields.detect { |field| field.handle == handle }
+      method_missing_without_find_custom_attributes(method, *args) unless fields.detect { |field| !field.is_a?(AssociationField) && field.handle == handle }
       if custom_attribute = custom_attributes.detect { |c| c.handle == handle }
         create_reader_for_custom_attribute custom_attribute
         return custom_attribute.value
@@ -297,16 +297,16 @@ protected
     rescue
       if args.size == 0
         handle = method.to_s.gsub(/\?/, '')
-        if field = fields.detect { |field| field.handle == handle }
+        if field = fields.detect { |field| field.is_a?(AssociationField) && field.handle == handle }
           match = field.target_handle.blank? ? custom_associations_by_handle(handle) : custom_association_contexts_by_handle(field.target_handle)
           if match.any?
             unless field.target_handle.present?
-              match.first.relationship == 'one_to_one' ? match.first.target : CustomAssociationProxy.new({
+              match.first.relationship == 'one_to_one' ? match.first.target : Porthos::CustomAssociationProxy.new({
                 :target_class => match.first.target_type.constantize,
                 :target_ids   => match.collect { |m| m.target_id }
               })
             else
-              field.relationship == 'one_to_one' ? match.first.context : CustomAssociationProxy.new({
+              field.relationship == 'one_to_one' ? match.first.context : Porthos::CustomAssociationProxy.new({
                 :target_class => match.first.context_type.constantize,
                 :target_ids   => match.collect { |m| m.context_id }
               })

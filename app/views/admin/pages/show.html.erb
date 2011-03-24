@@ -54,7 +54,7 @@
   <div id="page_tags">
     <div id="page_tags_list">
       <p class="tags">
-      <%= @page.tags.collect { |tag| link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ') -%>
+      <%= @page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ').html_safe -%>
       </p>
       <p><a href="#">Ändra</a></p>
     </div>
@@ -361,5 +361,6 @@
   </div>
 </div>
 <% content_for :javascripts do %>
+  <%= javascript_include_tag 'ckeditor/ckeditor', 'ckeditor/adapters/jquery' %>
   <%= javascript_include_tag 'application' %>
 <% end %>

@@ -9,7 +9,7 @@
   </div>
   <div id="content">
     <% form_for :tag, :url => admin_tag_path(@tag), :html => { :method => :put } do |f| %>
-      <%= f.error_messages %>
+      <%= render 'admin/shared/error_messages', :object => f.object %>
       <%= f.text_field :name %>
       <div class="submit">
         <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_tag_path(@tag)) %>

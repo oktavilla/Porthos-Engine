@@ -14,7 +14,8 @@ class CustomAttribute < ActiveRecord::Base
   end
 
   def value
-    read_attribute(self.value_attribute)
+    @value = read_attribute(self.value_attribute)
+    @value.present? && @value.acts_like_string? ? @value.html_safe :  @value
   end
 
 protected

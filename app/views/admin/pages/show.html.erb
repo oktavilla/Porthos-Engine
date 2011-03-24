@@ -54,7 +54,7 @@
   <div id="page_tags">
     <div id="page_tags_list">
       <p class="tags">
-      <%=raw @page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ') -%>
+      <%= @page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ').html_safe -%>
       </p>
       <p><a href="#">Ändra</a></p>
     </div>
@@ -196,7 +196,7 @@
          when 'StringField' -%>
           <div class="container">
             <h2 class="field_label"><%= field.label %></h2>
-            <div class="content"><%=raw custom_attribute.value %></div>
+            <div class="content"><%= custom_attribute.value %></div>
             <div class="edit"><a href="#" class="change">Ändra</a></div>
           </div>
           <% unless custom_attribute.new_record? -%>
@@ -225,7 +225,7 @@
         <div class="container">
           <h2 class="field_label"><%= field.label %></h2>
           <div class="content">
-            <%=raw !field.allow_rich_text? ? simple_format(custom_attribute.value) : custom_attribute.value %>
+            <%= !field.allow_rich_text? ? simple_format(custom_attribute.value) : custom_attribute.value %>
           </div>
           <div class="edit"><a href="#" class="change">Ändra</a></div>
         </div>

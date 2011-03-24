@@ -8,16 +8,17 @@
     <div class="header">
       <h1><%= @field_set.title %></h1>
       <span class="away">
-        <%= link_to "Inställningar", edit_admin_field_set_path(@field_set), :class => 'edit_settings action' %>
-        <%= link_to "Alla sidtyper", admin_field_sets_path, :class => 'action' %>
+        <%= link_to t(:edit, :scope => [:app, :views, :admin, :field_sets, :show]), edit_admin_field_set_path(@field_set), :class => 'edit_settings action' %>
+        <%= link_to t(:destroy, :scope => [:app, :views, :admin, :field_sets, :show]), admin_field_set_path(@field_set), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @field_set.title), :class => 'destroy action' %>
+        <%= link_to t(:all_field_sets, :scope => [:app, :views, :admin, :field_sets, :show]), admin_field_sets_path, :class => 'action' %>
         <% if @field_set.pages_sortable? %>
-        <%= link_to "Sortera sidor", pages_admin_field_set_path(@field_set), :class => 'action' %>
+        <%= link_to t(:sort, :scope => [:app, :views, :admin, :field_sets, :show]), pages_admin_field_set_path(@field_set), :class => 'action' %>
         <% end %>
       </span>
     </div>
     <div class="tools">
       <div class="add">
-        <%= link_to "Lägg till fält", new_admin_field_set_field_path(@field_set), :class => "new" %>
+        <%= link_to t(:add_field, :scope => [:app, :views, :admin, :field_sets, :show]), new_admin_field_set_field_path(@field_set), :class => "new" %>
       </div>
     </div>
     <div id="content">
@@ -26,10 +27,10 @@
         <thead>
           <tr>
             <th class="placeholder"></th>
-            <th>Namn</th>
-            <th>Fältnamn</th>
-            <th>Typ</th>
-            <th>Obligatorisk?</th>
+            <th><%= t(:name, :scope => [:app, :views, :admin, :field_sets, :show, :table]) %></th>
+            <th><%= t(:field_name, :scope => [:app, :views, :admin, :field_sets, :show, :table]) %></th>
+            <th><%= t(:type, :scope => [:app, :views, :admin, :field_sets, :show, :table]) %></th>
+            <th><%= t(:requred, :scope => [:app, :views, :admin, :field_sets, :show, :table]) %></th>
             <th colspan="2"></th>
           </tr>
         </thead>
@@ -41,14 +42,14 @@
             <td><%= field.handle %></td>
             <td><%= field.class.human_name %></td>
             <td><%= field.required? ? 'Ja' : 'Nej' %></td>
-            <td><%= link_to "Ändra", edit_admin_field_set_field_path(@field_set, field) %></td>
-            <td><%= link_to "Ta bort", admin_field_set_field_path(@field_set, field), :method => :delete, :confirm => "Vill du verkligen ta bort #{field.label}? Fältet och dess infomation kommer tas bort från alla #{@field_set.title} sidor." %>
+            <td><%= link_to t(:edit), edit_admin_field_set_field_path(@field_set, field) %></td>
+            <td><%= link_to t(:destroy), :method => :delete, :confirm => "Vill du verkligen ta bort #{field.label}? Fältet och dess infomation kommer tas bort från alla #{@field_set.title} sidor." %>
           </tr>
           <% end -%>
         </tbody>
       </table>
       <% else -%>
-      <p class="notice">Det finns inga fält skapade än.</p>
+      <p class="notice"><%= t(:no_data, :scope => [:app, :views, :admin, :field_sets, :show]) %></p>
       <% end -%>
     </div>
   </div>

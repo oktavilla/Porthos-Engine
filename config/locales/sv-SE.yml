@@ -253,6 +253,7 @@
       password_has_been_sent: Ett nytt lösenord har skapats och skickats till din e-postadress 
       unable_to_find_user: Det gick inte att hitta någon användare med den e-postadressen
       flash_is_needed: Du behöver flash för att se den här delen av sidan
+      destroy_confirmation: Är du säker på att du vill radera %{target_name}?
     colors:
       light_magenta: Ljusmagenta
       light_cyan: Ljuscyan
@@ -293,6 +294,7 @@
       deleted: och alla sidor under den är borttagna
     admin_general:
       saved: sparades
+      updated: uppdaterades
       deleted: raderades
       logged_in: Du är inloggad
       logged_out: Du är nu utloggad och lugnt surfa vidare
@@ -317,3 +319,43 @@
     validators:
       bad_email_format: har fel format
       bad_redirect_format: måste börja med ett /-tecken
+    views:
+      layouts:
+        admin:
+          account_nav:
+            settings: Inställningar
+            my_account: Mitt konto
+            logout: Logga ut
+      admin:
+        shared:
+          settings_sub_nav:
+            title: Innehåll
+            site_settings: Inställningar
+            content_lists: Delat Innehållsmodul
+            field_sets: Sidtyper
+            redirects: Vidarebefordringar
+            tags: Nyckelord
+            content_modules: Moduler
+        field_sets:
+          index:
+            title: Alla sidtyper
+            new_field_set: Lägg till sidtyp
+          new: 
+            title: Ny sidtyp
+          show:
+            edit: Ändra sidtyp
+            destroy: Radera sidtyp
+            all_field_sets: Alla sidtyper
+            sort: Sortera
+            add_field: Lägg till fält
+            no_data: Det finns inga fält skapade än
+            table:
+              name: Namn
+              field_name: Fältnamn
+              type: Typ
+              required: Obligatorisk?
+  save: Spara
+  or: eller
+  cancel: Avbryt
+  edit: Ändra
+  destroy: Tabort

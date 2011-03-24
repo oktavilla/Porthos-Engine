@@ -27,6 +27,7 @@ class Admin::FieldSetsController < ApplicationController
     @field_set = FieldSet.new(params[:field_set])
     respond_to do |format|
       if @field_set.save
+        flash[:notice] = "#{@field_set.title}  #{t(:saved, :scope => [:app, :admin_general])}"
         format.html { redirect_to admin_field_set_path(@field_set) }
       else
         format.html { render :action => 'new' }
@@ -45,6 +46,7 @@ class Admin::FieldSetsController < ApplicationController
     @field_set = FieldSet.find(params[:id])
     respond_to do |format|
       if @field_set.update_attributes(params[:field_set])
+        flash[:notice] = "#{@field_set.title}  #{t(:updated, :scope => [:app, :admin_general])}"
         format.html { redirect_to admin_field_set_path(@field_set) }
       else
         format.html { render :action => 'edit' }
@@ -54,9 +56,11 @@ class Admin::FieldSetsController < ApplicationController
 
   def destroy
     @field_set = FieldSet.find(params[:id])
-    @field_set.destroy
+    if @field_set.destroy
+      flash[:notice] = "#{@field_set.title}  #{t(:deleted, :scope => [:app, :admin_general])}"
+    end
     respond_to do |format|
-      format.html { redirect_to admin_fields_path }
+      format.html { redirect_to admin_field_sets_path }
     end
   end
 
@@ -68,7 +72,7 @@ class Admin::FieldSetsController < ApplicationController
       format.js { render :nothing => true }
     end
   end
-  
+
   def pages
     @field_set = FieldSet.find(params[:id])
     @pages = @field_set.pages.all(:order => 'position')

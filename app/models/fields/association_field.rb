@@ -1,0 +1,2 @@
+class AssociationField < Field
+end

@@ -1,4 +1,4 @@
-class PageAssociationField < Field
+class PageAssociationField < AssociationField
   validates_presence_of :relationship
   self.data_type = CustomAssociation
 

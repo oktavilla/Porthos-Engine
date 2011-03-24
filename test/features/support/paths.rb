@@ -25,6 +25,20 @@ module NavigationHelpers
     when /^#{capture_model}(?:'s)? (.+?) page$/                     # eg. the forum's posts page
       path_to_pickle $1, :extra => $2                               #  or the forum's edit page
 
+    when /the (.*) page for #{capture_model}/
+      polymorphic_path(model!($2), :action => $1.to_sym)
+
+    when /the (.+?) #{capture_model}(?:'s)? page/
+      polymorphic_path [$1.to_sym, model!($2)]
+
+    when /the (.+?) #{capture_model} new page/
+      polymorphic_path ['new', $1.to_sym, $2.to_sym]
+
+    when /the (.+?) (.+?) listing page/
+      polymorphic_path [$1.to_sym, $2.to_sym]
+
+    when /the (.+?) #{capture_model}(?:'s)? (.+?) page/
+      polymorphic_path [$3.to_sym, $1.to_sym, model!($2)]
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

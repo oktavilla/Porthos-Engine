@@ -53,8 +53,16 @@ When /^(?:|I )press "([^"]*)"$/ do |button|
   click_button(button)
 end
 
+When /^(?:|I )press t"([^"]*)"$/ do |button|
+  click_button(I18n.translate(button))
+end
+
 When /^(?:|I )follow "([^"]*)"$/ do |link|
   click_link(link)
+end
+
+When /^(?:|I )follow t"([^"]*)"$/ do |link|
+  click_link(I18n.translate(link))
 end
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|

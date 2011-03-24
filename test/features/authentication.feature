@@ -18,10 +18,10 @@ Feature: Authentication
     And   I press "commit"
     Then  I should be on the admin login page
     And   I should see element ".flash"
-
+  
   Scenario: Logging out
     Given I am logged in
     And   I am on the admin root page
-    And   I follow "logout"
+    And   I follow t"app.views.layouts.admin.account_nav.logout"
     Then  I should see element ".flash"
     Then  I should be logged out

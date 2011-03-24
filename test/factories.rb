@@ -4,6 +4,10 @@ Factory.sequence :title do |i|
   "A random title #{i}"
 end
 
+Factory.sequence :tag_name do |i|
+  "keyword#{i}"
+end
+
 Factory.sequence :handle do |i|
   "handle_#{i}"
 end
@@ -14,6 +18,10 @@ end
 
 Factory.sequence :email do |i|
   "person#{i}@mash-app.com"
+end
+
+Factory.define :tag do |f|
+  f.name { Factory.next(:tag_name) }
 end
 
 Factory.define :user do |f|
@@ -63,6 +71,9 @@ Factory.define :custom_attribute do |f|
 end
 
 Factory.define :string_attribute, :class => StringAttribute, :parent => :custom_attribute do |f|
+end
+
+Factory.define :date_time_attribute, :class => DateTimeAttribute, :parent => :custom_attribute do |f|
 end
 
 Factory.define :custom_association do |f|

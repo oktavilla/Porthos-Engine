@@ -10,7 +10,7 @@
     </div>
     <div id="content">
       <% form_for :site_setting, :url => admin_site_settings_path, :html => { :class => "tiny" } do |f| %>
-        <%= error_messages_for :redirect %>
+        <%= render 'admin/shared/error_messages', :object => f.object %>
         <%= render :partial => 'form', :locals => {:f => f} %>
         <div class="submit">
           <%= submit_tag 'Spara' %> eller <%= link_to "avbryt", admin_site_settings_path %>

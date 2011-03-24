@@ -5,9 +5,8 @@
     <h1>Lägg till <%= @page.field_set ? @page.field_set.title.downcase : 'sida' %></h1>
   </div>
   <div id="content">
-    <%= error_messages_for :node %>
-    <%= error_messages_for :page %>
     <% form_for @page, :url => admin_pages_path, :html => { :id => 'page', :class => 'new' } do |f| %>
+      <%= render 'admin/shared/error_messages', :object => f.object %>
       <%= f.hidden_field :field_set_id %>
       <label for="page_title"><%= f.object.field_set && f.object.field_set.page_label.present? ? f.object.field_set.page_label : "Ge sidan en titel" %></label>
       <div class="fullwidth">

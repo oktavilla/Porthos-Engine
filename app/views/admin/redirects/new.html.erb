@@ -10,7 +10,7 @@
     </div>
     <div id="content">
       <% form_for :redirect, :url => admin_redirects_path, :html => { :class => "tiny" } do |f| %>
-        <%= error_messages_for :redirect %>
+        <%= render 'admin/shared/error_messages', :object => f.object %>
         <label for="redirect_path">Från</label>
         <%= f.text_field :path %>
         <p class="form_help after">Vilken address som ska vidarebefordras, t.ex. /ge-en-gava</p>

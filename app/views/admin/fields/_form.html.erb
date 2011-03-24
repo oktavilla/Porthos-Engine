@@ -1,11 +1,11 @@
 <div id="field_types">
-  <div class="type text_field">
+  <div class="type TextField">
     <label for="field_allow_rich_text" class="contains-input">
       <%= f.check_box :allow_rich_text %>
       Tillåt textformatering?
     </label>
   </div>
-  <div class="type page_association_field">
+  <div class="type PageAssociationField">
     <label for="field_page_relationship" class="contains-input">
       Typ av relation: <%= f.select :relationship, [['En till en', 'one_to_one'], ['En till många', 'one_to_many']], :id => 'field_page_relationship' %>
     </label>
@@ -13,14 +13,14 @@
       Kan relatera till: <%= f.select :association_source_id, FieldSet.all.collect { |p| [p.title, p.id ] }, :include_blank => "Alla sidor" %>
     </label>
   </div>
-  <div class="type reversed_page_association_field">
+  <div class="type ReversedPageAssociationField">
     <label for="field_target_handle">Vad heter associationen?</label>
     <%= f.text_field :target_handle %>
     <label for="field_reversed_page_association">
       Typ av relation: <%= f.select :relationship, [['En till en', 'one_to_one'], ['En till många', 'one_to_many']], :id => 'field_reversed_page_association' %>
     </label>
   </div>
-  <div class="type asset_association_field">
+  <div class="type AssetAssociationField">
     <label for="field_asset_relationship" class="contains-input">
       Typ av relation: <%= f.select :relationship, [['En till en', 'one_to_one'], ['En till många', 'one_to_many']], :id => 'field_asset_relationship' %>
     </label>

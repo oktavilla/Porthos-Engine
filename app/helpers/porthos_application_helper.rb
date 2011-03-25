@@ -2,7 +2,7 @@ module PorthosApplicationHelper
 
   def page_id
     @page_id ||= controller.class.to_s.underscore.gsub(/_controller$/, '').gsub(/admin\//, '')
-    ' id="'+@page_id+'_view"'
+    ' id="'+@page_id+'_view"'.html_safe
   end
 
   def page_class(css_class = false)
@@ -14,20 +14,20 @@ module PorthosApplicationHelper
       body_class << 'debug' if params[:debug]
       body_class << 'grid' if params[:grid]
     end
-    ' class="'+body_class.join(" ")+'"' if body_class.size > 0
+    ' class="'+body_class.join(" ")+'"'.html_safe if body_class.size > 0
   end
 
   def body_attributes
-    page_id + page_class
+    "#{page_id}#{page_class}".html_safe
   end
 
   def flash_messages(type = "")
     if type.blank?
       flash.collect do |type, message|
         content_tag('p', message, :class => "flash #{type}")
-      end.join("\n")
+      end.join("\n").html_safe
     elsif flash[type.to_sym]
-      content_tag('p', flash[type.to_sym], :class => "flash #{type}")
+      content_tag('p', flash[type.to_sym], :class => "flash #{type}").html_safe
     end
   end
 

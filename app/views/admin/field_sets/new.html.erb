@@ -9,8 +9,8 @@
       <h1><%= t(:title, :scope => [:app, :views, :admin, :field_sets, :new]) %></h1>
     </div>
     <div id="content">
-      <%= form_for :field_set, :url => admin_field_sets_path do |f| %>
-        <%= render :partial => 'form', :locals => { :f => f } %>
+      <%= form_for @field_set, :url => admin_field_sets_path do |f| %>
+        <%= render :partial => 'form', :locals => {:f => f} %>
         <div class="submit">
           <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <%= link_to t(:cancel), previous_view_path(admin_field_sets_path) %>
         </div>

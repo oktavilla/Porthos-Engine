@@ -26,7 +26,7 @@ Feature: Field sets
     And   I select "Blog" from "field_set_template_name"
     And   I fill in "Current news page type" for "field_set_description"
     And   I press t"save"
-    Then  I should see element ".errors" 
+    Then  I should see element ".error_messages" 
 
   Scenario: Editing a field set
     Given a field_set exists with title: "News", page_label: "Title", handle: "news", template_name: "blog"

@@ -21,5 +21,10 @@ class ActsAsTaggableTest < ActiveSupport::TestCase
       assert_equal @tag_names.join(Tag.delimiter), @page.tag_names
     end
 
+    should 'parse tags from a string' do
+      assert_equal ['tag1', 'tag2', 'tag 3'].sort, Page.tag_list_from_string('tag1 tag2 "tag 3"').sort
+      Tag.delimiter = ','
+      assert_equal ['tag1', 'tag2', 'tag 3'].sort, Page.tag_list_from_string('tag1, tag2, tag 3').sort
+    end
   end
 end

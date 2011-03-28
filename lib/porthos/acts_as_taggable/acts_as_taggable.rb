@@ -96,7 +96,7 @@ module ActiveRecord
           [/\s*#{Tag.delimiter}\s*(['"])(.*?)\1\s*/, /^\s*(['"])(.*?)\1\s*#{Tag.delimiter}?/].each do |exp|
             string.gsub!(exp) { tag_list << $2; "" }
           end
-          tag_list += string.strip.split(Tag.delimiter).uniq.compact
+          tag_list += string.strip.split(Tag.delimiter).collect(&:strip).uniq.compact
         end
       end
 

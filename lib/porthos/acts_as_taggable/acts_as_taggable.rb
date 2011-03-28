@@ -36,8 +36,8 @@ module ActiveRecord
 
             def #{namespace}_tag_names=(tag_string)
               self.taggings.with_namespace('#{namespace}').each(&:destroy)
-              self.class.tag_list_from_string(tag_string).collect(&:strip).each do |name|
-                new_tag = Tag.find_or_create_by_name(name.downcase.strip)
+              self.class.tag_list_from_string(tag_string).each do |name|
+                new_tag = Tag.find_or_create_by_name(name.downcase)
                 self.new_record? ? self.taggings.build(:tag_id => new_tag.id, :namespace => '#{namespace}') : self.taggings.create(:tag_id => new_tag.id, :namespace => '#{namespace}')
               end
             end
@@ -50,15 +50,15 @@ module ActiveRecord
         def find_tagged_with(options = {})
           tags = options.delete(:tags)
           namespace = options.delete(:namespace)
-          tag_list = tags.acts_like?(String) ? tag_list_from_string(tags) : tags
+          tag_list = tags.acts_like?(:string) ? tag_list_from_string(tags) : tags
 
           select("#{table_name}.*, count(tags.id) AS count").
           from('taggings').
           joins("join #{table_name} on #{table_name}.#{primary_key} = taggings.taggable_id
                       #{"AND taggings.taggable_type = '#{self.name}'"}
-                      AND taggings.namespace #{namespace.present? ? "= '#{namespace}'" : 'IS NULL' }
+                      AND taggings.namespace #{namespace.present? ? "= #{connection.quote(namespace)}" : 'IS NULL' }
                       LEFT OUTER JOIN tags ON tags.id = taggings.tag_id
-                      AND LOWER(tags.name) IN ('#{tag_list.join("','")}')#{options[:joins].present? ? " #{options[:joins]}" : ''}").
+                      AND LOWER(tags.name) IN (#{tag_list.collect { |t| connection.quote(t) }.join(',')})#{options[:joins].present? ? options[:joins] : ''}").
           group("#{table_name}.#{primary_key} HAVING count = #{tag_list.length}").
           order(options[:order] || "#{table_name}.#{primary_key}")
         end
@@ -68,24 +68,25 @@ module ActiveRecord
           Tag.select('tags.*, count(taggings.tag_id) as count').
               from('tags').
               joins('LEFT JOIN taggings ON taggings.tag_id = tags.id').
-              where("taggings.taggable_type = '#{self.class.name}' and taggings.namespace #{namespace.blank? ? 'IS NULL' : "= '#{namespace}'"}").
+              where("taggings.taggable_type = '#{self.class.name}' and taggings.namespace #{namespace.blank? ? 'IS NULL' : "= #{connection.quote(namespace)}"}").
               group('tags.id').
               order(options[:order] || 'count desc')
         end
 
         def find_related_tags(tag_names, options = {})
-          Tag.select('select t.*, count(taggings.taggable_id) as count').from('taggings, tags').
+          Tag.select('select t.*, count(taggings.taggable_id) as count').
+              from('taggings, tags').
               where("taggings.taggable_id in (
                        select taggings.taggable_id
                        from taggings, tags t
                        where taggings.tag_id = t.id
                        and (LOWER(t.name) IN ( '#{ tag_names.join("','") }' ))
-                       and taggings.namespace #{options[:namespace].blank? ? 'IS NULL' : "= '#{options[:namespace]}'"}
+                       and taggings.namespace #{options[:namespace].blank? ? 'IS NULL' : "= #{connection.quote(options[:namespace])}"}
                        group by taggings.taggable_id
                        having count(taggings.taggable_id) = #{ tag_names.size }
                      )
                      and tags.id = taggings.tag_id
-                     and LOWER(tags.name) not in ( '#{ tag_names.join("','") }' )
+                     and LOWER(tags.name) not in (#{ tag_names.collect { |t| connection.quote(t) }.join(',') })
                      and taggings.taggable_type = '#{self.class.name}'").
               group('taggings.tag_id').
               order(options[:order] || 'count desc')
@@ -110,8 +111,8 @@ module ActiveRecord
 
         def tag_names=(tag_string)
           self.taggings.each(&:destroy)
-          self.class.tag_list_from_string(tag_string).collect(&:strip).each do |name|
-            new_tag = Tag.find_or_create_by_name(name.downcase.strip)
+          self.class.tag_list_from_string(tag_string).each do |name|
+            new_tag = Tag.find_or_create_by_name(name.downcase)
             self.new_record? ? self.taggings.build(:tag_id => new_tag.id) : self.taggings.create(:tag_id => new_tag.id)
           end
         end

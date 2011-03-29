@@ -42,7 +42,7 @@
 <%= f.text_area :instructions, :rows => 3 %>
 
 <label for="field_type" class="contains-input">
-  Typ <%= select_tag 'field_type', options_for_select(Field.types.collect { |type| [type.human_name, type.to_s] }, :selected => @field.class.to_s) %>
+  Typ <%= select_tag 'field_type', options_for_select(Field.types.collect { |type| [type.model_name.human, type.to_s] }, :selected => @field.class.to_s) %>
 </label>
 
 <div id="field_customizations"></div>

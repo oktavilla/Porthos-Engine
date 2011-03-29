@@ -2,7 +2,7 @@ class Admin::FieldsController < ApplicationController
   include Porthos::Admin
   before_filter :login_required,
                 :find_field_set
-  
+
   def new
     @field = @field_set.fields.build
     respond_to do |format|
@@ -16,6 +16,7 @@ class Admin::FieldsController < ApplicationController
     end
     respond_to do |format|
       if @field.save
+        flash[:notice] = "#{@field.label}  #{t(:saved, :scope => [:app, :admin_general])}"
         format.html { redirect_to admin_field_set_path(@field_set) }
       else
         format.html { render :action => 'new' }
@@ -34,6 +35,7 @@ class Admin::FieldsController < ApplicationController
     @field = @field_set.fields.find(params[:id])
     respond_to do |format|
       if @field.update_attributes(params[:field])
+        flash[:notice] = "#{@field.label}  #{t(:saved, :scope => [:app, :admin_general])}"
         format.html { redirect_to admin_field_set_path(@field_set) }
       else
         format.html { render :action => 'edit' }
@@ -43,7 +45,9 @@ class Admin::FieldsController < ApplicationController
 
   def destroy
     @field = @field_set.fields.find(params[:id])
-    @field.destroy
+    if @field.destroy
+      flash[:notice] = "#{@field.label}  #{t(:deleted, :scope => [:app, :admin_general])}"
+    end
     respond_to do |format|
       format.html { redirect_to admin_field_set_path(@field_set) }
     end

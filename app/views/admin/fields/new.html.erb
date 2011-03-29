@@ -9,7 +9,7 @@
       <h1>Nytt fält i <%= @field_set.title %></h1>
     </div>
     <div id="content">
-      <% form_for :field, @field, :url => admin_field_set_fields_path(@field_set), :html => { :id =>  'field_form' } do |f| %>
+      <%= form_for @field, :url => admin_field_set_fields_path(@field_set), :html => { :id =>  'field_form' } do |f| %>
         <%= render :partial => 'form', :locals => { :f => f } %>
         <div class="submit">
           <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_field_set_path(@field_set)) %>

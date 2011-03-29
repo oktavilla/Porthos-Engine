@@ -4,7 +4,12 @@ module NavigationHelpers
   #   When /^I go to (.+)$/ do |page_name|
   #
   # step definition in web_steps.rb
-  #
+
+  def base_model!(name)
+    resolved_model = model!(name)
+    resolved_model.becomes(resolved_model.class.base_class)
+  end
+
   def path_to(page_name)
     case page_name
 
@@ -25,6 +30,15 @@ module NavigationHelpers
     when /^#{capture_model}(?:'s)? (.+?) page$/                     # eg. the forum's posts page
       path_to_pickle $1, :extra => $2                               #  or the forum's edit page
 
+    # Namespaced routes
+
+    when /the (.+?) #{capture_model}(?:'s)? (.+?) #{capture_model} page/ # the admin forum's new post page
+      polymorphic_path [$3, $1.to_sym, model!($2), $4.to_sym]
+
+    when /the (.+?) #{capture_model}(?:'s)? #{capture_model}'s (.+?) page/ # the admin forum's post's edit page
+      nested_object = model!($3)
+      polymorphic_path [$4.to_sym, $1.to_sym, model!($2), base_model!($3)]
+
     when /the (.*) page for #{capture_model}/
       polymorphic_path(model!($2), :action => $1.to_sym)
 
@@ -39,6 +53,7 @@ module NavigationHelpers
 
     when /the (.+?) #{capture_model}(?:'s)? (.+?) page/
       polymorphic_path [$3.to_sym, $1.to_sym, model!($2)]
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

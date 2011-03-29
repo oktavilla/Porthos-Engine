@@ -1,4 +1,7 @@
 class Tag < ActiveRecord::Base
+  class_inheritable_accessor :delimiter
+  self.delimiter = ' '
+
   has_many :taggings, :dependent => :destroy
   has_many :taggables, :through => :taggings
 
@@ -25,10 +28,6 @@ class Tag < ActiveRecord::Base
             :uniqueness => true
 
   before_validation :format_name
-
-  def self.delimiter
-    ' '
-  end
 
   def tagged_models
     @tagged_models ||= self.connection.select_values("SELECT DISTINCT taggings.taggable_type FROM taggings WHERE taggings.tag_id = #{id}").collect { |model| model.constantize }

@@ -10,8 +10,8 @@
   <%= stylesheet_link_tag 'porthos/elements', 'porthos/layout', 'porthos/wymeditor', 'application' %>
   <%= installation_specific_stylesheet_link_tag %>
 </head>
-<body<%= raw body_attributes %>>
-<%= raw flash_messages %>
+<body<%= body_attributes.html_safe %>>
+<%= flash_messages %>
 <div id="nav">
   <%= render :partial => 'layouts/admin/account_nav' %>
   <%= render :partial => 'layouts/admin/main_nav' %>

@@ -2,11 +2,11 @@ class Admin::PagesController < ApplicationController
   include Porthos::Admin
   before_filter :login_required
 
-  has_scope :whith_field_set
+  has_scope :with_field_set
   has_scope :created_by
   has_scope :updated_by
   has_scope :order_by, :default => 'updated_at desc'
-  has_scope :published, :type => :boolean
+  has_scope :is_published, :type => :boolean
 
   def index
     @field_sets = FieldSet.all(:order => 'position')

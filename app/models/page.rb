@@ -84,7 +84,7 @@ class Page < ActiveRecord::Base
     order(order_by_string)
   }
 
-  scope :published, lambda { |is_published|
+  scope :is_published, lambda { |is_published|
     if is_published
       where('published_on > ?', Time.now)
     else

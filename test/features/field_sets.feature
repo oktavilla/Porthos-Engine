@@ -18,6 +18,7 @@ Feature: Field sets
     And   I press t"save"
     Then  a field_set should exist
     And   I should be on the admin field_set's page 
+    And   I should see "News" within "h1"
     And   I should see element ".flash"
 
   Scenario: Trying to create a field set with missing data
@@ -48,4 +49,5 @@ Feature: Field sets
     Then  I should be on the admin field_set's page 
     And   I follow t"app.views.admin.field_sets.show.destroy"
     And   I should be on the admin field_sets listing page 
+    And   I should not see "News" within "#content"
     And   I should see element ".flash"

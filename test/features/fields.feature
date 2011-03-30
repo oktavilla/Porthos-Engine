@@ -18,6 +18,7 @@ Feature: Fields
     And   I press t"save"
     Then  a field should exist
     And   I should be on the admin field_set's page
+    And   I should see "News contents"
     And   I should see element ".flash"
     
   Scenario: Trying to add a field that already exists
@@ -38,6 +39,7 @@ Feature: Fields
     When  I fill in "Book author" for "field_label"
     And   I press t"save"
     Then  I should be on the admin field_set's page
+    And   I should see "Book author"
     And   I should see element ".flash"
 
   Scenario: Deleting a field
@@ -45,4 +47,5 @@ Feature: Fields
     And   I go to the admin field_set's page 
     And   I follow t"destroy"
     Then  I should be on the admin field_set's page
+    And   I should not see "Author" within "#content"
     And   I should see element ".flash"

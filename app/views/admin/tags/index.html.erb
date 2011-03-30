@@ -4,18 +4,31 @@
 </div>
 <div id="workspace">
   <div class="header">
-    <h1>Nyckelord</h1>
+    <h1><%= t(:title, :scope => [:app, :views, :admin, :tags, :index]) %></h1>
   </div>
   <div class="tools">
     <div class="add">
-      <%= link_to "Nytt nyckelord", new_admin_tag_path, :class => 'new' %>
+      <%= link_to t(:add_tag, :scope => [:app, :views, :admin, :tags, :index]), new_admin_tag_path, :class => 'new' %>
     </div>
   </div>
   <div id="content">
-    <ul>
+  <% if @tags.any? %>
+    <table>
+      <tr>
+        <th><%= t(:name, :scope => [:app, :views, :admin, :tags, :index, :table]) %></th>
+        <th></th>
+        <th></th>
+      </tr>
     <% @tags.each do |tag| -%>
-      <li><%= link_to tag.name, admin_tag_path(tag) %></li>
-    <% end -%>
-    </ul>
+      <tr class="<%= cycle 'odd', 'even' %>">
+        <td><%= link_to tag.name, admin_tag_path(tag) %></td>
+        <td><%= link_to t(:edit), edit_admin_tag_path(tag) %></td>
+        <td><%= link_to t(:destroy), admin_tag_path(tag), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %></td>
+      </tr>
+    <% end %>
+  </table>
+  <% else %>
+    <p class="blank-slate"><%= t(:no_data, :scope => [:app, :views, :admin, :tags, :index]) %></p>
+  <% end -%>
   </div>
 </div>

@@ -379,6 +379,20 @@
             form_help:
               path: Vilken address som ska vidarebefordras, t.ex. /ge-en-gava
               target: Vilken address som besökaren ska vidarebefordras till, t.ex. /stod-oss/ge-en-gava
+        tags:
+          index:
+            title: Nyckelord
+            add_tag: Nytt nyckelord
+            table:
+              name: Namn
+            no_data: Inga nyckelord inlagda än.
+          new:
+            title: Nytt nyckelord
+          edit:
+            title: Ändra nyckelordet %{name}
+          show:
+            title: Nyckelord - ”%{name}”
+            edit_tag: Ändra
   save: Spara
   or: eller
   cancel: Avbryt

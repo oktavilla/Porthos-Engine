@@ -4,15 +4,14 @@
 </div>
 <div id="workspace">
   <div class="header">
-    <h1>Ändra: <%= @tag.name %></h1>
-    <%= link_to "Radera", admin_tag_path(@tag), :method => :delete, :confirm => "Ta bort nyckelorder #{@tag.name} och alla referenser till det?" %>
+    <h1><%= t(:title, :scope => [:app, :views, :admin, :tags, :edit], :name => @tag.name) %></h1>
   </div>
   <div id="content">
-    <% form_for :tag, :url => admin_tag_path(@tag), :html => { :method => :put } do |f| %>
+    <%= form_for :tag, :url => admin_tag_path(@tag), :html => { :method => :put } do |f| %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
       <%= f.text_field :name %>
       <div class="submit">
-        <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_tag_path(@tag)) %>
+        <%= submit_tag t(:save) %> eller <%= link_to t(:cancel), previous_view_path(admin_tags_path) %>
       </div>
     <% end %>
   </div>

@@ -6,19 +6,19 @@
   </div>
   <div id="workspace">
     <div class="header">
-      <h1>Ny vidarebefordring</h1>
+      <h1><%= t(:title, :scope => [:app, :views, :admin, :redirects, :new]) %></h1>
     </div>
     <div id="content">
-      <% form_for :redirect, :url => admin_redirects_path, :html => { :class => "tiny" } do |f| %>
+      <%= form_for :redirect, :url => admin_redirects_path, :html => { :class => "tiny" } do |f| %>
         <%= render 'admin/shared/error_messages', :object => f.object %>
-        <label for="redirect_path">Från</label>
+        <%= f.label :path %>
         <%= f.text_field :path %>
-        <p class="form_help after">Vilken address som ska vidarebefordras, t.ex. /ge-en-gava</p>
-        <label for="redirect_target">Till</label>
+        <p class="form_help after"><%= t(:path, :scope => [:app, :views, :admin, :redirects, :shared, :form_help]) %></p>
+        <%= f.label :target %>
         <%= f.text_field :target %>
-        <p class="form_help after">Vilken address som besökaren ska vidarebefordras till, t.ex. /stod-oss/ge-en-gava</p>
+        <p class="form_help after"><%= t(:target, :scope => [:app, :views, :admin, :redirects, :shared, :form_help]) %></p>
         <div class="submit">
-          <%= submit_tag 'Spara' %> eller <%= link_to "avbryt", admin_redirects_path %>
+          <%= submit_tag t(:save) %> eller <%= link_to t(:cancel), admin_redirects_path %>
         </div>
       <% end %>
     </div>

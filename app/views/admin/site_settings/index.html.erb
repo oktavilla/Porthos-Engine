@@ -10,36 +10,36 @@
     </div>
     <div class="tools">
       <div class="add">
-        <%= link_to "Skapa ny inställning", new_admin_site_setting_path, :class => 'new' %>
+        <%= link_to t(:add_site_setting, :scope => [:app, :views, :admin, :site_settings, :index]), new_admin_site_setting_path, :class => 'new' %>
       </div>
     </div>
     <div id="content">
-      <% if @site_settings.any? %>  
+      <% if @site_settings.any? %>
         <table>
           <thead>
             <tr>
-              <th>Namn</th>
-              <th>Värde</th>
+              <th><%= t(:name, :scope => [:app, :views, :admin, :site_settings, :index, :table]) %></th>
+              <th><%= t(:value, :scope => [:app, :views, :admin, :site_settings, :index, :table]) %></th>
               <th colspan="2"></th>
             </tr>
           </thead>
           <tbody id="site_settings">
-        <% @site_settings.each do |setting| %>  
+        <% @site_settings.each do |setting| %>
           <tr class="<%= cycle 'odd', 'even' %>">
             <td><%= setting.name %></td>
             <td><%= html_escape setting.value %></td>
             <td>
-              <%= link_to "Ändra", edit_admin_site_setting_path(setting) %>
+              <%= link_to t(:edit), edit_admin_site_setting_path(setting) %>
             </td>
             <td>
-              <%= link_to "Radera", admin_site_setting_path(setting), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %>
+              <%= link_to t(:destroy), admin_site_setting_path(setting), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %>
             </td>
           </tr>
         <% end %>
           </tbody>
         </table>
       <% else %>
-        <p class="blank-slate">Det finns inga inställningar inlagda än.</p>
+        <p class="blank-slate"><%= t(:no_data, :scope => [:app, :views, :admin, :site_settings, :index]) %></p>
       <% end %>
     </div>
   </div>

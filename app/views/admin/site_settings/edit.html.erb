@@ -6,14 +6,14 @@
   </div>
   <div id="workspace">
     <div class="header">
-      <h1>Ändra inställning</h1>
+      <h1><%= t(:title, :scope => [:app, :views, :admin, :site_settings, :edit]) %></h1>
     </div>
     <div id="content">
-      <% form_for @site_setting, :url => admin_site_setting_path(@site_setting), :html => {:method => :put, :class => "tiny" } do |f| %>
+      <%= form_for @site_setting, :url => admin_site_setting_path(@site_setting), :html => {:method => :put, :class => "tiny" } do |f| %>
         <%= render 'admin/shared/error_messages', :object => f.object %>
         <%= render :partial => 'form', :locals => {:f => f} %>
         <div class="submit">
-          <%= submit_tag 'Spara' %> eller <%= link_to "avbryt", admin_site_settings_path %>
+          <%= submit_tag t(:save) %> eller <%= link_to t(:cancel), admin_site_settings_path %>
         </div>
       <% end %>
     </div>

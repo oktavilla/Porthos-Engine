@@ -354,6 +354,31 @@
               field_name: Fältnamn
               type: Typ
               required: Obligatorisk?
+        site_settings:
+          index:
+            add_site_setting: Ny inställning
+            table:
+              name: Namn
+              value: Värde
+            no_data: Det finns inta inställningar inlagda än.
+          new:
+            title: Ny inställning
+        redirects:
+          index:
+            title: Vidarebefordring
+            add_redirect: Skapa ny Vidarebefordring
+            table:
+              from: Från
+              to: Till
+            no_data: Det finns inga Vidarebefordringar inlagda än.
+          new:
+            title: Ny Vidarebefordring
+          edit:
+            title: Ändra Vidarebefordring
+          shared:
+            form_help:
+              path: Vilken address som ska vidarebefordras, t.ex. /ge-en-gava
+              target: Vilken address som besökaren ska vidarebefordras till, t.ex. /stod-oss/ge-en-gava
   save: Spara
   or: eller
   cancel: Avbryt

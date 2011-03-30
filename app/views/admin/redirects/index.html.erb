@@ -6,33 +6,33 @@
   </div>
   <div id="workspace">
     <div class="header">
-      <h1>Vidarebefordringar</h1>
+      <h1><%= t(:title, :scope => [:app, :views, :admin, :redirects, :index]) %></h1>
     </div>
     <div class="tools">
       <div class="add">
-        <%= link_to "Skapa ny vidarebefordring", new_admin_redirect_path, :class => 'new' %>
+        <%= link_to t(:add_redirect, :scope => [:app, :views, :admin, :redirects, :index]), new_admin_redirect_path, :class => 'new' %>
       </div>
     </div>
     <div id="content">
-      <% if @redirects.any? %>  
+      <% if @redirects.any? %>
         <table>
           <tr>
-            <th>Från</th>
-            <th>Till</th>
+            <th><%= t(:from, :scope => [:app, :views, :admin, :redirects, :index, :table]) %></th>
+            <th><%= t(:to, :scope => [:app, :views, :admin, :redirects, :index, :table]) %></th>
             <th></th>
             <th></th>
           </tr>
-        <% @redirects.each do |redirect| %>  
+        <% @redirects.each do |redirect| %>
           <tr class="<%= cycle 'odd', 'even' %>">
             <td><%= link_to redirect.path, redirect.path %></td>
             <td>&rarr; <%= link_to redirect.target, redirect.target %></td>
-            <td><%= link_to "Ändra", edit_admin_redirect_path(redirect) %></td>
-            <td><%= link_to "Radera", admin_redirect_path(redirect), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %></td>
+            <td><%= link_to t(:edit), edit_admin_redirect_path(redirect) %></td>
+            <td><%= link_to t(:destroy), admin_redirect_path(redirect), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %></td>
           </tr>
         <% end %>
         </table>
       <% else %>
-        <p class="blank-slate">Det finns inga vidarebefordringar inlagda än.</p>
+        <p class="blank-slate"><%= t(:no_data, :scope => [:app, :views, :admin, :redirects, :index]) %></p>
       <% end %>
     </div>
   </div>

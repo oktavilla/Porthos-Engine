@@ -26,6 +26,15 @@ Feature: Finding pages
     When I follow "article" within "#sub_nav ul.tags"
     Then I should see "About" within "#content"
     And I should not see "Current projects" within "#content"
+
     When I follow "article" within "#sub_nav ul.tags"
     Then I should see "About" within "#content"
     And I should see "Current projects" within "#content"
+
+    When I follow "important" within "#sub_nav ul.tags"
+    Then I should see "About" within "#content"
+    And I should see "Current projects" within "#content"
+
+    When I follow "project" within "#sub_nav ul.tags"
+    Then I should see "Current projects" within "#content"
+    And I should not see "About" within "#content"

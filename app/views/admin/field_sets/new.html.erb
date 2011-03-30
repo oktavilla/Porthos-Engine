@@ -12,7 +12,7 @@
       <%= form_for @field_set, :url => admin_field_sets_path do |f| %>
         <%= render :partial => 'form', :locals => {:f => f} %>
         <div class="submit">
-          <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <%= link_to t(:cancel), previous_view_path(admin_field_sets_path) %>
+          <%= submit_tag t(:save) %> eller <%= link_to t(:cancel), previous_view_path(admin_field_sets_path) %>
         </div>
       <% end %>
     </div>

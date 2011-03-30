@@ -11,7 +11,7 @@
       <%= form_for @field_set, :url => admin_field_set_path(@field_set), :html => { :method => :put } do |f| %>
         <%= render :partial => 'form', :locals => { :f => f } %>
         <div class="submit">
-          <input type="submit" value="Spara ändringar"> eller <%= link_to "avbryt", previous_view_path(admin_field_set_path(@field_set)) %>
+          <%= submit_tag t(:save) %> eller <%= link_to t(:cancel), previous_view_path(admin_field_set_path(@field_set)) %>
         </div>
       <% end %>
     </div>

@@ -6,28 +6,28 @@
   </div>
   <% end %>
   <ul class="filter">
-    <li<%= ' class="current"' if current_scopes[:with_field_set].blank? %>><%= link_to "Alla", admin_pages_path(:filters => current_scopes.except(:with_field_set)) %></li>
+    <li<%= ' class="current"'.html_safe if current_scopes[:with_field_set].blank? %>><%= link_to "Alla", admin_pages_path(current_scopes.except(:with_field_set)) %></li>
     <% FieldSet.all(:order => 'position').each do |field_set| -%>
-    <li<%= ' class="current"' if current_scopes[:with_field_set].to_i == field_set.id %>><%= link_to field_set.title, admin_pages_path(:filters => current_scopes.merge(:with_field_set => field_set.id)) %></li>
+    <li<%= ' class="current"'.html_safe if current_scopes[:with_field_set].to_i == field_set.id %>><%= link_to field_set.title, admin_pages_path(current_scopes.merge(:with_field_set => field_set.id)) %></li>
     <% end -%>
   </ul>
   <div class="label">Status</div>
   <ul class="filter">
-    <li<%= ' class="current"' if !current_scopes[:published] %>>
-      <%= link_to "Alla", admin_pages_path(:filters => current_scopes.except(:published)) %>
+    <li<%= ' class="current"'.html_safe if !current_scopes[:is_published] %>>
+      <%= link_to "Alla", admin_pages_path(current_scopes.except(:is_published)) %>
     </li>
-    <li<%= ' class="current"' if current_scopes[:published]%>>
-      <%= link_to "Utkast", admin_pages_path(:filters => current_scopes.merge(:published => false)) %> (<%= Page.unpublished.count %>)
+    <li<%= ' class="current"'.html_safe if current_scopes[:is_published]%>>
+      <%= link_to "Utkast", admin_pages_path(current_scopes.merge(:is_published => 'false')) %> (<%= Page.unpublished.count %>)
     </li>
   </ul>
   <div class="label">Senast ändrad av</div>
   <ul class="filter">
-    <li<%= ' class="current"' unless current_scopes[:updated_by] %>>
-      <%= link_to "Alla", admin_pages_path(:filters => current_scopes.except(:updated_by)) %>
+    <li<%= ' class="current"'.html_safe unless current_scopes[:updated_by] %>>
+      <%= link_to "Alla", admin_pages_path(current_scopes.except(:updated_by)) %>
     </li>
     <% User.recent_contributers.sort_by(&:first_name).each do |user| -%>
-      <li<%= ' class="current"' if current_scopes[:updated_by].to_i == user.id %>>
-        <%= link_to user.short_name, admin_pages_path(:filters => current_scopes.merge(:updated_by => user.id)) %>
+      <li<%= ' class="current"'.html_safe if current_scopes[:updated_by].to_i == user.id %>>
+        <%= link_to user.short_name, admin_pages_path(current_scopes.merge(:updated_by => user.id)) %>
       </li>
     <% end -%>
   </ul>

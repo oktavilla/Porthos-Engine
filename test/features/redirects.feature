@@ -7,7 +7,7 @@ Feature: Redirects
     Given I am logged in
 
   Scenario: Adding a new redirect
-    Given I go to the admin redirects pages
+    Given I go to the admin redirects page
     And   I follow t"app.views.admin.redirects.index.add_redirect"
     Then  I should be on the admin redirect new page
     When  I fill in "/my-old-page" for "redirect_path"

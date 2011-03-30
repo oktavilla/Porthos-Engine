@@ -1,0 +1,10 @@
+<a href="<%= edit_admin_asset_path(:id => taggable, :return_to => request.request_uri) %>">
+<% if taggable.image? %>
+  <%= image_tag display_image_path(:size => 'c50x50', :id => taggable, :format => taggable.extname), :id => "taggable_#{taggable.id}" %>
+<% elsif taggable.respond_to?(:thumbnail) and not taggable.thumbnail.blank? %>
+  <%= image_tag display_image_path(:size => 'c50x50', :id => taggable.thumbnail, :format => taggable.thumbnail.extname), :id => "taggable_#{taggable.id}" %>
+<% else %>
+  <img src="/graphics/porthos/icons/filetypes/<%= taggable.extname %>.png" alt="" width="100" height="100">
+<% end %>
+</a>
+<div class="title"><%= link_to taggable.title, edit_admin_asset_path(:id => taggable, :return_to => request.request_uri) %></div>

@@ -1,28 +1,21 @@
-require 'rails/generators/active_record'
+require 'rails/generators/migration'
 
-class PorthosGenerator < ActiveRecord::Generators::Base
-  desc "Create a mmigration to add create porthos tables"
+class PorthosGenerator < Rails::Generators::Base
+  include Rails::Generators::Migration
 
   def self.source_root
     @source_root ||= File.expand_path('../templates', __FILE__)
   end
 
-  def generate_migration
-    migration_template "porthos_migration.rb.erb", "db/migrate/#{migration_file_name}"
+  def self.next_migration_number(dirname)
+    if ActiveRecord::Base.timestamped_migrations
+      Time.new.utc.strftime("%Y%m%d%H%M%S")
+    else
+      "%.3d" % (current_migration_number(dirname) + 1)
+    end
   end
 
-  protected
-
-  def migration_name
-    "create_porthos_tables"
+  def create_migration_file
+    migration_template 'porthos_migration.rb', 'db/migrate/create_porthos_tables.rb'
   end
-
-  def migration_file_name
-    "#{migration_name}.rb"
-  end
-
-  def migration_class_name
-    migration_name.camelize
-  end
-
 end

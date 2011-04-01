@@ -19,4 +19,5 @@ Given /^I am logged in$/ do
   And %{I fill in "login" with "#{username}"}
   And %{I fill in "password" with "#{password}"}
   And %{I press "commit"}
+  Then %{I should be on the admin root page}
 end

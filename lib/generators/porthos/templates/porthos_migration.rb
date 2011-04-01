@@ -1,4 +1,4 @@
-class <%= migration_class_name %> < ActiveRecord::Migration
+class CreatePorthosTables < ActiveRecord::Migration
   def self.up
     create_table :nodes do |t|
       t.string   "url"

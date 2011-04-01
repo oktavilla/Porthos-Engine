@@ -22,8 +22,6 @@ class CreatePorthosTables < ActiveRecord::Migration
     add_index "nodes", ["resource_id", "resource_type"], :name => "index_nodes_on_resource_id_and_resource_type"
     add_index "nodes", ["parent_id"], :name => "index_nodes_on_parent_id"
 
-    Node.create(:name => 'Start', :status => 1, :position => 1, :controller => 'pages', :action => 'index'
-
     create_table "content_images", :force => true do |t|
       t.integer  "image_asset_id"
       t.string   "title"

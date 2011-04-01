@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
         where('assets.created_by_id IS NOT NULL AND users.id IS NOT NULL').
         group('assets.created_by_id')
 
-  scope :filter_role , lambda { |role_name|
+  scope :role , lambda { |role_name|
     scoped = includes('roles')
     role_name.blank? ? scoped : scoped.where("roles.name = ?", role_name)
   }

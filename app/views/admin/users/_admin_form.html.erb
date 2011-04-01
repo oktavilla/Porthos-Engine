@@ -1,0 +1,33 @@
+<%= render 'admin/shared/error_messages', :object => f.object %>
+<%= hidden_field_tag 'role', 'Admin' %>
+
+<div class="avatar">
+<% if @user.avatar %>
+  <%= image_tag(display_image_path(:size => 'c60x60', :id => @user.avatar, :format => @user.avatar.extname), :class => "photo") %>
+  <label for="user_file">Byt din profilbild</label>
+<% else %>
+  <label for="user_file">Profilbild</label>
+<% end %>
+<%= f.file_field :file, :size => 20 %>
+</div>
+
+<fieldset class="compact">
+  <label for="user_first_name">Förnamn</label>
+  <div class="fullwidth"><%= f.text_field :first_name, :autocomplete => "off" %></div>
+  <label for="user_last_name">Efternamn</label>
+  <div class="fullwidth"><%= f.text_field :last_name, :autocomplete => "off" %></div>
+  <label for="user_email">E-post</label>
+  <div class="fullwidth"><%= f.text_field :email, :autocomplete => "off" %></div>
+
+  <label for="user_login">Användarnamn</label>
+  <div class="fullwidth"><%= f.text_field :login, :autocomplete => "off" %></div>
+  <label for="user_password">Lösenord</label>
+  <div class="fullwidth"><%= f.password_field :password, :autocomplete => "off" %></div>
+  <label for="user_password_confirmation">Bekräfta lösenord</label>
+  <div class="fullwidth"><%= f.password_field :password_confirmation, :autocomplete => "off" %></div>
+
+  <label for="user_phone">Telefon</label>
+  <div class="fullwidth"><%= f.text_field :phone, :autocomplete => "off" %></div>
+  <label for="user_cell_phone">Mobiltelefon</label>
+  <div class="fullwidth"><%= f.text_field :cell_phone, :autocomplete => "off" %></div>
+</fieldset>

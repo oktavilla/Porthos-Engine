@@ -1,7 +1,5 @@
 ;(function($) {
-  if (typeof Porthos == "undefined") {
-    var Porthos = {};
-  }
+  var Porthos = {};
   Porthos.Helpers = {
     extract_id: new RegExp(/^\d/i),
 
@@ -13,18 +11,19 @@
       var source = $.trim(string.toLowerCase()),
           from = "åäöàáäâèéëêìíïîòóöôùúüûÑñÇç·/_,:;",
           to   = "aaoaaaaeeeeiiiioooouuuunncc------",
-          l    = from.length;
-      for (var i = 0, l; i < l; i++) {
+          l    = from.length,
+          i    = 0;
+      for (i, l; i < l; i++) {
         source = source.replace(new RegExp(from[i], 'g'), to[i]);
       }
-      return source.replace(/[^a-zA-Z0-9 -]/g, '').replace(/\s+/g, '-');
+      return source.replace(/[^a-zA-Z0-9 \-]/g, '').replace(/\s+/g, '-');
     },
 
     cloneAsUrl: function(source, target) {
       var $source = $(source),
           $target = $(target);
       if (!$source || !$target) { return; }
-      $target.data('clone_from_title', $target.val() == '');
+      $target.data('clone_from_title', $target.val() === '' || $target.val() === Porthos.Helpers.parameterize($source.val()));
       $source.bind('keyup', function(event) {
         if ($target.data('clone_from_title')) {
           $target.val(Porthos.Helpers.parameterize($source.val()));
@@ -32,8 +31,8 @@
       });
       $target.bind('blur', function(event) {
         var value = $target.val();
-        if (value != '') {
-          if (value != Porthos.Helpers.parameterize($source.val())) {
+        if (value !== '') {
+          if (value !== Porthos.Helpers.parameterize($source.val())) {
             $target.data('clone_from_title', false);
           }
         } else {
@@ -47,7 +46,7 @@
     var Switch = function(field_type, $container) {
       $('#field_customizations div.type').each(function() {
         $container.append(this);
-      })
+      });
       $('#field_form').find('div.'+field_type).each(function() {
         $('#field_customizations').append(this);
       });
@@ -69,7 +68,7 @@
           });
         });
       }
-    }
+    };
   }());
 
   Porthos.Page = (function() {
@@ -148,4 +147,4 @@
   Porthos.Field.init();
   Porthos.Page.init();
 
-})(jQuery);
+}(jQuery));

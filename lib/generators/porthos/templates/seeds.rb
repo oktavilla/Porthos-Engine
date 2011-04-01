@@ -1,4 +1,6 @@
-
+# Seeds for Porthos
+# $ rails runner db/porthos_seeds.rb
+#
 # Create default admin user
 
 admin_role = Role.create(:name => 'Admin')

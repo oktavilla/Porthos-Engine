@@ -162,7 +162,7 @@ class Page < ActiveRecord::Base
   end
 
   def full_slug
-    @full_slug ||= node ? node.slug : (index_node ? [index_node.slug, to_param].join('/') : slug)
+    @full_slug ||= node ? node.url : (index_node ? [index_node.url, to_param].join('/') : slug)
   end
 
   def custom_value_for(field)

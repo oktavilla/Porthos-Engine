@@ -12,7 +12,7 @@
       <p><a href="#" class="toggle_publish_date">Välj ett publiceringsdatum</a> eller <%= link_to "publicera nu", publish_admin_page_path(@page.id), :method => :put, :class => 'new' %></p>
     <% end %>
     </div>
-    <% form_for [:admin, @page], :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.date_select :published_on, :order => [:day, :month, :year ] %>
         <input type="submit" value="Spara publiceringsdatum"> eller <a href="#">avbryt</a>
@@ -34,14 +34,14 @@
       <% end -%>
       <p><a href="#" class="change"><%= @page.category.present? ? 'Ändra' : 'Välj' %> kategori</a></p>
     </div>
-    <% form_for [:admin, @page], :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.select @page.category_method_name, Tag.on('Page').namespaced_to(@page.field_set.handle).collect { |t| [t.name.titlecase, t.name] }, :include_blank => 'Ingen kategori' %>
         <a href="#" id="new_category">Lägg till</a><br>
         <input type="submit" value="Välj"> eller <a href="#" class="cancel">avbryt</a>
       </div>
     <% end -%>
-    <% form_for [:admin, @page], :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field @page.category_method_name, :value => '' %>
         <input type="submit" value="Spara"> eller <a href="#">avbryt</a>
@@ -58,7 +58,7 @@
       </p>
       <p><a href="#">Ändra</a></p>
     </div>
-    <% form_for [:admin, @page], :html => { :id => 'page_tags_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :html => { :id => 'page_tags_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field :tag_names %>
         <input type="submit" value="Spara"> eller <a href="#">avbryt</a>
@@ -69,7 +69,7 @@
 <div id="workspace">
   <div class="header">
     <span class="away">
-      <a href="#" class="edit_settings toggler action">Ändra</a>
+      <a href="#" class="edit_settings toggler action"><span>Ändra</span></a>
       <% if @page.published? -%>
         <%= link_to "Visa på webbplatsen", "/#{@page.full_slug}", :class => 'public_link action' %>
       <% else -%>
@@ -121,7 +121,7 @@
     <% end %>
   </div>
   <div class="header" style="display:none;">
-    <% form_for @page, :url => admin_page_path(@page.id) do |f| %>
+    <%= form_for @page, :url => admin_page_path(@page.id) do |f| %>
       <% if @page.node -%>
         <label for="page_main_title" class="first_label"><%= @page.field_set.page_label.present? ? @page.field_set.page_label : "Titel" %></label>
         <div class="fullwidth">
@@ -200,7 +200,7 @@
             <div class="edit"><a href="#" class="change">Ändra</a></div>
           </div>
           <% unless custom_attribute.new_record? -%>
-            <% form_for :custom_attribute, :url => admin_page_custom_attribute_path(@page.id, custom_attribute.id), :html => { :method => :put, :style => 'display:none;' } do |f| %>
+            <%= form_for :custom_attribute, :url => admin_page_custom_attribute_path(@page.id, custom_attribute.id), :html => { :method => :put, :style => 'display:none;' } do |f| %>
               <label for="page_<%= field.handle %>"><%= field.label %></label>
               <div class="fullwidth">
                 <%= f.text_field :value, :value => custom_attribute.value, :class => 'title', :id => "page_#{field.handle}" %>
@@ -210,7 +210,7 @@
               </div>
             <% end %>
           <% else %>
-            <% form_for :custom_attribute, :url => admin_page_custom_attributes_path(@page.id), :html => { :style => 'display:none;' } do |f| %>
+            <%= form_for :custom_attribute, :url => admin_page_custom_attributes_path(@page.id), :html => { :style => 'display:none;' } do |f| %>
               <%= hidden_field_tag :field_id, field.id %>
               <label for="page_<%= field.handle %>"><%= field.label %></label>
               <div class="fullwidth">
@@ -230,7 +230,7 @@
           <div class="edit"><a href="#" class="change">Ändra</a></div>
         </div>
         <% unless custom_attribute.new_record? -%>
-          <% form_for :custom_attribute, :url => admin_page_custom_attribute_path(@page.id, custom_attribute.id), :html => { :method => :put, :style => 'display:none;' } do |f| %>
+          <%= form_for :custom_attribute, :url => admin_page_custom_attribute_path(@page.id, custom_attribute.id), :html => { :method => :put, :style => 'display:none;' } do |f| %>
             <label for="page_<%= field.handle %>"><%= field.label %></label>
             <div class="fullwidth">
               <%= f.text_area :value, :value => custom_attribute.value, :class => (field.allow_rich_text? ? 'editor' : 'normal') %>
@@ -240,7 +240,7 @@
             </div>
           <% end %>
         <% else %>
-          <% form_for :custom_attribute, :url => admin_page_custom_attributes_path(@page.id), :html => { :style => 'display:none;' } do |f| %>
+          <%= form_for :custom_attribute, :url => admin_page_custom_attributes_path(@page.id), :html => { :style => 'display:none;' } do |f| %>
             <%= hidden_field_tag :field_id, field.id %>
             <label for="page_<%= field.handle %>"><%= field.label %></label>
             <div class="fullwidth">
@@ -260,7 +260,7 @@
           <div class="edit"><a href="#" class="change">Ändra</a></div>
         </div>
         <% unless custom_attribute.new_record? %>
-          <% form_for :custom_attribute, :url => admin_page_custom_attribute_path(@page.id, custom_attribute.id), :html => { :method => :put, :style => 'display:none;' } do |f| %>
+          <%= form_for :custom_attribute, :url => admin_page_custom_attribute_path(@page.id, custom_attribute.id), :html => { :method => :put, :style => 'display:none;' } do |f| %>
             <%= hidden_field_tag :field_id, field.id %>
             <label for="page_<%= field.handle %>">
               <%= field.label %>
@@ -273,7 +273,7 @@
             </div>
           <% end %>
         <% else %>
-          <% form_for :custom_attribute, :url => admin_page_custom_attributes_path(@page.id), :html => { :style => 'display:none;' } do |f| %>
+          <%= form_for :custom_attribute, :url => admin_page_custom_attributes_path(@page.id), :html => { :style => 'display:none;' } do |f| %>
             <%= hidden_field_tag :field_id, field.id %>
             <label for="page_<%= field.handle %>">
               <%= field.label %>
@@ -293,7 +293,7 @@
           <div class="edit"><a href="#" class="change">Ändra</a></div>
         </div>
         <% unless custom_attribute.new_record? -%>
-          <% form_for :custom_attribute, :url => admin_page_custom_attribute_path(@page.id, custom_attribute.id), :html => { :method => :put, :style => 'display:none;' } do |f| %>
+          <%= form_for :custom_attribute, :url => admin_page_custom_attribute_path(@page.id, custom_attribute.id), :html => { :method => :put, :style => 'display:none;' } do |f| %>
             <%= hidden_field_tag :field_id, field.id %>
             <label for="page_<%= field.handle %>" class="contains-input">
               <%= f.check_box :value, :checked => custom_attribute.value == true %>
@@ -304,7 +304,7 @@
             </div>
           <% end %>
         <% else -%>
-          <% form_for :custom_attribute, :url => admin_page_custom_attributes_path(@page.id), :html => { :style => 'display:none;' } do |f| %>
+          <%= form_for :custom_attribute, :url => admin_page_custom_attributes_path(@page.id), :html => { :style => 'display:none;' } do |f| %>
             <%= hidden_field_tag :field_id, field.id %>
             <label for="page_<%= field.handle %>" class="contains-input">
               <%= f.check_box :value, :checked => custom_attribute.value == true %>

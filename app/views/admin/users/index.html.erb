@@ -1,0 +1,23 @@
+<% @page_title = "Användare" -%>
+<% @page_class = 'layout3' %>
+<%= render :partial => 'sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1>Användare</h1>
+  </div>
+  <div class="tools">
+    <div class="add">
+      <%= link_to "Lägg till ny redaktör", new_admin_user_path, :class => "new" %>
+    </div>
+  </div>
+  <div id="content">
+    <ul id="userslist">
+    <% @users.each do |user| -%>
+      <li>
+        <%= render :partial => 'user', :locals => {:user => user} %>
+      </li>
+    <% end -%>
+    </ul>
+    <%= will_paginate(@users) %>
+  </div>
+</div>

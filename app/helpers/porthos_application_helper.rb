@@ -1,5 +1,65 @@
 module PorthosApplicationHelper
 
+  def nested_list_of(collection, options = {}, html_options = {}, &block)
+    options = {
+      :expand_all     => false,
+      :allow_inactive => false,
+      :first_level    => true,
+      :node_class     => collection.first.class.to_s.underscore,
+      :end_points     => [],
+      :trail          => [],
+      :except         => [],
+      :trailed_class  => 'trailed'
+    }.merge(options)
+
+    html_options = {
+      :id => collection.first.class.to_s.underscore.pluralize
+    }.merge(html_options)
+
+    first_level = options.delete(:first_level)
+    if first_level
+      if options[:end_points]
+        options[:end_points] = [options[:end_points]] unless options[:end_points].is_a?(Array)
+        options[:end_points].collect { |item| options[:trail] += (item.ancestors << item) }
+      end
+    end
+    html_options.delete(:id) unless first_level
+
+    ret = collection.collect do |item|
+      next if (item.respond_to?(:access_status) and item.access_status == 'inactive') and not options[:allow_inactive] == true
+      next if item == options[:except] || (options[:except].respond_to?(:include?) && options[:except].include?(item))
+      in_trail = options[:trail].include?(item)
+      rendered_item = capture(item, &block)
+      if (options[:expand_all] and item.children.any?) or ( in_trail and item.children.any? )
+        rendered_item += nested_list_of(item.children, options.merge({ :first_level => false }), &block)
+      end
+      if item.respond_to?(:access_status)
+        status_class = unless in_trail
+          item.access_status
+        else
+          "#{item.access_status} #{options[:trailed_class]}"
+        end
+      end
+      node_container_options = {
+        :class => [
+          options[:node_class],
+          status_class
+        ].join(" ")
+      }
+      if options[:node_id].nil?
+        node_container_options[:id] = "#{item.class.to_s.underscore}_#{item.id}"
+      elsif not options[:node_id].blank?
+        node_container_options[:id] = "#{options[:node_id]}_#{item.id}"
+      end
+
+      content_tag('li', rendered_item, node_container_options)
+    end.join("\n").html_safe
+
+    #list = content_tag('ul', ret, html_options)
+    #first_level ? concat(list) : list
+    content_tag('ul', ret, html_options)
+  end
+
   def page_id
     @page_id ||= controller.class.to_s.underscore.gsub(/_controller$/, '').gsub(/admin\//, '')
     ' id="'+@page_id+'_view"'.html_safe

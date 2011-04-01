@@ -1,0 +1,28 @@
+<% @page_class = "layout1" -%>
+<% @page_id = 'site-structure' -%>
+<% @page_title = "Navigation" -%>
+<div id="workspace">
+  <div class="header">
+    <h1>Struktur och Navigation</h1>
+  </div>
+  <div id="content">
+    <div class="inner">
+      <% if @root -%>  
+      <div id="root">
+        <span class="name"><%= @root.name %></span>
+        <span class="edit">
+          <%= link_to "Ändra", edit_admin_node_path(@root), :class => 'settings' %>
+        </span>
+      </div>
+      <div id="navigation">
+        <%= render :partial => 'nodes_tree', :locals => { :nodes => @nodes, :open_nodes => @open_nodes, :trail => @trail, :place => false} %>
+      </div>
+      <% else -%>
+      <p class="blank-slate">Det finns inga sidor inlagda än. <%= link_to "Skapa din startsida nu »", new_admin_page_path, :onclick => "$('new_page_form').toggle(); return false;" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'porthos/nodes' %>
+<% end %>

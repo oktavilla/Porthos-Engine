@@ -1,0 +1,23 @@
+<div id="sub_nav">
+  <% form_tag search_admin_users_path, :method => 'get' do %>
+  <div class="search">
+    <div class="fullwidth">
+      <%= text_field_tag :query, (@query ? @query : 'Sök efter användare'), :class => "search_query", :id=> "ref_search_query" %>
+    </div>
+    <%= submit_tag "Sök", :style => "display:none" %>
+  </div>
+  <% end %>
+  <% if @filters %>
+  <ul class="filter">
+    <li<%= ' class="current"' if @filters[:role] == '' %>>
+      <%= link_to "Alla", admin_users_path(:filters => @filters.except(:role).merge({:role => ''})) %>
+    </li>
+    <li<%= ' class="current"' if @filters[:role] == 'Admin' %>>
+      <%= link_to "Redaktörer", admin_users_path(:filters => @filters.except(:role).merge({:role => 'Admin'})) %>
+    </li>
+    <li<%= ' class="current"' if @filters[:role] == 'Public' %>>
+      <%= link_to "Besökare", admin_users_path(:filters => @filters.except(:role).merge({:role => 'Public'})) %>
+    </li>
+  </end>
+  <% end %>
+</div>

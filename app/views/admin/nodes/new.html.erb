@@ -1,0 +1,69 @@
+<% @page_class = "layout1" -%>
+<% @page_title = "Navigation" -%>
+  <div id="workspace">
+    <div class="header">
+      <h1>Placera i strukturen</h1>
+    </div>
+    <div id="content">
+      <%= form_for @node, :url => admin_nodes_path do |f| %>
+        <%= render 'admin/shared/error_messages', :object => f.object %>
+        <%= f.hidden_field :resource_type %>
+        <%= f.hidden_field :resource_id %>
+        <%= f.hidden_field :controller %>
+        <%= f.hidden_field :action %>
+        <label for="node_name">Namn i navigationen</label>
+        <%= f.text_field :name %>
+        <!--
+
+        Not necessary in all installations, needs to be better communicated.
+
+        <label for="node_restricted" class="contains-input">
+          <%= f.check_box :restricted %> Kräv inloggning
+        </label>
+        -->
+        <ul class="multiple_choice">
+          <li>
+            <label for="shown_in_nav">
+              <%= f.radio_button :status, 1, :id => 'shown_in_nav' %>
+              Syns i navigationen <span class="form_help">Och är tillgänglig på internet.</span>
+            </label>
+          </li>
+          <li>
+            <label for="not_shown_in_nav">
+              <%= f.radio_button :status, 0, :id => 'not_shown_in_nav' %>
+              Syns inte i navigationen. <span class="form_help">Men är tillgänglig på internet.</span>
+            </label>
+          </li>
+          <li>
+            <label for="restricted">
+              <%= f.radio_button :status, -1, :id => 'restricted' %>
+              Avstängd <span class="form_help">Är ej tillgänglig på internet.</span>
+            </label>
+          </li>
+        </ul>
+        <div id="navigation">
+          <%= nested_list_of(@nodes, {
+              :end_points => @nodes,
+              :allow_inactive => true,
+              :except => @node
+            }, {
+              :id => 'nodes'
+          }) do |node| %>
+            <div>
+              <% if node != @nodes.first && node.children.any? -%>
+                <%= link_to "+", admin_nodes_path(:nodes => [node.id], :place => true), :class => 'toggle_handle' %>
+              <% end -%>
+              <%= radio_button_tag('node[parent_id]', node.id, (node.id == @node.parent_id), :id => "node_parent_id_#{node.id}") unless node == @node %>
+              <span class="name"><%= node.name %></span>
+            </div>
+          <% end %>
+        </div>
+        <div class="submit">
+          <%= submit_tag 'Spara ändringar' %> eller <%= link_to "avbryt", previous_view_path((@resource ? admin_page_path(:id => @resource.id) : admin_nodes_path)) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'porthos/nodes' %>
+<% end %>

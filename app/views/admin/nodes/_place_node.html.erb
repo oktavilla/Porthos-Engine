@@ -1,0 +1,11 @@
+<div class="<%= node.access_status %>">
+  <% if node.children.any? %>
+    <% if trail.include?(node) -%>
+      <%= link_to "-", admin_nodes_path(:nodes => [node.parent_id]), :class => 'jax toggle_handle active' %>
+    <% else -%>
+      <%= link_to "+", admin_nodes_path(:nodes => [node.id], :place => true), :class => 'jax toggle_handle' %>
+    <% end -%>
+  <% end %>
+  <%= radio_button_tag('node[parent_id]', node.id, false, :id => "node_parent_id_#{node.id}") %>
+  <span class="name"><%= node.name %></span>
+</div>

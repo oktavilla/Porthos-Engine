@@ -1,0 +1,7 @@
+<% nested_list_of nodes, { :end_points => open_nodes, :allow_inactive => true }, :id => 'nodes' do |node| %>
+  <% if place %>
+    <%= render :partial => 'place_node.html.erb', :locals => { :trail => trail, :node => node } %>
+  <% else %>
+    <%= render :partial => 'node.html.erb', :locals => { :trail => trail, :node => node } %>
+  <% end %>
+<% end %>

@@ -111,12 +111,12 @@
       </div>
       <div class="slug">
         <span class="key">Adress:</span>
-        <span class="value"><%= request.host %>/<%= @page.node.slug %></span>
+        <span class="value"><%= request.host %>/<%= @page.node.url %></span>
       </div>
     <% elsif @page.index_node %>
       <div class="slug">
         <span class="key">Adress:</span>
-        <span class="value"><%= request.host %>/<%= @page.index_node.slug %>/<%= @page.to_param %></span>
+        <span class="value"><%= request.host %>/<%= @page.index_node.url %>/<%= @page.to_param %></span>
       </div>
     <% end %>
   </div>
@@ -132,7 +132,7 @@
           <%= node_form.text_field :name, :size => 60, :id => 'page_title' %>
           <div class="slug_field">
             <label for="page_slug">Adress:</label>
-            <%= "#{request.host}/#{@page.node.parent ? @page.node.parent.slug : ''}" %><%= f.text_field :slug %>
+            <%= "#{request.host}/#{@page.node.parent ? @page.node.parent.url : ''}" %><%= f.text_field :slug %>
           </div>
           <ul class="multiple_choice">
             <li>
@@ -167,7 +167,7 @@
           <%= f.text_field :title, :class => 'title' %>
         </div>
         <div class="slug_field">
-          <label for="page_slug">Adress:</label> <%= "#{request.host}/#{@page.index_node.slug}/#{@page.id}-" if @page.index_node %>
+          <label for="page_slug">Adress:</label> <%= "#{request.host}/#{@page.index_node.url}/#{@page.id}-" if @page.index_node %>
           <%= f.text_field :slug %>
         </div>
         <div class="restricted_field">

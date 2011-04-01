@@ -1,0 +1,38 @@
+<%= render 'admin/shared/error_messages', :object => f.object %>
+<%= hidden_field_tag 'role', 'Public' %>
+<%= hidden_field_tag 'return_to', public_admin_users_path %>
+<div class="form_container">
+  <div class="col">
+    <fieldset id="login">
+      <legend>Inloggningsuppgifter</legend>
+      <label for="user_login">Användarnamn</label>
+      <%= f.text_field :login, :tabindex => 7, :autocomplete => "off" %>
+      <label for="user_password">Lösenord</label>
+      <%= f.password_field :password, :tabindex => 8, :autocomplete => "off" %>
+      <label for="user_password_confirmation">Bekräfta lösenord</label>
+      <%= f.password_field :password_confirmation, :tabindex => 9, :autocomplete => "off" %>
+    </fieldset>
+    <fieldset id="user-image">
+      <legend>Bild</legend>
+      <%= image_tag(display_image_path(:size => 'c246x246', :id => @user.avatar, :format => @user.avatar.extname), :class => "photo") if @user.avatar %>
+      <label for="user_file">Välj bild att ladda upp</label>
+      <%= f.file_field :file, :size => 20, :tabindex => 1 %>
+      <p><small><em>Ladda inte upp bilder över <strong>1MB</strong> och använd endast filformaten <strong>jpg</strong>, <strong>png</strong> eller <strong>gif</strong>.</em></small></p>
+    </fieldset>
+  </div>
+  <div class="col">
+    <fieldset id="contact">
+      <legend>Kontaktuppgifter</legend>
+      <label for="user_first_name">Förnamn</label>
+      <%= f.text_field :first_name, :tabindex => 2, :autocomplete => "off" %>
+      <label for="user_last_name">Efternamn</label>
+      <%= f.text_field :last_name, :tabindex => 3, :autocomplete => "off" %>
+      <label for="user_email">E-post</label>
+      <%= f.text_field :email, :tabindex => 4, :autocomplete => "off" %>
+      <label for="user_phone">Telefon</label>
+      <%= f.text_field :phone, :tabindex => 5, :autocomplete => "off" %>
+      <label for="user_cell_phone">Mobiltelefon</label>
+      <%= f.text_field :cell_phone, :tabindex => 6, :autocomplete => "off" %>
+    </fieldset>
+  </div>
+</div>

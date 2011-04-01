@@ -12,8 +12,14 @@ Rails.application.routes.draw do
     match 'login' => 'sessions#new', :as => 'login'
     match '/logout' => 'sessions#destroy', :as => 'logout'
     resources :sessions
-
-    resources :users
+    resources :users do
+      collection do
+        get 'admins'
+        get 'public'
+        get 'new_public'
+        get 'search'
+      end
+    end
 
     resources :site_settings
     resources :content_lists
@@ -29,7 +35,15 @@ Rails.application.routes.draw do
     resources :tags
     resources :content_modules
 
-    resources :nodes
+    resources :nodes do
+      member do
+        get 'place'
+      end
+      collection do
+        put 'sort'
+      end
+    end
+
     resources :pages do
       collection do
         get 'search'

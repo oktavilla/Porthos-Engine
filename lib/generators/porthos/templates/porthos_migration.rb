@@ -1,13 +1,17 @@
 class CreatePorthosTables < ActiveRecord::Migration
   def self.up
     create_table :nodes do |t|
+      t.integer  "parent_id"
+      t.string   "name"
       t.string   "url"
       t.integer  "status", :default => 0
+      t.integer  "position"
       t.string   "controller"
       t.string   "action"
       t.string   "resource_type"
       t.integer  "resource_id"
       t.integer  "field_set_id"
+      t.integer  "children_count"
       t.datetime "created_at"
       t.datetime "updated_at"
       t.boolean  "restricted", :default => false
@@ -16,6 +20,9 @@ class CreatePorthosTables < ActiveRecord::Migration
     add_index "nodes", ["url"], :name => "index_nodes_on_url"
     add_index "nodes", ["field_set_id"], :name => "index_nodes_on_field_set_id"
     add_index "nodes", ["resource_id", "resource_type"], :name => "index_nodes_on_resource_id_and_resource_type"
+    add_index "nodes", ["parent_id"], :name => "index_nodes_on_parent_id"
+
+    Node.create(:name => 'Start', :status => 1, :position => 1, :controller => 'pages', :action => 'index'
 
     create_table "content_images", :force => true do |t|
       t.integer  "image_asset_id"
@@ -264,14 +271,6 @@ class CreatePorthosTables < ActiveRecord::Migration
 
     add_index "redirects", ["path"], :name => "index_redirects_on_path"
 
-    # Create default admin user
-
-    admin_role = Role.create(:name => 'Admin')
-    public_role = Role.create(:name => 'Public')
-    site_admin_role = Role.create(:name => 'SiteAdmin')
-    admin_user = User.create(:login => 'admin', :password => 'password', :password_confirmation => 'password', :first_name => 'Admin', :last_name => 'Admin', :email => 'admin@example.com')
-    UserRole.create(:role_id => admin_role.id, :user_id => admin_user.id)
-    UserRole.create(:role_id => site_admin_role.id, :user_id => admin_user.id)
   end
 
   def self.down

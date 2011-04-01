@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'sunspot'
   s.add_dependency 'sunspot_rails'
   s.add_dependency 'has_scope'
+  s.add_dependency 'parndt-acts_as_tree'
 
   # Dev dependencies
   s.add_dependency 'shoulda'

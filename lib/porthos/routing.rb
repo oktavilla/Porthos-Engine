@@ -12,33 +12,6 @@ module Porthos
     #     :controller => 'test_posts'
     #   }
     cattr_accessor :rules
-    # self.rules = [
-    #   {
-    #     :test => /(^.*)\/(\d+)\-[a-z0-9]/,
-    #     :matches => ['url', 'id'],
-    #     :controller => 'pages'
-    #   },
-    #   {
-    #     :test => /(^.*)\/(\d{4})\/(\d{2})\/(\d{2})\/(\d+)/,
-    #     :matches => ['url', 'year', 'month', 'day', 'id'],
-    #     :controller => 'pages'
-    #   },
-    #   {
-    #     :test => /(^.*)\/(\d{4})\/(\d{2})\/(\d{2})$/,
-    #     :matches => ['url', 'year', 'month', 'day'],
-    #     :controller => 'pages'
-    #   },
-    #   {
-    #     :test => /(^.*)\/(\d{4})\/(\d{2})$/,
-    #     :matches => ['url', 'year', 'month'],
-    #     :controller => 'pages'
-    #   },
-    #   {
-    #     :test => /(^.*)\/(\d{4})$/,
-    #     :matches => ['url', 'year'],
-    #     :controller => 'pages'
-    #   }
-    # ]
     self.rules = [
       {
         :test => ":url/:id",
@@ -46,7 +19,8 @@ module Porthos
           :url => '(^.*)',
           :id => '(\d+)\-[a-z0-9]'
         },
-        :controller => 'pages'
+        :controller => 'pages',
+        :action => 'show'
       },
       {
         :test => ":url/:year/:month/:day/:id",

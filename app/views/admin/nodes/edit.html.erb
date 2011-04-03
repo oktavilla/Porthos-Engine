@@ -1,22 +1,20 @@
-<% @page_title = "Sidor > #{@node.name}" %>
+<% @page_title = "#{t(:node, :scope => [:activerecord, :models])} > #{@node.name}" %>
 <% @page_class = "A content" -%>
 <div id="workspace">
   <div class="header">
-    <h1><span class="pre">Ändra detaljer</span> <%= @node.name %></h1>
+    <h1><span class="pre"><%= t(:title, :scope => [:app, :views, :admin, :nodes, :edit])  %></span> <%= @node.name %></h1>
   </div>
   <div id="content">
-    <%= render 'admin/shared/error_messages', :object => f.object %>
-    <% form_for :node, :url => admin_node_path(@node), :html => { :method => :put } do |f| %>
+    <%= form_for :node, :url => admin_node_path(@node), :html => { :method => :put } do |f| %>
+      <%= render 'admin/shared/error_messages', :object => f.object %>
       <fieldset>
         <%= render :partial => 'form', :locals => { :f => f } %>
       </fieldset>
       <div class="submit">
-        <%= submit_tag 'Spara ändringar' %> eller <%= link_to "avbryt", previous_view_path(admin_nodes_path(:nodes => @node)) %>
+        <%= submit_tag t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), previous_view_path(admin_nodes_path(:nodes => @node)) %>
       </div>
     <% end %>
   </div>
 </div>
 <% content_for :javascripts do %>
-  <%= javascript_include_tag 'porthos/swfupload/swfupload', 'porthos/swfupload/swfupload.queue.js', 'porthos/assets', 'porthos/swfobject', 'porthos/mediaplayer', :cache => 'assets_uploader' %>
-  <%= javascript_include_tag 'porthos/pages' %>
 <% end %>

@@ -135,7 +135,7 @@
     models:
       asset: Fil
       content_module: Innehållsmodul
-      node: Navigations-node
+      node: Navigationsnode
       page: Sida
       content_teaser: Teaser
       user: Användare
@@ -160,8 +160,9 @@
         name: Namn
         template: Modul
       node:
-        name: Namn
+        name: Namn i navigationen
         status: Status
+        restricted: Kräver inloggning (även undersidor)
       page:
         title: Namn
         description: Beskrivning   
@@ -393,8 +394,26 @@
           show:
             title: Nyckelord - ”%{name}”
             edit_tag: Ändra
+        nodes:
+          index:
+            title: Struktur och navigation
+            no_data: Det finns inga navigationsnoder inlagda 
+            add_root_node: Skapa startsida
+          new:
+            title: Placera i strukturen
+          edit: 
+            title: Ändra
+          shared:
+            move: Flytta
+            show_in_nav: Syns i navigationen och är tillgänglig på internet
+            not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
+            restricted: Avstängd, inte tillgänglig på internet
+        pages:
+          publish_now: publicera
   save: Spara
   or: eller
   cancel: Avbryt
   edit: Ändra
   destroy: Tabort
+  move: Flytta
+  show_all: Visa alla

@@ -8,18 +8,18 @@
   <% end %>
   <span class="name"><%= node.name %></span>
   <% if node.restricted? -%>
-  <span class="info restricted">lösenordsskyddad</span>
+  <span class="info restricted"><%= t(:restricted, :scope => [:activerecord, :attributes, :node])  %></span>
   <% end -%>
   <span class="edit">
     <% if node.controller == 'pages' && node.action == 'index' -%>
-      <%= link_to "Visa alla #{node.field_set.title.downcase}", admin_pages_path(:filters => { :with_field_set => node.field_set_id }), :class => 'edit' %>
-      <%= link_to "Ändra", edit_admin_node_path(node), :class => 'settings' %>
+      <%= link_to "#{t(:show_all) }  #{node.field_set.title.downcase}", admin_pages_path(:filters => { :with_field_set => node.field_set_id }), :class => 'edit' %>
+      <%= link_to t(:edit), edit_admin_node_path(node), :class => 'settings' %>
     <% elsif node.controller == 'pages' && node.action == 'show' -%>
-      <%= link_to "Ändra", admin_node_path(node), :class => 'edit' %>
+      <%= link_to t(:edit), admin_node_path(node), :class => 'edit' %>
     <% else -%>
-      <%= link_to "Ändra", edit_admin_node_path(node), :class => 'settings' %>
+      <%= link_to t(:edit), edit_admin_node_path(node), :class => 'settings' %>
     <% end -%>
-    <%= link_to "Flytta", place_admin_node_path(node) %>
-    <%= link_to "Ta bort", admin_node_path(node), { :method => :delete, :class => "delete", :confirm => "Är du säker, detta går inte att ångra." } %>
+    <%= link_to t(:move, :scope => [:app, :views, :admin, :nodes, :shared])  place_admin_node_path(node) %>
+    <%= link_to t(:destroy), admin_node_path(node), { :method => :delete, :class => "delete", :confirm => t(:app, :general, :destroy_confirmation), :target_name => node.name } %>
   </span>
 </div>

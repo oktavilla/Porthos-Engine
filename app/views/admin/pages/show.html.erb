@@ -9,7 +9,8 @@
       <p><a href="#" class="toggle_publish_date">Ändra</a></p>
     <% else %>
       <p><strong>Sidan är inte publicerad</strong></p>
-      <p><a href="#" class="toggle_publish_date">Välj ett publiceringsdatum</a> eller <%= link_to "publicera nu", publish_admin_page_path(@page.id), :method => :put, :class => 'new' %></p>
+      <p><a href="#" class="toggle_publish_date">Välj ett publiceringsdatum</a> eller
+      <%= link_to t(:publish_now, :scope => [:app, :views, :admin, :pages, :show]), publish_admin_page_path(@page.id), :method => :put, :class => 'new' %></p>
     <% end %>
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>

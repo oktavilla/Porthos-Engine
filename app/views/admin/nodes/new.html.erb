@@ -2,7 +2,7 @@
 <% @page_title = "Navigation" -%>
   <div id="workspace">
     <div class="header">
-      <h1>Placera i strukturen</h1>
+      <h1><%= t(:title, :scope => [:app, :views, :admin, :nodes, :new])  %></h1>
     </div>
     <div id="content">
       <%= form_for @node, :url => admin_nodes_path do |f| %>
@@ -13,36 +13,30 @@
         <%= f.hidden_field :controller %>
         <%= f.hidden_field :action %>
         <% end %>
-        <label for="node_name">Namn i navigationen</label>
+
+        <%= f.label :name %>
         <%= f.text_field :name %>
 
         <%= f.label :url %>
         <%= f.text_field :url %>
-        <!--
 
-        Not necessary in all installations, needs to be better communicated.
-
-        <label for="node_restricted" class="contains-input">
-          <%= f.check_box :restricted %> Kräv inloggning
-        </label>
-        -->
         <ul class="multiple_choice">
           <li>
             <label for="shown_in_nav">
               <%= f.radio_button :status, 1, :id => 'shown_in_nav' %>
-              Syns i navigationen <span class="form_help">Och är tillgänglig på internet.</span>
+              <%= t(:show_in_nav, :scope => [:app, :views, :admin, :nodes, :shared])  %>
             </label>
           </li>
           <li>
             <label for="not_shown_in_nav">
               <%= f.radio_button :status, 0, :id => 'not_shown_in_nav' %>
-              Syns inte i navigationen. <span class="form_help">Men är tillgänglig på internet.</span>
+              <%= t(:not_shown_in_nav, :scope => [:app, :views, :admin, :nodes, :shared])  %>
             </label>
           </li>
           <li>
             <label for="restricted">
               <%= f.radio_button :status, -1, :id => 'restricted' %>
-              Avstängd <span class="form_help">Är ej tillgänglig på internet.</span>
+              <%= t(:restricted, :scope => [:app, :views, :admin, :nodes, :shared])  %>
             </label>
           </li>
         </ul>
@@ -73,7 +67,7 @@
           <% end %>
         </div>
         <div class="submit">
-          <%= submit_tag 'Spara ändringar' %> eller <%= link_to "avbryt", previous_view_path((@resource ? admin_page_path(:id => @resource.id) : admin_nodes_path)) %>
+          <%= submit_tag t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), previous_view_path((@resource ? admin_page_path(:id => @resource.id) : admin_nodes_path)) %>
         </div>
       <% end %>
     </div>

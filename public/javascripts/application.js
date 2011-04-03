@@ -22,7 +22,7 @@
     cloneAsUrl: function(source, target) {
       var $source = $(source),
           $target = $(target);
-      if (!$source || !$target) { return; }
+      if ($source.size() === 0 || $target.size() === 0) { return; }
       $target.data('clone_from_title', $target.val() === '' || $target.val() === Porthos.Helpers.parameterize($source.val()));
       $source.bind('keyup', function(event) {
         if ($target.data('clone_from_title')) {
@@ -96,8 +96,6 @@
         $container.find('div.header').toggle();
       });
 
-      Porthos.Helpers.cloneAsUrl('#page_title', '#page_slug');
-
       $('#content').delegate('div.edit a.change, div.edit a.add, a.cancel', 'click', function(event) {
         event.preventDefault();
         var $element = $(this),
@@ -146,5 +144,9 @@
 
   Porthos.Field.init();
   Porthos.Page.init();
+  $(document).ready(function() {
+    Porthos.Helpers.cloneAsUrl('#page_title', '#page_slug');
+    Porthos.Helpers.cloneAsUrl('#node_name', '#node_url');
+  });
 
 }(jQuery));

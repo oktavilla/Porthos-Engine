@@ -1,8 +1,8 @@
-<span><strong>Förhandsgranskning</strong> av sidan ”<%= link_to @page.title, "/#{@page.node.slug}" %>”.
+<span><strong>Förhandsgranskning</strong> av sidan ”<%= link_to @page.title, "/#{@page.node.url}" %>”.
 <% if @page.node.inactive? %>
   Sidan är avstängd.
 <% else %>
-  Sidan finns på <code><%= "#{request.protocol}#{request.host}/#{@page.node.slug}" %></code> och 
+  Sidan finns på <code><%= "#{request.protocol}#{request.host}/#{@page.node.url}" %></code> och 
   <% if @page.node.active? %>
     är synlig i navigationen.
   <% elsif @page.node.hidden? %>  

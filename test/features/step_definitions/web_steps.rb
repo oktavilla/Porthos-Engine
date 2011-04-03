@@ -65,6 +65,10 @@ When /^(?:|I )follow t"([^"]*)"$/ do |link|
   click_link(I18n.translate(link))
 end
 
+When /^(?:|I )click "([^"]*)"$/ do |link|
+  find(link).click
+end
+
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
   fill_in(field, :with => value)
 end

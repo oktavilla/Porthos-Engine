@@ -4,11 +4,11 @@
   <ul>
     <% renderer.archive.each do |archive_year| %>
       <% year, months = archive_year[0], archive_year[1] %>
-      <li<%= ' class="selected"' if year == renderer.selected_year.to_s %>><%= link_to year, "/#{node.slug}/#{year}" %></li>
+      <li<%= ' class="selected"' if year == renderer.selected_year.to_s %>><%= link_to year, "/#{node.url}/#{year}" %></li>
       <% if year == renderer.selected_year.to_s && months.any? -%>
       <ul>
         <% months.each do |month| -%>
-          <li<%= ' class="selected"' if month == renderer.selected_month.to_s %>><%= link_to Date::MONTHNAMES[month.to_i], "/#{node.slug}/#{year}/#{month}" %></li>
+          <li<%= ' class="selected"' if month == renderer.selected_month.to_s %>><%= link_to Date::MONTHNAMES[month.to_i], "/#{node.url}/#{year}/#{month}" %></li>
         <% end -%>
       </ul>
       <% end %>

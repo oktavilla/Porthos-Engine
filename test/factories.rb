@@ -13,7 +13,7 @@ Factory.sequence :handle do |i|
 end
 
 Factory.sequence :url do |i|
-  "/where/am/#{i}"
+  "where/am/#{i}"
 end
 
 Factory.sequence :email do |i|

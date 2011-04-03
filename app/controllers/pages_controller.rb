@@ -8,8 +8,6 @@ class PagesController < ApplicationController
     raise ActiveRecord::RecordNotFound if user == :false or !user.admin?
   end
 
-  layout 'public'
-
   def index
     @field_set = @node.field_set
     template = @field_set ? @field_set.template : PageTemplate.default
@@ -115,7 +113,7 @@ class PagesController < ApplicationController
     respond_to do |format|
       if @comment.save
         flash[:notice] = @comment.spam ? t(:saved, :scope => [:app, :admin_comments]) : t(:published, :scope => [:app, :admin_comments])
-        format.html { redirect_to (params[:return_to] || "/#{@node.slug}#comment_#{@comment.id}") }
+        format.html { redirect_to (params[:return_to] || "/#{@node.url}#comment_#{@comment.id}") }
       else
         format.html { render :action => 'show' }
       end

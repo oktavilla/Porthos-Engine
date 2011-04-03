@@ -14,25 +14,25 @@ module Porthos
         login_required if trail.detect { |n| n.restricted? } and not logged_in?
         raise ActiveRecord::RecordNotFound if trail.detect { |n| n.inactive? }
       end
-      
+
       def porthos_session_id
         session[:porthos_id] ||= CGI::Session.generate_unique_id
       end
-      
+
     protected
-    
+
       def root_node
         @root_node ||= Node.root
       end
-    
+
       def root_nodes
         @root_nodes ||= [root_node] + root_node.children
       end
-    
+
       def node
-        @node ||= Node.find_by_slug(params[:slug]) or raise ActiveRecord::RecordNotFound
+        @node ||= Node.find_by_url(params[:node][:url]) or raise ActiveRecord::RecordNotFound
       end
-    
+
       def nodes
         # fetch the children of the selected top level node (it later recursive renders all nodes belonging to the trail)
         @nodes ||= unless node == root_node # dont fetch children for the root node (that's all nodes dummy!)
@@ -41,11 +41,11 @@ module Porthos
           []
         end
       end
-      
+
       def porthos_session_id
         session[:porthos_id] ||= ActiveSupport::SecureRandom.hex
       end
-      
+
       def node_ancestors
         unless defined?(@node_ancestors)
           @node_ancestors = node.ancestors.reverse
@@ -53,7 +53,7 @@ module Porthos
         end
         @node_ancestors
       end
-      
+
       def trail
         unless defined?(@trail)
           # fetch an ordered trail (top to bottom) of nodes
@@ -65,11 +65,11 @@ module Porthos
         end
         @trail
       end
-      
+
       def breadcrumbs
         @breadcrumbs ||= trail.collect { |n| ["/#{n.slug}", n.name] }
       end
-      
+
     end
   end
 end

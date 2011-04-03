@@ -6,7 +6,7 @@
   <ul>
   <% @renderer.pages.each do |page| %>
     <li>
-      <h2><%= link_to page.title, "/#{page.index_node.slug}/#{page.calendar_date.strftime("%Y/%m/%d")}/#{page.to_param}" %></h2>
+      <h2><%= link_to page.title, "/#{page.index_node.url}/#{page.calendar_date.strftime("%Y/%m/%d")}/#{page.to_param}" %></h2>
       <p><%= page.description %> <span class="date"><%= l page.calendar_date, :format => :long %></span></p>
     </li>
   <% end %>

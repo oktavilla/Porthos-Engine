@@ -27,11 +27,14 @@ class UrlResolverTest < Test::Unit::TestCase
   context 'Porthos urls' do
     setup do
       Porthos::Routing.rules = [
-        {
-          :test => /(^.*)\/(\d{4})\-(\d{2})\-(\d{2})/,
-          :matches => ['url', 'year', 'month', 'day'],
-          :scope => 'test_posts'
-        }
+        :test => ":url/:year/:month/:day",
+        :constraints => {
+          :url => '(^.*)',
+          :year => '(\d{4})',
+          :month => '(\d{2})',
+          :day => '(\d{2})'
+        },
+        :scope => 'test_posts'
       ]
     end
 
@@ -44,18 +47,18 @@ class UrlResolverTest < Test::Unit::TestCase
         end
 
         should 'result in a url with the parameters in the correct places' do
-          assert_equal "#{@node.url}/2001-01-01", url_helpers.test_posts_path(:year => '2001', :month => '01', :day => '01')
+          assert_equal "/#{@node.url}/2001/01/01", url_helpers.test_posts_path(:year => '2001', :month => '01', :day => '01')
         end
       end
 
       context 'with a specific resource' do
         setup do
           @test_post = Factory(:test_post)
-          @node = Factory(:test_blog_post_node, :resource_id => @test_post.id)
+          @node = Factory(:test_blog_post_node, :resource_id => @test_post.id, :resource_type => @test_post.class.name)
         end
 
         should 'rewrite the path to match the nodes url' do
-          assert_equal @node.url, url_helpers.test_post_path(@test_post)
+          assert_equal @node.url, url_helpers.test_post_path(:id => @test_post.id, :mongo => true)
         end
       end
     end
@@ -73,13 +76,13 @@ class UrlResolverTest < Test::Unit::TestCase
         end
 
         should 'rewrite params to match the node' do
-          get @node.url
+          get "/#{@node.url}"
           assert_equal "test_posts", params[:controller]
           assert_equal "index", params[:action]
         end
 
         should 'recognize the params' do
-          get "#{@node.url}/2011-01-02"
+          get "/#{@node.url}/2011/01/02"
           assert_equal "test_posts", params[:controller]
           assert_equal "index", params[:action]
           assert_equal '2011', params[:year]

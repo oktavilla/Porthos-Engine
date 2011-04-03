@@ -10,7 +10,7 @@
     <% end -%>
   </ol>
 <% end -%>
-<% form_for :comment, :url => comment_page_path(:id => @page.id, :slug => @node.slug), :html => { :method => :post } do |f| %>
+<% form_for :comment, :url => comment_page_path(:id => @page.id, :slug => @node.url), :html => { :method => :post } do |f| %>
   <fieldset>
     <%= hidden_field_tag 'return_to', request.request_uri %>
     <legend>Har du något att säga?</legend>

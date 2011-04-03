@@ -6,10 +6,10 @@
   <ul>
   <% @renderer.pages.each do |page| %>
     <li>
-      <h2><%= link_to page.title, "/#{page.index_node.slug}/#{page.published_on.strftime("%Y/%m/%d")}/#{page.to_param}" %></h2>
-      <p><%= page.description %> <span class="date"><%= l page.published_on, :format => :long %></span></p>
+      <h2><%= link_to page.title, page_path({:id => page}.merge(page.published_on_parts)) %></h2>
+      <p><%= page.preamble %> <span class="date"><%= l page.published_on, :format => :long %></span></p>
     </li>
   <% end %>
   </ul>
-  <%= render :partial => 'pages/templates/blog/archive', :locals => { :renderer => @renderer } %>
+  <%#= render :partial => 'pages/templates/blog/archive', :locals => { :renderer => @renderer } %>
 </div>

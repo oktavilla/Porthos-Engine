@@ -1,6 +1,6 @@
 <article class="hentry">
   <% if !page.category.present? -%>
-  <a href="/<%= page.index_node.slug %>" class="category"><%= page.index_node.name %></a>
+  <a href="/<%= page.index_node.url %>" class="category"><%= page.index_node.name %></a>
   <% else -%>
   <a href="/<%= field_set_category_path(page.field_set, category) %>" class="category"><%= page.category.name %></a>
   <% end -%>

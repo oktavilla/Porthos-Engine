@@ -157,6 +157,14 @@ class Page < ActiveRecord::Base
     "#{id}-#{slug}"
   end
 
+  def published_on_parts
+    @published_on_parts ||= {
+      :year => published_on.strftime("%Y"),
+      :month => published_on.strftime("%m"),
+      :day => published_on.strftime("%d")
+    }
+  end
+
   def published?
     published_on.present? && published_on <= Time.now
   end

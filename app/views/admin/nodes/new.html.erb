@@ -7,12 +7,17 @@
     <div id="content">
       <%= form_for @node, :url => admin_nodes_path do |f| %>
         <%= render 'admin/shared/error_messages', :object => f.object %>
+        <% if @resource %>
         <%= f.hidden_field :resource_type %>
         <%= f.hidden_field :resource_id %>
         <%= f.hidden_field :controller %>
         <%= f.hidden_field :action %>
+        <% end %>
         <label for="node_name">Namn i navigationen</label>
         <%= f.text_field :name %>
+
+        <%= f.label :url %>
+        <%= f.text_field :url %>
         <!--
 
         Not necessary in all installations, needs to be better communicated.
@@ -41,6 +46,15 @@
             </label>
           </li>
         </ul>
+        <% unless @resource %>
+          <%= f.label :controller %>
+          <%= f.text_field :controller %>
+
+          <%= f.label :action %>
+          <%= f.text_field :action %>
+          <%= f.label :field_set_id %>
+          <%= f.select :field_set_id, FieldSet.all.collect { |f| [f.title, f.id] }, :include_blank => 'Välj en sidtyp' %>
+        <% end %>
         <div id="navigation">
           <%= nested_list_of(@nodes, {
               :end_points => @nodes,
@@ -65,5 +79,5 @@
     </div>
   </div>
 <% content_for :javascripts do %>
-  <%= javascript_include_tag 'porthos/nodes' %>
+  <%= javascript_include_tag 'application' %>
 <% end %>

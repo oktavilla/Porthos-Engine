@@ -9,9 +9,9 @@ xml.rss(:version => "2.0") {
         xml.title(page.title)
         xml.pubDate(page.published_on.strftime("%a, %d %b %Y %H:%M:%S %z"))
         if page.index_node
-          xml.link("#{root_url}#{page.index_node.slug}/#{page.to_param}")
+          xml.link("#{root_url}#{page.index_node.url}/#{page.to_param}")
         elsif page.node
-          xml.link("#{root_url}/#{page.index_node.slug}/#{page.published_on.strftime("%Y/%m/%d")}/#{page.to_param}")
+          xml.link("#{root_url}/#{page.index_node.url}/#{page.published_on.strftime("%Y/%m/%d")}/#{page.to_param}")
         end
       end
     end

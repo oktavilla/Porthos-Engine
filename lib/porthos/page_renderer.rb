@@ -42,6 +42,13 @@ module Porthos
       controller.send(:logged_in?)
     end
 
+    def create_instance_variables_for_objects
+      objects.each do |key, object|
+        self.class.send(:attr_reader, key)
+        instance_variable_set("@#{key.to_s}".to_sym, object)
+      end
+    end
+
   protected
 
     def after_initialize
@@ -51,13 +58,6 @@ module Porthos
       object_keys = @objects.keys
       self.class.required_objects.each do |object_name|
         raise "Missing required object #{object_name.to_s}" unless object_keys.include?(object_name)
-      end
-    end
-
-    def create_instance_variables_for_objects
-      objects.each do |key, object|
-        self.class.send(:attr_reader, key)
-        instance_variable_set("@#{key.to_s}".to_sym, object)
       end
     end
 

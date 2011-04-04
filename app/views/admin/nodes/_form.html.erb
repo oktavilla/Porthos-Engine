@@ -1,5 +1,23 @@
 <%= f.label :name %>
 <%= f.text_field :name %>
+<%= f.label :url %>
+<%= f.text_field :url %>
+
+<% if @resource %>
+  <%= f.hidden_field :resource_type %>
+  <%= f.hidden_field :resource_id %>
+  <%= f.hidden_field :controller %>
+  <%= f.hidden_field :action %>
+<% else %>
+  <%= f.label :controller %>
+  <%= f.text_field :controller %>
+
+  <%= f.label :action %>
+  <%= f.text_field :action %>
+  <%= f.label :field_set_id %>
+  <%= f.select :field_set_id, FieldSet.all.collect { |f| [f.title, f.id] }, :include_blank => 'Välj en sidtyp' %>
+<% end %>
+
 <ul class="multiple_choice">
   <li>
     <label for="shown_in_nav">

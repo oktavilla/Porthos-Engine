@@ -27,14 +27,13 @@ class UrlResolverTest < Test::Unit::TestCase
   context 'Porthos urls' do
     setup do
       Porthos::Routing.rules = [
-        :test => ":url/:year/:month/:day",
+        :path => ":year/:month/:day",
         :constraints => {
-          :url => '(^.*)',
           :year => '(\d{4})',
           :month => '(\d{2})',
           :day => '(\d{2})'
         },
-        :scope => 'test_posts'
+        :controller => 'test_posts'
       ]
     end
 

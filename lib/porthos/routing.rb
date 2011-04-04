@@ -14,30 +14,27 @@ module Porthos
     cattr_accessor :rules
     self.rules = [
       {
-        :test => ":url/:id",
+        :path => ":id",
         :constraints => {
-          :url => '(^.*)',
-          :id => '(\d+)\-[a-z0-9]'
+          :id => '([a-z0-9\-\_]+)'
         },
         :controller => 'pages',
         :action => 'show'
       },
       {
-        :test => ":url/:year/:month/:day/:id",
+        :path => ":year/:month/:day/:id",
         :constraints => {
-          :url => '(^.*)',
           :year => '(\d{4})',
           :month => '(\d{2})',
           :day => '(\d{2})',
-          :id => '(\d+\-.*)'
+          :id => '([a-z0-9\-\_]+)'
         },
         :controller => 'pages',
         :action => 'show'
       },
       {
-        :test => ":url/:year/:month/:day",
+        :path => ":year/:month/:day",
         :constraints => {
-          :url => '(^.*)',
           :year => '(\d{4})',
           :month => '(\d{2})',
           :day => '(\d{2})'
@@ -45,18 +42,16 @@ module Porthos
         :controller => 'pages'
       },
       {
-        :test => ":url/:year/:month",
+        :path => ":year/:month",
         :constraints => {
-          :url => '(^.*)',
           :year => '(\d{4})',
           :month => '(\d{2})'
         },
         :controller => 'pages'
       },
       {
-        :test => ":url/:year/:month",
+        :path => ":year",
         :constraints => {
-          :url => '(^.*)',
           :year => '(\d{4})'
         },
         :controller => 'pages'
@@ -67,20 +62,22 @@ module Porthos
     # Returns a hash of params
     def self.recognize(path)
       return {}.tap do |params|
-        self.rules.each do |rule|
-          path_template = rule[:test].dup
+        self.rules.sort_by { |r| r[:constraints].keys.size }.reverse.each do |rule|
+          path_template = "^(.*|)/#{rule[:path].dup}"
           rule[:constraints].each do |key, value|
             path_template.gsub!(":#{key.to_s}", value)
           end
-          matches = path.match(Regexp.new(path_template)).to_a
+          matches = path.scan(Regexp.new(path_template)).flatten
+
           next unless matches.any?
 
-          matches.shift
-          keys = rule[:test].scan(/:(\w+)/).flatten
+          params[:url] = matches.shift.gsub(/^\//,'')
+          keys = rule[:path].scan(/:(\w+)/).flatten
           keys.each_with_index do |key, i|
             params[key.to_sym] = matches[i]
           end
           params[:action] = rule[:action] if rule[:action]
+          break
         end
       end
     end

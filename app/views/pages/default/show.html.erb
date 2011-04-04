@@ -1,5 +1,5 @@
 <% @page_class = "article layout2" -%>
-<% @page_title = @renderer.page.title -%>
+<% @page_title = @page_renderer.page.title -%>
 <% @page_id = 'pages-show' -%>
 <div id="content">
   <div id="c_1">
@@ -9,12 +9,12 @@
   </div>
   <div id="c_2">
     <article>
-      <h1><%= @renderer.page.title %></h1>
-      <%= @renderer.page.body %>
-      <% @renderer.page.contents.active.each do |content| -%>
-        <%= render_page_content(@renderer.page, content) %>
+      <h1><%= @page_renderer.page.title %></h1>
+      <%= @page_renderer.page.body %>
+      <% @page_renderer.page.contents.active.each do |content| -%>
+        <%= render_page_content(@page_renderer.page, content) %>
       <% end -%>
-      <%= render :partial => 'pages/contents/modules/share/content' if not @renderer.page.in_restricted_context? and not @renderer.page.parent_type == 'RegistrationForm' %>
+      <%= render :partial => 'pages/contents/modules/share/content' if not @page_renderer.page.in_restricted_context? and not @page_renderer.page.parent_type == 'RegistrationForm' %>
     </article>
   </div>
 </div>

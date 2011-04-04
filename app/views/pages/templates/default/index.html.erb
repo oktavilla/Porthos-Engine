@@ -1,10 +1,10 @@
-<% @page_class = @renderer.layout_class -%>
-<% @page_title = @renderer.title -%>
-<% @page_id    = @renderer.page_id -%>
+<% @page_class = @page_renderer.layout_class -%>
+<% @page_title = @page_renderer.title -%>
+<% @page_id    = @page_renderer.page_id -%>
 <div id="content">
-  <h1><%= @renderer.title %></h2>
+  <h1><%= @page_renderer.title %></h2>
   <ul>
-  <% @renderer.pages.each do |page| %>
+  <% @page_renderer.pages.each do |page| %>
     <li>
       <h2><%= page.title %></h2>
       <%= page.long_description %>

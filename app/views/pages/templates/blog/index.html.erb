@@ -1,15 +1,15 @@
-<% @page_class = @renderer.layout_class -%>
-<% @page_title = @renderer.title -%>
-<% @page_id    = @renderer.page_id -%>
+<% @page_class = @page_renderer.layout_class -%>
+<% @page_title = @page_renderer.title -%>
+<% @page_id    = @page_renderer.page_id -%>
 <div id="content">
-  <h1><%= @renderer.title %></h1>
+  <h1><%= @page_renderer.title %></h1>
   <ul>
-  <% @renderer.pages.each do |page| %>
+  <% @page_renderer.pages.each do |page| %>
     <li>
-      <h2><%= link_to page.title, page_path({:id => page}.merge(page.published_on_parts)) %></h2>
+      <h2><%= link_to page.title, page_path(page) %></h2>
       <p><%= page.preamble %> <span class="date"><%= l page.published_on, :format => :long %></span></p>
     </li>
   <% end %>
   </ul>
-  <%#= render :partial => 'pages/templates/blog/archive', :locals => { :renderer => @renderer } %>
+  <%#= render :partial => 'pages/templates/blog/archive', :locals => { :renderer => @page_renderer } %>
 </div>

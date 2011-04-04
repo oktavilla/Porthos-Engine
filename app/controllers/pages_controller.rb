@@ -11,7 +11,7 @@ class PagesController < ApplicationController
   def index
     @field_set = @node.field_set
     template = @field_set ? @field_set.template : PageTemplate.default
-    @renderer = page_renderer(template, {
+    @page_renderer = page_renderer(template, {
       :field_set => @field_set
     })
 
@@ -24,7 +24,7 @@ class PagesController < ApplicationController
   def show
     @page = Page.find_by_id(params[:id], :include => [:custom_attributes, :custom_associations, :fields]) || Page.find_by_slug(params[:id], :include => [:custom_attributes, :custom_associations, :fields])
     template = @page.field_set.template
-    @renderer = page_renderer(template, :field_set => @page.field_set, :page => @page)
+    @page_renderer = page_renderer(template, :field_set => @page.field_set, :page => @page)
 
     if !@page.restricted? || logged_in?
       respond_to do |format|
@@ -38,7 +38,7 @@ class PagesController < ApplicationController
   def preview
     @page = Page.find(params[:id])
     template = @page.field_set.template
-    @renderer = page_renderer(template, :field_set => @page.field_set, :page => @page)
+    @page_renderer = page_renderer(template, :field_set => @page.field_set, :page => @page)
     respond_to do |format|
       format.html { render :template => template.views.show }
     end
@@ -77,7 +77,7 @@ class PagesController < ApplicationController
   def categories
     @field_set = @node.field_set
     template = @field_set ? @field_set.template : PageTemplate.default
-    @renderer = page_renderer(template, :field_set => @field_set)
+    @page_renderer = page_renderer(template, :field_set => @field_set)
 
     respond_to do |format|
       format.html { render :template => template.views.categories }
@@ -87,7 +87,7 @@ class PagesController < ApplicationController
   def category
     @field_set = @node.field_set
     template = @field_set ? @field_set.template : PageTemplate.default
-    @renderer = page_renderer(template, :field_set => @field_set)
+    @page_renderer = page_renderer(template, :field_set => @field_set)
 
     respond_to do |format|
       format.html { render :template => template.views.category }
@@ -97,7 +97,7 @@ class PagesController < ApplicationController
   def tagged_with
     @field_set = @node.field_set
     template = @field_set ? @field_set.template : PageTemplate.default
-    @renderer = page_renderer(template, :field_set => @field_set)
+    @page_renderer = page_renderer(template, :field_set => @field_set)
 
     respond_to do |format|
       format.html { render :template => template.views.tagged_with }

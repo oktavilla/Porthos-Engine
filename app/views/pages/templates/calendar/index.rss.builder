@@ -1,10 +1,10 @@
 xml.instruct! :xml, :version => "1.0"
 xml.rss(:version => "2.0") {
   xml.channel{
-    xml.title(@renderer.node.name)
+    xml.title(@page_renderer.node.name)
     xml.link(root_url)
     xml.language('sv-SV')
-    @renderer.pages.each do |page|
+    @page_renderer.pages.each do |page|
       xml.item do
         xml.title(page.title)
         xml.pubDate(page.published_on.strftime("%a, %d %b %Y %H:%M:%S %z"))

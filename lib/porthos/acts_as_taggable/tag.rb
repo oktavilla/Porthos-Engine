@@ -11,12 +11,6 @@ class Tag < ActiveRecord::Base
     where("taggings.namespace = ?", namespace)
   }
 
-  scope :popular,
-        select("tags.*, COUNT(taggings.tag_id) as num_taggings").
-        joins("LEFT OUTER JOIN taggings ON taggings.tag_id = tags.id").
-        order("num_taggings DESC").
-        group("tags.id")
-
   scope :on, lambda { |taggable_type|
     select('DISTINCT(tags.id), tags.*').
     joins("LEFT OUTER JOIN taggings ON taggings.tag_id = tags.id").

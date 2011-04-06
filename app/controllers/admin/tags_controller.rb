@@ -63,7 +63,7 @@ class Admin::TagsController < ApplicationController
   end
 
   def search
-    @tags = Tag.popular.find(:all, :conditions => ["name LIKE ?", "#{params[:query].downcase.strip}%"])
+    @tags = Tag.where("name LIKE ?", "#{params[:query].downcase.strip}%")
     respond_to do |format|
       format.js
     end

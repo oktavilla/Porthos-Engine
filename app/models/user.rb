@@ -138,13 +138,6 @@ class User < ActiveRecord::Base
     def can_be_destroyed_by?(user)
       (user.admin? and user != self) || user == self
     end
-
-    # hash with methods allowed to be called form the restriction model
-    # key's should be used for translations and values for the method names
-    def allowed_restrictions
-      {} # override per installation
-    end
-
   end
 
   def admin?

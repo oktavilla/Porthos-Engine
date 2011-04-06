@@ -20,6 +20,7 @@ module RoutingFilter
           mapping_params[:id] = node.resource_id if node.resource_id.present?
           path.replace('/' + mapping_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
           custom_params[:node] = {
+            :id => node.id,
             :url => node.url
           }
         end
@@ -35,40 +36,32 @@ module RoutingFilter
         yield
       else
         conditions = { :controller => params[:controller], :action => params[:action] }
-        index_conditions = { :controller => params[:controller], :action => 'index' }
+        index_conditions = conditions.dup.merge(:action => 'index')
+
         if params[:id].present?
           resource = params[:id]
           if resource.is_a?(ActiveRecord::Base)
             params[:id] = resource.to_param
             conditions.merge!(:resource_type => resource.class.to_s, :resource_id => resource.id)
-            index_conditions.merge!(:field_set_id => resource.field_set_id) if resource.respond_to?(:field_set_id)
+            if resource.respond_to?(:field_set_id)
+              index_conditions.merge!(:field_set_id => resource.field_set_id)
+            else
+              index_conditions.merge!(:field_set_id => params[:field_set_id])
+            end
           else
             conditions.merge!(:resource_type => params[:controller].classify, :resource_id => resource)
+            index_conditions.merge!(:field_set_id => params[:field_set_id])
           end
           node = Node.where(conditions).first || Node.where(index_conditions).first
         else
           node = Node.where(conditions.merge(:field_set_id => params[:field_set_id])).first
         end
-
         yield.tap do |path|
           if node
-            params_keys = params.keys
-            rule = Porthos::Routing.rules.sort_by { |r| r[:constraints].keys.size }.reverse.detect do |r|
-              r[:constraints].except(:url).keys.all? { |key| params_keys.include?(key) }
-            end
-            if rule
-              path_template = [node.url, rule[:path]].join('/')
-              rule[:constraints].except(:url).each do |key, value|
-                path_template.gsub!(":#{key.to_s}", params[key].to_s) if params[key]
-              end
-              path_template = "/#{path_template}" unless path_template[0...1] == '/'
-              path.replace(path_template)
-            else
-              path.replace node.url
-            end
+            rule = Porthos::Routing.rules.find_matching_params(params)
+            path.replace(rule ? rule.computed_path(node, params) : node.url)
           end
         end
-
       end
     end
   end

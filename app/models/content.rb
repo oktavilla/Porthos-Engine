@@ -6,7 +6,6 @@ class Content < ActiveRecord::Base
              :polymorphic => true
   belongs_to :content_collection,
              :foreign_key => 'parent_id'
-  has_many :restrictions
 
   scope :active, where("contents.active = ?", true)
 
@@ -14,9 +13,6 @@ class Content < ActiveRecord::Base
 
   acts_as_settingable
 
-  attr_accessor :multiple_restrictions
-
-  after_save :set_restrictions
 
   before_destroy do |content|
     content.resource.destroy if content.resource and not content.module?
@@ -66,23 +62,4 @@ class Content < ActiveRecord::Base
   def collection?
     self.is_a?(ContentCollection)
   end
-  def viewable_by(user)
-    !self.restrictions.detect { |r| r.denies?(user) }
-  end
-
-  def restricted?
-    !restrictions_count.nil? && restrictions_count > 0
-  end
-
-protected
-
-  def set_restrictions
-    self.restrictions.destroy_all
-    unless multiple_restrictions.nil?
-      multiple_restrictions.each do |key|
-        self.restrictions << self.restrictions.create(:mapping_key => key)
-      end
-    end
-  end
-
 end

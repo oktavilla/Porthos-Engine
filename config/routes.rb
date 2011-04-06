@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
   filter :url_resolver
   resources :pages do
+    collection do
+      get 'categories'
+    end
     member do
       get 'preview'
       post 'comment'
     end
   end
+  match 'pages/categories/:id' => 'pages#category', :as => 'pages_category'
 
   namespace :admin do
     root :to => 'pages#index'

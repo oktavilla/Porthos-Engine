@@ -107,8 +107,6 @@
         $parent.find(query).toggle();
       });
 
-      $('textarea.editor').ckeditor();
-
       $('#page_publish_on_date a.toggle_publish_date, #page_published_on_form a').click(function(event) {
         event.preventDefault();
         $('#page_current_publish_on_date, #page_published_on_form').toggle();
@@ -145,6 +143,9 @@
   Porthos.Field.init();
   Porthos.Page.init();
   $(document).ready(function() {
+    if ($.fn.hasOwnProperty('ckeditor')) {
+      $('textarea.editor').ckeditor();
+    }
     Porthos.Helpers.cloneAsUrl('#page_title', '#page_slug');
     Porthos.Helpers.cloneAsUrl('#node_name', '#node_url');
   });

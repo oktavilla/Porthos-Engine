@@ -16,9 +16,10 @@ FieldSet.create(:title => 'Article', :page_label => 'Title', :handle => 'article
 
 # Create root node
 
-Node.create(:name => 'Start',
-            :status => 1,
-            :position => 1,
-            :controller => 'pages',
-            :action => 'index',
-            :field_set => FieldSet.first)
+Node.create({
+  :name => 'Start',
+  :status => 1,
+  :controller => 'pages',
+  :action => 'index',
+  :field_set => FieldSet.first
+})

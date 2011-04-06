@@ -1,0 +1,2 @@
+<label for="asset_usage_gravity">Var i bilden ska beskärningen utgå ifrån?</label>
+<%= f.select :gravity, ImageAsset.gravities.collect { |key, val| [t(key.to_sym, :scope => [:app, :image_asset, :gravities]), key] } %>

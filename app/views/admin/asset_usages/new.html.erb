@@ -1,0 +1,17 @@
+<% @page_class = 'layout1' %>
+<div id="workspace">
+  <div class="header">
+    <h1>Inställningar för bilden</h1>
+  </div>
+  <div id="content">
+    <% form_for :asset_usage, :url => admin_asset_usages_path(:return_to => params[:return_to]) do |f| %>
+      <%= f.hidden_field :asset_id %>
+      <%= f.hidden_field :parent_id %>
+      <%= f.hidden_field :parent_type %>
+      <%= render :partial => 'form', :locals => { :f => f } %>
+      <div class="submit">
+        <%= submit_tag 'Spara' %> eller <%= link_to "avbryt", previous_view_path, :class => 'cancel' %>
+      </div>
+    <% end %>
+  </div>
+</div>

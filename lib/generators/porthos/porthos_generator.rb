@@ -18,5 +18,7 @@ class PorthosGenerator < Rails::Generators::Base
   def create_migration_file
     migration_template 'porthos_migration.rb', 'db/migrate/create_porthos_tables.rb'
     copy_file 'seeds.rb', 'db/porthos_seeds.rb'
+    copy_file 'porthos_s3.rb', 'config/initializers/porthos_s3.rb'
+    copy_file 'resizor.rb', 'config/initializers/resizor.rb'
   end
 end

@@ -1,0 +1,42 @@
+<% @page_title = "Beskriv de uppladdade filerna" %>
+<div id="workspace">
+  <div class="header">
+    <h1>Beskriv de uppladdade filerna</h1>
+  </div>
+  <div id="content">
+    <% form_for :asset, @assets, :url => update_multiple_admin_assets_path, :html => { :method => :put } do |f| %>
+      <% @assets.each do |asset| -%>
+      <div class="describe_asset">
+        <div class="preview">
+          <div class="asset<%= " #{asset.class}" %>">
+            <% if asset.image? %>
+              <%= image_tag display_image_path(:size => '260', :id => asset, :format => asset.extname), :id => "asset_#{asset.id}" %>
+            <% elsif asset.video? and asset.thumbnail %>
+              <%= image_tag display_image_path(:size => '260', :id => asset.thumbnail, :format => asset.thumbnail.extname), :id => "asset_#{asset.id}", :class => 'video' %>
+            <% else %>
+              <img src="/graphics/porthos/icons/filetypes/<%= asset.extname %>.png" alt="" width="100" height="100" class="icon">
+            <% end %>
+          </div>
+        </div>
+        <fieldset>
+          <label for="assets[<%= asset.id %>][title]">Titel</label>
+          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][title]", asset.file_name, :size => "40" %></div>
+          <label for="assets[<%= asset.id %>][description]">Beskrivning</label>
+          <div class="fullwidth"><%= text_area_tag("assets[#{asset.id}][description]", '', options = {:class => 'description', :rows => 2, :cols => 38}) %></div>
+          <label for="assets[<%= asset.id %>][author]">Fotograf/copyright</label>
+          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][author]", asset.author, :size => "40" %></div>
+          <label for="assets[<%= asset.id %>][tag_names]">Nyckelord</label>
+          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][tag_names]", {}, :size => "40", :class => 'asset_tags' %></div>
+          <p class="form_help after">Dela fler nyckelord med mellanslag.</p>
+        </fieldset>
+      </div>
+      <% end -%>
+      <fieldset class="submit">
+        <input type="submit" value="Spara beskrivningar"> eller <%= link_to "avbryt", admin_assets_path %>
+      </fieldset>
+    <% end %>
+  </div>
+</div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'assets', 'swfobject', 'mediaplayer' %>
+<% end %>

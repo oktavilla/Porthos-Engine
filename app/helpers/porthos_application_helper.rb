@@ -1,5 +1,10 @@
 module PorthosApplicationHelper
 
+  def admin_assets_path_with_session_key(arguments = {})
+    session_key = Rails.application.config.session_options[:key]
+    admin_assets_path({session_key => cookies[session_key], request_forgery_protection_token => form_authenticity_token}.merge(arguments))
+  end
+
   def nested_list_of(collection, options = {}, html_options = {}, &block)
     options = {
       :expand_all     => false,

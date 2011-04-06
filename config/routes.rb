@@ -68,7 +68,14 @@ Rails.application.routes.draw do
     resources :content_modules
     resources :content_lists
 
-    resources :assets
+    resources :assets do
+      collection do
+        get 'search'
+        get 'incomplete'
+        put 'update_multiple'
+      end
+    end
+
     resources :comments
   end
 end

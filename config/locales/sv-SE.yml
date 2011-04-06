@@ -132,6 +132,9 @@
         field:
           handle:
             reserved: används redan av sidan
+        asset:
+          file: 
+            unable_to_store: kunde inte sparas
     models:
       asset: Fil
       content_module: Innehållsmodul

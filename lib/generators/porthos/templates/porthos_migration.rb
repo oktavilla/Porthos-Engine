@@ -1,5 +1,38 @@
 class CreatePorthosTables < ActiveRecord::Migration
   def self.up
+    create_table "assets", :force => true do |t|
+      t.string   "type"
+      t.string   "name"
+      t.string   "extension"
+      t.string   "mime_type"
+      t.integer  "width"
+      t.integer  "height"
+      t.integer  "size"
+      t.string   "title"
+      t.text     "author"
+      t.text     "description"
+      t.boolean  "hidden", :default => false
+      t.integer  "resizor_id"
+      t.integer  "created_by_id"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index "assets", ["name"], :name => "index_assets_on_name"
+
+    create_table "asset_usages", :force => true do |t|
+      t.integer  "asset_id"
+      t.integer  "parent_id"
+      t.string   "parent_type"
+      t.integer  "position"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+      t.string   "gravity"
+    end
+
+    add_index "asset_usages", ["asset_id"], :name => "index_asset_usages_on_asset_id"
+    add_index "asset_usages", ["parent_id", "parent_type"], :name => "index_asset_usages_on_parent_id_and_parent_type"
+
     create_table :nodes do |t|
       t.integer  "parent_id"
       t.string   "name"

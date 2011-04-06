@@ -84,6 +84,13 @@ Factory.define :custom_association do |f|
   f.relationship 'one_to_one'
 end
 
+Factory.define :asset do |f|
+  f.association :created_by, :factory => :user
+end
+
+Factory.define :image_asset, :parent => :asset, :class => ImageAsset do |f|
+end
+
 # Factories for url resolver
 Factory.define :test_post do |f|
 end

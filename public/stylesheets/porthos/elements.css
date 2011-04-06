@@ -249,6 +249,12 @@ form .avatar {
     margin:0 0 1em 0;
     padding:.5em 0 .5em 0; }
   .items.thumbnails li {padding-left:115px;}
+    .items .icon { 
+      width: 100px;
+      height: 100px;
+      margin-left: -115px;
+      float: left;
+      background: url('/graphics/porthos/icons/filetypes/default.png'); }
     .items.thumbnails img {
       float:left;
       margin-left:-115px; 

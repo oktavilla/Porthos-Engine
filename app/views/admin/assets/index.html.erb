@@ -1,0 +1,79 @@
+<% @page_title = "Bilder, video, ljud och dokument" %>
+<% @page_class = 'layout3' %>
+  <%= render :partial => 'admin/assets/sub_nav' %>
+  <div id="workspace">
+    <% if @current_tags.any? -%>
+    <div class="header">
+      <h1>Filer märkta med: <%= @current_tags.join(', ') %></h1>
+    </div>
+    <% else -%>
+    <div class="header">
+      <h1>Bilder, video, ljud och dokument</h1>
+    </div>
+    <div class="tools">
+      <div class="add">
+        <a href="<%= new_admin_asset_path %>" class="new">Ladda upp filer</a>
+      </div>
+      <%= form_tag admin_assets_path, :method => :get do |f| %>
+      <div class="sort">
+        <label for="filters_order_by">Sortering</label>
+        <% current_scopes.except(:order_by).each do |filter, value| -%>
+          <%= hidden_field_tag "filters[#{filter}]", value %>
+        <% end -%>
+          <%= select_tag 'filters[order_by]', options_for_select({ 'Datum' => 'created_at desc', 'A-Z' => 'title asc', 'Storlek' => 'size' }, current_scopes[:order_by]) %>
+          <input type="submit" value="Välj" id="filters_order_by_submit" style="display:none">
+      </div>
+      <% end %>
+    </div>
+    <% end -%>
+    <div id="content">
+      <% if @content || @asset_usage -%>
+      <p>
+        <span style="background:#ffb">Välj vilken bild/film du vill använda eller ladda upp en ny.</span>
+        <%= link_to "Avbryt", previous_view_path(@context_params[:return_to]) %>
+      </p>
+      <% end -%>
+      <% if @assets.any? -%>
+      <ul class="items thumbnails">
+        <% @assets.each do |asset| -%><li><div class="inner <%= asset.extension %>">
+          <a href="<%= edit_admin_asset_path(asset.id) %>">
+          <% if asset.is_a?(ImageAsset) %>
+            <%= image_tag asset.version_url(:size => 'c100x100'), :id => "asset_#{asset.id}", :width => 100, :height => 100 %>
+          <% elsif asset.respond_to?(:thumbnail) and not asset.thumbnail.blank? %>
+            <%= image_tag display_image_path(:size => 'c100x100', :id => asset.thumbnail, :format => asset.thumbnail.extension), :id => "asset_#{asset.id}", :width => 100, :height => 100 %>
+          <% else %>
+            <span class="icon"></span>
+          <% end %>
+          </a>
+          <div class="title"><%= link_to asset.title, edit_admin_asset_path(asset.id) %></div>
+          <div class="description<%= ' blank' if asset.description.blank? %>">
+            <%= asset.description.blank? ? "<a href=\"#{edit_admin_asset_path(asset.id)}\">Ingen beskrivning. Skriv en ...</a>".html_safe : truncate(asset.description, :length => 200) %>
+          </div>
+          <% unless asset.tag_names.blank? %>
+          <div class="tags"><%= asset.tags.collect { |tag| @current_tags.include?(tag.name) ? tag.name : link_to(tag.name, admin_assets_path(:tags => [tag.name])) }.join(', ') -%></div>
+          <% end %>
+          <div class="meta">
+            <span>Uppladdad</span> den <%= asset.created_at.strftime("%d %b %Y") %>
+            <% if !asset.created_by.nil? && asset.created_by.respond_to?(:name) -%>
+            <span>av</span> <%= asset.created_by.name %>
+            <% end -%>
+          </div>
+          <div class="edit">
+            <%= link_to "Ändra", edit_admin_asset_path(asset.id, :return_to => request.path) %>
+            <%= link_to "Ta bort", admin_asset_path(asset.id), :class => 'delete', :confirm => "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig.", :method => :delete %>
+          </div>
+          <% if @create_callback.present? %>
+          <div class="add">
+            <%= render :partial => 'create_callback_form', :locals => {:create_callback => @create_callback, :asset => asset} %>
+          </div>
+          <% end %>
+        </div></li>
+        <% end -%>
+      </ul>
+      <%= will_paginate @assets, :previous_label => "« Föregående", :next_label => "Nästa »" unless @current_tags.any? %>
+      <% end -%>
+    </div>
+  </div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'swfupload/swfupload', 'swfupload/swfupload.queue.js', 'assets' %>
+<% end %>

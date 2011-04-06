@@ -18,7 +18,7 @@ class Admin::AssetsController < ApplicationController
   has_scope :order_by, :default => 'created_at DESC'
 
   def index
-    @tags = Tag.on('Asset').popular.find(:all, :limit => 30)
+    @tags = Tag.on('Asset').limit(30)
     @assets = unless @current_tags.any?
       apply_scopes(Asset).paginate({
         :page     => (params[:page] || 1),
@@ -34,7 +34,7 @@ class Admin::AssetsController < ApplicationController
 
   def search
     @type = params[:type] ? params[:type] : 'Asset'
-    @tags = Tag.on('Asset').popular.find(:all, :limit => 30)
+    @tags = Tag.on('Asset').limit(30)
     unless params[:query].blank?
       query = params[:query]
       page = params[:page] || 1

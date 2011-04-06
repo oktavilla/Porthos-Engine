@@ -7,8 +7,8 @@ class Tag < ActiveRecord::Base
 
   scope :namespaced_to, lambda { |namespace|
     joins('LEFT OUTER JOIN taggings ON taggings.tag_id = tags.id').
-    where("taggings.namespace = ?", namespace).
-    group('name')
+    where("taggings.tag_id IS NOT NULL").
+    where("taggings.namespace = ?", namespace)
   }
 
   scope :popular,
@@ -18,9 +18,10 @@ class Tag < ActiveRecord::Base
         group("tags.id")
 
   scope :on, lambda { |taggable_type|
-    where("taggings.taggable_type = ?", taggable_type.to_s.classify).
+    select('DISTINCT(tags.id), tags.*').
     joins("LEFT OUTER JOIN taggings ON taggings.tag_id = tags.id").
-    group('tags.name')
+    where("taggings.tag_id IS NOT NULL").
+    where("taggings.taggable_type = ?", taggable_type.to_s.classify)
   }
 
   validates :name,

@@ -10,7 +10,6 @@ class FieldSet < ActiveRecord::Base
                           :case_sensitive => false
 
   has_many :fields,
-           :order => 'fields.position',
            :dependent => :destroy
 
   has_many :pages,
@@ -20,7 +19,7 @@ class FieldSet < ActiveRecord::Base
   has_one :node,
           :conditions => { :controller => 'pages', :action => 'index' }
 
-  acts_as_list
+  resort!
 
   def dates_with_children(options = {})
     options = { :year => Time.now.year }.merge(options.symbolize_keys)

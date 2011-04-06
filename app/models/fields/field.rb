@@ -1,6 +1,12 @@
 class Field < ActiveRecord::Base
   class_inheritable_accessor :data_type
 
+  resort!
+
+  def siblings
+    self.field_set.fields
+  end
+
   belongs_to :field_set
 
   has_many :custom_attributes,
@@ -20,8 +26,6 @@ class Field < ActiveRecord::Base
   before_validation :parameterize_handle
 
   validate :not_a_reserved_handle
-
-  acts_as_list :scope => :field_set_id
 
   class << self
 

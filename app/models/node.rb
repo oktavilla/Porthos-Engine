@@ -10,18 +10,13 @@ class Node < ActiveRecord::Base
   validates :controller, :presence => true
   validates :action, :presence => true
 
-  acts_as_tree :order => 'position',
-               :counter_cache => :children_count,
+  acts_as_tree :counter_cache => :children_count,
                :dependent => :destroy
+  resort!
 
-  acts_as_list :scope  => :parent,
-               :column => 'position',
-               :order  => 'position'
-
-  before_update :add_to_list_bottom,
-               :if => Proc.new { |node| node.parent_id_changed? }
-  after_update :reposition_former_list,
-               :if => Proc.new { |node| node.parent_id_changed? }
+  def siblings
+    self.parent.present? ? self.parent.children : self.class.where(:parent_id => nil)
+  end
 
   after_save  :generate_url_for_children
   before_validation :generate_url
@@ -70,12 +65,6 @@ private
     if parent
       self.url = !parent.parent_id.blank? ? [parent.url, name.parameterize.to_s].join('/') : name.parameterize.to_s
     end
-  end
-
-  # before save when moved to another list, decrement all nodes in the former list
-  # (ie. parent_id_changed?)
-  def reposition_former_list
-    acts_as_list_class.update_all("#{position_column} = (#{position_column} - 1)", "parent_id = #{parent_id_was} AND #{position_column} > #{position_was}")
   end
 
   # after save

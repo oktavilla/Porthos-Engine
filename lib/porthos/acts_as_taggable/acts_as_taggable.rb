@@ -47,20 +47,16 @@ module ActiveRecord
       end
       module SingletonMethods
 
-        def find_tagged_with(options = {})
-          tags = options.delete(:tags)
-          namespace = options.delete(:namespace)
+        def tagged_with(tags, *args)
+          namespace = args.last.is_a?(Hash) ? args.last.delete(:namespace) : nil
           tag_list = tags.acts_like?(:string) ? tag_list_from_string(tags) : tags
-
-          select("#{table_name}.*, count(tags.id) AS count").
-          from('taggings').
-          joins("join #{table_name} on #{table_name}.#{primary_key} = taggings.taggable_id
+          select("DISTINCT(#{table_name}.#{primary_key}), #{table_name}.*").
+          joins("LEFT OUTER JOIN taggings on taggings.taggable_id = #{table_name}.#{primary_key}
                       #{"AND taggings.taggable_type = '#{self.name}'"}
                       AND taggings.namespace #{namespace.present? ? "= #{connection.quote(namespace)}" : 'IS NULL' }
                       LEFT OUTER JOIN tags ON tags.id = taggings.tag_id
-                      AND LOWER(tags.name) IN (#{tag_list.collect { |t| connection.quote(t) }.join(',')})#{options[:joins].present? ? options[:joins] : ''}").
-          group("#{table_name}.#{primary_key} HAVING count = #{tag_list.length}").
-          order(options[:order] || "#{table_name}.#{primary_key}")
+                      AND LOWER(tags.name) IN (#{tag_list.collect { |t| connection.quote(t) }.join(',')})").
+          where("tags.id IS NOT NULL AND taggings.taggable_id IS NOT NULL")
         end
 
         def find_tags(options = {})

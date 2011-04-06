@@ -12,7 +12,77 @@ module Porthos
     #     :controller => 'test_posts'
     #   }
     cattr_accessor :rules
-    self.rules = [
+    class Rule
+      attr_reader :path,
+                  :constraints,
+                  :controller,
+                  :action
+
+      def initialize(attrs)
+        attrs.each do |key, value|
+          instance_variable_set("@#{key.to_s}".to_sym, value)
+        end
+      end
+
+      def param_keys
+        path.scan(/:(\w+)/).flatten.collect(&:to_sym)
+      end
+
+      def computed_path(node, params)
+        [node.url, translated_path].join('/').tap do |computed_path|
+          template = computed_path
+          constraints.each do |key, value|
+            template.gsub!(":#{key.to_s}", params[key].to_s) if params[key]
+          end
+          template = "/#{template}" unless template[0...1] == '/'
+          computed_path.replace(template)
+        end
+      end
+
+      def regexp_template
+        "^(.*|)/#{translated_path}".tap do |regexp_template|
+          template = regexp_template
+          constraints.each do |key, value|
+            template.gsub!(":#{key.to_s}", value)
+          end
+          regexp_template.replace(template)
+        end
+      end
+
+      def translated_path
+        path.dup.tap do |translated_path|
+          template = translated_path
+          path.scan(/{{(\w+)}}/).flatten.each do |string|
+            template.gsub!("{{#{string}}}", I18n.t(string))
+          end
+          translated_path.replace(template)
+        end
+      end
+    end
+    class Rules
+      include Enumerable
+
+      def initialize(rules)
+        @rules = rules.collect { |r| Rule.new(r) }
+      end
+
+      def each
+        @rules.each { |r| yield r }
+      end
+
+      def sorted
+       sort_by { |r| r.constraints ? r.constraints.keys.size : 0 }.reverse
+      end
+
+      def find_matching_params(params)
+        param_keys = params.keys
+        sorted.detect do |rule|
+          (rule.action.blank? || rule.action == params[:action]) && rule.constraints.keys.all? { |key| param_keys.include?(key) }
+        end
+      end
+    end
+
+    self.rules = Rules.new([
       {
         :path => ":id",
         :constraints => {
@@ -55,28 +125,34 @@ module Porthos
           :year => '(\d{4})'
         },
         :controller => 'pages'
+      },
+      {
+        :path => '{{categories}}',
+        :controller => 'pages',
+        :action => 'categories'
+      },
+      {
+        :path => "{{categories}}/:id",
+        :constraints => {
+          :id => '([a-z0-9\-\_]+)'
+        },
+        :controller => 'pages',
+        :action => 'category'
       }
-    ]
+    ])
 
     # Find a rule definition that matches the path
     # Returns a hash of params
     def self.recognize(path)
       return {}.tap do |params|
-        self.rules.sort_by { |r| r[:constraints].keys.size }.reverse.each do |rule|
-          path_template = "^(.*|)/#{rule[:path].dup}"
-          rule[:constraints].each do |key, value|
-            path_template.gsub!(":#{key.to_s}", value)
-          end
-          matches = path.scan(Regexp.new(path_template)).flatten
-
+        self.rules.sorted.each do |rule|
+          matches = path.scan(Regexp.new(rule.regexp_template)).flatten
           next unless matches.any?
-
           params[:url] = matches.shift.gsub(/^\//,'')
-          keys = rule[:path].scan(/:(\w+)/).flatten
-          keys.each_with_index do |key, i|
-            params[key.to_sym] = matches[i]
+          rule.param_keys.each_with_index do |key, i|
+            params[key] = matches[i]
           end
-          params[:action] = rule[:action] if rule[:action]
+          params[:action] = rule.action if rule.action.present?
           break
         end
       end

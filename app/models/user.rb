@@ -184,7 +184,7 @@ protected
   def save_avatar
     if file and file.size.nonzero?
       self.avatar.destroy if self.avatar
-      self.avatar = ImageAsset.create(:title => name, :file => file, :private => true)
+      self.avatar = ImageAsset.create(:title => name, :file => file, :hidden => true)
     end
   end
 

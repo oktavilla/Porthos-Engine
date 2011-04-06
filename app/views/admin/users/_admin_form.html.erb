@@ -3,7 +3,7 @@
 
 <div class="avatar">
 <% if @user.avatar %>
-  <%= image_tag(display_image_path(:size => 'c60x60', :id => @user.avatar, :format => @user.avatar.extname), :class => "photo") %>
+  <%= image_tag(@user.avatar.version_url(:size => 'c60x60'), :class => "photo") %>
   <label for="user_file">Byt din profilbild</label>
 <% else %>
   <label for="user_file">Profilbild</label>

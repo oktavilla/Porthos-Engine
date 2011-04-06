@@ -14,7 +14,7 @@
     </fieldset>
     <fieldset id="user-image">
       <legend>Bild</legend>
-      <%= image_tag(display_image_path(:size => 'c246x246', :id => @user.avatar, :format => @user.avatar.extname), :class => "photo") if @user.avatar %>
+      <%= image_tag(@user.avatar.version_url(:size => 'c246x246'), :class => "photo") if @user.avatar %>
       <label for="user_file">Välj bild att ladda upp</label>
       <%= f.file_field :file, :size => 20, :tabindex => 1 %>
       <p><small><em>Ladda inte upp bilder över <strong>1MB</strong> och använd endast filformaten <strong>jpg</strong>, <strong>png</strong> eller <strong>gif</strong>.</em></small></p>

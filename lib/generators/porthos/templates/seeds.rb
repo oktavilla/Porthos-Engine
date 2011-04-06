@@ -18,7 +18,6 @@ FieldSet.create(:title => 'Article', :page_label => 'Title', :handle => 'article
 
 Node.create(:name => 'Start',
             :status => 1,
-            :position => 1,
             :controller => 'pages',
             :action => 'index',
             :field_set => FieldSet.first)

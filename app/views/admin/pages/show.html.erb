@@ -332,15 +332,6 @@
         <% @page.contents.find_all { |content| content.column_position == column }.each do |content| -%>
           <li class="<%= "#{content.resource_type} content" unless content.collection? %><%= ' collection' if content.collection? %> sortable <%= content.active? ? '' : ' inactive' %>" id="content_<%= content.id %>">
             <span class="draghandle"></span>
-          <% if content.restricted? -%>
-            <div class="restriction-info">
-              <ul>
-            <% content.restrictions.each do |restriction| -%>
-                <li><%= t(restriction.mapping_key, :scope => [:app, :restrictions]) %></li>
-            <% end -%>
-              </ul>
-            </div>
-          <% end -%>
           <% unless content.collection? -%>
             <%= render :partial => content.resource_template, :locals => { :resource => content.resource, :content => content } %>
           <% else %>

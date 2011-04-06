@@ -57,7 +57,6 @@ class CreatePorthosTables < ActiveRecord::Migration
       t.string   "accepting_content_resource_type"
       t.boolean  "active",                          :default => true, :null => false
       t.string   "context_type"
-      t.integer  "restrictions_count"
     end
 
     add_index "contents", ["context_id", "context_type", "position"], :name => "index_contents_on_context_id_and_context_type_and_position"

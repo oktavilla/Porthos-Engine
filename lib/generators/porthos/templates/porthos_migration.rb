@@ -34,26 +34,29 @@ class CreatePorthosTables < ActiveRecord::Migration
     add_index "asset_usages", ["parent_id", "parent_type"], :name => "index_asset_usages_on_parent_id_and_parent_type"
 
     create_table :nodes do |t|
-      t.integer  "parent_id"
-      t.string   "name"
-      t.string   "url"
-      t.integer  "status", :default => 0
-      t.integer  "position"
-      t.string   "controller"
-      t.string   "action"
-      t.string   "resource_type"
-      t.integer  "resource_id"
-      t.integer  "field_set_id"
-      t.integer  "children_count"
-      t.datetime "created_at"
-      t.datetime "updated_at"
-      t.boolean  "restricted", :default => false
+      t.integer    "parent_id"
+      t.references "next"
+      t.boolean    "first"
+      t.string     "name"
+      t.string     "url"
+      t.integer    "status", :default => 0
+      t.string     "controller"
+      t.string     "action"
+      t.string     "resource_type"
+      t.integer    "resource_id"
+      t.integer    "field_set_id"
+      t.integer    "children_count"
+      t.datetime   "created_at"
+      t.datetime   "updated_at"
+      t.boolean    "restricted", :default => false
     end
 
     add_index "nodes", ["url"], :name => "index_nodes_on_url"
     add_index "nodes", ["field_set_id"], :name => "index_nodes_on_field_set_id"
-    add_index "nodes", ["resource_id", "resource_type"], :name => "index_nodes_on_resource_id_and_resource_type"
     add_index "nodes", ["parent_id"], :name => "index_nodes_on_parent_id"
+    add_index "nodes", ["parent_id", "next_id"], :name => "index_nodes_on_parent_id_and_next_id"
+    add_index "nodes", ["parent_id", "first"], :name => "index_nodes_on_parent_id_and_first"
+    add_index "nodes", ["resource_id", "resource_type"], :name => "index_nodes_on_resource_id_and_resource_type"
 
     create_table "content_images" do |t|
       t.integer  "image_asset_id"
@@ -103,19 +106,23 @@ class CreatePorthosTables < ActiveRecord::Migration
     end
 
     create_table "custom_associations" do |t|
-      t.integer  "context_id"
-      t.string   "context_type"
-      t.integer  "target_id"
-      t.string   "target_type"
-      t.string   "relationship"
-      t.integer  "field_id"
-      t.string   "handle"
-      t.integer  "position"
-      t.datetime "created_at"
-      t.datetime "updated_at"
+      t.integer    "context_id"
+      t.string     "context_type"
+      t.integer    "target_id"
+      t.string     "target_type"
+      t.references "next"
+      t.boolean    "first"
+      t.string     "relationship"
+      t.integer    "field_id"
+      t.string     "handle"
+      t.integer    "position"
+      t.datetime   "created_at"
+      t.datetime   "updated_at"
     end
 
     add_index "custom_associations", ["context_id", "context_type"], :name => "index_custom_associations_on_context_id_and_context_type"
+    add_index "custom_associations", ["context_id", "context_type", "next_id"], :name => "index_custom_associations_on_sorted_within_context"
+    add_index "custom_associations", ["context_id", "context_type", "first"], :name => "index_custom_associations_on_sorted_first_within_context"
     add_index "custom_associations", ["field_id"], :name => "index_custom_associations_on_field_id"
     add_index "custom_associations", ["handle"], :name => "index_custom_associations_on_handle"
     add_index "custom_associations", ["target_id", "target_type"], :name => "index_custom_associations_on_target_id_and_target_type"
@@ -139,60 +146,69 @@ class CreatePorthosTables < ActiveRecord::Migration
     add_index "custom_attributes", ["handle"], :name => "index_custom_attributes_on_handle"
 
     create_table "field_sets" do |t|
-      t.integer  "position"
-      t.string   "title"
-      t.string   "page_label"
-      t.text     "description"
-      t.datetime "created_at"
-      t.datetime "updated_at"
-      t.string   "handle"
-      t.string   "template_name"
-      t.boolean  "pages_sortable"
-      t.boolean  "allow_categories", :default => false
-      t.boolean  "allow_node_placements", :default => false
+      t.references "next"
+      t.boolean    "first"
+      t.string     "title"
+      t.string     "page_label"
+      t.text       "description"
+      t.datetime   "created_at"
+      t.datetime   "updated_at"
+      t.string     "handle"
+      t.string     "template_name"
+      t.boolean    "pages_sortable"
+      t.boolean    "allow_categories",      :default => false
+      t.boolean    "allow_node_placements", :default => false
     end
 
     add_index "field_sets", ["handle"], :name => "index_field_sets_on_handle"
+    add_index "field_sets", ["next_id"], :name => "index_fields_on_next_id"
+    add_index "field_sets", ["first"], :name => "index_fields_on_first"
 
     create_table "fields" do |t|
-      t.string   "type"
-      t.integer  "field_set_id"
-      t.string   "label"
-      t.string   "handle"
-      t.string   "target_handle"
-      t.integer  "position"
-      t.boolean  "required",              :default => false
-      t.text     "instructions"
-      t.boolean  "allow_rich_text",       :default => false
-      t.integer  "association_source_id"
-      t.string   "relationship"
-      t.datetime "created_at"
-      t.datetime "updated_at"
+      t.integer    "field_set_id"
+      t.string     "type"
+      t.references "next"
+      t.boolean    "first"
+      t.integer    "association_source_id"
+      t.string     "label"
+      t.string     "handle"
+      t.string     "target_handle"
+      t.boolean    "required",              :default => false
+      t.text       "instructions"
+      t.boolean    "allow_rich_text",       :default => false
+      t.string     "relationship"
+      t.datetime   "created_at"
+      t.datetime   "updated_at"
     end
 
     add_index "fields", ["field_set_id"], :name => "index_fields_on_field_set_id"
+    add_index "fields", ["field_set_id", "next_id"], :name => "index_fields_on_field_set_id_and_next_id"
+    add_index "fields", ["field_set_id", "first"], :name => "index_fields_on_field_set_id_and_first"
     add_index "fields", ["handle"], :name => "index_fields_on_handle"
     add_index "fields", ["target_handle"], :name => "index_fields_on_target_handle"
     add_index "fields", ["association_source_id"], :name => "index_fields_on_association_source_id"
 
 
     create_table "pages" do |t|
-      t.integer  "field_set_id"
-      t.integer  "created_by_id"
-      t.integer  "updated_by_id"
-      t.string   "slug"
-      t.string   "title"
-      t.string   "layout_class"
-      t.integer  "column_count"
-      t.integer  "position"
-      t.boolean  "active",                  :default => true
-      t.boolean  "restricted",              :default => false
-      t.datetime "published_on"
-      t.datetime "created_at"
-      t.datetime "updated_at"
+      t.integer    "field_set_id"
+      t.integer    "created_by_id"
+      t.integer    "updated_by_id"
+      t.references "next"
+      t.boolean    "first"
+      t.string     "slug"
+      t.string     "title"
+      t.string     "layout_class"
+      t.integer    "column_count"
+      t.boolean    "active",          :default => true
+      t.boolean    "restricted",      :default => false
+      t.datetime   "published_on"
+      t.datetime   "created_at"
+      t.datetime   "updated_at"
     end
 
     add_index "pages", ["field_set_id"], :name => "index_pages_on_field_set_id"
+    add_index "pages", ["field_set_id", "next_id"], :name => "index_pages_on_field_set_id_and_next_id"
+    add_index "pages", ["field_set_id", "first"], :name => "index_pages_on_field_set_id_and_first"
     add_index "pages", ["slug"], :name => "index_pages_on_slug"
 
     create_table "content_textfields" do |t|

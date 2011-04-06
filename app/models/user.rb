@@ -29,12 +29,9 @@ class User < ActiveRecord::Base
   before_save :encrypt_password, :save_avatar
 
   scope :recent_contributers,
-        select('DISTINCT users.*').
-        from('pages').
-        joins('LEFT JOIN users ON users.id = pages.updated_by_id').
-        where('pages.updated_by_id IS NOT NULL AND users.id IS NOT NULL').
-        order('pages.updated_by_id DESC').
-        group('pages.updated_by_id')
+        select('users.*').
+        joins('LEFT OUTER JOIN pages ON pages.updated_by_id = users.id').
+        where('pages.updated_by_id IS NOT NULL')
 
   scope :recent_uploaders,
         select('DISTINCT users.*').

@@ -2,7 +2,7 @@ require 'routing_filter'
 module RoutingFilter
   class UrlResolver < Filter
     def around_recognize(path, env, &block)
-      if env["REQUEST_URI"] =~ /^\/admin/
+      if env["REQUEST_URI"] =~ /^\/(admin|javascripts|stylesheets|images|graphics)/
         yield
       else
         custom_params = {}

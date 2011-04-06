@@ -9,7 +9,7 @@ class Admin::PagesController < ApplicationController
   has_scope :is_published, :type => :boolean
 
   def index
-    @field_sets = FieldSet.all(:order => 'position')
+    @field_sets = FieldSet.ordered
     @field_set = FieldSet.find(params[:with_field_set]) if params[:with_field_set].present?
 
     @tags = Tag.on('Page')
@@ -22,7 +22,7 @@ class Admin::PagesController < ApplicationController
         :per_page => (params[:per_page] || 25)
       })
     else
-      Page.find_tagged_with({:tags => params[:tags], :order => 'created_at DESC'})
+      Page.tagged_with(params[:tags])
     end
     respond_to do |format|
       format.html
@@ -43,7 +43,7 @@ class Admin::PagesController < ApplicationController
     end
     @query = query
     @page = page
-    @field_sets = FieldSet.all(:order => 'position')
+    @field_sets = FieldSet.ordered
     respond_to do |format|
       format.html
     end
@@ -124,12 +124,12 @@ class Admin::PagesController < ApplicationController
     end
   end
 
-  def sort
-    params[:pages].each_with_index do |id, idx|
-      Page.update(id, :position => idx+1)
-    end
-    respond_to do |format|
-      format.js { render :nothing => true }
-    end
-  end
+  # def sort
+  #   params[:pages].each_with_index do |id, idx|
+  #     Page.update(id, :position => idx+1)
+  #   end
+  #   respond_to do |format|
+  #     format.js { render :nothing => true }
+  #   end
+  # end
 end

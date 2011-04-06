@@ -12,7 +12,7 @@ class Admin::NodesController < ApplicationController
       end
       format.js do
         @node = params[:nodes] ? Node.find(params[:nodes].first, :include => :children) : Node.root
-        render :partial => 'admin/nodes/list_of_nodes.html.erb', :locals => { :nodes => @node.children.sort_by { |n| n.position.to_i }, :trail => [], :place => (params[:place] || false) }
+        render :partial => 'admin/nodes/list_of_nodes.html.erb', :locals => { :nodes => @node.children.ordered, :trail => [], :place => (params[:place] || false) }
       end
     end
   end
@@ -98,15 +98,15 @@ class Admin::NodesController < ApplicationController
     end
   end
 
-  def sort
-    params[:nodes].each_with_index do |id, position|
-      Node.update(id, {
-        :position => position+1
-      })
-    end
-    respond_to do |format|
-      format.js { render :nothing => true }
-    end
-  end
+  # def sort
+  #   params[:nodes].each_with_index do |id, position|
+  #     Node.update(id, {
+  #       :position => position+1
+  #     })
+  #   end
+  #   respond_to do |format|
+  #     format.js { render :nothing => true }
+  #   end
+  # end
 
 end

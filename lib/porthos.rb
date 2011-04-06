@@ -17,7 +17,7 @@ require 'porthos/content_resource'
 require 'porthos/custom_association_proxy'
 require 'porthos/s3_storage'
 
-require 'acts_as_list'
+require 'resort'
 require 'sunspot'
 require 'sunspot_rails'
 require 'delayed_job'

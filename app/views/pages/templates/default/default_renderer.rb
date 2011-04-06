@@ -52,7 +52,7 @@ module DefaultRenderer
 
     def pages
       return @pages if @pages
-      @pages = Page.find_tagged_with(:tags => category.name, :namespace => @field_set.handle).tap do |pages|
+      @pages = Page.tagged_with(:tags => category.name, :namespace => @field_set.handle).tap do |pages|
         pages.each { |p| p.send :cache_custom_attributes }
       end
     end
@@ -88,7 +88,7 @@ module DefaultRenderer
 
     def pages
       return @pages if @pages
-      @pages = Page.find_tagged_with(:tags => selected_tag_names, :conditions => ['pages.field_set_id = ?', @field_set.id]).tap do |pages|
+      @pages = Page.tagged_with(:tags => selected_tag_names, :conditions => ['pages.field_set_id = ?', @field_set.id]).tap do |pages|
         pages.each { |p| p.send :cache_custom_attributes }
       end
     end

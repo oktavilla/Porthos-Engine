@@ -10,7 +10,8 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.6"
 
   s.add_dependency "bundler"
-  s.add_dependency "rails", "3.0.5"
+  s.add_dependency "rails", "3.0.6"
+  s.add_dependency 'resort'
   s.add_dependency "routing-filter"
   s.add_dependency "mime-types"
   s.add_dependency "mini_magick"

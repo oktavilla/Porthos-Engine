@@ -4,8 +4,8 @@
     <% custom_associations.each do |custom_association| -%>
       <% custom_association.target.tap do |asset| -%>
         <div class="content">
-          <% if asset.image? %>
-            <%= image_tag display_image_path(:size => 'c100x100', :id => asset, :format => asset.extname), :id => "asset_#{asset.id}", :width => 100, :height => 100 %>
+          <% if asset.is_a?(ImageAsset) %>
+            <%= image_tag asset.version_url(:size => 'c100x100'), :id => "asset_#{asset.id}", :width => 100, :height => 100 %>
           <% elsif asset.respond_to?(:thumbnail) and not asset.thumbnail.blank? %>
             <%= image_tag display_image_path(:size => 'c100x100', :id => asset.thumbnail, :format => asset.thumbnail.extname), :id => "asset_#{asset.id}", :width => 100, :height => 100 %>
           <% else %>

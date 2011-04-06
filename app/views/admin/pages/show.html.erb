@@ -185,10 +185,11 @@
   </div>
   <div id="content" class="page_contents">
   <% @page.field_set.fields.each do |field| -%>
+
     <% next if field.is_a?(ReversedPageAssociationField) -%>
     <div class="page_content <%= field.data_type == CustomAssociation ? ['association', field.target_type, field.relationship].join(' ') : ['attribute', field.class.to_s.underscore].join(' ') %>">
     <% if field.data_type == CustomAssociation %>
-      <% @page.field_set.custom_association.where(:field_id => field.id).ordered.tap do |custom_associations| %>
+      <% @page.custom_associations.where(:field_id => field.id).ordered.tap do |custom_associations| %>
         <%= render :partial => "admin/fields/#{field.target_type}_association_field_form", :locals => {:custom_associations => custom_associations, :field => field} %>
       <% end -%>
     <% else -%>

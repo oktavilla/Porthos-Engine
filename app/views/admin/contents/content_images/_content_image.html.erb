@@ -1,0 +1,14 @@
+<% if content.resource %>
+<div class="actual_content image">
+  <% if content.resource.asset %>
+    <%= image_tag content.resource.asset.version_url(:size => 'c80x80') %>
+  <% end %>
+  <span class="title"><%= content.resource.title %></span>
+  <div class="description"><%= content.resource.caption %></div>
+  <span class="meta">Format: <%= content.resource.style_properties[:name] %>. Copyright / Fotograf: <%= content.resource.copyright %></span>
+</div>
+<% else %>
+<div class="error">
+  Bilden saknas
+</div>
+<% end %>

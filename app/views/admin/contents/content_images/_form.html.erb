@@ -1,0 +1,12 @@
+<%= image_tag display_image_path(:size => 'w150', :id => @content.resource.asset, :format => @content.resource.asset.extname), :width => 150 %>
+
+<label for="content_image_title">Alt. text</label>
+<%= f.text_field :title, :class => 'text' %>
+
+<label for="content_image_caption">Bildtext</label>
+<%= f.text_area :caption %>
+
+<label for="content_image_caption">Bildtext</label>
+<%= f.text_field :caption, :class => 'text' %>
+
+<label for="content_image_downloadable"><%= f.check_box :downloadable %> Länka till orginal</label>

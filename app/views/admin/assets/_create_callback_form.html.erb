@@ -1,8 +1,8 @@
-<% form_tag url_for(:controller => create_callback[:controller], :action => create_callback[:action]), 
+<%= form_tag url_for(:controller => create_callback[:controller], :action => create_callback[:action]),
               :method => (create_callback[:method].present? ? create_callback[:method] : 'get') do %>
   <% create_callback[:params].each do |key, value| %>
     <%= if value.is_a?(Hash)
-      value.collect{|sub_key, sub_value| hidden_field_tag("#{key}[#{sub_key}]", sub_value)}
+      value.collect{|sub_key, sub_value| hidden_field_tag("#{key}[#{sub_key}]", sub_value)}.join.html_safe
     else
       hidden_field_tag(key, value)
     end

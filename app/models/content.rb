@@ -9,7 +9,16 @@ class Content < ActiveRecord::Base
 
   scope :active, where("contents.active = ?", true)
 
-  # acts_as_list :scope => 'context_id = \'#{context_id}\' AND context_type = \'#{context_type}\' AND column_position = \'#{column_position}\' AND parent_id #{(parent_id.blank? ? "IS NULL" : (" = " + parent_id.to_s))}'
+  resort!
+
+  def siblings
+    raise scoped.where({
+      :parent_id => parent_id,
+      :column_position => column_position,
+      :context_id => context_id,
+      :context_type => context_type
+    }).to_sql
+  end
 
   acts_as_settingable
 

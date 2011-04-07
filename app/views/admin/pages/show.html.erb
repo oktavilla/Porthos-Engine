@@ -330,8 +330,8 @@
         <div class="title">Kolumn #<%= column %></div>
         <% end %>
         <%= render :partial => 'content_types', :locals => {:page => @page, :column => column} %>
-        <ul class="contents items sortable" id="contents_in_column_<%= column %>">
-        <% @page.contents.find_all { |content| content.column_position == column }.each do |content| -%>
+        <ul class="contents items sortable" data-column="<%= column %>">
+        <% @page.contents.where(:column_position => column).ordered.each do |content| -%>
           <li class="<%= "#{content.resource_type} content" unless content.collection? %><%= ' collection' if content.collection? %> sortable <%= content.active? ? '' : ' inactive' %>" id="content_<%= content.id %>">
             <span class="draghandle"></span>
           <% unless content.collection? -%>
@@ -355,6 +355,6 @@
   </div>
 </div>
 <% content_for :javascripts do %>
-  <%= javascript_include_tag 'ckeditor/ckeditor', 'ckeditor/adapters/jquery' %>
+  <%= javascript_include_tag 'admin/ckeditor/ckeditor', 'admin/ckeditor/adapters/jquery' %>
   <%= javascript_include_tag 'admin/application' %>
 <% end %>

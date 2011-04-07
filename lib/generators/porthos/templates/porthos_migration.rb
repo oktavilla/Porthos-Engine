@@ -81,21 +81,23 @@ class CreatePorthosTables < ActiveRecord::Migration
     add_index "content_lists", ["handle"], :name => "index_content_lists_on_handle"
 
     create_table "contents" do |t|
-      t.integer  "context_id"
-      t.integer  "column_position"
-      t.integer  "position"
-      t.integer  "resource_id"
-      t.string   "resource_type"
-      t.datetime "created_at"
-      t.datetime "updated_at"
-      t.integer  "parent_id"
-      t.string   "type"
-      t.string   "accepting_content_resource_type"
-      t.boolean  "active",                          :default => true, :null => false
-      t.string   "context_type"
+      t.integer    "context_id"
+      t.integer    "column_position"
+      t.references "next"
+      t.boolean    "first"
+      t.integer    "resource_id"
+      t.string     "resource_type"
+      t.datetime   "created_at"
+      t.datetime   "updated_at"
+      t.integer    "parent_id"
+      t.string     "type"
+      t.string     "accepting_content_resource_type"
+      t.boolean    "active",                          :default => true, :null => false
+      t.string     "context_type"
     end
 
-    add_index "contents", ["context_id", "context_type", "position"], :name => "index_contents_on_context_id_and_context_type_and_position"
+    add_index "contents", ["context_id", "context_type"], :name => "index_contents_on_context_id_and_context_type"
+    add_index "contents", ["context_id", "context_type", "next_id", 'parent_id'], :name => "index_contents_on_sorted_context_id_and_context_type"
     add_index "contents", ["parent_id"], :name => "index_contents_on_parent_id"
 
     create_table "content_modules" do |t|

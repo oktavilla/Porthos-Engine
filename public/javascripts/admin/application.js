@@ -4,6 +4,9 @@
       "X-CSRF-Token": $("meta[name='csrf-token']").attr('content')
     }
   });
+
+  // $.fn.reverse = [].reverse;
+
   var Porthos = {};
   Porthos.Helpers = {
     extractId: function(string) {
@@ -109,24 +112,38 @@
       var $container = $(container),
           $columns_container = $container.find('div.page_layout'),
           page_id = Porthos.Helpers.extractId($columns_container.attr('id')),
-          columns = $columns_container.find('div.column').map(function() {
-            var $column = $(this);
-            $column.delegate('a.add', 'click', function(event) {
-              event.preventDefault();
-              $(this).toggleClass('active');
-              $column.find('div.sub_controls').toggle();
-            });
-
-            return {
-              container: $column,
-              position : Porthos.Helpers.extractId($column.attr('id')),
-              element  : $column.find('ul.contents').get(0)
-            };
-          });
+          $sortables = $columns_container.find('ul.sortable');
 
       $container.delegate('div.header a.toggler', 'click', function(event) {
         event.preventDefault();
         $container.find('div.header').toggle();
+      });
+
+      $columns_container.delegate('a.add', 'click', function(event) {
+        event.preventDefault();
+        $(this).toggleClass('active').parents('div.column').find('div.sub_controls').toggle();
+      });
+
+      // TODO: Rewrite with nested containments when we have content collections
+      $sortables.sortable({
+        handle: 'span.draghandle',
+        connectWith: $sortables,
+        stop: function() {
+          $sortables.each(function() {
+            var $sortable = $(this),
+                params = '&column_position=' + $sortable.data('column'),
+                contents = $sortable.sortable('serialize');
+            if (contents === '') {
+              return;
+            }
+            $.ajax({
+              type: 'PUT',
+              url: '/admin/contents/sort',
+              data: contents + params,
+              dataType: 'json'
+            });
+          });
+        }
       });
 
       $('#content').delegate('div.edit a.change, div.edit a.add, a.cancel', 'click', function(event) {

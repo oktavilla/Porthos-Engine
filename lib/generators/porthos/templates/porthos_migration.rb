@@ -317,6 +317,18 @@ class CreatePorthosTables < ActiveRecord::Migration
     end
 
     add_index "redirects", ["path"], :name => "index_redirects_on_path"
+
+    create_table "settings" do |t|
+      t.string   "settingable_type"
+      t.string   "settingable_id"
+      t.string   "name"
+      t.text     "value"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+
+    add_index "settings", ["name"], :name => "index_settings_on_name"
+    add_index "settings", ["name", "settingable_id", "settingable_type"], :name => "index_settings_on_name_and_settingable_id_and_settingable_type"
   end
 
   def self.down

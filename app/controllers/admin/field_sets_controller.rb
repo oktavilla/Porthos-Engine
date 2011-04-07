@@ -65,11 +65,8 @@ class Admin::FieldSetsController < ApplicationController
   end
 
   def sort
-    field_sets = FieldSet.find_all_by_id(params[:field_set])
-    first = field_sets.shift
-    first.prepend
-    field_sets.each do |field_set|
-      field_set.append_to(first)
+    params[:field_set].each_with_index do |id, i|
+      FieldSet.update(id, :first => (i == 0), :next_id => params[:field_set][i+1])
     end
     respond_to do |format|
       format.js { render :nothing => true }

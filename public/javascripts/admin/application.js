@@ -6,10 +6,8 @@
   });
   var Porthos = {};
   Porthos.Helpers = {
-    extract_id: new RegExp(/^\d/i),
-
     extractId: function(string) {
-      return string.replace(Porthos.Helpers.extract_id,'');
+      return string.replace(/[^0-9]+/, '');
     },
 
     parameterize: function(string) {
@@ -78,15 +76,23 @@
 
   Porthos.FieldSet = function() {
     var Ready = function() {
-      $('#field_sets').bind('sortstop', function(event, ui) {
+      $('#field_sets').bind('sortstop', function() {
         $.ajax({
           type: 'PUT',
           url: '/admin/field_sets/sort',
           data: $(this).sortable('serialize'),
-          dataType: 'json',
-          success: function() {
-            console.log('success');
-          }
+          dataType: 'json'
+        });
+      });
+
+      $('#fields').bind('sortstop', function() {
+        var $list = $(this),
+            field_set_id = Porthos.Helpers.extractId($list.parent('table').attr('id'));
+        $.ajax({
+          type: 'PUT',
+          url: '/admin/field_sets/'+field_set_id+'/fields/sort',
+          data: $(this).sortable('serialize'),
+          dataType: 'json'
         });
       });
     };

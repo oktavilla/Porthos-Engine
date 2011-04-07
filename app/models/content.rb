@@ -12,12 +12,12 @@ class Content < ActiveRecord::Base
   resort!
 
   def siblings
-    raise scoped.where({
+    self.class.where({
       :parent_id => parent_id,
       :column_position => column_position,
       :context_id => context_id,
       :context_type => context_type
-    }).to_sql
+    })
   end
 
   acts_as_settingable

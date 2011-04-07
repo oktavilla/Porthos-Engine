@@ -22,9 +22,9 @@ class ContentImage < ActiveRecord::Base
     def styles
       [
         {
-          :class => 'halfsize left',
-          :name  => '',
-          :size  => '230'
+          :class => 'full',
+          :name  => 'Fullbredd',
+          :size  => '640'
         }
       ]
     end

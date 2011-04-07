@@ -64,14 +64,17 @@ class Admin::FieldSetsController < ApplicationController
     end
   end
 
-  # def sort
-  #   params[:field_sets].each_with_index do |id, index|
-  #     FieldSet.update(id, :position => index + 1)
-  #   end
-  #   respond_to do |format|
-  #     format.js { render :nothing => true }
-  #   end
-  # end
+  def sort
+    field_sets = FieldSet.find_all_by_id(params[:field_set])
+    first = field_sets.shift
+    first.prepend
+    field_sets.each do |field_set|
+      field_set.append_to(first)
+    end
+    respond_to do |format|
+      format.js { render :nothing => true }
+    end
+  end
 
   def pages
     @field_set = FieldSet.find(params[:id])

@@ -28,7 +28,9 @@ Rails.application.routes.draw do
     resources :site_settings
     resources :content_lists
     resources :field_sets do
-      put 'sort'
+      collection do
+        put 'sort'
+      end
       resources :fields do
         collection do
           put 'sort'

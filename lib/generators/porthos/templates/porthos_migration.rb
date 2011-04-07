@@ -320,7 +320,7 @@ class CreatePorthosTables < ActiveRecord::Migration
 
     create_table "settings" do |t|
       t.string   "settingable_type"
-      t.string   "settingable_id"
+      t.integer  "settingable_id"
       t.string   "name"
       t.text     "value"
       t.datetime "created_at"

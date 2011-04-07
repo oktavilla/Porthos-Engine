@@ -7,7 +7,7 @@
   </div>
   <div id="content">
     <div id="uploader">
-      <% form_for @asset, :url => admin_assets_path_with_session_key(:format => 'json'), :html => { :multipart => true, :id => 'upload' } do |f| %>
+      <% form_for @asset, :url => admin_assets_path_with_session_key(), :html => { :multipart => true, :id => 'upload' } do |f| %>
       <fieldset id="files">
         <%= f.file_field :file, :size => 15 %>
       </fieldset>

@@ -176,7 +176,6 @@
         event.preventDefault();
         $('#choose_page_category_form, #page_categories_form').toggle();
       });
-
     };
 
     return {
@@ -206,6 +205,9 @@
         axis: 'y'
       });
     }
+    $('select#order_by').bind('change', function(event) {
+      this.form.submit();
+    });
   });
 
 }(jQuery));

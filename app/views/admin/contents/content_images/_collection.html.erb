@@ -15,7 +15,7 @@
   </li>
 <% end -%>
   <li class="add">
-    <%= link_to("Lägg till bild", admin_assets_path(:filters => { :by_type => 'ImageAsset' }, :create_callback => {:controller => 'admin/contents', :action => 'new', :asset_field_name => 'resource[image_asset_id]', :params => {'content[context_id]' => @page.id, 'content[context_type]' => 'Page', 'content[resource_type]' => 'ContentImage', 'content[parent_id]' => content, 'content[column_position]' => content.column_position, :return_to => request.request_uri }}), :class => 'image ContentImage new') %>
+    <%= link_to("Lägg till bild", admin_assets_path(:by_type => 'ImageAsset', :create_callback => {:controller => 'admin/contents', :action => 'new', :asset_field_name => 'resource[image_asset_id]', :params => {'content[context_id]' => @page.id, 'content[context_type]' => 'Page', 'content[resource_type]' => 'ContentImage', 'content[parent_id]' => content, 'content[column_position]' => content.column_position, :return_to => request.request_uri }}), :class => 'image ContentImage new') %>
   </li>
 </ul>
 <% end %>

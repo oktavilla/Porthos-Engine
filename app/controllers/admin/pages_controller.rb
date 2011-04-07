@@ -30,10 +30,6 @@ class Admin::PagesController < ApplicationController
   end
 
   def search
-    @filters = {
-      :order_by => 'updated_at desc'
-    }.merge((params[:filters] || {}).to_options)
-
     query = params[:query]
     page  = params[:page] || 1
     per_page = params[:per_page] ? params[:per_page].to_i : 45

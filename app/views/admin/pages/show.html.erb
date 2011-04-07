@@ -72,12 +72,12 @@
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span>Ändra</span></a>
       <% if @page.published? -%>
-        <%= link_to "Visa på webbplatsen", "/#{@page.full_slug}", :class => 'public_link action' %>
+        <%= link_to "Visa på webbplatsen", page_path(@page), :class => 'public_link action' %>
       <% else -%>
       <%= link_to "Förhandsgranska", preview_page_path(@page.id), :class => 'public_link action' %>
       <% end -%>
     </span>
-    <div class="parents"><%= link_to @page.field_set.title, admin_pages_path(:filters => { :with_field_set => @page.field_set.id }) %></div>
+    <div class="parents"><%= link_to @page.field_set.title, admin_pages_path(:with_field_set => @page.field_set.id) %></div>
     <div class="page_title">
       <h1><%= @page.title %></h1>
       <% if @page.node -%>
@@ -112,12 +112,12 @@
       </div>
       <div class="slug">
         <span class="key">Adress:</span>
-        <span class="value"><%= request.host %>/<%= @page.node.url %></span>
+        <span class="value"><%= page_url(@page, :mongo => 'yh').tap { |url| url.replace(link_to(url, url)) }.html_safe %></span>
       </div>
     <% elsif @page.index_node %>
       <div class="slug">
         <span class="key">Adress:</span>
-        <span class="value"><%= request.host %>/<%= @page.index_node.url %>/<%= @page.to_param %></span>
+        <span class="value"><%= page_url(:field_set_id => @page.field_set_id, :id => @page.slug).tap { |url| url.replace(link_to(url, url)) }.html_safe %></span>
       </div>
     <% end %>
   </div>
@@ -168,7 +168,8 @@
           <%= f.text_field :title, :class => 'title' %>
         </div>
         <div class="slug_field">
-          <label for="page_slug">Adress:</label> <%= "#{request.host}/#{@page.index_node.url}/#{@page.id}-" if @page.index_node %>
+          <label for="page_slug">Adress:</label>
+          <%= pages_url(:field_set_id => @page.index_node.field_set_id) if @page.index_node %>/
           <%= f.text_field :slug %>
         </div>
         <div class="restricted_field">

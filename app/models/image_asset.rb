@@ -19,6 +19,22 @@ class ImageAsset < Asset
     not landscape?
   end
 
+  def height_for_width(new_width)
+    unless new_width >= self.width
+      (height.to_f * (new_width.to_f / self.width.to_f)).ceil
+    else
+      height
+    end
+  end
+
+  def width_for_height(new_height)
+    unless new_height >= self.height
+      (width.to_f * (new_height.to_f / self.height.to_f)).ceil
+    else
+      width
+    end
+  end
+
 protected
 
   def store

@@ -37,7 +37,6 @@ module RoutingFilter
       else
         conditions = { :controller => params[:controller], :action => params[:action] }
         index_conditions = conditions.dup.merge(:action => 'index')
-
         if params[:id].present?
           resource = params[:id]
           if resource.is_a?(ActiveRecord::Base)
@@ -58,8 +57,12 @@ module RoutingFilter
         end
         yield.tap do |path|
           if node
-            rule = Porthos::Routing.rules.find_matching_params(params)
-            path.replace(rule ? rule.computed_path(node, params) : node.url)
+            if node.resource_id.present?
+              path.replace("/#{node.url}")
+            else
+              rule = Porthos::Routing.rules.find_matching_params(params)
+              path.replace(rule ? rule.computed_path(node, params) : "/#{node.url}")
+            end
           end
         end
       end

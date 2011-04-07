@@ -34,11 +34,9 @@ class User < ActiveRecord::Base
         where('pages.updated_by_id IS NOT NULL')
 
   scope :recent_uploaders,
-        select('DISTINCT users.*').
-        from('assets').
-        joins('LEFT JOIN users ON users.id = assets.created_by_id').
-        where('assets.created_by_id IS NOT NULL AND users.id IS NOT NULL').
-        group('assets.created_by_id')
+        select('DISTINCT users.id, users.*').
+        joins('LEFT OUTER JOIN assets ON assets.created_by_id = users.id').
+        where('assets.created_by_id IS NOT NULL')
 
   scope :role , lambda { |role_name|
     scoped = includes('roles')

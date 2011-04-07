@@ -1,15 +1,30 @@
 class Asset < ActiveRecord::Base
-  belongs_to :created_by, :class_name => 'User'
-  has_many   :usages, :class_name => 'AssetUsage',
-                      :dependent => :destroy
+  belongs_to :created_by,
+             :class_name => 'User'
+
+  has_many :usages,
+           :class_name => 'AssetUsage',
+           :dependent => :destroy
+
   has_many :custom_associations,
            :as => :target,
            :dependent => :destroy
 
-  scope :is_hidden,  lambda { |hidden| {:conditions => ['hidden = ?', hidden ]}}
-  scope :created_by, lambda { |user_id| { :conditions => ["created_by_id = ?", user_id] }}
-  scope :by_type,    lambda { |type| { :conditions => ["type = ?", type] }}
-  scope :order_by,   lambda { |order| { :order => order }}
+  scope :is_hidden,  lambda { |hidden|
+    where('hidden = ?', hidden)
+  }
+
+  scope :created_by, lambda { |user_id|
+    where("created_by_id = ?", user_id)
+  }
+
+  scope :by_type, lambda { |type|
+    where("type = ?", type)
+  }
+
+  scope :order_by, lambda { |order|
+    order(order)
+  }
 
   attr_accessor :file
   validates_presence_of :file, :on => :create

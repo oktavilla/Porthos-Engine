@@ -7,22 +7,17 @@
     </div>
   <% end %>
   <% end %>
-  <% if @filters %>
-  <ul class="filter">
-    <%= asset_filter_links(@filters).join(' ') %>
-  </ul>
   <div class="label">Uppladdad av</div>
   <ul class="filter">
-    <li<%= ' class="current"' unless @filters[:created_by] %>>
-      <%= link_to "Alla", admin_assets_path(:filters => @filters.except(:created_by)) %>
+    <li<%= ' class="current"' unless current_scopes[:created_by] %>>
+      <%= link_to "Alla", admin_assets_path(current_scopes.except(:created_by)) %>
     </li>
     <% User.recent_uploaders.sort_by(&:first_name).each do |user| -%>
-      <li<%= ' class="current"' if @filters[:created_by].to_i == user.id %>>
-        <%= link_to user.short_name, admin_assets_path(:filters => @filters.merge(:created_by => user.id)) %>
+      <li<%= ' class="current"' if current_scopes[:created_by].to_i == user.id %>>
+        <%= link_to user.short_name, admin_assets_path(current_scopes.merge(:created_by => user.id)) %>
       </li>
     <% end -%>
   </ul>
-  <% end %>
 <% if @tags.present? and @tags.any? -%>
   <div class="label">Nyckelord</div>
   <ul class="tags alphabetical">

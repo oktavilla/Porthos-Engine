@@ -20,12 +20,6 @@ class Asset < ActiveRecord::Base
 
   acts_as_taggable
 
-#  searchable :auto_index => false do
-#    text :title, :boost => 2.0
-#    text :type, :name, :author, :description, :tag_names
-#    boolean :is_hidden, :using => :hidden?
-#  end
-
   IMAGE_FORMATS = [:jpg, :jpeg, :png, :gif]
   VIDEO_FORMATS = [:flv, :mov, :qt, :mpg, :avi, :mp4]
   SOUND_FORMATS = [:mp3, :wav, :aiff, :aif]

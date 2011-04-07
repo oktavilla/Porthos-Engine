@@ -45,10 +45,6 @@ class User < ActiveRecord::Base
     role_name.blank? ? scoped : scoped.where("roles.name = ?", role_name)
   }
 
-  searchable :auto_index => false do
-    text :first_name, :last_name, :email
-  end
-
   after_save :commit_to_sunspot
 
   validate :valid_file

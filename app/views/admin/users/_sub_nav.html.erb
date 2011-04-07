@@ -1,4 +1,5 @@
 <div id="sub_nav">
+  <% if Rails.application.config.use_fulltext_search %>
   <% form_tag search_admin_users_path, :method => 'get' do %>
   <div class="search">
     <div class="fullwidth">
@@ -6,6 +7,7 @@
     </div>
     <%= submit_tag "Sök", :style => "display:none" %>
   </div>
+  <% end %>
   <% end %>
   <% if @filters %>
   <ul class="filter">

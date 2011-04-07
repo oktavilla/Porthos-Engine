@@ -1,4 +1,9 @@
 ;(function($) {
+  $.ajaxSetup({
+    headers: {
+      "X-CSRF-Token": $("meta[name='csrf-token']").attr('content')
+    }
+  });
   var Porthos = {};
   Porthos.Helpers = {
     extract_id: new RegExp(/^\d/i),
@@ -71,6 +76,28 @@
     };
   }());
 
+  Porthos.FieldSet = function() {
+    var Ready = function() {
+      $('#field_sets').bind('sortstop', function(event, ui) {
+        $.ajax({
+          type: 'PUT',
+          url: '/admin/field_sets/sort',
+          data: $(this).sortable('serialize'),
+          dataType: 'json',
+          success: function() {
+            console.log('success');
+          }
+        });
+      });
+    };
+
+    return {
+      init: function() {
+        $(document).ready(Ready);
+      }
+    };
+  }();
+
   Porthos.Page = (function() {
     var Ready = function(container) {
       var $container = $(container),
@@ -141,6 +168,7 @@
   }());
 
   Porthos.Field.init();
+  Porthos.FieldSet.init();
   Porthos.Page.init();
   $(document).ready(function() {
     if ($.fn.hasOwnProperty('ckeditor')) {
@@ -148,6 +176,13 @@
     }
     Porthos.Helpers.cloneAsUrl('#page_title', '#page_slug');
     Porthos.Helpers.cloneAsUrl('#node_name', '#node_url');
+    if ($.fn.hasOwnProperty('sortable')) {
+      $('table.sortable tbody').sortable({
+        handle: 'span.drag_handle',
+        items: 'tr',
+        axis: 'y'
+      });
+    }
   });
 
 }(jQuery));

@@ -1,22 +1,19 @@
 <% @page_title = "Bilder, video, ljud och dokument" %>
 <% @page_class = 'layout3' %>
-  <%= render :partial => 'admin/assets/sub_nav' %>
-  <div id="workspace">
-    <div class="header">
-    <h1>Ladda upp bilder och video</h1>
+<%= render :partial => 'admin/assets/sub_nav' %>
+<div id="workspace">
+  <div class="header">
+  <h1>Ladda upp bilder och video</h1>
+</div>
+<div id="content">
+  <div id="uploader">
+    <% form_for @asset, :url => admin_assets_path_with_session_key(:format => 'json'), :html => { :multipart => true, :id => 'upload' } do |f| %>
+    <fieldset id="files">
+      <%= f.file_field :file, :size => 15 %>
+    </fieldset>
+    <fieldset class="submit" id="submit_container">
+      <input type="submit" value="Börja uppladdning"> eller <%= link_to "Avbryt", admin_assets_path %>
+    </fieldset>
+    <% end %>
   </div>
-  <div id="content">
-    <div id="uploader">
-      <% form_for @asset, :url => admin_assets_path_with_session_key(:format => 'json'), :html => { :multipart => true, :id => 'upload' } do |f| %>
-      <fieldset id="files">
-        <%= f.file_field :file, :size => 15 %>
-      </fieldset>
-      <fieldset class="submit" id="submit_container">
-        <input type="submit" value="Börja uppladdning"> eller <%= link_to "Avbryt", admin_assets_path %>
-      </fieldset>
-      <% end %>
-    </div>
-  </div>
-<% content_for :javascripts do %>
-  <%= javascript_include_tag 'swfupload/swfupload', 'swfupload/swfupload.queue.js', 'assets' %>
-<% end %>
+</div>

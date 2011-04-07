@@ -6,7 +6,7 @@ module Porthos
       base.send :include, Porthos::AccessControl
       base.send :skip_before_filter, :remember_uri, :only => [:edit, :create, :update, :destroy, :sort]
       base.send :before_filter, :clear_callback
-      base.send :layout, 'admin/porthos'
+      base.send :layout, 'admin/application'
     end
 
   protected

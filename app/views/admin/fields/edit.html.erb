@@ -1,22 +1,22 @@
 <% @page_title = "Sidtyper > #{@field_set.title} > Ändra @field.label" %>
 <% @page_class = 'layout2' -%>
 <% @page_id = 'site-settings' -%>
-  <div id="sub_nav">
-    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1>Ändra fältet ”<%= @field.label %>”</h1>
   </div>
-  <div id="workspace">
-    <div class="header">
-      <h1>Ändra fältet ”<%= @field.label %>”</h1>
-    </div>
-    <div id="content">
-      <%= form_for :field, :url => admin_field_set_field_path(@field_set, @field), :html => { :method => :put, :id =>  'field_form' } do |f| %>
-        <%= render :partial => 'form', :locals => { :f => f } %>
-        <div class="submit">
-          <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_field_set_path(@field_set)) %>
-        </div>
-      <% end %>
-    </div>
+  <div id="content">
+    <%= form_for :field, :url => admin_field_set_field_path(@field_set, @field), :html => { :method => :put, :id =>  'field_form' } do |f| %>
+      <%= render :partial => 'form', :locals => { :f => f } %>
+      <div class="submit">
+        <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_field_set_path(@field_set)) %>
+      </div>
+    <% end %>
   </div>
+</div>
 <% content_for :javascripts do %>
-  <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'admin/application' %>
 <% end %>

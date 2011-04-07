@@ -1,9 +1,9 @@
 <% if resource and not content.resource.asset.blank? %>
 <div class="image <%= resource.style %><%= ' downloadable' if resource.downloadable? %>">
   <% if resource.downloadable? %>
-    <a href="<%= download_asset_path(resource.asset.file_name, resource.asset.extname) %>"><img width="<%= resource.style_properties[:size] %>" height="<%= resource.asset.height_for_width(resource.style_properties[:size].to_i) %>" src="<%= display_image_path(:size => resource.style_properties[:size], :id => resource.asset, :format => resource.asset.extname, :add_token => true) %>" alt="<%= resource.title %>"/></a>
+    <a href="<%= download_asset_path(resource.asset.file_name, resource.asset.extension) %>"><img width="<%= resource.style_properties[:size] %>" height="<%= resource.asset.height_for_width(resource.style_properties[:size].to_i) %>" src="<%= resource.asset.version_url(:size => resource.style_properties[:size], :format => resource.asset.extension, :add_token => true) %>" alt="<%= resource.title %>"/></a>
   <% else %>
-    <img width="<%= resource.style_properties[:size] %>" height="<%= resource.asset.height_for_width(resource.style_properties[:size].to_i) %>" src="<%= display_image_path(:size => resource.style_properties[:size], :id => resource.asset, :format => resource.asset.extname, :add_token => true) %>" alt="<%= resource.title %>"/>
+    <img width="<%= resource.style_properties[:size] %>" height="<%= resource.asset.height_for_width(resource.style_properties[:size].to_i) %>" src="<%= resource.asset.version_url(:size => resource.style_properties[:size], :format => resource.asset.extension, :add_token => true) %>" alt="<%= resource.title %>"/>
   <% end %>
   <% unless resource.caption.blank? and resource.copyright.blank? -%>
   <span class="meta">

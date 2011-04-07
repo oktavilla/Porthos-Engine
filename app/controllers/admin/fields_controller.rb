@@ -54,8 +54,8 @@ class Admin::FieldsController < ApplicationController
   end
 
   def sort
-    params[:fields].each_with_index do |id, index|
-      @field_set.fields.update(id, :position => index + 1)
+    params[:field].each_with_index do |id, i|
+      puts Field.update(id, :first => (i == 0), :next_id => params[:field][i+1])
     end
     respond_to do |format|
       format.js { render :nothing => true }

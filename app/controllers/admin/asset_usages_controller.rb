@@ -34,9 +34,9 @@ class Admin::AssetUsagesController < ApplicationController
         format.html { render :action => 'edit' }
       end
     end
-    
+
   end
-  
+
   def destroy
     @asset_usage = AssetUsage.find(params[:id])
     @asset_usage.destroy
@@ -44,10 +44,10 @@ class Admin::AssetUsagesController < ApplicationController
       format.html { redirect_to params[:return_to] || eval("admin_#{@asset_usage.parent_type.tableize}_path") }
     end
   end
-  
+
   def sort
-    params[:asset_usages].each_with_index do |id, idx|
-      AssetUsage.update(id, :position => idx+1)
+    params[:asset_usage].each_with_index do |id, i|
+      AssetUsage.update(id, :first => (i == 0), :next_id => params[:asset_usage][i+1])
     end
     respond_to do |format|
       format.js { render :nothing => true }

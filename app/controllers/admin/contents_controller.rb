@@ -87,8 +87,8 @@ class Admin::ContentsController < ApplicationController
   end
 
   def sort
-    params[:contents].each_with_index do |id, index|
-      attributes = { :position => index+1 }
+    params[:content].each_with_index do |id, i|
+      attributes = { :first => (i==0), :position => params[:content][i+1] }
       attributes[:column_position] = params[:column_position] if params[:column_position]
       attributes[:parent_id] = params[:parent_id] if params[:parent_id]
       Content.update(id, attributes)

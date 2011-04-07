@@ -98,15 +98,13 @@ class Admin::NodesController < ApplicationController
     end
   end
 
-  # def sort
-  #   params[:nodes].each_with_index do |id, position|
-  #     Node.update(id, {
-  #       :position => position+1
-  #     })
-  #   end
-  #   respond_to do |format|
-  #     format.js { render :nothing => true }
-  #   end
-  # end
+  def sort
+    params[:node].each_with_index do |id, i|
+      Node.update(id, :first => (i == 0), :next_id => params[:node][i+1])
+    end
+    respond_to do |format|
+      format.js { render :nothing => true }
+    end
+  end
 
 end

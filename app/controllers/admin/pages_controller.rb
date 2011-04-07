@@ -120,12 +120,12 @@ class Admin::PagesController < ApplicationController
     end
   end
 
-  # def sort
-  #   params[:pages].each_with_index do |id, idx|
-  #     Page.update(id, :position => idx+1)
-  #   end
-  #   respond_to do |format|
-  #     format.js { render :nothing => true }
-  #   end
-  # end
+  def sort
+    params[:page].each_with_index do |id, i|
+      Page.update(id, :first => (i == 0), :next_id => params[:page][i+1])
+    end
+    respond_to do |format|
+      format.js { render :nothing => true }
+    end
+  end
 end

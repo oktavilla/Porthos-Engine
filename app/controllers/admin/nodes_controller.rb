@@ -100,7 +100,7 @@ class Admin::NodesController < ApplicationController
 
   def sort
     params[:node].each_with_index do |id, i|
-      Node.update(id, :first => (i == 0), :next_id => params[:node][i+1])
+      Node.update_all({:first => (i == 0), :next_id => params[:node][i+1]}, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

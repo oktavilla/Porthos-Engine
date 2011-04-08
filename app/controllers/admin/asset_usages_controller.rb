@@ -47,7 +47,7 @@ class Admin::AssetUsagesController < ApplicationController
 
   def sort
     params[:asset_usage].each_with_index do |id, i|
-      AssetUsage.update(id, :first => (i == 0), :next_id => params[:asset_usage][i+1])
+      AssetUsage.update_all({:first => (i == 0), :next_id => params[:asset_usage][i+1]}, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

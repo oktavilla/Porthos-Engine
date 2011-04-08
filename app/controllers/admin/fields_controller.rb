@@ -55,7 +55,7 @@ class Admin::FieldsController < ApplicationController
 
   def sort
     params[:field].each_with_index do |id, i|
-      puts Field.update(id, :first => (i == 0), :next_id => params[:field][i+1])
+      Field.update_all({:first => (i == 0), :next_id => params[:field][i+1]}, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

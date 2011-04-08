@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "bundler"
   s.add_dependency "rails", "3.0.6"
-  s.add_dependency 'resort'
   s.add_dependency "routing-filter"
   s.add_dependency "mime-types"
   s.add_dependency "mini_magick"
@@ -23,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'parndt-acts_as_tree'
   s.add_dependency 's3'
   s.add_dependency 'resizor'
+  s.add_dependency 'oktavilla-resort'
 
   # Dev dependencies
   s.add_dependency 'shoulda'

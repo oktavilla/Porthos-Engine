@@ -15,7 +15,7 @@ class Node < ActiveRecord::Base
   resort!
 
   def siblings
-    self.parent.present? ? self.parent.children : self.class.where(:parent_id => nil)
+    self.class.where(:parent_id => self.parent_id)
   end
 
   after_save  :generate_url_for_children

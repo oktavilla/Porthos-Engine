@@ -43,3 +43,9 @@ img, input, textarea
 {
 	cursor: default;
 }
+
+p {
+  font-size:15px;
+  margin:0 0 .7em 0; }
+
+.lead {font-size:18px;}

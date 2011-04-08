@@ -1,3 +1,23 @@
 = Porthos
 
-This project rocks and uses MIT-LICENSE.
+A Rails 3 CMS under development by Oktavilla (http://oktavilla.se) named after Porthos (http://en.wikipedia.org/wiki/Jonathan_Archer#Porthos)
+
+== Requirements
+
+Rails 3.0.x
+
+== Installation instructions
+
+Create a new rails project
+
+Add porthos (dev version) to your Gemfile: 
+
+  gem 'porthos', :git => "git://github.com/Oktavilla/Porthos-Engine.git", :branch => 'develop'
+
+Run porthos generator 
+
+  $ rails g porthos
+
+Run migrations
+
+  $ rake db:migrate

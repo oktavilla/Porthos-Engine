@@ -206,11 +206,12 @@ class Page < ActiveRecord::Base
   end
 
   def field_exists?(handle)
-    fields.detect { |field| field.handle == handle }
+    fields.one? { |field| field.handle == handle }
   end
 
+  alias_method :respond_to_without_field_checking?, :respond_to?
   def respond_to?(method, include_private = false)
-    !new_record? ? (super(method, include_private) || field_exists?(method.to_s.gsub(/\?/, ''))) : super(method, include_private)
+    !new_record? ? (respond_to_without_field_checking?(method, include_private) || field_exists?(method.to_s.gsub(/\?/, ''))) : respond_to_without_field_checking?(method, include_private)
   end
 
   def category

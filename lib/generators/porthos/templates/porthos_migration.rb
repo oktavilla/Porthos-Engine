@@ -197,6 +197,7 @@ class CreatePorthosTables < ActiveRecord::Migration
       t.integer    "updated_by_id"
       t.references "next"
       t.boolean    "first"
+      t.integer    "position"
       t.string     "slug"
       t.string     "title"
       t.string     "layout_class"

@@ -16,7 +16,8 @@ form .avatar:after,
 #asset_usages div:after,
 #tags_view .taggable:after,
 .page_content:after,
-.page_content .content:after {
+.page_content .content:after,
+.contents li.content:after {
   content:".";
   display:block;
   height:0;
@@ -488,6 +489,16 @@ ul#nodes, ul#nodes ul {
     height:25px;
     width:20px;
     background:transparent url(/graphics/porthos/ui_new.png) 0 -790px no-repeat; }
+
+ul.sortable {margin-left:-25px;}
+  ul.sortable .drag_handle {display:none;}
+  ul.sortable li {
+    padding-left:25px;
+    position:relative;}
+  ul.sortable li:hover .drag_handle {
+    display:block;
+    top:4px;
+    left:0; }
 
 table.sortable {
   margin-left:-40px; }

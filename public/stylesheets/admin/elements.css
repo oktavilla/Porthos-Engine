@@ -72,7 +72,7 @@ label {
   display:block;
   margin:1.5em 0 .3em 0;
   font-size:14px;
-  color:#000; 
+  color:#000;
   font-weight:bold; }
   label.notasimportant {font-weight:normal;}
   input[type="hidden"] + label,
@@ -91,7 +91,7 @@ fieldset.compact {
     margin-left:-115px;
     font-weight:normal;
     font-size:12px;
-    width:100px; 
+    width:100px;
     text-align:right; }
   fieldset.compact .fullwidth {
     width:300px;
@@ -134,8 +134,8 @@ p.fieldset_help {margin-top:0;}
 
 .form_help {
   margin:.5em 0 .5em 0;
-  font-size:12px; 
-  line-height:14px; 
+  font-size:12px;
+  line-height:14px;
   color:#666; }
   label .form_help {
     margin-left:.5em;
@@ -175,7 +175,7 @@ form .avatar {
   form .avatar img {
     float:left;
     margin-top:-1em;
-    margin-right:1em; 
+    margin-right:1em;
     border:2px solid #ddd;}
 
 .drag_handle { display:none; }
@@ -194,7 +194,7 @@ form .avatar {
       border:1px solid #ddd; }
     .pagination span.current {font-weight:bold;}
 
-.flash { 
+.flash {
   margin:0;
   padding:12px 40px 9px 65px;
   border-top:1px solid #9e9;
@@ -229,7 +229,7 @@ form .avatar {
     padding:6px 10px 5px 10px;
     font-size:12px;
     color:rgba(0,0,0,.85);
-    background:rgb(240,240,240) url(/graphics/porthos/button_grey_bg.png) 0 0 repeat-x; 
+    background:rgb(240,240,240) url(/graphics/porthos/button_grey_bg.png) 0 0 repeat-x;
     border:1px solid rgb(215,215,215);
     text-shadow:1px 1px 1px rgb(255,255,255);
     -webkit-border-radius:5px;
@@ -249,7 +249,7 @@ form .avatar {
     margin:0 0 1em 0;
     padding:.5em 0 .5em 0; }
   .items.thumbnails li {padding-left:115px;}
-    .items .icon { 
+    .items .icon {
       width: 100px;
       height: 100px;
       margin-left: -115px;
@@ -257,7 +257,7 @@ form .avatar {
       background: url('/graphics/porthos/icons/filetypes/default.png'); }
     .items.thumbnails img {
       float:left;
-      margin-left:-115px; 
+      margin-left:-115px;
       border:1px solid #ccc; }
     .items .title {
       font-size:15px;
@@ -314,19 +314,18 @@ form .avatar {
 .contents li.content {
   position:relative;
   list-style:none;
-  margin:0;
   padding:1em 250px 1em 40px;
-  border-top:1px solid #ddd; 
+  border-top:1px solid #ddd;
   background:#fff; }
   .contents li.content > .edit {
     position:absolute;
     top:.5em;
     right:1em;
-    background:rgba(255,255,255,.8); 
+    background:rgba(255,255,255,.8);
     display:none; }
     .contents li.content > .edit a {
       display:inline-block;
-      padding:10px 5px; 
+      padding:10px 5px;
       vertical-align:middle; }
   .contents li.content > .draghandle {
     position:absolute;
@@ -336,7 +335,7 @@ form .avatar {
     width:40px;
     height:50px;
     cursor:move;
-    background:transparent url(/graphics/porthos/ui_new.png) 10px -780px no-repeat; 
+    background:transparent url(/graphics/porthos/ui_new.png) 10px -780px no-repeat;
     display:none; }
   .contents li.content:hover > .draghandle,
   .contents li.content:hover > .edit {display:block;}
@@ -358,7 +357,7 @@ form .avatar {
     .contents .actual_content h6 {
       margin:0;
       font-size:1em;
-      font-weight:bold; 
+      font-weight:bold;
       color:#000; }
     .contents .actual_content p,
     .contents .actual_content ul {margin:.8em 0 .8em 0;}
@@ -366,7 +365,7 @@ form .avatar {
         margin:0 0 .5em 1.5em;
         padding:0; }
     .contents .actual_content *:first-child {margin-top:0;}
-    
+
     .contents .actual_content p {}
     .contents .inactive {
       max-height:40px;
@@ -392,7 +391,7 @@ form .avatar {
       .contents .actual_content.teaser .no_image span {
         display:block;
         margin-top:25px; }
-      
+
   .contents .actual_content.module .title,
   .contents .actual_content.video .title {
     padding-left:20px;
@@ -400,7 +399,7 @@ form .avatar {
   .contents .actual_content.video .title {background-position:0 -1120px;}
 
   .contents li.collection {
-    margin:0; 
+    margin:0;
     padding:0; }
     .contents li.collection ul {
       list-style:none;
@@ -419,7 +418,7 @@ form .avatar {
     .page_content:first-child {border-top:none;}
     .page_content h2.field_label {
       margin:0 0 .5em 0;
-      font-size:1em; 
+      font-size:1em;
       color:#999; }
     .page_content label {margin-top:0;}
     .page_content .submit {
@@ -436,7 +435,7 @@ form .avatar {
       margin-top:.5em; }
   .page_content.association {}
     .page_content.association ul {
-      list-style:none; 
+      list-style:none;
       margin:0; }
     .page_content.association li {
       margin:0 0 .25em -40px;
@@ -486,7 +485,7 @@ ul.filter {
 ul.nav li.current a,
 ul.filter li.current a,
 ul.tags li a.current {
-  background:#0093d0; 
+  background:#0093d0;
   color:#fff; }
 ul.filter li {margin-bottom:.5em;}
 
@@ -502,7 +501,7 @@ ul.filter {}
     -webkit-border-radius:6px;
     -moz-border-radius:6px; }
   ul.filter li.current {margin-left:-3px;}
-  ul.filter li.current a {  
+  ul.filter li.current a {
     padding:3px 6px 3px 6px; }
 
 ul.tags {}
@@ -511,7 +510,7 @@ ul.tags {}
     font-weight:normal;
     font-size:12px; }
 
-ul.tags.alphabetical {    
+ul.tags.alphabetical {
   color:#999; }
   ul.tags.alphabetical li {
     display:block;
@@ -531,7 +530,7 @@ ul.tags.alphabetical {
   .tags.autocomplete {
     position:absolute;
     width:250px !important; }
-  .tags.autocomplete ul {  
+  .tags.autocomplete ul {
     margin:0;
     padding:0;
     list-style-type:none;

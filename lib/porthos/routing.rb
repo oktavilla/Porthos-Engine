@@ -46,7 +46,7 @@ module Porthos
             template.gsub!(":#{key.to_s}", value)
           end
           regexp_template.replace(template)
-        end
+        end.mb_chars
       end
 
       def translated_path
@@ -134,7 +134,7 @@ module Porthos
       {
         :path => "{{categories}}/:id",
         :constraints => {
-          :id => '([a-z0-9\-\_]+)'
+          :id => '([a-z0-9\-\_\p{Word}]+)'
         },
         :controller => 'pages',
         :action => 'category'

@@ -5,6 +5,7 @@ module RoutingFilter
       if env["REQUEST_URI"] =~ /^\/(admin|javascripts|stylesheets|images|graphics)/
         yield
       else
+        path.replace(CGI::unescape(path))
         custom_params = {}
         node_url = path.gsub(/^\//,'')
         node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first

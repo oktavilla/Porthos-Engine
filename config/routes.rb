@@ -28,6 +28,9 @@ Rails.application.routes.draw do
     resources :site_settings
     resources :content_lists
     resources :field_sets do
+      member do
+        get 'pages'
+      end
       collection do
         put 'sort'
       end

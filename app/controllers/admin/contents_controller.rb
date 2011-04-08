@@ -88,11 +88,14 @@ class Admin::ContentsController < ApplicationController
 
   def sort
     params[:content].each_with_index do |id, i|
-      attributes = { :first => (i==0), :position => params[:content][i+1] }
+      attributes = {}
       attributes[:column_position] = params[:column_position] if params[:column_position]
       attributes[:parent_id] = params[:parent_id] if params[:parent_id]
-      Content.update(id, attributes)
-    end if params[:contents]
+      Content.update(id, {
+        :first => (i == 0),
+        :next_id => params[:content][i+1]
+      }.merge(attributes))
+    end if params[:content]
     respond_to do |format|
       format.js { render :nothing => true }
     end

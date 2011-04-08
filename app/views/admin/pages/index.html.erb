@@ -29,7 +29,6 @@
         <%= hidden_field_tag filter, value %>
       <% end -%>
         <%= select_tag 'order_by', options_for_select({ 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, current_scopes[:order_by]) %>
-        <input type="submit" value="Välj" style="display:none;" id="filters_order_by_submit">
     </div>
     <% end %>
   </div>
@@ -45,3 +44,6 @@
     </ul>
   </div>
 </div>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'admin/application' %>
+<% end %>

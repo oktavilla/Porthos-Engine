@@ -21,3 +21,5 @@ Run porthos generator
 Run migrations
 
   $ rake db:migrate
+
+Done. Drink beer and rock out

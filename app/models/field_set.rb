@@ -42,7 +42,7 @@ class FieldSet < ActiveRecord::Base
   end
 
   def tags_for_pages
-    @tags_for_pages ||= Tag.on('Page').all(:joins => 'LEFT OUTER JOIN pages ON taggings.taggable_id = pages.id', :conditions => ['pages.field_set_id = ? AND namespace IS NULL', self.id])
+    @tags_for_pages ||= Tag.on('Page').joins('LEFT OUTER JOIN pages ON pages.id = taggings.taggable_id').where(['pages.id IS NOT NULL AND pages.field_set_id = ? AND namespace IS NULL', self.id])
   end
 
 protected

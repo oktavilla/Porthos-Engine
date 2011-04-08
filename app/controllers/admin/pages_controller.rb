@@ -122,7 +122,7 @@ class Admin::PagesController < ApplicationController
 
   def sort
     params[:page].each_with_index do |id, i|
-      Page.update_all({:first => (i == 0), :next_id => params[:page][i+1]}, ["id = ?", id])
+      Page.update_all({:first => (i == 0), :next_id => params[:page][i+1], :position => i}, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

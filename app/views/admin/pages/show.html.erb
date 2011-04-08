@@ -330,7 +330,7 @@
         <div class="title">Kolumn #<%= column %></div>
         <% end %>
         <%= render :partial => 'content_types', :locals => {:page => @page, :column => column} %>
-        <ul class="contents items sortable" data-column="<%= column %>">
+        <ul class="contents sortable" data-column="<%= column %>">
         <% @page.contents.where(:column_position => column).ordered.each do |content| -%>
           <li class="<%= "#{content.resource_type} content" unless content.collection? %><%= ' collection' if content.collection? %> sortable <%= content.active? ? '' : ' inactive' %>" id="content_<%= content.id %>">
             <span class="draghandle"></span>

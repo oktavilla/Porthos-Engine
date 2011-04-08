@@ -98,6 +98,19 @@
           dataType: 'json'
         });
       });
+
+      $('#pages.sortable').sortable({
+        axis: 'y',
+        handle: 'span.drag_handle',
+        stop: function() {
+          $.ajax({
+            type: 'PUT',
+            url: '/admin/pages/sort',
+            data: $(this).sortable('serialize'),
+            dataType: 'json'
+          });
+        }
+      });
     };
 
     return {

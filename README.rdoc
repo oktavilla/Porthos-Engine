@@ -5,6 +5,7 @@ A Rails 3 CMS under development by Oktavilla (http://oktavilla.se) named after P
 == Requirements
 
 Rails 3.0.x
+Ruby 1.9
 
 == Installation instructions
 

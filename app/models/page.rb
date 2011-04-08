@@ -3,7 +3,7 @@ class Page < ActiveRecord::Base
   resort!
 
   def siblings
-    self.field_set.pages
+    self.class.where(:field_set_id => self.field_set_id)
   end
 
   acts_as_taggable

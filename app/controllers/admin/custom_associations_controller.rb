@@ -27,7 +27,7 @@ class Admin::CustomAssociationsController < ApplicationController
 
   def sort
     params[:custom_association].each_with_index do |id, i|
-      CustomAssociation.update(id, :first => (i == 0), :next_id => params[:custom_association][i+1])
+      CustomAssociation.update_all({:first => (i == 0), :next_id => params[:custom_association][i+1]}, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

@@ -23,10 +23,23 @@ class FieldSet < ActiveRecord::Base
 
   def dates_with_children(options = {})
     options = { :year => Time.now.year }.merge(options.symbolize_keys)
-    years = connection.select_values("select distinct year(published_on) as year from pages where field_set_id = #{ self.id } and published_on <= now() order by year desc")
-    years.collect do |year|
-      months = connection.select_values("select distinct month(published_on) as month, year(published_on) as year from pages where year(published_on) = #{ year } and field_set_id = #{ self.id } and published_on <= now() order by month desc")
-      [year, months.collect { |month| "%02d" % month }.sort ]
+    case ActiveRecord::Base.connection.adapter_name
+    when 'PostgreSQL'
+      years = connection.select_values("SELECT DISTINCT DATE_PART('year', published_on) AS year FROM pages
+                                        WHERE field_set_id = #{ self.id } AND published_on <= NOW() ORDER BY year DESC")
+      years.collect do |year|
+        months = connection.select_values("SELECT DISTINCT DATE_PART('month', published_on) AS month, DATE_PART('year', published_on) AS year FROM pages
+                                           WHERE DATE_PART('year', published_on) = #{ year } AND field_set_id = #{ self.id } AND published_on <= NOW() ORDER BY month DESC")
+        [year, months.collect { |month| "%02d" % month }.sort ]
+      end
+    else
+      years = connection.select_values("SELECT DISTINCT YEAR(published_on) AS year FROM pages
+                                        WHERE field_set_id = #{ self.id } AND published_on <= NOW() ORDER BY year DESC")
+      years.collect do |year|
+        months = connection.select_values("SELECT DISTINCT MONTH(published_on) AS month, YEAR(published_on) AS year FROM pages
+                                           WHERE YEAR(published_on) = #{ year } AND field_set_id = #{ self.id } AND published_on <= NOW() ORDER BY month DESC")
+        [year, months.collect { |month| "%02d" % month }.sort ]
+      end
     end
   end
 

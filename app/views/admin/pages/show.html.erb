@@ -72,7 +72,7 @@
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span>Ändra</span></a>
       <% if @page.published? -%>
-        <%= link_to "Visa på webbplatsen", page_path(@page), :class => 'public_link action' %>
+        <%= link_to "Visa på webbplatsen", page_path(:id => @page.slug, :field_set_id => @page.field_set_id), :class => 'public_link action' %>
       <% else -%>
       <%= link_to "Förhandsgranska", preview_page_path(@page.id), :class => 'public_link action' %>
       <% end -%>

@@ -37,7 +37,7 @@
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
       <div>
-        <%= f.select @page.category_method_name, Tag.on('Page').namespaced_to(@page.field_set.handle).collect { |t| [t.name.titlecase, t.name] }, :include_blank => 'Ingen kategori' %>
+        <%= f.select @page.category_method_name, Tag.on('Page').namespaced_to(@page.field_set.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
         <a href="#" id="new_category">Lägg till</a><br>
         <input type="submit" value="Välj"> eller <a href="#" class="cancel">avbryt</a>
       </div>

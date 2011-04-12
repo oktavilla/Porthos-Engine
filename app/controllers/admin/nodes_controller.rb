@@ -99,8 +99,13 @@ class Admin::NodesController < ApplicationController
   end
 
   def sort
+    timestamp = Time.now
     params[:node].each_with_index do |id, i|
-      Node.update_all({:first => (i == 0), :next_id => params[:node][i+1]}, ["id = ?", id])
+      Node.update_all({
+        :first => (i == 0),
+        :next_id => params[:node][i+1],
+        :updated_at => timestamp
+      }, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

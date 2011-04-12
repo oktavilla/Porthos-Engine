@@ -26,8 +26,13 @@ class Admin::CustomAssociationsController < ApplicationController
   end
 
   def sort
+    timestamp = Time.now
     params[:custom_association].each_with_index do |id, i|
-      CustomAssociation.update_all({:first => (i == 0), :next_id => params[:custom_association][i+1]}, ["id = ?", id])
+      CustomAssociation.update_all({
+        :first => (i == 0),
+        :next_id => params[:custom_association][i+1],
+        :updated_at => timestamp
+      }, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

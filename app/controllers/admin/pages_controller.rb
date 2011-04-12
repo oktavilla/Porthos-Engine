@@ -121,8 +121,14 @@ class Admin::PagesController < ApplicationController
   end
 
   def sort
+    timestamp = Time.now
     params[:page].each_with_index do |id, i|
-      Page.update_all({:first => (i == 0), :next_id => params[:page][i+1], :position => i}, ["id = ?", id])
+      Page.update_all({
+        :first => (i == 0),
+        :next_id => params[:page][i+1],
+        :position => i+1,
+        :updated_at => timestamp
+      }, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

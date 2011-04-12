@@ -87,11 +87,16 @@ class Admin::ContentsController < ApplicationController
   end
 
   def sort
+    timestamp = Time.now
     params[:content].each_with_index do |id, i|
       attributes = {}
       attributes[:column_position] = params[:column_position] if params[:column_position]
       attributes[:parent_id] = params[:parent_id] if params[:parent_id]
-      Content.update_all({:first => (i == 0), :next_id => params[:content][i+1]}.merge(attributes), ["id = ?", id])
+      Content.update_all({
+        :first => (i == 0),
+        :next_id => params[:content][i+1],
+        :updated_at => timestamp
+      }.merge(attributes), ["id = ?", id])
     end if params[:content]
     respond_to do |format|
       format.js { render :nothing => true }

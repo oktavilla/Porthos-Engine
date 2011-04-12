@@ -46,8 +46,13 @@ class Admin::AssetUsagesController < ApplicationController
   end
 
   def sort
+    timestamp = Time.now
     params[:asset_usage].each_with_index do |id, i|
-      AssetUsage.update_all({:first => (i == 0), :next_id => params[:asset_usage][i+1]}, ["id = ?", id])
+      AssetUsage.update_all({
+        :first => (i == 0),
+        :next_id => params[:asset_usage][i+1],
+        :updated_at => timestamp
+      }, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

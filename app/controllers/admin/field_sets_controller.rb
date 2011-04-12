@@ -65,8 +65,13 @@ class Admin::FieldSetsController < ApplicationController
   end
 
   def sort
+    timestamp = Time.now
     params[:field_set].each_with_index do |id, i|
-      FieldSet.update_all({:first => (i == 0), :next_id => params[:field_set][i+1]}, ["id = ?", id])
+      FieldSet.update_all({
+        :first => (i == 0),
+        :next_id => params[:field_set][i+1],
+        :updated_at => timestamp
+      }, ["id = ?", id])
     end
     respond_to do |format|
       format.js { render :nothing => true }

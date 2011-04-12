@@ -134,7 +134,7 @@ module Porthos
       {
         :path => "{{categories}}/:id",
         :constraints => {
-          :id => '([a-z0-9\-\_\p{Word}]+)'
+          :id => '([a-z0-9\-\_\s\p{Word}]+)'
         },
         :controller => 'pages',
         :action => 'category'

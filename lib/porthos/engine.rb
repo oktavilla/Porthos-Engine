@@ -15,6 +15,10 @@ module Porthos
       end
     end
 
+    initializer "redirects" do |app|
+      app.middleware.use Porthos::Redirects
+    end
+
     initializer 'helpers' do |app|
       ActionView::Base.send :include, PorthosApplicationHelper
     end

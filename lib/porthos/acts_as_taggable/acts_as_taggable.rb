@@ -106,7 +106,7 @@ module ActiveRecord
         end
 
         def tag_names=(tag_string)
-          self.taggings.each(&:destroy)
+          self.taggings.without_namespace.each(&:destroy)
           self.class.tag_list_from_string(tag_string).each do |name|
             new_tag = Tag.find_or_create_by_name(name.downcase)
             self.new_record? ? self.taggings.build(:tag_id => new_tag.id) : self.taggings.create(:tag_id => new_tag.id)

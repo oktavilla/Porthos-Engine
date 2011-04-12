@@ -3,6 +3,8 @@ module Porthos
     Pathname.new(File.expand_path(File.dirname(__FILE__)+'../..'))
   end
 end
+
+require 'porthos/redirects'
 require 'porthos/engine'
 require 'porthos/routing'
 require 'porthos/url_resolver'

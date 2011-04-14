@@ -35,7 +35,7 @@ module Porthos
             template.gsub!(":#{key.to_s}", params[key].to_s) if params[key]
           end
           template = "/#{template}" unless template[0...1] == '/'
-          computed_path.replace(template)
+          computed_path.replace(template.gsub(/\s/, '+'))
         end
       end
 

@@ -5,16 +5,16 @@ module Porthos
     end
 
     def call(env)
-      redirect = Redirect.connection.select_all("SELECT * FROM redirects WHERE path = '#{env['PATH_INFO']}'").first
-      if redirect and (redirect_path = redirect['target'])
+      redirect = Redirect.connection.select_value("SELECT target FROM redirects WHERE path = '#{env['PATH_INFO']}' LIMIT 1")
+      if redirect.present?
         if not env['QUERY_STRING'].blank?
-          if redirect_path.include?('?')
-            redirect_path.gsub!('?', "?#{env['QUERY_STRING']}&")
+          if redirect.include?('?')
+            redirect.gsub!('?', "?#{env['QUERY_STRING']}&")
           else
-            redirect_path << "?#{env['QUERY_STRING']}"
+            redirect << "?#{env['QUERY_STRING']}"
           end
         end
-        [301, {'Content-Type' => 'text/html', 'Location' => redirect_path}, ['You are being redirected.']]
+        [301, {'Content-Type' => 'text/html', 'Location' => redirect}, ['You are being redirected.']]
       else
         @app.call(env)
       end

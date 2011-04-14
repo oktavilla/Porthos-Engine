@@ -1,5 +1,5 @@
 class AssetUsage < ActiveRecord::Base
-  belongs_to :parent, :polymorphic => true
+  belongs_to :parent, :polymorphic => true, :touch => true
   belongs_to :asset
 
   # acts_as_list :scope => 'parent_id = #{parent_id} and parent_type = \'#{parent_type}\'', :column => 'position', :order => 'position'

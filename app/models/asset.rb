@@ -81,7 +81,6 @@ protected
   # before validation on update
   def replace_file_if_new_file
     if file.present?
-      puts "\n\n replace_file_if_new_file \n\n"
       if MIME::Types.type_for(file.original_filename).first.to_s == self.mime_type
         cleanup
         store

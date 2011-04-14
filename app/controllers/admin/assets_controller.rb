@@ -121,11 +121,10 @@ class Admin::AssetsController < ApplicationController
 
   def update
     @asset = Asset.find_by_name(params[:id])
-
     respond_to do |format|
       if @asset.update_attributes(params[:asset])
         flash[:notice] = "#{@asset.full_name} #{t(:saved, :scope => [:app, :admin_general])}"
-        format.html { redirect_to previous_view_path(edit_admin_asset_url(@asset)) }
+        format.html { redirect_to (params[:return_to] || edit_admin_asset_url(@asset)) }
       else
         format.html { render :action => "edit" }
       end

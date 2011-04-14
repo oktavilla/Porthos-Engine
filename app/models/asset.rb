@@ -30,6 +30,7 @@ class Asset < ActiveRecord::Base
   validates_presence_of :file, :on => :create
 
   before_validation :process, :on => :create
+  before_validation :replace_file_if_new_file, :on => :update
   after_destroy :cleanup
   after_save :commit_to_sunspot
 
@@ -75,6 +76,19 @@ protected
     extract_attributes_from_file
     ensure_unique_name
     store
+  end
+
+  # before validation on update
+  def replace_file_if_new_file
+    if file.present?
+      puts "\n\n replace_file_if_new_file \n\n"
+      if MIME::Types.type_for(file.original_filename).first.to_s == self.mime_type
+        cleanup
+        store
+      else
+        errors[:file] << I18n.t(:unable_to_replace_different_filetype, :scope => [:activerecord, :errors, :models, :asset, :file])
+      end
+    end
   end
 
   def extract_attributes_from_file

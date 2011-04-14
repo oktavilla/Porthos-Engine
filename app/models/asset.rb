@@ -31,6 +31,7 @@ class Asset < ActiveRecord::Base
 
   before_validation :process, :on => :create
   before_validation :replace_file_if_new_file, :on => :update
+  after_update :touch_parents
   after_destroy :cleanup
   after_save :commit_to_sunspot
 
@@ -71,6 +72,11 @@ class Asset < ActiveRecord::Base
 
 protected
 
+  # after update
+  def touch_parents
+    custom_associations.each &:touch
+    usages.each &:touch
+  end
   # before validation on create
   def process
     extract_attributes_from_file

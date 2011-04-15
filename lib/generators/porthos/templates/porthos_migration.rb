@@ -43,7 +43,7 @@ class CreatePorthosTables < ActiveRecord::Migration
       t.string     "controller"
       t.string     "action"
       t.string     "resource_type"
-      t.integer    "resource_id"
+      t.string     "resource_id"
       t.integer    "field_set_id"
       t.integer    "children_count"
       t.datetime   "created_at"

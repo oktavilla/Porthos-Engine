@@ -1,119 +1,135 @@
-class Page < ActiveRecord::Base
+class Page
 
-  resort!
+  include MongoMapper::Document
 
-  def siblings
-    self.class.where(:field_set_id => self.field_set_id)
+  key :field_set_id, Integer, :required => true
+  key :created_by_id, Integer
+  key :updated_by_id, Integer
+  key :position, Integer
+  key :slug, String
+  key :title, String, :required => true
+  key :layout_class, String
+  key :column_count, Integer
+  key :active, Boolean
+  key :restricted, Boolean
+  key :published_on, DateTime
+  timestamps!
+
+  # many :contents
+  many :custom_attributes
+  many :custom_associations
+ # acts_as_taggable
+
+  def field_set
+    FieldSet.find(field_set_id)
   end
 
-  acts_as_taggable
+  def field_set=(_field_set)
+    field_set_id = _field_set.id
+  end
 
-  validates_presence_of :title,
-                        :field_set_id
-  has_one :node,
-          :as => :resource
+  def created_by
+    User.find(:created_by_id)
+  end
 
-  has_one :index_node,
-          :through => :field_set,
-          :source  => :node
+  def created_by=(_user)
+    created_by_id = _user.id
+  end
 
-  accepts_nested_attributes_for :node
+  def updated_by
+    User.find(:updated_by_id)
+  end
 
-  has_many :contents,
-           :as    => :context,
-           :conditions => ["contents.parent_id IS NULL"],
-           :dependent  => :destroy
+  def updated_by=(_user)
+    updated_by_id = _user.id
+  end
 
-  belongs_to :field_set
+  def node
+    Node.where(:resource_type => 'Page', :resource_id => self.id)
+  end
 
-  has_many :fields,
-           :through => :field_set
+  def node=(node_attributes)
+    node ? node.attributes.merge(node_attributes) : Node.new(node_attributes)
+  end
+
+  def index_node
+    field_set.node
+  end
+
+  def fields
+    field_set.fields
+  end
 
   delegate :template,
            :to => :field_set
 
-  has_many :custom_attributes,
-           :as => :context,
-           :dependent => :destroy
+  def custom_association_contexts
+    CustomAssociation.where(:parent => self)
+  end
 
-  has_many :custom_associations,
-           :as => :context,
-           :dependent => :destroy
-
-  has_many :custom_association_contexts,
-           :class_name => 'CustomAssociation',
-           :as => :target,
-           :dependent => :destroy
-
-  belongs_to :created_by,
-             :class_name => 'User'
-
-  belongs_to :updated_by,
-             :class_name => 'User'
-
-  has_many :comments,
-           :as => :commentable,
-           :order => 'comments.created_at'
+  #has_many :comments,
+  #         :as => :commentable,
+  #         :order => 'comments.created_at'
 
   scope :unpublished, lambda {
-    where("published_on IS NULL OR published_on > ?", Time.now)
+    where(:$or => [{:published_on => nil}, {:published_on.gt => Time.now}])
   }
 
   scope :published, lambda {
-    where("published_on <= ?", Time.now)
+    where(:published_on.lt => Time.now)
   }
 
   scope :published_within, lambda { |from, to|
-    where("published_on BETWEEN ? AND ?", from.to_s(:db), to.to_s(:db))
+    where(:published_on.gt > from, :published_on.lt => to)
   }
 
   scope :include_restricted, lambda { |restricted|
-    where('restricted = ? or restricted = ?', restricted, false)
+    where(:$or => [{:restricted => restricted}, { :restricted => false}])
   }
 
-  scope :created_latest, order('created_at DESC')
+  scope :created_latest, sort(:created_at.desc)
 
-  scope :updated_latest, where('updated_at > created_at').order('updated_at DESC')
+  scope :updated_latest, where(:updated_at.gt => :created_at).sort(:updated_at.desc)
 
   scope :with_field_set, lambda { |field_set_id|
-    where("field_set_id = ?", field_set_id)
+    where(:field_set_id => field_set_id)
   }
 
   scope :created_by, lambda { |user_id|
-    where("created_by_id = ?", user_id)
+    where(:created_by_id => user_id)
   }
 
   scope :updated_by, lambda { |user_id|
-    where("updated_by_id = ?", user_id)
+    where(:updated_by_id => user_id)
   }
 
-  scope :order_by, lambda { |order_by_string|
-    order(order_by_string)
+  scope :order_by, lambda { |order_by|
+    sort(order_by)
   }
 
   scope :is_published, lambda { |is_published|
     if is_published
-      where('published_on > ?', Time.now)
+      where(:published_on.lt => Time.now)
     else
-      where('published_on IS NULL or published_on < ?', Time.now)
+      where(:$or => [{:published_on => nil}, {:published_on.lt => Time.now}])
     end
   }
 
-  scope :with_custom_attributes_field, lambda { |ca_field|
-    joins("left join custom_attributes as #{ca_field} on #{ca_field}.context_type = 'Page' and #{ca_field}.context_id = pages.id and #{ca_field}.handle = '#{ca_field}'")
-  }
+#  scope :with_custom_attributes_field, lambda { |ca_field|
+#    joins("left join custom_attributes as #{ca_field} on #{ca_field}.context_type = 'Page' and #{ca_field}.context_id = pages.id and #{ca_field}.handle = '#{ca_field}'")
+#  }
 
   before_create :set_created_by
   before_save   :set_layout_attributes,
                 :generate_slug
   before_update :set_updated_by
 
-  after_initialize :create_namespaced_tagging_methods
+  #after_initialize :create_namespaced_tagging_methods
 
   after_save :commit_to_sunspot
 
   def contents_as_text
-    contents.active.collect do |content|
+    contents.select{|c| c.active? }.collect do |content|
       def render_content(content_resource)
         if content_resource.is_a?(ContentImage) or content_resource.is_a?(ContentVideo)
           "#{content_resource.asset.title} #{content_resource.asset.description}"
@@ -331,7 +347,12 @@ private
   end
 
   def set_layout_attributes
-    contents.update_all("column_position = #{template.columns}", "column_position > #{template.columns}") unless column_count == template.columns or column_count.blank?
+    unless column_count == template.columns or column_count.blank?
+      #contents.each do |content|
+      #  content.column_position = template.collumns
+      #  column_position = template.columns
+      #end
+    end
     self.layout_class = template.handle
     self.column_count = template.columns
   end

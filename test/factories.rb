@@ -61,7 +61,8 @@ Factory.define :asset_association_field, :parent => :field, :class => PageAssoci
 end
 
 Factory.define :page do |f|
-  f.association :field_set
+  #f.association :field_set
+  f.field_set_id {Factory(:field_set).id}
   f.title { Factory.next(:title) }
 end
 

@@ -23,6 +23,8 @@ Gem::Specification.new do |s|
   s.add_dependency 's3'
   s.add_dependency 'resizor'
   s.add_dependency 'oktavilla-resort'
+  s.add_dependency 'bson_ext'
+  s.add_dependency 'mongo_mapper'
 
   # Dev dependencies
   s.add_dependency 'shoulda'

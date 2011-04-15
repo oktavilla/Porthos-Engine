@@ -20,10 +20,10 @@ ActionMailer::Base.default_url_options[:host] = "test.com"
 Rails.backtrace_cleaner.remove_silencers!
 
 # Run any available migration (in silience)
-silence_stream(STDOUT) do
+#silence_stream(STDOUT) do
   `cd #{Porthos.root.join('test')}/dummy; rm db/migrate/*_create_porthos_tables.rb;rails g porthos`
   ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
-end
+#end
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

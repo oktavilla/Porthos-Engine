@@ -58,6 +58,16 @@ class FieldSet < ActiveRecord::Base
     @tags_for_pages ||= Tag.on('Page').joins('LEFT OUTER JOIN pages ON pages.id = taggings.taggable_id').where(['pages.id IS NOT NULL AND pages.field_set_id = ? AND namespace IS NULL', self.id])
   end
 
+  class << self
+    def to_mongo(field_set)
+      field_set.id
+    end
+
+    def from_mongo(fieldset_id)
+      find(field_set_id)
+    end
+  end
+
 protected
 
   def parameterize_handle

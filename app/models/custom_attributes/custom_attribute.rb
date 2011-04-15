@@ -1,11 +1,20 @@
-class CustomAttribute < ActiveRecord::Base
+class CustomAttribute
+
+  include MongoMapper::EmbeddedDocument
+
   class_inheritable_accessor :value_attribute
 
-  belongs_to :context,
-             :polymorphic => true,
-             :touch => true
+  key :_type, String
+  key :field_id, Integer
+  key :handle, String
 
-  belongs_to :field
+  def field
+    Field.find(field_id)
+  end
+
+  def field=(_field)
+    field_id = _field.id
+  end
 
   before_validation :parameterize_handle
 

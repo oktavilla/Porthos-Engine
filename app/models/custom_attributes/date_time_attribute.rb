@@ -1,6 +1,8 @@
 class DateTimeAttribute < CustomAttribute
   self.value_attribute = :date_time_value
 
+  key :date_time_value, DateTime
+
   def value=(value)
     value = if value.is_a?(Hash)
       attrs = value.to_options

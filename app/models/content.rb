@@ -1,4 +1,4 @@
-class Content < ActiveRecord::Base
+class Content
   belongs_to :context,
              :polymorphic => true,
              :touch => true

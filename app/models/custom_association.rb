@@ -1,4 +1,11 @@
 class CustomAssociation < ActiveRecord::Base
+  include MongoMapper::EmbeddedDocument
+
+  belongs_to :target, :polymorphic => true
+  belongs_to :field
+  key :relationship, String
+  key :handle, String
+
   belongs_to :context,
              :polymorphic => true,
              :touch => true

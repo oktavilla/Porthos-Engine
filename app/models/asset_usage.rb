@@ -1,4 +1,9 @@
-class AssetUsage < ActiveRecord::Base
+class AssetUsage
+  include MongoMapper::Document
+
+  key :gravity, String
+  timestamps!
+
   belongs_to :parent, :polymorphic => true
   belongs_to :asset
 

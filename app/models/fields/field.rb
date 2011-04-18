@@ -1,27 +1,21 @@
-class Field < ActiveRecord::Base
-  class_inheritable_accessor :data_type
+class Field
+  include MongoMapper::EmbeddedDocument
 
-  resort!
-
-  def siblings
-    self.field_set.fields
-  end
-
+  key :_type, String
+  key :association_source_id, Integer
+  key :label, String, :required => true, :unique => true
+  key :handle, String, :required => true, :unique => true
+  key :target_handle, String
+  key :require, Boolean, :default => lambda {false}
+  key :instructions, String
+  key :allow_rich_text, Boolean, :default => lambda {false}
+  key :relationship, String
+  many :custom_attributes, :dependent => :destroy
+  many :custom_associations, :dependent => :destroy
   belongs_to :field_set
 
-  has_many :custom_attributes,
-           :dependent => :destroy
 
-  has_many :custom_associations,
-           :dependent => :destroy
-
-  validates_uniqueness_of :label,
-                          :handle,
-                          :scope => :field_set_id
-
-  validates_presence_of :field_set_id,
-                        :label,
-                        :handle
+  class_inheritable_accessor :data_type
 
   before_validation :parameterize_handle
 

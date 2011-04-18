@@ -1,29 +1,42 @@
-class Asset < ActiveRecord::Base
+class Asset
+  include MongoMapper::Document
+
+  key :_type, String
+  key :name, String
+  key :extension, String
+  key :mime_type, String
+  key :width, Integer
+  key :height, Integer
+  key :size, Integer
+  key :title, String
+  key :author, String
+  key :description, String
+  key :hidden, Boolean, :default => lambda { false }
+  timestamps!
+
   belongs_to :created_by,
              :class_name => 'User'
-
   has_many :usages,
            :class_name => 'AssetUsage',
            :dependent => :destroy
-
   has_many :custom_associations,
            :as => :target,
            :dependent => :destroy
 
   scope :is_hidden,  lambda { |hidden|
-    where('hidden = ?', hidden)
+    where(:hidden => hidden)
   }
 
   scope :created_by, lambda { |user_id|
-    where("created_by_id = ?", user_id)
+    where(:created_by_id => user_id)
   }
 
   scope :by_type, lambda { |type|
-    where("type = ?", type)
+    where(:type => type)
   }
 
   scope :order_by, lambda { |order|
-    order(order)
+    sort(order)
   }
 
   attr_accessor :file
@@ -33,7 +46,7 @@ class Asset < ActiveRecord::Base
   after_destroy :cleanup
   after_save :commit_to_sunspot
 
-  acts_as_taggable
+  #acts_as_taggable
 
   IMAGE_FORMATS = [:jpg, :jpeg, :png, :gif]
   VIDEO_FORMATS = [:flv, :mov, :qt, :mpg, :avi, :mp4]
@@ -88,7 +101,7 @@ protected
   end
 
   def ensure_unique_name
-    while !Asset.count(:conditions => ['name = ?', self.name]).zero? do
+    while !Asset.where(:name => self.name).count.zero? do
       self.name = "#{self.name}_#{ActiveSupport::SecureRandom.hex(8)}"
     end
   end

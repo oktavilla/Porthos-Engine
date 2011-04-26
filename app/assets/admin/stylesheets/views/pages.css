@@ -1,0 +1,194 @@
+.column {
+  margin-bottom:3em;
+  padding-top:0; }
+  .column > .title,
+  .content_list > .title {
+    background:#f2f2f2;
+    padding:10px 40px 10px 40px;
+    font-weight:bold;
+    color:#000;}
+  .column .controls,
+  .content_list .controls {
+    padding:1em 40px 1em 40px;
+    line-height:1em; }
+    .column .controls .add {margin-bottom:0;}
+  .column .contents {min-height:50px;}
+
+.sub_controls {padding:0 40px;}
+  .sub_controls ul {
+    list-style:none;
+    margin:0 0 1em 0; }
+    .sub_controls li {
+      margin:0 0 .25em 0; }
+
+.contents li.content {
+  position:relative;
+  list-style:none;
+  padding:1em 250px 1em 40px;
+  border-top:1px solid #ddd;
+  background:#fff; }
+  .contents li.content > .edit {
+    position:absolute;
+    top:.5em;
+    right:1em;
+    background:rgba(255,255,255,.8);
+    display:none; }
+    .contents li.content > .edit a {
+      display:inline-block;
+      padding:10px 5px;
+      vertical-align:middle; }
+  .contents li.content > .draghandle {
+    position:absolute;
+    top:0;
+    left:0;
+    vertical-align:middle;
+    width:40px;
+    height:50px;
+    cursor:move;
+    background:transparent url(/graphics/porthos/ui_new.png) 10px -780px no-repeat;
+    display:none; }
+  .contents li.content:hover > .draghandle,
+  .contents li.content:hover > .edit {display:block;}
+
+  .contents .actual_content {}
+    .contents .actual_content .title {margin:0;}
+    .contents .actual_content h1 {
+      font-size:2em;
+      margin:0; }
+    .contents .actual_content h2 {
+      font-size:1.5em;
+      margin:0; }
+    .contents .actual_content p + h1,
+    .contents .actual_content p + h2 {
+      margin-top:1em; }
+    .contents .actual_content h3,
+    .contents .actual_content h4,
+    .contents .actual_content h5,
+    .contents .actual_content h6 {
+      margin:0;
+      font-size:1em;
+      font-weight:bold;
+      color:#000; }
+    .contents .actual_content p,
+    .contents .actual_content ul {margin:.8em 0 .8em 0;}
+      .contents .actual_content ul li {
+        margin:0 0 .5em 1.5em;
+        padding:0; }
+    .contents .actual_content *:first-child {margin-top:0;}
+
+    .contents .actual_content p {}
+    .contents .inactive {
+      max-height:40px;
+      overflow:hidden; }
+      .contents .inactive .actual_content {
+        opacity:.3; }
+
+  .contents .actual_content.teaser,
+  .contents .actual_content.image,
+  .contents .actual_content.video {padding-left:95px;}
+    .contents .actual_content.teaser .thumbnail,
+    .contents .actual_content.teaser .no_image,
+    .contents .actual_content.image img,
+    .contents .actual_content.video img {
+      float:left;
+      width:80px;
+      height:80px;
+      margin-left:-95px;
+      font-size:12px;
+      text-align:center;
+      border:1px solid #eee;  }
+      .contents .actual_content.teaser .no_image:hover {border-color:#ccc;}
+      .contents .actual_content.teaser .no_image span {
+        display:block;
+        margin-top:25px; }
+
+  .contents .actual_content.module .title,
+  .contents .actual_content.video .title {
+    padding-left:20px;
+    background:transparent url(/graphics/porthos/ui_new.png) 0 -1050px no-repeat; }
+  .contents .actual_content.video .title {background-position:0 -1120px;}
+
+  .contents li.collection {
+    margin:0;
+    padding:0; }
+    .contents li.collection ul {
+      list-style:none;
+      margin:0;}
+    .contents li.collection ul .add {
+      margin:0;
+      padding-left:40px;
+      border-top: 1px solid rgb(221, 221, 221); }
+
+#workspace #content.page_contents {
+  padding:0; }
+  .page_content {
+    margin:0;
+    padding:20px 40px 20px 40px;
+    border-top:1px solid #ddd;}
+    .page_content:first-child {border-top:none;}
+    .page_content h2.field_label {
+      margin:0 0 .5em 0;
+      font-size:1em;
+      color:#999; }
+    .page_content label {margin-top:0;}
+    .page_content .submit {
+      font-size:.857142857em;
+      margin-top:.5em;}
+    .page_content .content {
+      color:#000;}
+    .page_content .edit,
+    .page_content .delete {font-size:.857142857em;}
+  .page_content.string_field {}
+    .page_content.string_field .content {
+      font-size:1.142857143em; }
+    .page_content.string_field .edit {
+      margin-top:.5em; }
+  .page_content.association {}
+    .page_content.association ul {
+      list-style:none;
+      margin:0; }
+    .page_content.association li {
+      margin:0 0 .25em -40px;
+      padding:0 0 0 40px; }
+      .page_content.association li .drag_handle {
+        top:-3px;
+        left:15px; }
+      .page_content.association li .drag_handle,
+      .page_content.association li .delete { display:none; }
+      .page_content.association li:hover .drag_handle {display:block;}
+      .page_content.association li:hover .delete {display:inline;}
+    .page_content.association li .page {
+      font-size:1.142857143em; }
+    .page_content.association li .delete {margin-left:1em;}
+    .page_content.association .edit {margin-top:.5em;}
+    .page_content.association .select_page {
+      margin-top:.5em;
+      padding:10px;
+      background:#f5f5f5; }
+      .page_content.association .select_page label {display:none;}
+      .page_content.association .select_page .submit_inline {
+        display:inline;
+        font-size:.857142857em;}
+  .page_content.asset {}
+    .page_content.asset img {
+      float:left;
+      margin-right:20px; }
+    .page_content.asset .title {
+      padding-top:1.5em;
+      font-weight:bold; }
+    .page_content.asset .caption {
+      font-size:.857142857em; }
+    .page_content.asset .edit {margin-top:.5em;}
+  .page_content.asset.one_to_many {}
+    .page_content.asset.one_to_many .content {margin-bottom:.5em;}
+
+
+body#pages_view #pages_list {list-style:none;}
+  body#pages_view #pages_list li {
+    margin:0; }
+  body#pages_view #pages_list .title {font-size:16px;}
+  body#pages_view #pages_list .updated_at {
+    display:block;
+    margin:0 0 1em 1em;
+    font-size:12px;
+    color:#666; }

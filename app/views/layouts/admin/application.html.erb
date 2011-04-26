@@ -7,7 +7,7 @@
   <meta name="csrf-token" content="<%= form_authenticity_token %>" />
   <meta name="csrf-param" content="authenticity_token" />
   <title><%= @page_title if @page_title %></title>
-  <%= stylesheet_link_tag 'admin/elements', 'admin/layout' %>
+  <%= stylesheet_link_tag '/assets/admin/application' %>
   <%= installation_specific_stylesheet_link_tag %>
 </head>
 <body<%= body_attributes.html_safe %>>
@@ -20,7 +20,6 @@
 <%= yield %>
 </div>
 <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js", "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" %>
-<%= javascript_include_tag 'admin/rails' %>
-<%= yield :javascripts %>
+<%= javascript_include_tag '/assets/admin/application' %>
 </body>
 </html>

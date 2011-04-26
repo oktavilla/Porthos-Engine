@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount AssetServer.instance => '/assets/admin'
+
   # filter :url_resolver
   resources :pages do
     collection do

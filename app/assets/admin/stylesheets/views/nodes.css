@@ -1,0 +1,47 @@
+ul#nodes, ul#nodes ul {
+  list-style:none;
+  margin:0; }
+  ul#nodes li {
+    margin:0; }
+  ul#nodes li .toggle_handle {
+    float:left;
+    margin:0 0 0 -30px;
+    padding:6px 4px 4px 4px;
+    line-height:.2;
+    background:#fff;
+    color:#000;
+    border:1px solid #ddd;
+    -webkit-border-radius:4px;
+    font-weight:bold; }
+    ul#nodes li .toggle_handle:hover {
+      border:1px solid #ccc;
+      background:#f7f7f7;}
+  ul#nodes li > div,
+  #root {
+    border-top:1px solid #ddd;
+    padding:.8em 0 .8em 40px; }
+    ul#nodes li > div:hover,
+    #root:hover {background:#fff;}
+  ul#nodes li > div.active .name {
+    color:#000;
+    font-weight:bold; }
+  ul#nodes li > div.inactive .name {
+    font-style:italic;
+    color:#a00;}
+  ul#nodes li .name,
+  #root .name {
+    display:inline-block;
+    width:300px; }
+  ul#nodes li .edit,
+  #root .edit {
+    display:none;
+    font-size:12px;
+    margin-left:1em; }
+    ul#nodes li .edit a,
+    #root .edit a {margin-left:.5em;}
+  ul#nodes li div:hover .edit,
+  #root:hover .edit {display:inline;}
+  ul#nodes ul.placeholder,
+  #root ul.placeholder {display:none;}
+  ul#nodes ul li {margin-left:3em;}
+  ul#nodes ul li > div {border-top:0;}

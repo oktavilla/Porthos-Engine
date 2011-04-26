@@ -1,6 +1,6 @@
-require_relative '../test_helper'
+require_relative '../../test_helper'
 
-class AdminSessionsTest < ActiveSupport::IntegrationCase
+class SessionsTest < ActiveSupport::IntegrationCase
   test 'signing in' do
     login!
     assert_equal admin_root_path, current_path

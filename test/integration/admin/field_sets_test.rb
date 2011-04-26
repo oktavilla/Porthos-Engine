@@ -68,7 +68,7 @@ class FieldSetsTest < ActiveSupport::IntegrationCase
     within(".flash.notice") do
       assert_match field_set.title, page.body
     end
-    assert !page.body.include?("#field_sets field_set_#{field_set.id}"), 'Field set removed'
+    assert !page.has_css?("#field_sets #field_set_#{field_set.id}"), 'Field set removed'
   end
 
 end

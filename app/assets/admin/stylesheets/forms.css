@@ -84,6 +84,12 @@ label + .form_help {margin-top:-.3em;}
   .fullwidth input {width:100%;}
   .fullwidth textarea {width:100%;}
 
+div.contains_input {
+	margin: .8em 0 .3em 0; }
+	div.contains_input label,
+	div.contains_input input,
+	div.contains_input select { display:inline; }
+
 .submit {
   margin-top:1.5em; }
   .submit input {

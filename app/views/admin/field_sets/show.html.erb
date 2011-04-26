@@ -8,9 +8,9 @@
   <div class="header">
     <h1><%= @field_set.title %></h1>
     <span class="away">
-      <%= link_to t(:edit, :scope => [:app, :views, :admin, :field_sets, :show]), edit_admin_field_set_path(@field_set), :class => 'edit_settings action' %>
-      <%= link_to t(:destroy, :scope => [:app, :views, :admin, :field_sets, :show]), admin_field_set_path(@field_set), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @field_set.title), :class => 'destroy action' %>
-      <%= link_to t(:all_field_sets, :scope => [:app, :views, :admin, :field_sets, :show]), admin_field_sets_path, :class => 'action' %>
+      <%= link_to t('.edit'), edit_admin_field_set_path(@field_set), :class => 'edit_settings action' %>
+      <%= link_to t('.destroy'), admin_field_set_path(@field_set), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @field_set.title), :class => 'destroy action' %>
+      <%= link_to t('.all_field_sets'), admin_field_sets_path, :class => 'action' %>
       <% if @field_set.pages_sortable? %>
       <%= link_to t(:sort, :scope => [:app, :views, :admin, :field_sets, :show]), pages_admin_field_set_path(@field_set), :class => 'action' %>
       <% end %>
@@ -18,7 +18,10 @@
   </div>
   <div class="tools">
     <div class="add">
-      <%= link_to t(:add_field, :scope => [:app, :views, :admin, :field_sets, :show]), new_admin_field_set_field_path(@field_set), :class => "new" %>
+      <form action="<%= new_admin_field_set_field_path(@field_set) %>">
+        <%= select_tag 'field_type', options_for_select(Field.types.collect { |type| [type.model_name.human, type.to_s] }, :selected => @field.class.to_s) %>
+        <input type="submit" value="<%=t '.add_field' %>" />
+      </form>
     </div>
   </div>
   <div id="content">
@@ -35,7 +38,7 @@
         </tr>
       </thead>
       <tbody id="fields">
-        <% @field_set.fields.all.each do |field| -%>
+        <% @field_set.fields.each do |field| -%>
         <tr class="field" id="field_<%= field.id %>">
           <td class="handle"><span class="drag_handle"></span></td>
           <td class="label"><%= field.label %></td>
@@ -49,7 +52,7 @@
       </tbody>
     </table>
     <% else -%>
-    <p class="notice"><%= t(:no_data, :scope => [:app, :views, :admin, :field_sets, :show]) %></p>
+    <p class="notice"><%= t('.blank_slate') %></p>
     <% end -%>
   </div>
 </div>

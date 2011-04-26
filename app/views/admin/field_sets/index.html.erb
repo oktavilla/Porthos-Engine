@@ -10,7 +10,7 @@
     </div>
     <div class="tools">
       <div class="add">
-        <%= link_to "Lägg till sidtyp", new_admin_field_set_path, :class => "new" %>
+        <%= link_to t('.new'), new_admin_field_set_path, :class => "new" %>
       </div>
     </div>
     <div id="content">
@@ -19,9 +19,9 @@
         <thead>
           <tr>
             <th class="placeholder"></th>
-            <th>Namn</th>
-            <th>Handle</th>
-            <th>Template</th>
+            <th><%= FieldSet.human_attribute_name(:title) %></th>
+            <th><%= FieldSet.human_attribute_name(:handle) %></th>
+            <th><%= FieldSet.human_attribute_name(:template_name) %></th>
           </tr>
         </thead>
         <tbody id="field_sets">

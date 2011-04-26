@@ -12,7 +12,7 @@
     <%= form_for @field, :as => :field, :url => admin_field_set_fields_path(@field_set), :html => { :id =>  'field_form' } do |f| %>
       <%= render :partial => 'form', :locals => { :f => f } %>
       <div class="submit">
-        <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_field_set_path(@field_set)) %>
+        <%= f.submit t(:save) %> eller <%= link_to "avbryt", previous_view_path(admin_field_set_path(@field_set)) %>
       </div>
     <% end %>
   </div>

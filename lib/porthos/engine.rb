@@ -9,27 +9,29 @@ module Porthos
 
     config.use_fulltext_search = false
 
-    initializer "static assets" do |app|
+    initializer "porthos.static_assets" do |app|
       if app.config.serve_static_assets
         app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public"
       end
     end
 
-    initializer "redirects" do |app|
+    initializer "porthos.redirects" do |app|
       app.middleware.use Porthos::Redirects
     end
 
-    initializer 'helpers' do |app|
-      ActionView::Base.send :include, PorthosApplicationHelper
+    initializer 'porthos.helpers' do |app|
+      ActiveSupport.on_load :action_view do
+        include PorthosApplicationHelper
+      end
     end
 
-    initializer 'authentication' do |app|
+    initializer 'porthos.authentication' do |app|
       app.middleware.use Warden::Manager do |manager|
         manager.default_strategies :password
         manager.failure_app = Porthos::Authentication::UnauthorizedRequest
       end
 
-      class ::ActionController::Base
+      ActiveSupport.on_load :action_controller do
         include Porthos::Authentication::Helpers
       end
     end

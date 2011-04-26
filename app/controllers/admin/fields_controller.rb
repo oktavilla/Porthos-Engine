@@ -1,54 +1,39 @@
 class Admin::FieldsController < ApplicationController
   include Porthos::Admin
+  respond_to :html
   before_filter :find_field_set
 
   def new
-    @field = @field_set.fields.build
-    respond_to do |format|
-      format.html
-    end
+    @field = params[:field_type].constantize.new
   end
 
   def create
-    @field = params[:field_type].constantize.new(params[:field].merge(:field_set_id => @field_set.id))
-    raise @field.valid?.inspect
-    respond_to do |format|
-      if @field.save
-        flash[:notice] = "#{@field.label}  #{t(:saved, :scope => [:app, :admin_general])}"
-        format.html { redirect_to admin_field_set_path(@field_set) }
-      else
-        format.html { render :action => 'new' }
-      end
+    @field = params[:field_type].constantize.new(params[:field])
+    @field_set.fields << @field
+    if @field.save
+      flash[:notice] = "#{@field.label}  #{t(:saved, :scope => [:app, :admin_general])}"
     end
+    respond_with @field, :location => admin_field_set_path(@field_set)
   end
 
   def edit
     @field = @field_set.fields.find(params[:id])
-    respond_to do |format|
-      format.html
-    end
   end
 
   def update
     @field = @field_set.fields.find(params[:id])
-    respond_to do |format|
-      if @field.update_attributes(params[:field])
-        flash[:notice] = "#{@field.label}  #{t(:saved, :scope => [:app, :admin_general])}"
-        format.html { redirect_to admin_field_set_path(@field_set) }
-      else
-        format.html { render :action => 'edit' }
-      end
+    if @field.update_attributes(params[:field])
+      flash[:notice] = "#{@field.label} #{t(:saved, :scope => [:app, :admin_general])}"
     end
+    respond_with @field, :location => admin_field_set_path(@field_set)
   end
 
   def destroy
     @field = @field_set.fields.find(params[:id])
-    if @field.destroy
+    if @field_set.pull(:fields => { :_id => @field.id })
       flash[:notice] = "#{@field.label}  #{t(:deleted, :scope => [:app, :admin_general])}"
     end
-    respond_to do |format|
-      format.html { redirect_to admin_field_set_path(@field_set) }
-    end
+    respond_with @field, :location => admin_field_set_path(@field_set)
   end
 
   def sort

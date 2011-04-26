@@ -1,3 +1,7 @@
 <div class="fullwidth">
+<% if field.multiline? %>
   <%= builder.text_area(field.id, :value => page.custom_value_for(field), :class => (field.allow_rich_text? ? 'editor' : '' ), :rows => 2) %>
+<% else %>
+  <%= builder.text_field(field.id, :value => page.custom_value_for(field)) %>
+<% end %>
 </div>

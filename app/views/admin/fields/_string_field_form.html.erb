@@ -1,3 +1,9 @@
-<div class="fullwidth">
-  <%= builder.text_field(field.id, :value => page.custom_value_for(field)) %>
+<div class="contains_input">
+  <%= f.check_box :multiline %>
+  <%= f.label :multiline %>
+</div>
+
+<div class="contains_input">
+  <%= f.check_box :allow_rich_text %>
+  <%= f.label :allow_rich_text %>
 </div>

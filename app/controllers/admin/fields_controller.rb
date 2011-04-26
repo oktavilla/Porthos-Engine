@@ -1,7 +1,6 @@
 class Admin::FieldsController < ApplicationController
   include Porthos::Admin
-  before_filter :login_required,
-                :find_field_set
+  before_filter :find_field_set
 
   def new
     @field = @field_set.fields.build
@@ -11,9 +10,8 @@ class Admin::FieldsController < ApplicationController
   end
 
   def create
-    if Field.types.include?(params[:field_type].constantize)
-      @field = params[:field_type].constantize.new(params[:field].merge(:field_set_id => @field_set.id))
-    end
+    @field = params[:field_type].constantize.new(params[:field].merge(:field_set_id => @field_set.id))
+    raise @field.valid?.inspect
     respond_to do |format|
       if @field.save
         flash[:notice] = "#{@field.label}  #{t(:saved, :scope => [:app, :admin_general])}"

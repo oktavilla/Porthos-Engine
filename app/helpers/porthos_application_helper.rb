@@ -1,5 +1,15 @@
 module PorthosApplicationHelper
 
+  def previous_view_path(default_path = '/')
+    if params[:return_to]
+      params[:return_to]
+    elsif session[:last_viewed] and session[:last_viewed] != request.fullpath
+      session[:last_viewed]
+    else
+      default_path
+    end
+  end
+
   def admin_assets_path_with_session_key(arguments = {})
     session_key = Rails.application.config.session_options[:key]
     admin_assets_path({session_key => cookies[session_key], request_forgery_protection_token => form_authenticity_token}.merge(arguments))

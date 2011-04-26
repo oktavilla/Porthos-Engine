@@ -1,18 +1,31 @@
 class FieldSet
   include MongoMapper::Document
 
-  key :title, String, :required => true, :unique => true
-  key :page_label, String, :required => true
+  key :title, String
+  key :page_label, String
   key :description, String
-  key :handle, String, :required => true, :unique => true
-  key :template, String
-  key :page_sortable, Boolean
-  key :allow_categories, Boolean, :default => lambda {false}
-  key :allow_node_placements, Boolean, :default => lambda {false}
+  key :handle, String
+  key :template_name, String
+  key :pages_sortable, Boolean
+  key :allow_categories, Boolean, :default => lambda { false }
+  key :allow_node_placements, Boolean, :default => lambda { false }
 
-  many :fields, :dependent => :destroy
-  many :pages, :dependent => :destroy
-  one :node
+  validates :title,
+            :presence => true,
+            :uniqueness => { :case_sensitive => false }
+  validates :page_label,
+            :presence => true
+  validates :handle,
+            :presence => true,
+            :uniqueness => { :case_sensitive => false }
+
+  has_many :fields,
+           :dependent => :destroy
+  has_many :pages,
+           :dependent => :destroy
+
+
+#  one :node
 
   timestamps!
 

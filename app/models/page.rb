@@ -19,13 +19,10 @@ class Page
   many :custom_attributes
   many :custom_associations
  # acts_as_taggable
+  belongs_to :field_set
 
-  def field_set
-    FieldSet.find(field_set_id)
-  end
-
-  def field_set=(_field_set)
-    field_set_id = _field_set.id
+  def fields
+    field_set.fields
   end
 
   def created_by
@@ -56,9 +53,6 @@ class Page
     field_set.node
   end
 
-  def fields
-    field_set.fields
-  end
 
   delegate :template,
            :to => :field_set
@@ -66,10 +60,6 @@ class Page
   def custom_association_contexts
     CustomAssociation.where(:parent => self)
   end
-
-  #has_many :comments,
-  #         :as => :commentable,
-  #         :order => 'comments.created_at'
 
   scope :unpublished, lambda {
     where(:$or => [{:published_on => nil}, {:published_on.gt => Time.now}])

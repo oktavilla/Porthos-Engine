@@ -1,6 +1,5 @@
 class Admin::AssetUsagesController < ApplicationController
   include Porthos::Admin
-  before_filter :login_required
   skip_after_filter :remember_uri, :only => [:create, :update, :destroy]
 
   def new

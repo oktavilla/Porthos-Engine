@@ -1,6 +1,6 @@
 class Admin::NodesController < ApplicationController
   include Porthos::Admin
-  before_filter :login_required
+
 
   def index
     respond_to do |format|
@@ -12,7 +12,7 @@ class Admin::NodesController < ApplicationController
       end
       format.js do
         @node = params[:nodes] ? Node.find(params[:nodes].first, :include => :children) : Node.root
-        render :partial => 'admin/nodes/list_of_nodes.html.erb', :locals => { :nodes => @node.children.ordered, :trail => [], :place => (params[:place] || false) }
+        render :partial => 'admin/nodes/list_of_nodes.html.erb', :locals => { :nodes => @node.children.all, :trail => [], :place => (params[:place] || false) }
       end
     end
   end

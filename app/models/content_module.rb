@@ -26,18 +26,6 @@ class ContentModule < ActiveRecord::Base
 
   class << self
 
-    def can_be_edited_by?(user)
-      user.has_role?('SiteAdmin')
-    end
-
-    def can_be_created_by?(user)
-      user.has_role?('SiteAdmin')
-    end
-
-    def can_be_destroyed_by?(user)
-      user.has_role?('SiteAdmin')
-    end
-
     def find_available_templates
       ContentModule.template_paths.collect do |path|
         Dir.entries(path).reject { |entry| entry.chars.first == '.' or !File.directory?(File.join(path, entry) ) }

@@ -1,3 +1,4 @@
+require 'resizor'
 # For resizing images - http://resizor.com
 # Add your api key
 Resizor.configure do |config|

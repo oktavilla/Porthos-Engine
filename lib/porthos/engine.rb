@@ -22,5 +22,16 @@ module Porthos
     initializer 'helpers' do |app|
       ActionView::Base.send :include, PorthosApplicationHelper
     end
+
+    initializer 'authentication' do |app|
+      app.middleware.use Warden::Manager do |manager|
+        manager.default_strategies :password
+        manager.failure_app = Porthos::Authentication::UnauthorizedRequest
+      end
+
+      class ::ActionController::Base
+        include Porthos::Authentication::Helpers
+      end
+    end
   end
 end

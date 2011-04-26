@@ -11,30 +11,26 @@ Gem::Specification.new do |s|
 
   s.add_dependency "bundler"
   s.add_dependency "rails", "3.0.6"
+  s.add_dependency 'bson_ext'
+  s.add_dependency 'mongo_mapper'
+  s.add_dependency 'bcrypt-ruby'
+  s.add_dependency 'warden'
   s.add_dependency "routing-filter"
   s.add_dependency "mime-types"
   s.add_dependency "mini_magick"
-  s.add_dependency "will_paginate"
-  s.add_dependency 'sunspot_rails'
   s.add_dependency 'delayed_job'
   s.add_dependency 'sunspot'
+  s.add_dependency 'sunspot_rails'
   s.add_dependency 'has_scope'
-  s.add_dependency 'parndt-acts_as_tree'
   s.add_dependency 's3'
   s.add_dependency 'resizor'
-  s.add_dependency 'oktavilla-resort'
-  s.add_dependency 'bson_ext'
-  s.add_dependency 'mongo_mapper'
 
   # Dev dependencies
-  s.add_dependency 'shoulda'
-  s.add_dependency 'factory_girl'
-  s.add_dependency 'redgreen'
-  s.add_dependency 'cucumber'
-  s.add_dependency 'cucumber-rails'
-  s.add_dependency 'capybara'
-  s.add_dependency 'database_cleaner'
-  s.add_dependency 'rack-test'
-  s.add_dependency 'sqlite3'
-  s.add_dependency 'webmock'
+  s.add_development_dependency 'shoulda'
+  s.add_development_dependency 'factory_girl'
+  s.add_development_dependency 'capybara'
+  s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'rack-test'
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'webmock'
 end

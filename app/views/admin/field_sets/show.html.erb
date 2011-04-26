@@ -35,7 +35,7 @@
         </tr>
       </thead>
       <tbody id="fields">
-        <% @field_set.fields.ordered.each do |field| -%>
+        <% @field_set.fields.all.each do |field| -%>
         <tr class="field" id="field_<%= field.id %>">
           <td class="handle"><span class="drag_handle"></span></td>
           <td class="label"><%= field.label %></td>

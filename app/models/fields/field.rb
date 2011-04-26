@@ -1,50 +1,46 @@
 class Field
   include MongoMapper::EmbeddedDocument
+  embedded_in :field_set
 
-  key :_type, String
-  key :association_source_id, Integer
-  key :label, String, :required => true, :unique => true
-  key :handle, String, :required => true, :unique => true
-  key :target_handle, String
-  key :require, Boolean, :default => lambda {false}
+  key :label, String
+  key :handle, String
+  key :required, Boolean, :default => lambda { false }
   key :instructions, String
-  key :allow_rich_text, Boolean, :default => lambda {false}
-  key :relationship, String
-  many :custom_attributes, :dependent => :destroy
-  many :custom_associations, :dependent => :destroy
-  belongs_to :field_set
 
+  validates :label,
+            :presence => true
+  validates :handle,
+            :presence => true
 
-  class_inheritable_accessor :data_type
+  validate :uniqueness_of_handle
+  validate :not_a_reserved_handle
 
   before_validation :parameterize_handle
 
-  validate :not_a_reserved_handle
-
-  class << self
-
-    def types
-      [
-        StringField,
-        TextField,
-        DateTimeField,
-        BooleanField,
-        PageAssociationField,
-        ReversedPageAssociationField,
-        AssetAssociationField
-      ]
-    end
-
-  end
+  cattr_reader :types
+  @@types = [
+    StringField,
+    DateTimeField,
+    BooleanField,
+    PageAssociationField,
+    ReversedPageAssociationField,
+    AssetAssociationField
+  ].to_set
 
 protected
 
   def parameterize_handle
-    self.handle = handle.parameterize if handle.present?
+    self.handle = handle.parameterize('_') if handle.present?
+  end
+
+  def uniqueness_of_handle
+    if field_set.fields.detect { |f| f.id != self.id && f.handle == self.handle }
+      errors.add(:handle, :taken)
+    end
   end
 
   def not_a_reserved_handle
-    errors.add(:handle, I18n.t(:reserved, :scope => :'activerecord.errors.models.field.handle')) if handle.present? && Page.new.respond_to?(handle)
+    errors.add(:handle, :reserved) if handle.present? && Page.new.respond_to?(handle)
   end
 
 end

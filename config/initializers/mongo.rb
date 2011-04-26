@@ -1,3 +1,4 @@
+require 'mongo_mapper'
 if ENV['MONGOHQ_URL']
   MongoMapper.config = {Rails.env => {'uri' => ENV['MONGOHQ_URL']}}
 else

@@ -1,7 +1,7 @@
 <% @page_title = "Användare - sökresultat" -%>
 <% @page_class = 'layout3' %>
 <%= render :partial => 'sub_nav' %>
-<div id="workspace">  
+<div id="workspace">
   <div class="header">
     <h1>Sökresultat för "<%= @query %>" (<%= @search.total %> träffar)</h1></h1>
   </div>
@@ -14,7 +14,6 @@
         </li>
       <% end -%>
       </ul>
-      <%= will_paginate @search.results %>
     </div>
   </div>
 </div>

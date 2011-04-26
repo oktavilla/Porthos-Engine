@@ -1,9 +1,9 @@
 class Admin::FieldSetsController < ApplicationController
   include Porthos::Admin
-  before_filter :login_required
+
 
   def index
-    @field_sets = FieldSet.ordered
+    @field_sets = FieldSet.all
     respond_to do |format|
       format.html
     end
@@ -80,7 +80,7 @@ class Admin::FieldSetsController < ApplicationController
 
   def pages
     @field_set = FieldSet.find(params[:id])
-    @pages = @field_set.pages.ordered
+    @pages = @field_set.pages.all
     respond_to do |format|
       format.html
     end

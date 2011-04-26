@@ -11,7 +11,6 @@
 #workspace .tools .add:after,
 .theme:after,
 .batch_edit .asset:after,
-form .avatar:after,
 #asset_usages:after,
 #asset_usages div:after,
 #tags_view .taggable:after,
@@ -71,7 +70,6 @@ body {
     #main_nav .nodes_index a         {background:transparent url(/graphics/porthos/ui_new.png) 50% -280px no-repeat;}
     #main_nav .assets_index a        {background:transparent url(/graphics/porthos/ui_new.png) 50% -130px no-repeat;}
     #main_nav .users_index a         {background:transparent url(/graphics/porthos/ui_new.png) 50% -358px no-repeat;}
-    #main_nav .comments_index a      {background:transparent url(/graphics/porthos/ui_new.png) 50% -667px no-repeat;}
   #account_nav {float:right;}
     #account_nav a {padding:7px 12px 7px 12px;}
   #recent_nav a {

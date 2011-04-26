@@ -5,8 +5,8 @@
     <h1>Lägg till ny redaktör</h1>
   </div>
   <div id="content">
-    <%= form_for :user, @user, :url => admin_users_path, :html => { :multipart => true } do |f| %>
-      <%= render :partial => "#{@role.name.downcase}_form", :locals => { :f => f } %>
+    <%= form_for @user, :url => admin_users_path, :html => { :multipart => true } do |f| %>
+      <%= render :partial => "form", :locals => { :f => f } %>
       <div class="submit">
         <%= f.submit "Spara användaren" %> eller <%= link_to "Avbryt", previous_view_path(admin_users_path) %>
       </div>

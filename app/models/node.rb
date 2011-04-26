@@ -10,9 +10,9 @@ class Node < ActiveRecord::Base
   validates :controller, :presence => true
   validates :action, :presence => true
 
-  acts_as_tree :counter_cache => :children_count,
-               :dependent => :destroy
-  resort!
+  # acts_as_tree :counter_cache => :children_count,
+  #              :dependent => :destroy
+  # resort!
 
   def siblings
     self.class.where(:parent_id => self.parent_id)

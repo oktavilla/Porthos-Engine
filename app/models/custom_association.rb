@@ -27,7 +27,7 @@ class CustomAssociation < ActiveRecord::Base
 
   before_validation :parameterize_handle
 
-  resort!
+  # resort!
 
   def siblings
     self.class.where(:context_type => context_type, :context_id => context_id, :handle => handle)

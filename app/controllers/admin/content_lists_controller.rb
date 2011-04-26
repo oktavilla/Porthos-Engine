@@ -1,6 +1,6 @@
 class Admin::ContentListsController < ApplicationController
   include Porthos::Admin
-  before_filter :login_required
+  
   
   def index
     @content_lists = ContentList.find(:all, :order => 'name')

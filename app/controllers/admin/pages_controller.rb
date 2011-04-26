@@ -1,6 +1,5 @@
 class Admin::PagesController < ApplicationController
   include Porthos::Admin
-  before_filter :login_required
 
   has_scope :with_field_set
   has_scope :created_by
@@ -9,21 +8,13 @@ class Admin::PagesController < ApplicationController
   has_scope :is_published, :type => :boolean
 
   def index
-    @field_sets = FieldSet.ordered
+    @field_sets = FieldSet.all
     @field_set = FieldSet.find(params[:with_field_set]) if params[:with_field_set].present?
 
-    @tags = Tag.on('Page')
-    @current_tags = params[:tags] || []
-    @related_tags = @current_tags.any? ? Page.find_related_tags(@current_tags) : []
-
-    @pages = unless @current_tags.any?
-      apply_scopes(Page).paginate({
-        :page     => (params[:page] || 1),
-        :per_page => (params[:per_page] || 25)
-      })
-    else
-      Page.tagged_with(params[:tags])
-    end
+    @pages = apply_scopes(Page).paginate({
+      :page     => (params[:page] || 1),
+      :per_page => (params[:per_page] || 25)
+    })
     respond_to do |format|
       format.html
     end
@@ -39,7 +30,7 @@ class Admin::PagesController < ApplicationController
     end
     @query = query
     @page = page
-    @field_sets = FieldSet.ordered
+    @field_sets = FieldSet.all
     respond_to do |format|
       format.html
     end
@@ -50,13 +41,6 @@ class Admin::PagesController < ApplicationController
     if @page.node and @page.node.parent
       cookies[:last_opened_node] = { :value => @page.node.parent.id.to_s, :expires => 1.week.from_now }
     end
-    respond_to do |format|
-      format.html
-    end
-  end
-
-  def comments
-    @page = Page.find(params[:id])
     respond_to do |format|
       format.html
     end

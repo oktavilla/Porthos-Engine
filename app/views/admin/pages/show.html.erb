@@ -190,7 +190,7 @@
     <% next if field.is_a?(ReversedPageAssociationField) -%>
     <div class="page_content <%= field.data_type == CustomAssociation ? ['association', field.target_type, field.relationship].join(' ') : ['attribute', field.class.to_s.underscore].join(' ') %>">
     <% if field.data_type == CustomAssociation %>
-      <% @page.custom_associations.where(:field_id => field.id).ordered.tap do |custom_associations| %>
+      <% @page.custom_associations.where(:field_id => field.id).all.tap do |custom_associations| %>
         <%= render :partial => "admin/fields/#{field.target_type}_association_field_form", :locals => {:custom_associations => custom_associations, :field => field} %>
       <% end -%>
     <% else -%>
@@ -331,7 +331,7 @@
         <% end %>
         <%= render :partial => 'content_types', :locals => {:page => @page, :column => column} %>
         <ul class="contents sortable" data-column="<%= column %>">
-        <% @page.contents.where(:column_position => column).ordered.each do |content| -%>
+        <% @page.contents.where(:column_position => column).all.each do |content| -%>
           <li class="<%= "#{content.resource_type} content" unless content.collection? %><%= ' collection' if content.collection? %> sortable <%= content.active? ? '' : ' inactive' %>" id="content_<%= content.id %>">
             <span class="draghandle"></span>
           <% unless content.collection? -%>

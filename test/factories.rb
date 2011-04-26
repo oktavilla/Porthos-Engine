@@ -17,7 +17,11 @@ Factory.sequence :url do |i|
 end
 
 Factory.sequence :email do |i|
-  "person#{i}@mash-app.com"
+  "person#{i}@example.com"
+end
+
+Factory.sequence :username do |i|
+  "person#{i}"
 end
 
 Factory.define :tag do |f|
@@ -27,8 +31,8 @@ end
 Factory.define :user do |f|
   f.first_name 'Richie'
   f.last_name 'Hawtin'
-  f.email 'richie@hawtin.com'
-  f.login 'admin'
+  f.email { Factory.next(:email) }
+  f.username { Factory.next(:username) }
   f.password 'password'
   f.password_confirmation 'password'
 end

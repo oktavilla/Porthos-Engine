@@ -1,12 +1,11 @@
 Rails.application.routes.draw do
-  filter :url_resolver
+  # filter :url_resolver
   resources :pages do
     collection do
       get 'categories'
     end
     member do
       get 'preview'
-      post 'comment'
     end
   end
   match 'pages/categories/:id' => 'pages#category', :as => 'pages_category'
@@ -60,7 +59,6 @@ Rails.application.routes.draw do
       end
       member do
         put 'publish'
-        get 'comments'
       end
       resources :custom_attributes
       resources :custom_associations

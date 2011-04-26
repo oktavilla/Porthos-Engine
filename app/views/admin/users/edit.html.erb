@@ -5,8 +5,8 @@
   </div>
   <div id="content">
     <div id="c_1"><div class="inner">
-      <%= form_for :user, @user, :url => admin_user_path(@user), :html => { :method => :put, :multipart => true, :autocomplete => "off" } do |f| %>
-        <%= render :partial => "#{@user.roles.first.name.downcase}_form", :locals => { :f => f } %>
+      <%= form_for @user, :url => admin_user_path(@user), :html => { :method => :put, :multipart => true, :autocomplete => "off" } do |f| %>
+        <%= render :partial => "form", :locals => { :f => f } %>
         <div class="submit">
           <%= f.submit "Spara ändringar" %> eller <%= link_to "Avbryt", previous_view_path(admin_users_path) %>
         </div>

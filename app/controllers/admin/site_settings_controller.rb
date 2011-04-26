@@ -1,6 +1,6 @@
 class Admin::SiteSettingsController < ApplicationController
   include Porthos::Admin
-  before_filter :login_required
+  
   
   def index
     @site_settings = SiteSetting.find(:all)

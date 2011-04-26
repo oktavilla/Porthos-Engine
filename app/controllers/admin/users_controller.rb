@@ -1,8 +1,5 @@
 class Admin::UsersController < ApplicationController
   include Porthos::Admin
-  before_filter :login_required
-
-  has_scope :role, :default => 'Admin'
 
   def index
     @users = apply_scopes(User).paginate({
@@ -30,19 +27,10 @@ class Admin::UsersController < ApplicationController
 
   def new
     @user = User.new
-    @role = Role.find_or_create_by_name('Admin')
-  end
-
-  def new_public
-    @user = User.new
-    @role = Role.find_or_create_by_name('Public')
-    render :action => 'new'
   end
 
   def create
     @user = User.new(params[:user])
-    @role = Role.find_or_create_by_name(params[:role])
-    @user.roles << @role
     @user.save!
     flash[:notice] = "#{@user.login} #{t(:saved, :scope => [:app, :admin_general])}"
     respond_to do |format|
@@ -56,12 +44,10 @@ class Admin::UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    raise SecurityTransgression unless current_user.can_edit?(@user)
   end
 
   def update
     @user = User.find(params[:id])
-    raise SecurityTransgression unless current_user.can_edit?(@user)
     respond_to do |format|
       if @user.update_attributes(params[:user])
         flash[:notice] = "#{@user.name} #{t(:saved, :scope => [:app, :admin_general])}"

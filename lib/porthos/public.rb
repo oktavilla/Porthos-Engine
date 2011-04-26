@@ -2,7 +2,6 @@ module Porthos
   module Public
 
     def self.included(controller)
-      controller.send :include, Porthos::AccessControl
       controller.send :include, ClassMethods
       controller.send :helper_method, :root_node, :root_nodes, :node, :nodes
       controller.send :helper_method, :trail, :breadcrumbs

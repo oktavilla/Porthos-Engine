@@ -134,7 +134,7 @@
           handle:
             reserved: används redan av sidan
         asset:
-          file: 
+          file:
             unable_to_store: kunde inte sparas
     models:
       asset: Fil
@@ -179,7 +179,7 @@
         first_name: Förnamn
         last_name: Efternamn
         civic_number: Personnummer
-        login: Användarnamn
+        username: Användarnamn
         email: E-post
         phone: Telefon
         cell_phone: Mobil
@@ -310,9 +310,6 @@
       active: "är nu publicerad och syns på webbplatsen"
     admin_contents:
       deleted: Innehållet raderats
-    admin_comments:
-      saved: Din kommentar har sparats
-      published: Din kommentar har sparats och publicerats
     admin_redirects:
       saved: Vidarebefordring sparad
       deleted: Vidarebefordring raderad

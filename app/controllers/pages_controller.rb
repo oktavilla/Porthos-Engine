@@ -106,22 +106,6 @@ class PagesController < ApplicationController
     end
   end
 
-  # POST
-  # TODO: Should this be used? In that case need to incorporate it with the new page rendrerer
-  def comment
-    @page    = Page.find(params[:id])
-    @comment = @page.comments.new(params[:comment])
-    @comment.ip_address, @comment.env = request.remote_ip, request.env
-    respond_to do |format|
-      if @comment.save
-        flash[:notice] = @comment.spam ? t(:saved, :scope => [:app, :admin_comments]) : t(:published, :scope => [:app, :admin_comments])
-        format.html { redirect_to (params[:return_to] || "/#{@node.url}#comment_#{@comment.id}") }
-      else
-        format.html { render :action => 'show' }
-      end
-    end
-  end
-
 protected
 
   def page_renderer(template, objects = {})

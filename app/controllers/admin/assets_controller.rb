@@ -1,7 +1,7 @@
 class Admin::AssetsController < ApplicationController
   include Porthos::Admin
 
-  before_filter :login_required
+  
   before_filter :set_callback,
                 :only => [:index, :search]
   before_filter :find_tags,

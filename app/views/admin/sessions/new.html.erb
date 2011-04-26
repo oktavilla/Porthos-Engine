@@ -1,10 +1,10 @@
 <%= form_tag admin_sessions_path do -%>
   <fieldset class="compact">
-    <label for="login">Användarnamn</label>
+    <label for="username"><%= User.human_attribute_name('username') %></label>
     <div class="fullwidth">
-      <%= text_field_tag 'login' %>
+      <%= text_field_tag 'username' %>
     </div>
-    <label for="password">Lösenord</label>
+    <label for="password"><%= User.human_attribute_name('password') %></label>
     <div class="fullwidth">
       <%= password_field_tag 'password' %>
     </div>
@@ -13,5 +13,5 @@
     <%= check_box_tag 'remember_me' %>
     kom ihåg mig på den här datorn
   </label>
-  <fieldset class="submit"><%= submit_tag 'Logga in', :id => 'commit' %></fieldset>
+  <fieldset class="submit"><%= submit_tag I18n.t(:login, :scope => :'views.admin.sessions.new'), :id => 'commit' %></fieldset>
 <% end -%>

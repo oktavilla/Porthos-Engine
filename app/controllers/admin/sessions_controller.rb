@@ -1,7 +1,7 @@
 # This controller handles the login/logout function of the site.
 class Admin::SessionsController < ApplicationController
   include Porthos::Admin
-
+  skip_before_filter :authenticate!
   layout 'admin/sessions'
 
   def index
@@ -13,23 +13,14 @@ class Admin::SessionsController < ApplicationController
   end
 
   def create
-    self.current_user = User.authenticate(params[:login], params[:password])
-    if logged_in?
-      if params[:remember_me] == "1"
-        self.current_user.remember_me
-        cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
-      end
-      redirect_back_or_default('/admin')
-    else
-      flash[:error] = t(:login_failed, :scope => [:app, :admin_general])
-      redirect_to admin_login_path
-    end
+    user = warden.authenticate!
+    sign_in user
+    flash[:notice] = t(:'authentication.signed_in')
+    redirect_to admin_root_path
   end
 
   def destroy
-    self.current_user.forget_me if logged_in?
-    cookies.delete :auth_token
-    reset_session
+    sign_out
     flash[:notice] = t(:logged_out, :scope => [:app, :admin_general])
     redirect_to admin_login_path
   end

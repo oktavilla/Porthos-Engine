@@ -1,4 +1,4 @@
-class Content
+class Content < ActiveRecord::Base
   belongs_to :context,
              :polymorphic => true,
              :touch => true
@@ -9,7 +9,7 @@ class Content
 
   scope :active, where("contents.active = ?", true)
 
-  resort!
+  # resort!
 
   def siblings
     self.class.where({

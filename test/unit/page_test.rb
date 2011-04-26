@@ -28,8 +28,6 @@ class PageTest < ActiveSupport::TestCase
  #   should belong_to :created_by
  #   should belong_to :updated_by
 
- #   should have_many :comments
-
     should validate_presence_of :title
     should validate_presence_of :field_set_id
 

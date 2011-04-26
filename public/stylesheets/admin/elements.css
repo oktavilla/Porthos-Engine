@@ -168,16 +168,6 @@ div.uri {
 textarea.file {
   font:normal 12px/16px monaco; }
 
-form .avatar {
-  margin-top:1.5em;
-  padding-top:1em; }
-  form .avatar label {margin:0;}
-  form .avatar img {
-    float:left;
-    margin-top:-1em;
-    margin-right:1em;
-    border:2px solid #ddd;}
-
 .drag_handle { display:none; }
 
 .pagination {

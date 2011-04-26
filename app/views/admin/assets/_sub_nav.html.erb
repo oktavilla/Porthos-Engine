@@ -12,13 +12,15 @@
     <li<%= ' class="current"' unless current_scopes[:created_by] %>>
       <%= link_to "Alla", admin_assets_path(current_scopes.except(:created_by)) %>
     </li>
-    <% User.recent_uploaders.sort_by(&:first_name).each do |user| -%>
+    <% if false %>
+    <% Asset.recent_uploaders.sort_by(&:first_name).each do |user| -%>
       <li<%= ' class="current"' if current_scopes[:created_by].to_i == user.id %>>
         <%= link_to user.short_name, admin_assets_path(current_scopes.merge(:created_by => user.id)) %>
       </li>
     <% end -%>
+    <% end %>
   </ul>
-<% if @tags.present? and @tags.any? -%>
+<% if false and @tags.present? and @tags.any? -%>
   <div class="label">Nyckelord</div>
   <ul class="tags alphabetical">
   <% @tags.sort_by(&:name).group_by { |tag| tag.name[0...1].upcase }.each do |first_letter, tags| -%>

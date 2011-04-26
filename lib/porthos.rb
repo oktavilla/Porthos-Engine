@@ -7,6 +7,7 @@ end
 require 'bcrypt'
 require 'resizor'
 require 'has_scope'
+require 's3'
 
 require 'porthos/redirects'
 require 'porthos/engine'

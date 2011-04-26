@@ -4,8 +4,8 @@
     <h1>Beskriv de uppladdade filerna</h1>
   </div>
   <div id="content">
-    <% form_for :asset, @assets, :url => update_multiple_admin_assets_path, :html => { :method => :put } do |f| %>
-      <% @assets.each do |asset| -%>
+    <%= form_for @assets, :url => update_multiple_admin_assets_path, :html => { :method => :put } do |f| %>
+      <% @assets.each_with_index do |asset, index| -%>
       <div class="describe_asset">
         <div class="preview">
           <div class="asset<%= " #{asset.class}" %>">
@@ -18,13 +18,13 @@
         </div>
         <fieldset>
           <label for="assets[<%= asset.id %>][title]">Titel</label>
-          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][title]", asset.title, :size => "40" %></div>
+          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][title]", asset.title, :size => "40", :id => "asset_#{index}_title" %></div>
           <label for="assets[<%= asset.id %>][description]">Beskrivning</label>
-          <div class="fullwidth"><%= text_area_tag("assets[#{asset.id}][description]", '', options = {:class => 'description', :rows => 2, :cols => 38}) %></div>
+          <div class="fullwidth"><%= text_area_tag("assets[#{asset.id}][description]", '', options = {:class => 'description', :rows => 2, :cols => 38, :id => "asset_#{index}_description"}) %></div>
           <label for="assets[<%= asset.id %>][author]">Fotograf/copyright</label>
-          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][author]", asset.author, :size => "40" %></div>
+          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][author]", asset.author, :size => "40", :id => "asset_#{index}_author" %></div>
           <label for="assets[<%= asset.id %>][tag_names]">Nyckelord</label>
-          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][tag_names]", '', :size => "40", :class => 'asset_tags' %></div>
+          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][tag_names]", '', :size => "40", :class => 'asset_tags', :id => "asset_#{index}_tag_names" %></div>
           <p class="form_help after">Dela fler nyckelord med mellanslag.</p>
         </fieldset>
       </div>

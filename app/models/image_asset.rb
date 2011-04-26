@@ -1,9 +1,11 @@
 class ImageAsset < Asset
+  key :width, Integer
+  key :height, Integer
   key :resizor_id, Integer
 
   validates_presence_of :resizor_id,
                         :on => :create,
-                        :message => I18n.t(:unable_to_store, :scope => [:activerecord, :models, :asset, :file])
+                        :message => I18n.t(:unable_to_store)
 
   def remote_url
     resizor_asset.url(:size => 'original', :format => extension)

@@ -1,12 +1,9 @@
 class Asset
   include MongoMapper::Document
 
-  key :_type, String
   key :name, String
   key :extension, String
   key :mime_type, String
-  key :width, Integer
-  key :height, Integer
   key :size, Integer
   key :title, String
   key :author, String
@@ -16,12 +13,12 @@ class Asset
 
   belongs_to :created_by,
              :class_name => 'User'
-  has_many :usages,
-           :class_name => 'AssetUsage',
-           :dependent => :destroy
-  has_many :custom_associations,
-           :as => :target,
-           :dependent => :destroy
+  #has_many :usages,
+  #         :class_name => 'AssetUsage',
+  #         :dependent => :destroy
+  #has_many :custom_associations,
+  #         :as => :target,
+  #         :dependent => :destroy
 
   scope :is_hidden,  lambda { |hidden|
     where(:hidden => hidden)
@@ -40,11 +37,11 @@ class Asset
   }
 
   attr_accessor :file
-  validates_presence_of :file, :on => :create
+  validates_presence_of :file, :if => :new_record?
 
-  before_validation :process, :on => :create
+  before_validation :process, :if => :new_record?
   after_destroy :cleanup
-  after_save :commit_to_sunspot
+#  after_save :commit_to_sunspot, :if => Rails.application.config.use_fulltext_search
 
   #acts_as_taggable
 
@@ -108,7 +105,7 @@ protected
 
   def store
     unless Porthos.s3_storage.store(file, full_name)
-      errors[:file] << t(:unable_to_store, :scope => [:activerecord, :errors, :models, :asset, :file])
+      errors[:file] << t(:unable_to_store)
     end
     File.unlink(file.path) if file.respond_to?(:path)
   end

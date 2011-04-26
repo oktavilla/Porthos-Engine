@@ -32,17 +32,20 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 module PorthosTestHelpers
   def new_tempfile(type = 'image')
-    path = File.join(Porthos.root, 'test', 'files')
     file = case type
     when 'image' then 'image.jpg'
     when 'text'  then 'page.txt'
     end
-
     tempfile = Tempfile.new(Time.now.to_s)
-    tempfile.write IO.read(File.join(path, file))
+    tempfile.write IO.read(test_file_path(file))
     tempfile.rewind
     uploaded_file = ActionDispatch::Http::UploadedFile.new(:filename => file, :tempfile => tempfile)
     uploaded_file
+  end
+
+  def test_file_path(filename = 'page.txt')
+    path = File.join(Porthos.root, 'test', 'files')
+    File.join(path, filename)
   end
 
   def stub_resizor_post
@@ -103,4 +106,23 @@ end
 
 class ActiveSupport::TestCase
   include PorthosTestHelpers
+end
+
+
+class ActiveSupport::IntegrationCase
+  #include PorthosTestHelpers
+protected
+  def login!
+    @user = Factory.create(:user, {
+      :username => 'a-user',
+      :password => 'password',
+      :password_confirmation => 'password'
+    })
+    visit admin_login_path
+
+    fill_in User.human_attribute_name('username'), :with => 'a-user'
+    fill_in User.human_attribute_name('password'), :with => 'password'
+
+    click_button I18n.t(:login, :scope => :'views.admin.sessions.new')
+  end
 end

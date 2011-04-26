@@ -12,7 +12,7 @@
   </div>
   <div class="tools">
     <div class="add">
-      <a href="<%= new_admin_asset_path %>" class="new">Ladda upp filer</a>
+      <a href="<%= new_admin_asset_path %>" class="new"><%= I18n.t(:'app.views.assets.index.upload_files') %></a>
     </div>
     <%= form_tag admin_assets_path, :method => :get do |f| %>
     <div class="sort">
@@ -35,7 +35,7 @@
     <% end -%>
     <% if @assets.any? -%>
     <ul class="items thumbnails">
-      <% @assets.each do |asset| -%><li><div class="inner <%= asset.extension %>">
+      <% @assets.each do |asset| -%><li><div class="inner <%= asset.extension %>" id="asset_<%= asset.id %>">
         <a href="<%= edit_admin_asset_path(asset.id) %>">
         <% if asset.is_a?(ImageAsset) %>
           <%= image_tag asset.version_url(:size => 'c100x100'), :id => "asset_#{asset.id}", :width => 100, :height => 100 %>
@@ -49,7 +49,7 @@
         <div class="description<%= ' blank' if asset.description.blank? %>">
           <%= asset.description.blank? ? "<a href=\"#{edit_admin_asset_path(asset.id)}\">Ingen beskrivning. Skriv en ...</a>".html_safe : truncate(asset.description, :length => 200) %>
         </div>
-        <% unless asset.tag_names.blank? %>
+        <% if false and asset.tag_names.present? %>
         <div class="tags"><%= asset.tags.collect { |tag| @current_tags.include?(tag.name) ? tag.name : link_to(tag.name, admin_assets_path(:tags => [tag.name])) }.join(', ') -%></div>
         <% end %>
         <div class="meta">
@@ -59,8 +59,8 @@
           <% end -%>
         </div>
         <div class="edit">
-          <%= link_to "Ändra", edit_admin_asset_path(asset.id, :return_to => request.path) %>
-          <%= link_to "Ta bort", admin_asset_path(asset.id), :class => 'delete', :confirm => "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig.", :method => :delete %>
+          <%= link_to t(:edit), edit_admin_asset_path(asset.id, :return_to => request.path) %>
+          <%= link_to t(:destroy), admin_asset_path(asset.id), :class => 'delete', :confirm => "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig.", :method => :delete %>
         </div>
         <% if @create_callback.present? %>
         <div class="add">

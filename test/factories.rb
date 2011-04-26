@@ -50,7 +50,6 @@ Factory.define :field_set do |f|
 end
 
 Factory.define :field do |f|
-  f.association :field_set
   f.label { Factory.next(:title) }
   f.handle { Factory.next(:title) }
 end

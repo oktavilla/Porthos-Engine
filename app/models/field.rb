@@ -21,10 +21,7 @@ class Field
   @@types = [
     StringField,
     DateTimeField,
-    BooleanField,
-    PageAssociationField,
-    ReversedPageAssociationField,
-    AssetAssociationField
+    BooleanField
   ].to_set
 
 protected

@@ -110,8 +110,9 @@ end
 
 
 class ActiveSupport::IntegrationCase
-  #include PorthosTestHelpers
+
 protected
+
   def login!
     @user = Factory.create(:user, {
       :username => 'a-user',
@@ -125,4 +126,5 @@ protected
 
     click_button I18n.t(:login, :scope => :'views.admin.sessions.new')
   end
+
 end

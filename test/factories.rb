@@ -58,12 +58,6 @@ end
 Factory.define :string_field, :parent => :field do |f|
 end
 
-Factory.define :page_association_field, :parent => :field, :class => PageAssociationField do |f|
-end
-
-Factory.define :asset_association_field, :parent => :field, :class => PageAssociationField do |f|
-end
-
 Factory.define :page do |f|
   #f.association :field_set
   f.field_set_id {Factory(:field_set).id}

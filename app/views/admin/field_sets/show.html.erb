@@ -12,7 +12,7 @@
       <%= link_to t('.destroy'), admin_field_set_path(@field_set), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @field_set.title), :class => 'destroy action' %>
       <%= link_to t('.all_field_sets'), admin_field_sets_path, :class => 'action' %>
       <% if @field_set.pages_sortable? %>
-      <%= link_to t(:sort, :scope => [:app, :views, :admin, :field_sets, :show]), pages_admin_field_set_path(@field_set), :class => 'action' %>
+      <%= link_to t('.sort'), pages_admin_field_set_path(@field_set), :class => 'action' %>
       <% end %>
     </span>
   </div>
@@ -56,6 +56,3 @@
     <% end -%>
   </div>
 </div>
-<% content_for :javascripts do %>
-  <%= javascript_include_tag 'admin/application' %>
-<% end %>

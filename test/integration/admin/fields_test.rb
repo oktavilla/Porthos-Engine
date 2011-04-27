@@ -15,24 +15,20 @@ class FieldsTest < ActiveSupport::IntegrationCase
 
     within("form.field_new") do
       assert_equal Field.types.first.model_name, page.find('#field_type').value
+
       fill_in "field_label", :with => 'Description'
       fill_in "field_handle", :with => 'description'
       check "field_required"
       fill_in "field_instructions", :with => 'Please put in a descriptive description'
       check 'field_multiline'
       check 'field_allow_rich_text'
+
       click_button I18n.t(:save)
     end
 
     assert_equal admin_field_set_path(field_set), current_path
-
-    within(".flash.notice") do
-      assert_match 'Description', page.body
-    end
-
-    within("#fields .field") do
-      assert_match 'Description', page.body
-    end
+    assert has_flash_message('Description'), 'Should have a flash notice about the field'
+    assert page.find("#fields .field").has_content?('Description'), 'Shhould display the field in the fields list'
   end
 
   test 'editing a field' do
@@ -49,13 +45,8 @@ class FieldsTest < ActiveSupport::IntegrationCase
     fill_in "field_label", :with => 'Page Description'
     click_button I18n.t(:save)
 
-    within(".flash.notice") do
-      assert_match 'Page Description', page.body
-    end
-
-    within("#fields .field") do
-      assert_match 'Page Description', page.body
-    end
+    assert has_flash_message('Page Description'), 'Should have a flash notice about the field'
+    assert page.find("#fields .field").has_content?('Page Description'), "Should have changed the label"
   end
 
   test 'destroying a field' do
@@ -68,11 +59,7 @@ class FieldsTest < ActiveSupport::IntegrationCase
     end
 
     assert_equal admin_field_set_path(field_set), current_path
-
-    within(".flash.notice") do
-      assert_match field.label, page.body
-    end
-
-    assert !page.has_css?("#field_#{field_set.id}"), 'Field should be removed'
+    assert has_flash_message(field.label), 'Should have a flash notice about the field'
+    assert page.find("#content").has_no_content?(field.label), 'Should not have the field in the fields list'
   end
 end

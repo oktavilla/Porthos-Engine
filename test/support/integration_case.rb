@@ -11,4 +11,11 @@ class ActiveSupport::IntegrationCase < ActiveSupport::TestCase
   teardown do
     DatabaseCleaner.clean
   end
+
+protected
+
+  def has_flash_message(copy)
+    page.find(".flash.notice").has_content?(copy)
+  end
+
 end

@@ -27,12 +27,12 @@ class FieldsTest < ActiveSupport::IntegrationCase
     end
 
     assert_equal admin_field_set_path(field_set), current_path
-    assert has_flash_message('Description'), 'Should have a flash notice about the field'
-    assert page.find("#fields .field").has_content?('Description'), 'Shhould display the field in the fields list'
+    assert has_flash_message?('Description'), 'Should have a flash notice about the field'
+    assert page.find("#fields").has_content?('Description'), 'Should display the field in the fields list'
   end
 
   test 'editing a field' do
-    field_set = Factory(:field_set, :fields => [ Factory.build(:field) ])
+    field_set = Factory(:field_set)
     field = field_set.fields.first
 
     visit admin_field_set_path(field_set)
@@ -45,8 +45,8 @@ class FieldsTest < ActiveSupport::IntegrationCase
     fill_in "field_label", :with => 'Page Description'
     click_button I18n.t(:save)
 
-    assert has_flash_message('Page Description'), 'Should have a flash notice about the field'
-    assert page.find("#fields .field").has_content?('Page Description'), "Should have changed the label"
+    assert has_flash_message?('Page Description'), 'Should have a flash notice about the field'
+    assert page.find("#fields #field_#{field.id}").has_content?('Page Description'), "Should have changed the label"
   end
 
   test 'destroying a field' do
@@ -59,7 +59,7 @@ class FieldsTest < ActiveSupport::IntegrationCase
     end
 
     assert_equal admin_field_set_path(field_set), current_path
-    assert has_flash_message(field.label), 'Should have a flash notice about the field'
+    assert has_flash_message?(field.label), 'Should have a flash notice about the field'
     assert page.find("#content").has_no_content?(field.label), 'Should not have the field in the fields list'
   end
 end

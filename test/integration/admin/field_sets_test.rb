@@ -27,7 +27,7 @@ class FieldSetsTest < ActiveSupport::IntegrationCase
 
     click_button I18n.t(:save)
 
-    assert has_flash_message('Article'), 'Should have a flash notice about the new field set'
+    assert has_flash_message?('Article'), 'Should have a flash notice about the new field set'
     assert page.find("#content .notice").has_content?(I18n.t(:'admin.field_sets.show.blank_slate')), 'Should display blank slate message'
   end
 
@@ -46,7 +46,7 @@ class FieldSetsTest < ActiveSupport::IntegrationCase
     fill_in 'field_set_title', :with => 'New awesome title'
     click_button I18n.t(:save)
 
-    assert has_flash_message('New awesome title'), 'Should have a flash notice with the new title'
+    assert has_flash_message?('New awesome title'), 'Should have a flash notice with the new title'
   end
 
   test "destroying a field set" do
@@ -58,7 +58,7 @@ class FieldSetsTest < ActiveSupport::IntegrationCase
     end
 
     assert_equal admin_field_sets_path, current_path
-    assert has_flash_message(field_set.title), 'Should have a flash notice with the new title'
+    assert has_flash_message?(field_set.title), 'Should have a flash notice with the new title'
     assert !page.has_css?("#field_sets #field_set_#{field_set.id}"), 'Field set removed'
   end
 

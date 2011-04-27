@@ -14,7 +14,7 @@ class ActiveSupport::IntegrationCase < ActiveSupport::TestCase
 
 protected
 
-  def has_flash_message(copy)
+  def has_flash_message?(copy)
     page.find(".flash.notice").has_content?(copy)
   end
 

@@ -47,6 +47,13 @@ Factory.define :field_set do |f|
   f.title "Default"
   f.page_label "Default page"
   f.handle 'default'
+  f.fields {
+    [
+      Factory.build(:string_field),
+      Factory.build(:text_field),
+      Factory.build(:rich_text_field)
+    ]
+  }
 end
 
 Factory.define :field do |f|
@@ -54,7 +61,15 @@ Factory.define :field do |f|
   f.handle { Factory.next(:title) }
 end
 
-Factory.define :string_field, :parent => :field do |f|
+Factory.define :string_field, :class => StringField, :parent => :field do |f|
+end
+
+Factory.define :text_field, :parent => :string_field do |f|
+  f.multiline true
+end
+
+Factory.define :rich_text_field, :parent => :text_field do |f|
+  f.allow_rich_text true
 end
 
 Factory.define :page do |f|

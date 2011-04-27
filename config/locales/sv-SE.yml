@@ -164,6 +164,7 @@
         title: Titel
         template_name: Template
       field:
+        _type: Typ
         label: Namn
         handle: Fältnamn
         required: Obligatorisk
@@ -508,15 +509,12 @@
         sort: Sortera
         blank_slate: Det finns inga fält skapade än
         add_field: Lägg till fält
-        table:
-          name: Namn
-          field_name: Fältnamn
-          type: Typ
-          required: Obligatorisk?
   save: Spara
   or: eller
   cancel: Avbryt
   edit: Ändra
-  destroy: Tabort
+  destroy: Ta bort
   move: Flytta
   show_all: Visa alla
+  yes: Ja
+  no: Nej

@@ -30,10 +30,10 @@
       <thead>
         <tr>
           <th class="placeholder"></th>
-          <th><%= t(:name, :scope => [:app, :views, :admin, :field_sets, :show, :table]) %></th>
-          <th><%= t(:field_name, :scope => [:app, :views, :admin, :field_sets, :show, :table]) %></th>
-          <th><%= t(:type, :scope => [:app, :views, :admin, :field_sets, :show, :table]) %></th>
-          <th><%= t(:required, :scope => [:app, :views, :admin, :field_sets, :show, :table]) %></th>
+          <th><%= Field.human_attribute_name(:label) %></th>
+          <th><%= Field.human_attribute_name(:handle) %></th>
+          <th><%= Field.human_attribute_name(:_type) %></th>
+          <th><%= Field.human_attribute_name(:required) %></th>
           <th colspan="2"></th>
         </tr>
       </thead>
@@ -44,7 +44,7 @@
           <td class="label"><%= field.label %></td>
           <td><%= field.handle %></td>
           <td><%= field.class.model_name.human %></td>
-          <td><%= field.required? ? 'Ja' : 'Nej' %></td>
+          <td><%= t(field.required? ? :yes : :no) %></td>
           <td><%= link_to t(:edit), edit_admin_field_set_field_path(@field_set, field) %></td>
           <td><%= link_to t(:destroy), admin_field_set_field_path(@field_set, field), :method => :delete, :confirm => "Vill du verkligen ta bort #{field.label}? Fältet och dess infomation kommer tas bort från alla #{@field_set.title} sidor." %>
         </tr>

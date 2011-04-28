@@ -22,7 +22,7 @@ class PagesTest < ActiveSupport::IntegrationCase
     assert_equal 'About us', page.find('h1').text
 
     field_set.fields.each_with_index do |field, index|
-      assert_equal field.handle, page.find_field("#{field.label}").value
+      assert_equal field.label, page.find("label[for='page_data_attributes_#{index}_value']").text
     end
   end
 

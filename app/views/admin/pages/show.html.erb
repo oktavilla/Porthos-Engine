@@ -88,7 +88,21 @@
     <% end %>
   </div>
   <div id="content" class="page_contents">
-  <% @page.field_set.fields.each do |field| -%>
+  <%= form_for [:admin, @page] do |f| %>
+    <% @page.data.each_with_index do |datum, index| %>
+      <%= fields_for 'page[data_attributes][]', datum, :index => index do |datum_fields| %>
+        <%= datum_fields.hidden_field :id %>
+        <%= datum_fields.label :value, datum.label %>
+        <% begin %>
+          <%= render :partial => "admin/datum/#{datum_fields.object.input_type}_form", :locals => { :f => datum_fields } %>
+        <% rescue ActionView::MissingTemplate %>
+          <%= datum_fields.text_field :value %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <div>
+      <%= f.submit %>
+    </div>
   <% end %>
   </div>
 </div>

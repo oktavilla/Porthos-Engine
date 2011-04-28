@@ -52,7 +52,9 @@ class Admin::PagesController < ApplicationController
   end
 
   def create
-    @page = Page.create(params[:page])
+    @page = Page.new(params[:page])
+    @page.clone_field_set
+    @page.save!
     respond_with(@page, :location => admin_page_path(@page.id))
   end
 
@@ -61,11 +63,11 @@ class Admin::PagesController < ApplicationController
     respond_to do |format|
       if @page.update_attributes(params[:page])
         flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
-        if @page.can_have_a_node?
-          format.html { redirect_to new_admin_node_path(:resource_id => @page.id) }
-        else
+        # if @page.can_have_a_node?
+        #   format.html { redirect_to new_admin_node_path(:resource_id => @page.id) }
+        # else
           format.html { redirect_to params[:return_to] || admin_page_path(@page.id) }
-        end
+        # end
       else
         format.html { render :action => 'show' }
       end

@@ -2,11 +2,9 @@ class Page
 
   include MongoMapper::Document
 
-  key :created_by_id, Integer
-  key :updated_by_id, Integer
   key :position, Integer
+  key :title, String
   key :uri, String
-  key :title, String, :required => true
   key :layout_class, String
   key :column_count, Integer
   key :active, Boolean
@@ -14,30 +12,36 @@ class Page
   key :published_on, DateTime
   timestamps!
 
+  belongs_to :created_by, :class_name => 'User'
+  belongs_to :updated_by, :class_name => 'User'
   belongs_to :field_set
-  # many :contents
-  many :custom_attributes
-  many :custom_associations
- # acts_as_taggable
+  has_many :data
+
+  validates_presence_of :title
+
+  def clone_field_set
+    self.data = field_set.fields.collect do |field|
+      Datum.from_field(field)
+    end
+  end
+
+  def data_attributes=(datum_array)
+    self.data = datum_array.collect do |i, datum_attrs|
+      datum_attrs.to_options!
+      if id = datum_attrs.delete(:id)
+        unless datum_attrs[:_destroy]
+          data.detect { |d| d.id.to_s == id }.tap do |datum|
+            datum.update_attributes(datum_attrs)
+          end
+        end
+      else
+        Datum.new(datum_attrs)
+      end
+    end.compact
+  end
 
   def fields
     field_set.fields
-  end
-
-  def created_by
-    User.find(:created_by_id)
-  end
-
-  def created_by=(_user)
-    created_by_id = _user.id
-  end
-
-  def updated_by
-    User.find(:updated_by_id)
-  end
-
-  def updated_by=(_user)
-    updated_by_id = _user.id
   end
 
   def node
@@ -114,7 +118,9 @@ class Page
   before_update :set_updated_by
 
   #after_initialize :create_namespaced_tagging_methods
-
+  def tags
+    []
+  end
   # after_save :commit_to_sunspot
 
   def contents_as_text
@@ -138,10 +144,6 @@ class Page
     end.join(' ').gsub(/<\/?[^>]*>/, "")
   end
 
-  def to_param
-    "#{id}-#{uri}"
-  end
-
   def published_on_parts
     @published_on_parts ||= {
       :year => published_on.strftime("%Y"),
@@ -155,7 +157,7 @@ class Page
   end
 
   def full_uri
-    @full_uri ||= node ? node.url : (index_node ? [index_node.url, to_param].join('/') : uri)
+    # @full_uri ||= node ? node.url : (index_node ? [index_node.url, to_param].join('/') : uri)
   end
 
   def custom_value_for(field)
@@ -220,7 +222,7 @@ class Page
   # end
 
   def category
-    @category ||= field_set.allow_categories? ? all_tags.with_namespace(field_set.handle).first : nil
+    #@category ||= field_set.allow_categories? ? all_tags.with_namespace(field_set.handle).first : nil
   end
 
   def category_name

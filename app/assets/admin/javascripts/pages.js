@@ -3,7 +3,7 @@
 	  var Ready = function(container) {
 	    var $container = $(container),
 	        $columns_container = $container.find('div.page_layout'),
-	        page_id = Porthos.Helpers.extractId($columns_container.attr('id')),
+	        // page_id = Porthos.Helpers.extractId($columns_container.attr('id')),
 	        $sortables = $columns_container.find('ul.sortable');
 
 	    $container.delegate('div.header a.toggler', 'click', function(event) {
@@ -54,11 +54,6 @@
 	      $('#page_current_publish_on_date, #page_published_on_form').toggle();
 	    });
 
-	    $('#page_tags a').click(function(event) {
-	      event.preventDefault();
-	      $('#page_tags_list, #page_tags_form').toggle();
-	    });
-
 	    $('#page_category').delegate('a.change, a.cancel', 'click', function(event) {
 	      event.preventDefault();
 	      $('#category_view, #choose_page_category_form').toggle();
@@ -76,6 +71,7 @@
 	        $('#pages_view.show #workspace').each(function() {
 	          Ready(this);
 	        });
+				  Porthos.Helpers.cloneAsUrl('#page_title', '#page_uri');
 	      });
 	    }
 	  };

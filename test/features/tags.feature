@@ -38,7 +38,7 @@ Feature: Tags
   Scenario: List stuff tagged by a tag
     Given a tag exists with name: "green"
     And   a field_set exists with title: "Article", page_label: "Title", handle: "article", template_name: "default"
-    And   a page exists with title: "The color green", field_set: field_set, slug: "the-color-green", tag_names: "green"
+    And   a page exists with title: "The color green", field_set: field_set, uri: "the-color-green", tag_names: "green"
     And   I go to the admin tags page
     And   I follow "green"
     Then  I should be on the admin tag's page

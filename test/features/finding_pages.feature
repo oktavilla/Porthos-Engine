@@ -7,8 +7,8 @@ Feature: Finding pages
     Given I am logged in
     And a field_set exists with title: "Article", page_label: "Title", handle: "default", template_name: "default"
     And a field_set exists with title: "Project", page_label: "Name", handle: "project", template_name: "default"
-    And a page exists with field_set: first field_set, title: "About", slug: "about", tag_names: "article important"
-    And a page exists with field_set: 2nd field_set, title: "Current projects", slug: "current-projects", tag_names: "important project"
+    And a page exists with field_set: first field_set, title: "About", uri: "about", tag_names: "article important"
+    And a page exists with field_set: 2nd field_set, title: "Current projects", uri: "current-projects", tag_names: "important project"
     And I go to the admin pages listing page
 
   Scenario: Viewing the default page list

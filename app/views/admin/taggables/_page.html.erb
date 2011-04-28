@@ -1,7 +1,7 @@
 <span class="title"><%= link_to taggable.title, admin_page_path(taggable) %></span>
-<% unless taggable.full_slug.blank? -%>
-<span class="slug">
-  /<%= taggable.full_slug %>
+<% unless taggable.full_uri.blank? -%>
+<span class="uri">
+  /<%= taggable.full_uri %>
 </span>
 <% end -%>
 <span class="meta">

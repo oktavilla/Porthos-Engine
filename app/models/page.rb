@@ -2,11 +2,10 @@ class Page
 
   include MongoMapper::Document
 
-  key :field_set_id, Integer, :required => true
   key :created_by_id, Integer
   key :updated_by_id, Integer
   key :position, Integer
-  key :slug, String
+  key :uri, String
   key :title, String, :required => true
   key :layout_class, String
   key :column_count, Integer
@@ -15,11 +14,11 @@ class Page
   key :published_on, DateTime
   timestamps!
 
+  belongs_to :field_set
   # many :contents
   many :custom_attributes
   many :custom_associations
  # acts_as_taggable
-  belongs_to :field_set
 
   def fields
     field_set.fields
@@ -111,12 +110,12 @@ class Page
 
   before_create :set_created_by
   before_save   :set_layout_attributes,
-                :generate_slug
+                :generate_uri
   before_update :set_updated_by
 
   #after_initialize :create_namespaced_tagging_methods
 
-  after_save :commit_to_sunspot
+  # after_save :commit_to_sunspot
 
   def contents_as_text
     contents.select{|c| c.active? }.collect do |content|
@@ -140,7 +139,7 @@ class Page
   end
 
   def to_param
-    "#{id}-#{slug}"
+    "#{id}-#{uri}"
   end
 
   def published_on_parts
@@ -155,8 +154,8 @@ class Page
     published_on.present? && published_on <= Time.now
   end
 
-  def full_slug
-    @full_slug ||= node ? node.url : (index_node ? [index_node.url, to_param].join('/') : slug)
+  def full_uri
+    @full_uri ||= node ? node.url : (index_node ? [index_node.url, to_param].join('/') : uri)
   end
 
   def custom_value_for(field)
@@ -215,10 +214,10 @@ class Page
     fields.one? { |field| field.handle == handle }
   end
 
-  alias_method :respond_to_without_field_checking?, :respond_to?
-  def respond_to?(method, include_private = false)
-    !new_record? ? (respond_to_without_field_checking?(method, include_private) || field_exists?(method.to_s.gsub(/\?/, ''))) : respond_to_without_field_checking?(method, include_private)
-  end
+  # alias_method :respond_to_without_field_checking?, :respond_to?
+  # def respond_to?(method, include_private = false)
+  #   !new_record? ? (respond_to_without_field_checking?(method, include_private) || field_exists?(method.to_s.gsub(/\?/, ''))) : respond_to_without_field_checking?(method, include_private)
+  # end
 
   def category
     @category ||= field_set.allow_categories? ? all_tags.with_namespace(field_set.handle).first : nil
@@ -267,60 +266,60 @@ protected
     instance_variable_set("@#{custom_attribute.handle}".to_sym, custom_attribute.value)
   end
 
-  def method_missing_with_find_custom_attributes(method, *args)
-    # Check that we dont match any other method_missing hacks before we start query the database
-    begin
-      method_missing_without_find_custom_attributes(method, *args)
-    rescue
-      handle = method.to_s.gsub(/\?/, '')
-      # raise if we do not have a matching field
-      method_missing_without_find_custom_attributes(method, *args) unless fields.detect { |field| !field.is_a?(AssociationField) && field.handle == handle }
-      if custom_attribute = custom_attributes.detect { |c| c.handle == handle }
-        create_reader_for_custom_attribute custom_attribute
-        return custom_attribute.value
-      else
-        nil # we have a field but no data for it yet
-      end
-    end
-  end
-  alias_method_chain :method_missing, :find_custom_attributes
-
-  def method_missing_with_find_custom_associations(method, *args)
-    # Check that we dont match any other method_missing hacks before we start query the database
-    begin
-      method_missing_without_find_custom_associations(method, *args)
-    rescue
-      if args.size == 0
-        handle = method.to_s.gsub(/\?/, '')
-        if field = fields.detect { |field| field.is_a?(AssociationField) && field.handle == handle }
-          match = field.target_handle.blank? ? custom_associations_by_handle(handle) : custom_association_contexts_by_handle(field.target_handle)
-          if match.any?
-            unless field.target_handle.present?
-              match.first.relationship == 'one_to_one' ? match.first.target : Porthos::CustomAssociationProxy.new({
-                :target_class => match.first.target_type.constantize,
-                :target_ids   => match.collect { |m| m.target_id }
-              })
-            else
-              field.relationship == 'one_to_one' ? match.first.context : Porthos::CustomAssociationProxy.new({
-                :target_class => match.first.context_type.constantize,
-                :target_ids   => match.collect { |m| m.context_id }
-              })
-            end
-          # Do we have a matching field but no records, return nil for
-          # page.handle ? do stuff in the views
-          else
-            nil
-          end
-        else
-          # no match raise method missing again
-          method_missing_without_find_custom_associations(method, *args)
-        end
-      else
-        method_missing_without_find_custom_associations(method, *args)
-      end
-    end
-  end
-  alias_method_chain :method_missing, :find_custom_associations
+  # def method_missing_with_find_custom_attributes(method, *args)
+  #   # Check that we dont match any other method_missing hacks before we start query the database
+  #   begin
+  #     method_missing_without_find_custom_attributes(method, *args)
+  #   rescue
+  #     handle = method.to_s.gsub(/\?/, '')
+  #     # raise if we do not have a matching field
+  #     method_missing_without_find_custom_attributes(method, *args) unless fields.detect { |field| !field.is_a?(AssociationField) && field.handle == handle }
+  #     if custom_attribute = custom_attributes.detect { |c| c.handle == handle }
+  #       create_reader_for_custom_attribute custom_attribute
+  #       return custom_attribute.value
+  #     else
+  #       nil # we have a field but no data for it yet
+  #     end
+  #   end
+  # end
+  # alias_method_chain :method_missing, :find_custom_attributes
+  #
+  # def method_missing_with_find_custom_associations(method, *args)
+  #   # Check that we dont match any other method_missing hacks before we start query the database
+  #   begin
+  #     method_missing_without_find_custom_associations(method, *args)
+  #   rescue
+  #     if args.size == 0
+  #       handle = method.to_s.gsub(/\?/, '')
+  #       if field = fields.detect { |field| field.is_a?(AssociationField) && field.handle == handle }
+  #         match = field.target_handle.blank? ? custom_associations_by_handle(handle) : custom_association_contexts_by_handle(field.target_handle)
+  #         if match.any?
+  #           unless field.target_handle.present?
+  #             match.first.relationship == 'one_to_one' ? match.first.target : Porthos::CustomAssociationProxy.new({
+  #               :target_class => match.first.target_type.constantize,
+  #               :target_ids   => match.collect { |m| m.target_id }
+  #             })
+  #           else
+  #             field.relationship == 'one_to_one' ? match.first.context : Porthos::CustomAssociationProxy.new({
+  #               :target_class => match.first.context_type.constantize,
+  #               :target_ids   => match.collect { |m| m.context_id }
+  #             })
+  #           end
+  #         # Do we have a matching field but no records, return nil for
+  #         # page.handle ? do stuff in the views
+  #         else
+  #           nil
+  #         end
+  #       else
+  #         # no match raise method missing again
+  #         method_missing_without_find_custom_associations(method, *args)
+  #       end
+  #     else
+  #       method_missing_without_find_custom_associations(method, *args)
+  #     end
+  #   end
+  # end
+  # alias_method_chain :method_missing, :find_custom_associations
 
 private
 
@@ -332,8 +331,8 @@ private
     custom_association_contexts.find_all { |ca| ca.handle == handle }
   end
 
-  def generate_slug
-    self.slug = title.parameterize unless slug.present?
+  def generate_uri
+    self.uri = title.parameterize unless uri.present?
   end
 
   def set_layout_attributes
@@ -355,8 +354,8 @@ private
     self.updated_by = User.current
   end
 
-  def commit_to_sunspot
-    Delayed::Job.enqueue SunspotIndexJob.new('Page', self.id)
-  end
+  # def commit_to_sunspot
+  #   Delayed::Job.enqueue SunspotIndexJob.new('Page', self.id)
+  # end
 
 end

@@ -198,7 +198,7 @@ class CreatePorthosTables < ActiveRecord::Migration
       t.references "next"
       t.boolean    "first"
       t.integer    "position"
-      t.string     "slug"
+      t.string     "uri"
       t.string     "title"
       t.string     "layout_class"
       t.integer    "column_count"
@@ -212,7 +212,7 @@ class CreatePorthosTables < ActiveRecord::Migration
     add_index "pages", ["field_set_id"], :name => "index_pages_on_field_set_id"
     add_index "pages", ["field_set_id", "next_id"], :name => "index_pages_on_field_set_id_and_next_id"
     add_index "pages", ["field_set_id", "first"], :name => "index_pages_on_field_set_id_and_first"
-    add_index "pages", ["slug"], :name => "index_pages_on_slug"
+    add_index "pages", ["uri"], :name => "index_pages_on_uri"
 
     create_table "content_textfields" do |t|
       t.string   "filter"

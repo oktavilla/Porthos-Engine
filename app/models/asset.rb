@@ -116,7 +116,7 @@ protected
   end
 
   # after save
-  def commit_to_sunspot
-    Delayed::Job.enqueue SunspotIndexJob.new('Asset', self.id)
-  end
+  # def commit_to_sunspot
+  #   Delayed::Job.enqueue SunspotIndexJob.new('Asset', self.id)
+  # end
 end

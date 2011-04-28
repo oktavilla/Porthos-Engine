@@ -36,11 +36,11 @@ fieldset.compact {
   fieldset.compact .submit {
     padding-left:115px; }
 
-form .slug_field {margin-top:.5em;}
-  form .slug_field label {
+form .uri_field {margin-top:.5em;}
+  form .uri_field label {
     display:inline;
     font-weight:normal; }
-  form .slug_field input {
+  form .uri_field input {
       margin-left:.3em;
       padding:.1em;
       font-size:.8571em; }

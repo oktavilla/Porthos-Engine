@@ -6,6 +6,7 @@ module Porthos
       base.send :before_filter, :authenticate!
       base.send :skip_before_filter, :remember_uri, :only => [:edit, :create, :update, :destroy, :sort]
       base.send :before_filter, :clear_callback
+      base.send :around_filter, :set_current_user
       base.send :layout, 'admin/application'
     end
 
@@ -27,6 +28,12 @@ module Porthos
       end
       url = ['admin', action, base].compact.join('_').to_sym
       self.send url, options
+    end
+
+    def set_current_user
+      User.current = current_user if signed_in?
+      yield
+      User.current = nil
     end
 
   end

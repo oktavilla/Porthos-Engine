@@ -66,7 +66,7 @@ module Porthos
       end
 
       def breadcrumbs
-        @breadcrumbs ||= trail.collect { |n| ["/#{n.slug}", n.name] }
+        @breadcrumbs ||= trail.collect { |n| ["/#{n.uri}", n.name] }
       end
 
     end

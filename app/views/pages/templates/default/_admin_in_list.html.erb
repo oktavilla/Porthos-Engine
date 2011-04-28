@@ -1,7 +1,7 @@
 <span class="title"><%= link_to page.title, admin_page_path(page.id) %></span>
-<% unless page.full_slug.blank? -%>
-<span class="slug">
-  <%=  page_path(:field_set_id => page.field_set_id, :id => page.slug) %>
+<% unless page.full_uri.blank? -%>
+<span class="uri">
+  <%=  page_path(:field_set_id => page.field_set_id, :id => page.uri) %>
 </span>
 <% end -%>
 <% if page.tags.any? -%>

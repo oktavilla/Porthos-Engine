@@ -1,11 +1,11 @@
 <%= f.hidden_field :field_set_id %>
-<label for="page_title"><%= f.object.field_set && f.object.field_set.page_label.present? ? f.object.field_set.page_label : "Titel" %></label>
+<label for="page_title"><%= f.object.field_set && f.object.field_set.page_label.present? ? f.object.field_set.page_label : Page.human_attribute_name(:title) %></label>
 <div class="fullwidth">
   <%= f.text_field :title, :class => "title" %>
 </div>
-<label for="page_slug">Sidans address</label>
+<%= f.label :uri %>
 <div class="fullwidth">
-  <%= f.text_field :slug, :class => "slug" %>
+  <%= f.text_field :uri, :class => "uri" %>
 </div>
 
 <% f.fields_for :custom_fields do |custom_fields| %>

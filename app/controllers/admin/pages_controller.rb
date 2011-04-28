@@ -1,5 +1,6 @@
 class Admin::PagesController < ApplicationController
   include Porthos::Admin
+  respond_to :html
 
   has_scope :with_field_set
   has_scope :created_by
@@ -38,9 +39,9 @@ class Admin::PagesController < ApplicationController
 
   def show
     @page = Page.find(params[:id])
-    if @page.node and @page.node.parent
-      cookies[:last_opened_node] = { :value => @page.node.parent.id.to_s, :expires => 1.week.from_now }
-    end
+    # if @page.node and @page.node.parent
+    #   cookies[:last_opened_node] = { :value => @page.node.parent.id.to_s, :expires => 1.week.from_now }
+    # end
     respond_to do |format|
       format.html
     end
@@ -48,21 +49,11 @@ class Admin::PagesController < ApplicationController
 
   def new
     @page = Page.new(params[:page])
-    respond_to do |format|
-      format.html
-      format.js { render :layout => false }
-    end
   end
 
   def create
-    @page = Page.new(params[:page])
-    respond_to do |format|
-      if @page.save
-        format.html { redirect_to admin_page_path(@page.id) }
-      else
-        format.html { render :action => :new }
-      end
-    end
+    @page = Page.create(params[:page])
+    respond_with(@page, :location => admin_page_path(@page.id))
   end
 
   def update

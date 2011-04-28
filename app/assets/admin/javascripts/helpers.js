@@ -45,7 +45,6 @@
 	  if ($.fn.hasOwnProperty('ckeditor')) {
 	    $('textarea.editor').ckeditor();
 	  }
-	  Porthos.Helpers.cloneAsUrl('#page_title', '#page_slug');
 	  Porthos.Helpers.cloneAsUrl('#node_name', '#node_url');
 	  if ($.fn.hasOwnProperty('sortable')) {
 	    $('table.sortable tbody').sortable({

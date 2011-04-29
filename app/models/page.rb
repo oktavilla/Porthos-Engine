@@ -1,5 +1,4 @@
 class Page
-
   include MongoMapper::Document
 
   key :position, Integer

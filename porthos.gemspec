@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'mongo_mapper'
   s.add_dependency 'bcrypt-ruby'
   s.add_dependency 'warden'
+  s.add_dependency 'chronic'
   s.add_dependency "routing-filter"
   s.add_dependency "mime-types"
   s.add_dependency "mini_magick"

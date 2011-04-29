@@ -22,13 +22,13 @@ class Datum
   before_validation :type_cast_value
 
   class << self
-    def from_field(field)
-      new({
+    def from_field(field, attrs = {})
+      new(attrs.to_options.reverse_merge({
         :label => field.label,
         :handle => field.handle,
         :input_type => field.class.model_name.gsub(/Field/, '').underscore,
         :required => field.required
-      })
+      }))
     end
   end
 

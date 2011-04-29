@@ -25,6 +25,7 @@ class Page
     end
   end
 
+  # TODO: Test me
   def data_attributes=(datum_array)
     self.data = datum_array.collect do |i, datum_attrs|
       datum_attrs.to_options!
@@ -153,7 +154,7 @@ class Page
   end
 
   def published?
-    published_on.present? && published_on <= Time.now
+    published_on.present? && published_on <= DateTime.now
   end
 
   def full_uri
@@ -178,48 +179,9 @@ class Page
     custom_associations.detect { |ca| ca.field_id == field_id.to_i }
   end
 
-  def custom_fields=(custom_fields)
-    custom_fields.each do |key, value|
-      field = Field.find(key)
-      unless field.data_type == CustomAssociation
-        if custom_attribute = custom_attribute_for_field(field.id)
-          custom_attribute.update_attributes(:value => value)
-        else
-          self.custom_attributes << field.data_type.new({
-            :value    => value,
-            :field_id => field.id,
-            :handle   => field.handle,
-            :context => self
-          })
-        end
-      else
-        CustomAssociation.destroy_all(:context_id => self.id, :context_type => 'Page', :field_id => field.id)
-        value.to_a.reject(&:blank?).each do |association_value|
-          if association_value.is_a?(StringIO) || association_value.is_a?(Tempfile)
-            uploaded_asset = Asset.from_upload(:file => association_value)
-            association_value = uploaded_asset.id if uploaded_asset.save
-          end
-          self.custom_associations << self.custom_associations.build({
-            :context      => self,
-            :field        => field,
-            :handle       => field.handle,
-            :relationship => field.relationship,
-            :target_id    => association_value,
-            :target_type  => field.target_class.to_s
-          })
-        end
-      end
-    end
-  end
-
   def field_exists?(handle)
     fields.one? { |field| field.handle == handle }
   end
-
-  # alias_method :respond_to_without_field_checking?, :respond_to?
-  # def respond_to?(method, include_private = false)
-  #   !new_record? ? (respond_to_without_field_checking?(method, include_private) || field_exists?(method.to_s.gsub(/\?/, ''))) : respond_to_without_field_checking?(method, include_private)
-  # end
 
   def category
     #@category ||= field_set.allow_categories? ? all_tags.with_namespace(field_set.handle).first : nil
@@ -241,7 +203,29 @@ class Page
     @in_restricted_context ||= restricted? || node_restricted? || index_node_restricted?
   end
 
+  alias_method :respond_to_without_data?, :respond_to?
+  def respond_to?(method, include_private = false)
+    sanitized_method = method.to_s.gsub(/\?/, '')
+    respond_to_without_data?(method, include_private) || self.data.one? { |datum| datum.handle == sanitized_method }
+  end
+
+  def method_missing_with_datum(method, *args)
+    sanitized_method = method.to_s.gsub(/\?/, '')
+    if datum = self.data.detect { |p| p.handle == sanitized_method }
+      create_reader_for_datum datum
+      return datum.value
+    else
+      method_missing_without_datum(method, *args)
+    end
+  end
+  alias_method_chain :method_missing, :datum
+
 protected
+
+  def create_reader_for_datum(datum)
+    self.class.send :attr_reader, datum.handle
+    instance_variable_set("@#{datum.handle}".to_sym, datum.value)
+  end
 
   def node_restricted?
     node && (node.restricted? || node.ancestors.detect { |n| n.restricted? })
@@ -261,11 +245,6 @@ protected
     custom_attributes.each do |custom_attribute|
       create_reader_for_custom_attribute(custom_attribute)
     end
-  end
-
-  def create_reader_for_custom_attribute(custom_attribute)
-    self.class.send :attr_reader, custom_attribute.handle
-    instance_variable_set("@#{custom_attribute.handle}".to_sym, custom_attribute.value)
   end
 
   # def method_missing_with_find_custom_attributes(method, *args)

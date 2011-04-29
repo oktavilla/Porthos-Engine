@@ -72,9 +72,11 @@ Factory.define :rich_text_field, :parent => :text_field do |f|
   f.allow_rich_text true
 end
 
+Factory.define :boolean_field, :parent => :field do |f|
+end
+
 Factory.define :page do |f|
-  #f.association :field_set
-  f.field_set_id {Factory(:field_set).id}
+  f.field_set { Factory(:field_set) }
   f.title { Factory.next(:title) }
 end
 

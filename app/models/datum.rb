@@ -19,6 +19,12 @@ class Datum
   before_validation :type_cast_value
   before_validation :parameterize_handle
 
+  def value
+    read_attribute(:value).tap do |value|
+      value.localtime if input_type == 'date' && input_type == 'date_time'
+    end
+  end
+
   class << self
     def from_field(field, attrs = {})
       new(attrs.to_options.reverse_merge({

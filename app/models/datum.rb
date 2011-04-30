@@ -36,23 +36,16 @@ class Datum
       self.value = Boolean.to_mongo(value)
     when 'date'
     when 'date_time'
-      self.value = if value.acts_like?(:string)
-        begin
-          DateTime.parse(value)
-        rescue
-          Chronic.parse(value) rescue nil
-        end
-      elsif value.is_a?(Hash)
+      if value.is_a?(Hash)
         attrs = value.to_options
-        DateTime.new(*[
-          attrs[:year],
-          attrs[:month],
-          attrs[:day],
-          attrs[:hour],
-          attrs[:minute],
-        ].collect(&:to_i))
-      else
-        value
+        self.value = "#{attrs[:year]}-#{attrs[:month]}-#{attrs[:day]} #{attrs[:hour]}:#{attrs[:minute]}"
+      end
+      if value.acts_like?(:string)
+        begin
+          self.value = Time.parse(value).localtime
+        rescue
+          self.value = Chronic.parse(value).localtime rescue nil
+        end
       end
     end
   end

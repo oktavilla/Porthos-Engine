@@ -24,7 +24,7 @@ class DatumTest < ActiveSupport::TestCase
 
   test 'type casting the value for a date time' do
     datum = Datum.from_field(Factory.build(:date_time_field))
-    now = DateTime.now
+    now = Time.now.localtime
     date_time_string = now.strftime("%Y-%m-%d %H:%I")
 
     datum.value = date_time_string

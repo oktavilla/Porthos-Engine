@@ -7,11 +7,5 @@ class NodeTest < ActiveSupport::TestCase
     end
     subject { @node }
 
-    should belong_to :resource
-
-    should validate_presence_of :url
-    should validate_uniqueness_of :url
-    should validate_presence_of :controller
-    should validate_presence_of :action
   end
 end

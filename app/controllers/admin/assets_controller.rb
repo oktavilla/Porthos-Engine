@@ -143,7 +143,7 @@ class Admin::AssetsController < ApplicationController
 protected
 
   def find_tags
-    @tags = Tag.on('Asset')
+    @tags = Asset.tags_by_count(:limit => 30)
     @current_tags = params[:tags] || []
   end
 

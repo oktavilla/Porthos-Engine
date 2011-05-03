@@ -18,14 +18,14 @@ class Admin::AssetsController < ApplicationController
   has_scope :order_by, :default => 'created_at DESC'
 
   def index
-    @tags = Tag.on('Asset').limit(30)
+    @tags = Asset.tags_by_count(:limit => 30)
     @assets = unless @current_tags.any?
       apply_scopes(Asset).paginate({
         :page     => (params[:page] || 1),
         :per_page => (params[:per_page] || 20)
       })
     else
-      Asset.is_public.find_tagged_with({:tags => params[:tags], :order => 'created_at DESC'})
+      Asset.tagged_with(params[:tags]).where(:hidden => false).sort(:created_at.desc)
     end
     respond_to do |format|
       format.html
@@ -49,7 +49,6 @@ class Admin::AssetsController < ApplicationController
       respond_to do |format|
         format.html do
           @current_tags = params[:tags] || []
-          @related_tags = @current_tags.any? ? @type.find_related_tags(@current_tags) : []
         end
       end
     else
@@ -146,7 +145,6 @@ protected
   def find_tags
     @tags = Tag.on('Asset')
     @current_tags = params[:tags] || []
-    @related_tags = @current_tags.any? ? Asset.find_related_tags(@current_tags) : []
   end
 
   def set_callback

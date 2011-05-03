@@ -32,11 +32,13 @@ class AssetsTest < ActiveSupport::IntegrationCase
     fill_in 'asset_0_title', :with => 'My file'
     fill_in 'asset_0_description', :with => 'A file about stuff'
     fill_in 'asset_0_author', :with => 'A. User'
+    fill_in 'asset_0_tag_names', :with => 'my-tag'
     click_button I18n.t(:save)
 
     assert_equal admin_assets_path, current_path
     assert page.find("ul.items").has_content?('My file')
     assert page.find('ul.items').has_content?('A file about stuff')
+    assert page.find('ul.items').has_content?('my-tag')
   end
 
   test 'editing a asset' do
@@ -67,5 +69,18 @@ class AssetsTest < ActiveSupport::IntegrationCase
     assert_equal admin_assets_path, current_path
     assert page.has_no_css?("asset_#{asset.id}"), 'Asset removed from page body'
     assert Asset.count.zero?, 'Asset deleted from db'
+  end
+
+  test 'listning assets by tag' do
+    login!
+    asset1 = Factory.create(:asset, :tag_names => 'tag1 tag2', :file => new_tempfile('text'))
+    asset2 = Factory.create(:asset, :tag_names => 'tag2', :file => new_tempfile('text'))
+    asset3 = Factory.create(:asset, :tag_names => 'tag1 tag3', :file => new_tempfile('text'))
+    puts Asset.all.inspect
+    visit admin_assets_path(:tags => ['tag1'])
+
+    assert page.find("ul.items").has_content?(asset1.name), 'Should display asset1 in the assets list'
+    assert page.find("ul.items").has_content?(asset3.name), 'Should display assets3 in the assets list'
+    assert !page.find("ul.items").has_content?(asset2.name), 'Should not display asset2 in the assets list'
   end
 end

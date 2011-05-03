@@ -1,5 +1,6 @@
 class Asset
   include MongoMapper::Document
+  include Porthos::Taggable
 
   key :name, String
   key :extension, String
@@ -42,8 +43,6 @@ class Asset
   before_validation :process, :if => :new_record?
   after_destroy :cleanup
 #  after_save :commit_to_sunspot, :if => Rails.application.config.use_fulltext_search
-
-  #acts_as_taggable
 
   IMAGE_FORMATS = [:jpg, :jpeg, :png, :gif]
   VIDEO_FORMATS = [:flv, :mov, :qt, :mpg, :avi, :mp4]

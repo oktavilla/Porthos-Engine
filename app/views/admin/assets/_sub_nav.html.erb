@@ -20,7 +20,7 @@
     <% end -%>
     <% end %>
   </ul>
-<% if false and @tags.present? and @tags.any? -%>
+<% if @tags.present? and @tags.any? -%>
   <div class="label">Nyckelord</div>
   <ul class="tags alphabetical">
   <% @tags.sort_by(&:name).group_by { |tag| tag.name[0...1].upcase }.each do |first_letter, tags| -%>

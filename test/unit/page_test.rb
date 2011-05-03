@@ -7,7 +7,6 @@ class PageTest < ActiveSupport::TestCase
     @page.clone_field_set
   end
 
-
   test 'published_on should be less than now to be published' do
     @page.published_on = nil
     assert !@page.published?

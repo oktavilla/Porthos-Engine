@@ -79,7 +79,10 @@ Factory.define :rich_text_field, :parent => :text_field do |f|
   f.allow_rich_text true
 end
 
-Factory.define :boolean_field, :parent => :field do |f|
+Factory.define :boolean_field, :class => BooleanField, :parent => :field do |f|
+end
+
+Factory.define :date_time_field, :class => DateTimeField, :parent => :field do |f|
 end
 
 Factory.define :page do |f|

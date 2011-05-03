@@ -1,3 +1,4 @@
+require 'chronic'
 class Datum
   include MongoMapper::EmbeddedDocument
   embedded_in :page
@@ -14,12 +15,15 @@ class Datum
   validate :uniqueness_of_handle
   validates_presence_of :value,
                         :if => Proc.new { |d| d.required? && d.input_type != 'boolean' && page.published? }
-  validates_inclusion_of :value,
-                         :in => [true, false],
-                         :if => Proc.new { |d| d.required? && d.input_type == 'boolean' && d.page.published? }
 
-  before_validation :parameterize_handle
   before_validation :type_cast_value
+  before_validation :parameterize_handle
+
+  def value
+    read_attribute(:value).tap do |value|
+      value.localtime if input_type == 'date' && input_type == 'date_time'
+    end
+  end
 
   class << self
     def from_field(field, attrs = {})
@@ -32,27 +36,32 @@ class Datum
     end
   end
 
-protected
-
   def type_cast_value
-    if value.present?
-      case self.input_type
-      when 'boolean'
-        self.value = Boolean.to_mongo(value)
-        true
-      when 'date'
-      when 'date_time'
-        if !value.acts_like?(:time) && !value.acts_like?(:date)
-          self.value = Chronic.parse(value)
+    case self.input_type
+    when 'boolean'
+      self.value = Boolean.to_mongo(value)
+    when 'date'
+    when 'date_time'
+      if value.is_a?(Hash)
+        attrs = value.to_options
+        self.value = "#{attrs[:year]}-#{attrs[:month]}-#{attrs[:day]} #{attrs[:hour]}:#{attrs[:minute]}"
+      end
+      if value.acts_like?(:string)
+        begin
+          self.value = Time.parse(value).localtime
+        rescue
+          self.value = Chronic.parse(value).localtime rescue nil
         end
       end
     end
   end
 
+protected
+
   def uniqueness_of_handle
     if page.data.detect { |d| d.id != self.id && d.handle == self.handle }
       errors.add(:handle, :taken)
-    end
+    end if page
   end
 
   def parameterize_handle

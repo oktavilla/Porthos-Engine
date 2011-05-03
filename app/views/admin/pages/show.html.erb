@@ -93,10 +93,17 @@
       <%= fields_for 'page[data_attributes][]', datum, :index => index do |datum_fields| %>
         <%= datum_fields.hidden_field :id %>
         <%= datum_fields.label :value, datum.label %>
-        <% begin %>
-          <%= render :partial => "admin/datum/#{datum_fields.object.input_type}_form", :locals => { :f => datum_fields } %>
-        <% rescue ActionView::MissingTemplate %>
-          <%= datum_fields.text_field :value %>
+        <% if datum.is_a?(DatumAttribute) %>
+          <% begin %>
+            <%= render :partial => "admin/datum/#{datum_fields.object.input_type}_form", :locals => { :f => datum_fields } %>
+          <% rescue ActionView::MissingTemplate %>
+            <%= datum_fields.text_field :value %>
+          <% end %>
+        <% elsif datum.is_a?(ContentBlock) %>
+          <%= link_to 'Lägg till innehåll', new_admin_content_path(:content_block_id => datum.id, :type => 'Textfield') %>
+          <% datum.contents.each do |content| %>
+            <%= content.title %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

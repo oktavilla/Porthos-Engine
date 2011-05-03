@@ -1,5 +1,6 @@
 class Page
   include MongoMapper::Document
+  include Porthos::Taggable
 
   key :position, Integer
   key :title, String
@@ -121,9 +122,6 @@ class Page
   before_update :set_updated_by
 
   #after_initialize :create_namespaced_tagging_methods
-  def tags
-    []
-  end
   # after_save :commit_to_sunspot
 
   def contents_as_text

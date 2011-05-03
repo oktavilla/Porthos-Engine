@@ -12,10 +12,17 @@ class Admin::PagesController < ApplicationController
     @field_sets = FieldSet.all
     @field_set = FieldSet.find(params[:with_field_set]) if params[:with_field_set].present?
 
-    @pages = apply_scopes(Page).paginate({
-      :page     => (params[:page] || 1),
-      :per_page => (params[:per_page] || 25)
-    })
+    @tags = Page.tags_by_count(:limit => 30)
+    @current_tags = params[:tags] || []
+
+    @pages = unless @current_tags.any?
+      apply_scopes(Page).paginate({
+        :page     => (params[:page] || 1),
+        :per_page => (params[:per_page] || 25)
+      })
+    else
+      Page.tagged_with(@current_tags).sort(:updated_at.desc)
+    end
     respond_to do |format|
       format.html
     end
@@ -62,12 +69,9 @@ class Admin::PagesController < ApplicationController
     @page = Page.find(params[:id])
     respond_to do |format|
       if @page.update_attributes(params[:page])
+        @page.reload
         flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
-        # if @page.can_have_a_node?
-        #   format.html { redirect_to new_admin_node_path(:resource_id => @page.id) }
-        # else
-          format.html { redirect_to params[:return_to] || admin_page_path(@page.id) }
-        # end
+        format.html { redirect_to params[:return_to] || admin_page_path(@page.id) }
       else
         format.html { render :action => 'show' }
       end

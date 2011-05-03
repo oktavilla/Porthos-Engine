@@ -22,4 +22,16 @@
       <%= link_to "Utkast", admin_pages_path(current_scopes.merge(:is_published => 'false')) %>
     </li>
   </ul>
+  <% if @tags && @tags.any? -%>
+    <div class="label">Nyckelord</div>
+    <ul class="tags alphabetical">
+      <% @tags.sort_by(&:name).group_by { |tag| tag.name[0...1].upcase }.each do |first_letter, tags| -%>
+        <li>
+        <span class="letter"><%= first_letter %></span>
+        <% tags.each do |tag| -%>
+          <%= !@current_tags.include?(tag.name) ? link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') : link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags].dup - [tag.name])), :class => 'tag current') -%><%= ', ' unless tag == tags.last -%>
+        <% end -%>
+        </li>
+      <% end -%>
+    </ul><% end -%>
 </div>

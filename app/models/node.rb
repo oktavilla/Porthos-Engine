@@ -1,4 +1,19 @@
-class Node < ActiveRecord::Base
+class Node
+  include MongoMapper::Document
+  include MongoMapper::Acts::Tree
+
+  acts_as_tree
+
+  key :name, String
+  key :url, String
+  key :controller, String
+  key :action, String
+  key :status, Integer
+  key :restricted, Boolean, :default => lambda{false}
+
+  key :resource_id, ObjectId
+  key :resource_type, String
+
   belongs_to :resource,
              :polymorphic => true
   belongs_to :field_set
@@ -10,19 +25,11 @@ class Node < ActiveRecord::Base
   validates :controller, :presence => true
   validates :action, :presence => true
 
-  # acts_as_tree :counter_cache => :children_count,
-  #              :dependent => :destroy
-  # resort!
-
-  def siblings
-    self.class.where(:parent_id => self.parent_id)
-  end
-
   after_save  :generate_url_for_children
   before_validation :generate_url
 
   def resource_type=(r_type)
-     super(r_type.to_s.classify.constantize.base_class.to_s)
+     super(r_type.to_s.classify.constantize.to_s)
   end
 
   def access_status
@@ -47,13 +54,13 @@ class Node < ActiveRecord::Base
 
   class << self
     def for_page(page)
-      returning(self.new) do |node|
+      self.new.tap do |node|
         node.name       = page.title
-        node.controller = page.class.base_class.to_s.tableize
+        node.controller = page.class.to_s.tableize
         node.action     = 'show'
         node.resource   = page
-        node.field_set_id = page.field_set_id
-        node.parent = Node.root if node.parent_id.blank?
+        node.field_set = page.field_set
+        node.parent = Node.roots.first if node.parent_id.blank?
       end
     end
   end

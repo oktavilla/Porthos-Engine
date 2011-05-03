@@ -49,6 +49,7 @@
         <%= f.label :field_set_id %>
         <%= f.select :field_set_id, FieldSet.all.collect { |f| [f.title, f.id] }, :include_blank => 'Välj en sidtyp' %>
       <% end %>
+      <% if @nodes.any? %>
       <div id="navigation">
         <%= nested_list_of(@nodes, {
             :end_points => @nodes,
@@ -66,6 +67,7 @@
           </div>
         <% end %>
       </div>
+      <% end %>
       <div class="submit">
         <%= submit_tag t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), previous_view_path((@resource ? admin_page_path(:id => @resource.id) : admin_nodes_path)) %>
       </div>

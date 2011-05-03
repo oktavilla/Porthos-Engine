@@ -5,7 +5,7 @@ class Admin::NodesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @root  = Node.root
+        @root  = Node.roots.first
         @nodes = @root ? @root.children : []
         @open_nodes = params[:nodes] ? Node.find_all_by_id(params[:nodes]) : Node.find_all_by_id(cookies[:last_opened_node])
         @trail = @open_nodes ? @open_nodes.collect { |node| (node.ancestors || []) << node }.flatten : []
@@ -28,7 +28,7 @@ class Admin::NodesController < ApplicationController
   def new
     @resource = Page.find(params[:resource_id]) if params[:resource_id]
     @node = @resource ? Node.for_page(@resource) : Node.new
-    @nodes = [Node.root]
+    @nodes = [Node.roots.first]
     respond_to do |format|
       format.html
     end
@@ -74,7 +74,7 @@ class Admin::NodesController < ApplicationController
     respond_to do |format|
       if @node.update_attributes(params[:node])
         format.html do
-          redirect_to previous_view_path(admin_nodes_path(:nodes => @node))
+          redirect_to (params[:return_to] || admin_nodes_path(:nodes => @node))
         end
       else
         format.html do

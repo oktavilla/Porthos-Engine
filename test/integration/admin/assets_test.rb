@@ -76,7 +76,6 @@ class AssetsTest < ActiveSupport::IntegrationCase
     asset1 = Factory.create(:asset, :tag_names => 'tag1 tag2', :file => new_tempfile('text'))
     asset2 = Factory.create(:asset, :tag_names => 'tag2', :file => new_tempfile('text'))
     asset3 = Factory.create(:asset, :tag_names => 'tag1 tag3', :file => new_tempfile('text'))
-    puts Asset.all.inspect
     visit admin_assets_path(:tags => ['tag1'])
 
     assert page.find("ul.items").has_content?(asset1.name), 'Should display asset1 in the assets list'

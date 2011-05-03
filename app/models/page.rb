@@ -11,6 +11,9 @@ class Page
   key :published_on, DateTime
   timestamps!
 
+  ensure_index :created_at
+  ensure_index :updated_at
+
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
   belongs_to :field_set

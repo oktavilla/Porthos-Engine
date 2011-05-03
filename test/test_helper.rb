@@ -107,24 +107,3 @@ end
 class ActiveSupport::TestCase
   include PorthosTestHelpers
 end
-
-
-class ActiveSupport::IntegrationCase
-
-protected
-
-  def login!
-    @user = Factory.create(:user, {
-      :username => 'a-user',
-      :password => 'password',
-      :password_confirmation => 'password'
-    })
-    visit admin_login_path
-
-    fill_in User.human_attribute_name('username'), :with => 'a-user'
-    fill_in User.human_attribute_name('password'), :with => 'password'
-
-    click_button I18n.t(:login, :scope => :'views.admin.sessions.new')
-  end
-
-end

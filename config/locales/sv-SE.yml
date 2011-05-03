@@ -494,7 +494,8 @@
             not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
             restricted: Avstängd, inte tillgänglig på internet
         pages:
-          publish_now: publicera
+            show:
+              publish_now: publicera
   admin:
     field_sets:
       all_field_sets: Alla sidtyper

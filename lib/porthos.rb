@@ -8,6 +8,8 @@ require 'bcrypt'
 require 'resizor'
 require 'has_scope'
 require 's3'
+require 'sprockets'
+require 'mongo_mapper_acts_as_tree'
 
 require 'porthos/redirects'
 require 'porthos/engine'

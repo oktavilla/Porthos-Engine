@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'has_scope'
   s.add_dependency 's3'
   s.add_dependency 'resizor'
+  s.add_dependency 'ramdiv-mongo_mapper_acts_as_tree'
 
   # Dev dependencies
   s.add_development_dependency 'shoulda'

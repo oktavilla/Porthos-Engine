@@ -2,7 +2,8 @@ require 'routing_filter'
 module RoutingFilter
   class UrlResolver < Filter
     def around_recognize(path, env, &block)
-      if env["REQUEST_URI"] =~ /^\/(admin|javascripts|stylesheets|images|graphics)/
+      excluded_path_prefixes = /^\/(assets\/admin|admin|javascripts|stylesheets|images|graphics)/
+      if env["REQUEST_URI"] =~ excluded_path_prefixes or path =~ excluded_path_prefixes
         yield
       else
         path.replace(CGI::unescape(path))
@@ -36,11 +37,12 @@ module RoutingFilter
       if params[:controller] =~ /admin/
         yield
       else
+        node = nil
         conditions = { :controller => params[:controller], :action => params[:action] }
         index_conditions = conditions.dup.merge(:action => 'index')
         if params[:id].present?
           resource = params[:id]
-          if resource.is_a?(ActiveRecord::Base)
+          if resource.class.include?(MongoMapper::Document)
             params[:id] = resource.to_param
             conditions.merge!(:resource_type => resource.class.to_s, :resource_id => resource.id)
             if resource.respond_to?(:field_set_id)

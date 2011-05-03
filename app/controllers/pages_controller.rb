@@ -22,8 +22,8 @@ class PagesController < ApplicationController
   end
 
   def show
-    @page = Page.find_by_id(params[:id], :include => [:custom_attributes, :custom_associations, :fields]) ||
-            Page.find_by_uri(params[:id], :include => [:custom_attributes, :custom_associations, :fields]) ||
+    @page = Page.find(params[:id]) ||
+            Page.find(:uri => params[:id]) ||
             (raise ActiveRecord::RecordNotFound)
     template = @page.field_set.template
     @page_renderer = page_renderer(template, :field_set => @page.field_set, :page => @page)

@@ -242,9 +242,9 @@ protected
   end
 
   def cache_custom_attributes
-    custom_attributes.each do |custom_attribute|
-      create_reader_for_custom_attribute(custom_attribute)
-    end
+    #custom_attributes.each do |custom_attribute|
+    #  create_reader_for_custom_attribute(custom_attribute)
+    #end
   end
 
   # def method_missing_with_find_custom_attributes(method, *args)

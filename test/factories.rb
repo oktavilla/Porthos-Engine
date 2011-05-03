@@ -39,8 +39,15 @@ end
 
 Factory.define :node do |f|
   f.url { Factory.next(:url) }
+  f.status 1
   f.controller "pages"
   f.action "index"
+end
+
+Factory.define :root_node, :parent => :node do |f|
+  f.url nil
+  f.name 'Start'
+  f.field_set { Factory(:field_set) }
 end
 
 Factory.define :field_set do |f|
@@ -107,15 +114,15 @@ Factory.define :image_asset, :parent => :asset, :class => ImageAsset do |f|
 end
 
 # Factories for url resolver
-Factory.define :test_post do |f|
+Factory.define :post do |f|
 end
 
 Factory.define :test_blog_node, :parent => :node do |f|
-  f.controller 'test_posts'
+  f.controller 'posts'
   f.action 'index'
 end
 
 Factory.define :test_blog_post_node, :parent => :test_blog_node do |f|
   f.action 'show'
-  f.resource { Factory(:test_post) }
+  f.resource { Factory(:post) }
 end

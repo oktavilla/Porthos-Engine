@@ -1,2 +1,3 @@
-class TestPost < ActiveRecord::Base
+class Post
+  include MongoMapper::Document
 end

@@ -1,26 +1,12 @@
-<% @page_title = "Lägg till bild" %>
+<% @page_title = t('.title') %>
 <div id="workspace">
   <div class="header">
-    <h1>Lägg till bild</h1>
+    <h1><%=t '.title' %></h1>
   </div>
   <div id="content">
     <div id="c_1"><div class="inner">
       <%= form_for [:admin, @content], :as => :content, :url => admin_contents_path do |f| %>
-        <%= hidden_field_tag :content_block, @content_block.handle %>
-        <%= hidden_field_tag :type, @content.class.to_s %>
-        <%= f.hidden_field :asset_id %>
-        <label for="content_image_title">Beskriv vad bilden föreställer</label>
-        <div class="fullwidth">
-          <%= f.text_field :title, :value => @content.asset.title, :class => 'title' %>
-        </div>
-        <label for="content_image_caption">Bildtext</label>
-        <div class="fullwidth">
-          <%= f.text_area :caption, :value => @content.asset.description, :cols => 30, :rows => 5 %>
-        </div>
-        <label for="content_image_title">Copyright / Fotograf</label>
-        <div class="fullwidth">
-          <%= f.text_field :copyright, :value => @content.asset.author %>
-        </div>
+        <%= render :partial => 'admin/contents/images/form', :locals => { :f => f } %>
         <div class="submit">
           <input type="submit" value="Lägg till bild"> eller <a href="<%= previous_view_path %>" class="back">avbryt</a>
         </div>

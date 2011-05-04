@@ -1,12 +1,15 @@
-<%= image_tag display_image_path(:size => 'w150', :id => @content.resource.asset, :format => @content.resource.asset.extname), :width => 150 %>
-
-<label for="content_image_title">Alt. text</label>
-<%= f.text_field :title, :class => 'text' %>
-
+<%= hidden_field_tag :content_block, @content_block.handle %>
+<%= hidden_field_tag :type, @content.class.to_s %>
+<%= f.hidden_field :asset_id %>
+<label for="content_image_title">Beskriv vad bilden föreställer</label>
+<div class="fullwidth">
+  <%= f.text_field :title, :value => @content.asset.title, :class => 'title' %>
+</div>
 <label for="content_image_caption">Bildtext</label>
-<%= f.text_area :caption %>
-
-<label for="content_image_caption">Bildtext</label>
-<%= f.text_field :caption, :class => 'text' %>
-
-<label for="content_image_downloadable"><%= f.check_box :downloadable %> Länka till orginal</label>
+<div class="fullwidth">
+  <%= f.text_area :caption, :value => @content.asset.description, :cols => 30, :rows => 5 %>
+</div>
+<label for="content_image_title">Copyright / Fotograf</label>
+<div class="fullwidth">
+  <%= f.text_field :copyright, :value => @content.asset.author %>
+</div>

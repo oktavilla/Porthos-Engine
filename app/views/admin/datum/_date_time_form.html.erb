@@ -1,1 +1,9 @@
-<%= f.text_field :value %>
+<div class="container">
+  <h2 class="field_label"><%= datum.label %></h2>
+  <div class="content">
+    <%= datum.value.in_time_zone.strftime("%Y-%m-%d %H:%M") if datum.value.present? %>
+  </div>
+  <div class="edit"><a href="#" class="change">Ändra</a></div>
+</div>
+<%= f.label :value, datum.label %>
+<%= f.text_field :value, :value => (datum.value.present? ? datum.value.in_time_zone.strftime("%Y-%m-%d %H:%M") : '') %>

@@ -87,24 +87,31 @@
       </div>
     <% end %>
   </div>
-  <div id="content" class="page_contents">
+  <div id="content" class="datums">
   <%= form_for [:admin, @page] do |f| %>
     <% @page.data.each_with_index do |datum, index| %>
       <%= fields_for 'page[data_attributes][]', datum, :index => index do |datum_fields| %>
         <%= datum_fields.hidden_field :id %>
-        <%= datum_fields.label :value, datum.label %>
+        <div class="datum <%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
         <% if datum.is_a?(DatumAttribute) %>
-          <% begin %>
-            <%= render :partial => "admin/datum/#{datum_fields.object.input_type}_form", :locals => { :f => datum_fields } %>
-          <% rescue ActionView::MissingTemplate %>
-            <%= datum_fields.text_field :value %>
-          <% end %>
+          <%= render :partial => "admin/datum/#{datum_fields.object.input_type}_form", :locals => { :f => datum_fields, :datum => datum } %>
         <% elsif datum.is_a?(ContentBlock) %>
-          <%= link_to 'Lägg till innehåll', new_admin_content_path(:content_block_id => datum.id, :type => 'Textfield') %>
+          <h2><%= datum.label %></h2>
+          <%= link_to 'Lägg till innehåll', new_admin_content_path(:content_block => datum.handle, :type => 'Textfield') %>
+          <ul class="contents sortable" data-content-block="<%= datum.handle %>">
           <% datum.contents.each do |content| %>
-            <%= content.title %>
+            <li class="content <%= content.class.to_s.underscore %>">
+              <%= render :partial => "admin/contents/#{content.class.to_s.tableize}/#{content.class.to_s.underscore}", :locals => { :content => content } %>
+              <span class="edit">
+                <%= link_to "Ändra", edit_admin_content_path(content, :content_block => datum.handle) %>
+                <%= link_to content.active? ? 'Dölj' : 'Visa', toggle_admin_content_path(content, :content_block => datum.handle), :method => :put, :class => 'visibility' %>
+                <%= link_to "Ta bort", admin_content_path(content, :content_block => datum.handle), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+              </span>
+            </li>
           <% end %>
+          </ul>
         <% end %>
+        </div>
       <% end %>
     <% end %>
     <div>

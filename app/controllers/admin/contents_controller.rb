@@ -11,25 +11,20 @@ class Admin::ContentsController < ApplicationController
 
   def create
     @content = params[:type].constantize.new(params[:content])
-    raise @content_block.inspect
-    @page.contents << @content
+    @content_block.contents << @content
     if @page.save
       flash[:notice] = t(:saved, :scope => [:app, :admin_general])
     end
     respond_with(@content, :location => admin_page_path(@page))
   end
 
-  def show
-    @content = @page.contents.find(params[:id])
-    respond_with(@content)
-  end
-
   def edit
-    @content = @page.contents.find(params[:id])
+    @content = @content_block.contents.find(params[:id])
+    render :template => "admin/contents/#{@content.class.to_s.tableize}/edit"
   end
 
   def update
-    @content = @page.contents.find(params[:id])
+    @content = @content_block.contents.find(params[:id])
     if @content.update_attributes(params[:content])
       flash[:notice] = t(:saved, :scope => [:app, :admin_contents])
     end
@@ -37,8 +32,8 @@ class Admin::ContentsController < ApplicationController
   end
 
   def destroy
-    @content = @field_set.data.find(params[:id])
-    if @field_set.pull(:fields => { :_id => @field.id })
+    @content = @content_block.contents.find(params[:id])
+    if @content_block.pull(:contents => { :_id => @content.id })
       flash[:notice] = "#{@field.label}  #{t(:deleted, :scope => [:app, :admin_general])}"
     end
     respond_with @field, :location => admin_field_set_path(@field_set)
@@ -64,12 +59,9 @@ class Admin::ContentsController < ApplicationController
   Page.first(:conditions => { 'data' => { }})
 
   def toggle
-    @content = Content.find(params[:id])
+    @content = @content_block.contents.find(params[:id])
     @content.update_attributes(:active => !@content.active)
-    respond_to do |format|
-      format.html { redirect_to restfull_path_for(@content.context, :anchor => "content_#{@content.id}") }
-      format.js
-    end
+    respond_with(@content, :location => admin_page_path(@page))
   end
 
   def settings
@@ -82,9 +74,8 @@ class Admin::ContentsController < ApplicationController
 protected
 
   def find_content_block_and_page
-    raise Page.where(:data => { :id => params[:content_block_id] }).first.inspect
-    @page = Page.find(:data => { :id => params[:content_block_id]}).first
-    @content_block = @page.data.detect { |d| d.id.to_s = params[:content_block_id] }
+    @page = Page.where('data.handle' => params[:content_block]).first
+    @content_block = @page.data.detect { |d| d.handle == params[:content_block] }
   end
 
 end

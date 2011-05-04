@@ -106,6 +106,7 @@
       redirect: Vidarebefordring
       field_set: Sidtyp
       field: Fält
+      content_block_field: Innehållsblock
       date_time_field: Datum
       string_field: Sträng
       text_field: Text

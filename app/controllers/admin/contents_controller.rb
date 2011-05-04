@@ -1,115 +1,65 @@
 class Admin::ContentsController < ApplicationController
+  respond_to :html
   include Porthos::Admin
-  
+  before_filter :find_content_block_and_page
   skip_after_filter :remember_uri
 
-  def show
-    @content = Content.find(params[:id])
-    respond_to do |format|
-      format.html
-      format.js { render :json => @content.to_json }
-    end
-  end
-
   def new
-    @content = Content.new(params[:content])
-    @content.resource = @content.resource_class.new(params[:resource])
-    respond_to do |format|
-      format.html { render :template => @content.resource.view_path(:new) }
-      format.js   { render :template => @content.resource.view_path(:new), :layout => false }
-    end
-  end
-
-  def edit
-    @content  = Content.find(params[:id])
-    @resource = @content.resource
-
-    if params[:resource]
-      @asset = Asset.find(params[:resource][:image_asset_id] || params[:resource][:video_asset_id])
-    end
-
-    respond_to do |format|
-      format.html { render :template => @content.resource.view_path(:edit) }
-      format.js   { render :template => @content.resource.view_path(:edit), :layout => false }
-    end
-  end
-
-  def update
-    @content = Content.find(params[:id])
-    @content.resource.update_attributes(params[:resource]) if params[:resource]
-    @content.update_attributes(params[:content]) if params[:content]
-    @saved = @content.valid? && @content.resource.valid?
-    respond_to do |format|
-      if @saved
-        format.html { redirect_to restfull_path_for(@content.context, :anchor => "content_#{@content.id}") }
-      else
-        format.html { render :template => @content.resource.view_path(:edit) }
-      end
-    end
+    @content = params[:type].constantize.new(params[:content])
+    render :template => "admin/contents/#{@content.class.to_s.tableize}/new"
   end
 
   def create
-    Content.transaction do
-      @content = Content.new({
-        :column_position => 1,
-        :active => 1
-      }.stringify_keys.merge(params[:content]))
-      if @content.resource_id.blank?
-        @resource = @content.resource_class.new(params[:resource])
-        @resource.parent = @content if @resource.respond_to?(:parent)
-        @resource.save!
-        @content.resource = @resource
-      end
-      @content.save!
-      if params[:collection] && params[:collection].to_i == 1
-        @collection = ContentCollection.create(params[:content])
-        @collection.contents << @content
-      end
+    @content = params[:type].constantize.new(params[:content])
+    @content_block.contents << @content
+    if @page.save
+      flash[:notice] = t(:saved, :scope => [:app, :admin_general])
     end
-    respond_to do |format|
-      format.html { redirect_to restfull_path_for(@content.context, :anchor => "content_#{@content.id}") }
+    respond_with(@content, :location => admin_page_path(@page))
+  end
+
+  def edit
+    @content = @content_block.contents.find(params[:id])
+    render :template => "admin/contents/#{@content.class.to_s.tableize}/edit"
+  end
+
+  def update
+    @content = @content_block.contents.find(params[:id])
+    if @content.update_attributes(params[:content])
+      flash[:notice] = t(:saved, :scope => [:app, :admin_contents])
     end
-  rescue ActiveRecord::RecordInvalid
-    @content.valid?
-    respond_to do |format|
-      format.html { render :template => (@resource || @content.resource).send(:view_path, :new) }
-      format.js { render :template => (@resource || @content.resource).send(:view_path, :new), :layout => false }
-    end
+    respond_with(@content, :location => admin_page_path(@page))
   end
 
   def destroy
-    @content = Content.find(params[:id])
-    @content.destroy
-    flash[:notice] = t(:saved, :scope => [:app, :admin_contents]) unless @content.resource and @content.resource_type == 'ContentTextfield' and @content.resource.body.blank?
-    respond_to do |format|
-      format.html { redirect_to restfull_path_for(@content.context) }
+    @content = @content_block.contents.find(params[:id])
+    @content_block.contents.delete_if { |c| c._id == @content.id }
+    if @page.save
+      flash[:notice] = t(:deleted, :scope => [:app, :admin_general])
     end
+    respond_with @content, :location => admin_page_path(@page)
   end
 
   def sort
-    timestamp = Time.now
-    params[:content].each_with_index do |id, i|
-      attributes = {}
-      attributes[:column_position] = params[:column_position] if params[:column_position]
-      attributes[:parent_id] = params[:parent_id] if params[:parent_id]
-      Content.update_all({
-        :first => (i == 0),
-        :next_id => params[:content][i+1],
-        :updated_at => timestamp
-      }.merge(attributes), ["id = ?", id])
-    end if params[:content]
+    if params[:content]
+      params[:content].each_with_index do |id, i|
+        @content_block.contents.detect { |c| c.id.to_s == id }.tap do |content|
+          content.position = i
+        end
+      end
+      @page.save
+    end
     respond_to do |format|
       format.js { render :nothing => true }
     end
   end
 
+  Page.first(:conditions => { 'data' => { }})
+
   def toggle
-    @content = Content.find(params[:id])
+    @content = @content_block.contents.find(params[:id])
     @content.update_attributes(:active => !@content.active)
-    respond_to do |format|
-      format.html { redirect_to restfull_path_for(@content.context, :anchor => "content_#{@content.id}") }
-      format.js
-    end
+    respond_with(@content, :location => admin_page_path(@page))
   end
 
   def settings
@@ -118,4 +68,12 @@ class Admin::ContentsController < ApplicationController
       format.html { }
     end
   end
+
+protected
+
+  def find_content_block_and_page
+    @page = Page.where('data.handle' => params[:content_block]).first
+    @content_block = @page.data.detect { |d| d.handle == params[:content_block] }
+  end
+
 end

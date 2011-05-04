@@ -4,8 +4,34 @@
     <h1><%=t '.title'%> </h1>
   </div>
   <div id="content">
-    <%= form_for [:admin, @content], :as => :content, :url => admin_content_path(@content) do |f| %>
-      <%= render :partial => 'admin/contents/teasers/form', :locals => { :f => f } %>
-    <% end %>
+    <div id="c_1">
+      <%= form_for [:admin, @content], :as => :content, :url => admin_content_path(@content) do |f| %>
+        <%= render :partial => 'admin/contents/teasers/form', :locals => { :f => f } %>
+      <% end %>
+    </div>
+    <div id="c_2">
+      <%= link_to("Lägg till bild", admin_assets_path(:by_type => 'ImageAsset' , :create_callback => {
+          :controller => 'admin/contents',
+          :action => 'update',
+          :method => 'put',
+          :id => @content.id,
+          :asset_field_name => 'content[new_asset_id]',
+          :params => {
+            :content_block => @content_block.handle,
+            :return_to => request.request_uri
+          }
+        }), :class => 'new') %>
+      <% if @content.assets.any? %>
+        <h2>Bilder</h2>
+        <ul id="assets" class="assets sortable_tree">
+        <% @content.assets.each do |asset| %>
+          <li id="asset_<%= asset.id %>">
+            <%= image_tag('/graphics/admin/icons/move-vertical.gif', :class => "handle", :style => 'display:none') %>
+            <%= image_tag asset.version_url(:size => 'c80x80') %>
+          </li>
+        <% end %>
+        </ul>
+      <% end %>
+    </div>
   </div>
 </div>

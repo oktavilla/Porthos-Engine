@@ -26,6 +26,7 @@ protected
         end
       end
     end
+    true
   end
 
   def self.extract_field_attributes(field)

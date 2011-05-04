@@ -33,10 +33,11 @@ class Admin::ContentsController < ApplicationController
 
   def destroy
     @content = @content_block.contents.find(params[:id])
-    if @content_block.pull(:contents => { :_id => @content.id })
-      flash[:notice] = "#{@field.label}  #{t(:deleted, :scope => [:app, :admin_general])}"
+    @content_block.contents.delete_if { |c| c._id == @content.id }
+    if @page.save
+      flash[:notice] = t(:deleted, :scope => [:app, :admin_general])
     end
-    respond_with @field, :location => admin_field_set_path(@field_set)
+    respond_with @content, :location => admin_page_path(@page)
   end
 
   def sort

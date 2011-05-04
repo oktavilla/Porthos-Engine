@@ -110,8 +110,8 @@
           </div>
 
           <ul class="contents sortable" data-content-block="<%= datum.handle %>">
-          <% datum.contents.each do |content| %>
-            <li class="content <%= content.class.to_s.underscore %><%= ' inactive' unless content.active? %>">
+          <% datum.contents.sort_by(&:position).each do |content| %>
+            <li id="content_<%= content.id %>" class="content <%= content.class.to_s.underscore %><%= ' inactive' unless content.active? %>">
               <%= render :partial => "admin/contents/#{content.class.to_s.tableize}/#{content.class.to_s.underscore}", :locals => { :content => content } %>
               <span class="edit">
                 <%= link_to "Ändra", edit_admin_content_path(content, :content_block => datum.handle) %>

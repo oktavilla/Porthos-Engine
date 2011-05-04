@@ -24,7 +24,7 @@
 	      stop: function() {
 	        $sortables.each(function() {
 	          var $sortable = $(this),
-	              params = '&column_position=' + $sortable.data('column'),
+	              params = '&content_block=' + $sortable.data('content-block'),
 	              contents = $sortable.sortable('serialize');
 	          if (contents === '') {
 	            return;

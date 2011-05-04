@@ -104,6 +104,7 @@
           <div class="sub_controls" style="display:none;">
             <ul>
               <li><%= link_to Textfield.human_name, new_admin_content_path(:content_block => datum.handle, :type => 'Textfield') %></li>
+              <li><%= link_to Teaser.human_name, new_admin_content_path(:content_block => datum.handle, :type => 'Teaser') %></li>
               <li><%= link_to Image.human_name, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :controller => 'admin/contents', :action => 'new', :asset_field_name => 'content[asset_id]', :params => { 'content_block' => datum.handle, :type => 'Image' }}) %></li>
             </ul>
           </div>

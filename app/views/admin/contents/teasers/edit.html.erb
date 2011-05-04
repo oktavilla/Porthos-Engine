@@ -1,0 +1,11 @@
+<% @page_title = t('.title') %>
+<div id="workspace">
+  <div class="header">
+    <h1><%=t '.title'%> </h1>
+  </div>
+  <div id="content">
+    <%= form_for [:admin, @content], :as => :content, :url => admin_content_path(@content) do |f| %>
+      <%= render :partial => 'admin/contents/teasers/form', :locals => { :f => f } %>
+    <% end %>
+  </div>
+</div>

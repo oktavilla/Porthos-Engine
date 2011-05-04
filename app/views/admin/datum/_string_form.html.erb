@@ -1,13 +1,15 @@
-<div class="container">
-  <h2 class="field_label"><%= datum.label %></h2>
+<div class="viewable">
+  <h2><%= datum.label %></h2>
   <div class="content">
     <%= datum.allow_rich_text? ? datum.value : simple_format(datum.value) %>
   </div>
   <div class="edit"><a href="#" class="change">Ändra</a></div>
 </div>
-<%= f.label :value, datum.label %>
-<% if datum.multiline? %>
-  <%= f.text_area :value, :class => (datum.allow_rich_text? ? 'editor' : 'normal') %>
-<% else %>
-<%= f.text_field :value %>
-<% end %>
+<div class="editable">
+  <%= f.label :value, datum.label %>
+  <% if datum.multiline? %>
+    <%= f.text_area :value, :class => (datum.allow_rich_text? ? 'editor' : 'normal') %>
+  <% else %>
+    <%= f.text_field :value %>
+  <% end %>
+</div>

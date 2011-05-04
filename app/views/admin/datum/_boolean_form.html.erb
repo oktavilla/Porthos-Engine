@@ -1,7 +1,9 @@
-<div class="container">
-  <h2 class="field_label <%= datum.value? ? 'checked' : 'unchecked' %>"><%= datum.label %></h2>
+<div class="viewable">
+  <h2 class="<%= datum.value? ? 'checked' : 'unchecked' %>"><%= datum.label %></h2>
   <div class="content"><%= datum.value? ? 'Ja' : 'Nej' %></div>
   <div class="edit"><a href="#" class="change">Ändra</a></div>
 </div>
-<%= f.label :value, datum.label %>
-<%= f.check_box :value %>
+<div class="editable">
+  <%= f.label :value, datum.label %>
+  <%= f.check_box :value %>
+</div>

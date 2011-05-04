@@ -34,7 +34,7 @@ class Page
       if id = datum_attrs.delete(:id)
         unless datum_attrs[:_destroy]
           data.detect { |d| d.id.to_s == id }.tap do |datum|
-            datum.update_attributes(datum_attrs)
+            datum.update_attributes(datum_attrs) if datum_attrs.keys.any?
           end
         end
       else

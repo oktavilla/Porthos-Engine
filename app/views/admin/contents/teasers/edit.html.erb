@@ -5,20 +5,17 @@
   </div>
   <div id="content">
     <div id="c_1">
-      <%= form_for [:admin, @content], :as => :content, :url => admin_content_path(@content) do |f| %>
+      <%= form_for @content, :as => :content, :url => admin_page_datum_content_path(@page, @datum, @content) do |f| %>
         <%= render :partial => 'admin/contents/teasers/form', :locals => { :f => f } %>
       <% end %>
     </div>
     <div id="c_2">
-      <%= link_to("Lägg till bild", admin_assets_path(:by_type => 'ImageAsset' , :create_callback => {
-          :controller => 'admin/contents',
-          :action => 'update',
+      <%= link_to(t('.add_image'), admin_assets_path(:by_type => 'ImageAsset' , :create_callback => {
+          :path => admin_page_datum_content_path(@page, @datum, @content),
           :method => 'put',
-          :id => @content.id,
           :asset_field_name => 'content[new_asset_id]',
           :params => {
-            :content_block => @content_block.handle,
-            :return_to => request.request_uri
+            :return_to => request.fullpath
           }
         }), :class => 'new') %>
       <% if @content.assets.any? %>

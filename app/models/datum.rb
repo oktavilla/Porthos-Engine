@@ -1,4 +1,3 @@
-require 'chronic'
 class Datum
   include MongoMapper::EmbeddedDocument
   embedded_in :page

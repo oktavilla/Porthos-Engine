@@ -1,7 +1,7 @@
 class Admin::ContentsController < ApplicationController
   respond_to :html
   include Porthos::Admin
-  before_filter :find_content_block_and_page
+  before_filter :find_datum_and_page
   skip_after_filter :remember_uri
 
   def new
@@ -11,7 +11,7 @@ class Admin::ContentsController < ApplicationController
 
   def create
     @content = params[:type].constantize.new(params[:content])
-    @content_block.contents << @content
+    @datum.contents << @content
     if @page.save
       flash[:notice] = t(:saved, :scope => [:app, :admin_general])
     end
@@ -19,21 +19,21 @@ class Admin::ContentsController < ApplicationController
   end
 
   def edit
-    @content = @content_block.contents.find(params[:id])
+    @content = @datum.contents.find(params[:id])
     render :template => "admin/contents/#{@content.class.to_s.tableize}/edit"
   end
 
   def update
-    @content = @content_block.contents.find(params[:id])
+    @content = @datum.contents.find(params[:id])
     if @content.update_attributes(params[:content])
-      flash[:notice] = t(:saved, :scope => [:app, :admin_contents])
+      flash[:notice] = t(:saved, :scope => [:app, :admin_general])
     end
     respond_with(@content, :location => admin_page_path(@page))
   end
 
   def destroy
-    @content = @content_block.contents.find(params[:id])
-    @content_block.contents.delete_if { |c| c._id == @content.id }
+    @content = @datum.contents.find(params[:id])
+    @datum.contents.delete_if { |c| c._id == @content.id }
     if @page.save
       flash[:notice] = t(:deleted, :scope => [:app, :admin_general])
     end
@@ -43,7 +43,7 @@ class Admin::ContentsController < ApplicationController
   def sort
     if params[:content]
       params[:content].each_with_index do |id, i|
-        @content_block.contents.detect { |c| c.id.to_s == id }.tap do |content|
+        @datum.contents.detect { |c| c.id.to_s == id }.tap do |content|
           content.position = i
         end
       end
@@ -54,10 +54,8 @@ class Admin::ContentsController < ApplicationController
     end
   end
 
-  Page.first(:conditions => { 'data' => { }})
-
   def toggle
-    @content = @content_block.contents.find(params[:id])
+    @content = @datum.contents.find(params[:id])
     @content.update_attributes(:active => !@content.active)
     respond_with(@content, :location => admin_page_path(@page))
   end
@@ -71,9 +69,9 @@ class Admin::ContentsController < ApplicationController
 
 protected
 
-  def find_content_block_and_page
-    @page = Page.where('data.handle' => params[:content_block]).first
-    @content_block = @page.data.detect { |d| d.handle == params[:content_block] }
+  def find_datum_and_page
+    @page = Page.find(params[:page_id])
+    @datum = @page.data.find(params[:datum_id])
   end
 
 end

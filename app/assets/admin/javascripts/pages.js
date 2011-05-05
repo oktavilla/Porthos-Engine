@@ -21,18 +21,18 @@
 	    $sortables.sortable({
 	      handle: 'span.draghandle',
 	      connectWith: $sortables,
+	      axis: 'y',
 	      stop: function() {
 	        $sortables.each(function() {
 	          var $sortable = $(this),
-	              params = '&content_block=' + $sortable.data('content-block'),
 	              contents = $sortable.sortable('serialize');
 	          if (contents === '') {
 	            return;
 	          }
 	          $.ajax({
 	            type: 'PUT',
-	            url: '/admin/contents/sort',
-	            data: contents + params,
+	            url: $sortable.data('sort-uri'),
+	            data: contents,
 	            dataType: 'json'
 	          });
 	        });

@@ -1,9 +1,4 @@
-<%= form_tag url_for({
-      :controller => create_callback[:controller],
-      :action => create_callback[:action],
-      :id => create_callback[:id]
-    }),
-    :method => (create_callback[:method].present? ? create_callback[:method] : 'get') do %>
+<%= form_tag create_callback[:path], :method => (create_callback[:method].present? ? create_callback[:method] : 'get') do %>
   <% create_callback[:params].each do |key, value| %>
     <%= if value.is_a?(Hash)
       value.collect{|sub_key, sub_value| hidden_field_tag("#{key}[#{sub_key}]", sub_value)}.join.html_safe
@@ -12,6 +7,6 @@
     end
     %>
   <% end %>
-  <%= hidden_field_tag create_callback[:asset_field_name], asset.id%>
-  <%= submit_tag "Välj", :class => 'new' %>
+  <%= hidden_field_tag create_callback[:asset_field_name], asset.id %>
+  <%= submit_tag t(:choose), :class => 'new' %>
 <% end %>

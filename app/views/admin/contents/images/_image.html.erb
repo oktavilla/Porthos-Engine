@@ -1,0 +1,8 @@
+<div class="actual_content image">
+  <% if content.asset %>
+    <%= image_tag content.asset.version_url(:size => 'c80x80') %>
+  <% end %>
+  <span class="title"><%= content.title %></span>
+  <div class="description"><%= content.caption %></div>
+  <span class="meta">Copyright / Fotograf: <%= content.copyright %></span>
+</div>

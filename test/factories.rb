@@ -58,7 +58,10 @@ Factory.define :field_set do |f|
     [
       Factory.build(:string_field),
       Factory.build(:text_field),
-      Factory.build(:rich_text_field)
+      Factory.build(:rich_text_field),
+      Factory.build(:boolean_field),
+      Factory.build(:date_time_field),
+      Factory.build(:content_block_field)
     ]
   }
 end
@@ -83,6 +86,9 @@ Factory.define :boolean_field, :class => BooleanField, :parent => :field do |f|
 end
 
 Factory.define :date_time_field, :class => DateTimeField, :parent => :field do |f|
+end
+
+Factory.define :content_block_field, :class => ContentBlockField, :parent => :field do |f|
 end
 
 Factory.define :page do |f|

@@ -21,8 +21,13 @@ class Field
   @@types = [
     StringField,
     DateTimeField,
-    BooleanField
+    BooleanField,
+    ContentBlockField
   ].to_set
+
+  def datum_type
+    Datum
+  end
 
 protected
 
@@ -31,7 +36,7 @@ protected
   end
 
   def uniqueness_of_handle
-    if field_set.fields.detect { |f| f.id != self.id && f.handle == self.handle }
+    if field_set.fields.one? { |f| f.id != self.id && f.handle == self.handle }
       errors.add(:handle, :taken)
     end
   end

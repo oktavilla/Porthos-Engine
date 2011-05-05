@@ -106,6 +106,7 @@
       redirect: Vidarebefordring
       field_set: Sidtyp
       field: Fält
+      content_block_field: Innehållsblock
       date_time_field: Datum
       string_field: Sträng
       text_field: Text
@@ -463,8 +464,8 @@
             title: Ändra Vidarebefordring
           shared:
             form_help:
-              path: Vilken address som ska vidarebefordras, t.ex. /ge-en-gava
-              target: Vilken address som besökaren ska vidarebefordras till, t.ex. /stod-oss/ge-en-gava
+              path: "Vilken address som ska vidarebefordras, t.ex. /ge-en-gava"
+              target: "Vilken address som besökaren ska vidarebefordras till, t.ex. /stod-oss/ge-en-gava"
         tags:
           index:
             title: Nyckelord
@@ -497,6 +498,10 @@
             show:
               publish_now: publicera
   admin:
+    contents:
+      teasers:
+        edit:
+          add_image: Lägg till bild
     field_sets:
       all_field_sets: Alla sidtyper
       index:
@@ -515,6 +520,7 @@
   cancel: Avbryt
   edit: Ändra
   destroy: Ta bort
+  choose: Välj
   move: Flytta
   show_all: Visa alla
   yes: Ja

@@ -62,21 +62,23 @@ Rails.application.routes.draw do
       member do
         put 'publish'
       end
+      resources :data do
+        resources :contents do
+          collection do
+            put 'sort'
+          end
+          member do
+            put 'toggle'
+            get 'settings'
+          end
+        end
+      end
       resources :custom_attributes
       resources :custom_associations
     end
     resources :custom_associations do
       collection do
         put 'sort'
-      end
-    end
-    resources :contents do
-      collection do
-        put 'sort'
-      end
-      member do
-        put 'toggle'
-        get 'settings'
       end
     end
     resources :content_modules

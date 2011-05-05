@@ -1,1 +1,9 @@
-<%= f.check_box :value %>
+<div class="viewable">
+  <h2 class="<%= datum.value? ? 'checked' : 'unchecked' %>"><%= datum.label %></h2>
+  <div class="content"><%= datum.value? ? 'Ja' : 'Nej' %></div>
+  <div class="edit"><a href="#" class="change">Ändra</a></div>
+</div>
+<div class="editable">
+  <%= f.label :value, datum.label %>
+  <%= f.check_box :value %>
+</div>

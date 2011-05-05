@@ -1,0 +1,14 @@
+<%= hidden_field_tag :type, @content.class.to_s %>
+<%= f.hidden_field :asset_id %>
+<label for="content_image_title">Beskriv vad bilden föreställer</label>
+<div class="fullwidth">
+  <%= f.text_field :title, :value => @content.asset.title, :class => 'title' %>
+</div>
+<label for="content_image_caption">Bildtext</label>
+<div class="fullwidth">
+  <%= f.text_area :caption, :value => @content.asset.description, :cols => 30, :rows => 5 %>
+</div>
+<label for="content_image_title">Copyright / Fotograf</label>
+<div class="fullwidth">
+  <%= f.text_field :copyright, :value => @content.asset.author %>
+</div>

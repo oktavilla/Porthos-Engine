@@ -1,7 +1,0 @@
-<%= f.hidden_field :context_id %>
-<%= f.hidden_field :context_type %>
-<%= f.hidden_field :resource_type %>
-<%= f.hidden_field :column_position %>
-<%= fields_for :resource do |resource| %>
-  <%= resource.text_area :body, :class => @content.resource.filter, :class => 'editor', :cols => 90, :rows => 40 %>
-<% end %>

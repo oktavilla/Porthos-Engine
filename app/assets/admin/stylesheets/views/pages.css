@@ -1,18 +1,18 @@
-.column {
+.content_block {
   margin-bottom:3em;
   padding-top:0; }
-  .column > .title,
+  .content_block > .title,
   .content_list > .title {
     background:#f2f2f2;
     padding:10px 40px 10px 40px;
     font-weight:bold;
     color:#000;}
-  .column .controls,
-  .content_list .controls {
+  .content_block .controls,
+  .content_block .controls {
     padding:1em 40px 1em 40px;
     line-height:1em; }
-    .column .controls .add {margin-bottom:0;}
-  .column .contents {min-height:50px;}
+    .content_block .controls .add {margin-bottom:0;}
+  .content_block .contents {min-height:50px;}
 
 .sub_controls {padding:0 40px;}
   .sub_controls ul {
@@ -119,68 +119,68 @@
       padding-left:40px;
       border-top: 1px solid rgb(221, 221, 221); }
 
-#workspace #content.page_contents {
+#workspace #content.datums {
   padding:0; }
-  .page_content {
+  .datum {
     margin:0;
     padding:20px 40px 20px 40px;
     border-top:1px solid #ddd;}
-    .page_content:first-child {border-top:none;}
-    .page_content h2.field_label {
+    .datum:first-child {border-top:none;}
+    .datum .viewable > h2 {
       margin:0 0 .5em 0;
       font-size:1em;
       color:#999; }
-    .page_content label {margin-top:0;}
-    .page_content .submit {
+    .datum label {margin-top:0;}
+    .datum .submit {
       font-size:.857142857em;
       margin-top:.5em;}
-    .page_content .content {
+    .datum .content {
       color:#000;}
-    .page_content .edit,
-    .page_content .delete {font-size:.857142857em;}
-  .page_content.string_field {}
-    .page_content.string_field .content {
+    .datum .edit,
+    .datum .delete {font-size:.857142857em;}
+  .datum.string_attribute {}
+    .datum.string_attribute .content {
       font-size:1.142857143em; }
-    .page_content.string_field .edit {
+    .datum.string_attribute .edit {
       margin-top:.5em; }
-  .page_content.association {}
-    .page_content.association ul {
+  .datum.association {}
+    .datum.association ul {
       list-style:none;
       margin:0; }
-    .page_content.association li {
+    .datum.association li {
       margin:0 0 .25em -40px;
       padding:0 0 0 40px; }
-      .page_content.association li .drag_handle {
+      .datum.association li .drag_handle {
         top:-3px;
         left:15px; }
-      .page_content.association li .drag_handle,
-      .page_content.association li .delete { display:none; }
-      .page_content.association li:hover .drag_handle {display:block;}
-      .page_content.association li:hover .delete {display:inline;}
-    .page_content.association li .page {
+      .datum.association li .drag_handle,
+      .datum.association li .delete { display:none; }
+      .datum.association li:hover .drag_handle {display:block;}
+      .datum.association li:hover .delete {display:inline;}
+    .datum.association li .page {
       font-size:1.142857143em; }
-    .page_content.association li .delete {margin-left:1em;}
-    .page_content.association .edit {margin-top:.5em;}
-    .page_content.association .select_page {
+    .datum.association li .delete {margin-left:1em;}
+    .datum.association .edit {margin-top:.5em;}
+    .datum.association .select_page {
       margin-top:.5em;
       padding:10px;
       background:#f5f5f5; }
-      .page_content.association .select_page label {display:none;}
-      .page_content.association .select_page .submit_inline {
+      .datum.association .select_page label {display:none;}
+      .datum.association .select_page .submit_inline {
         display:inline;
         font-size:.857142857em;}
-  .page_content.asset {}
-    .page_content.asset img {
+  .datum.asset {}
+    .datum.asset img {
       float:left;
       margin-right:20px; }
-    .page_content.asset .title {
+    .datum.asset .title {
       padding-top:1.5em;
       font-weight:bold; }
-    .page_content.asset .caption {
+    .datum.asset .caption {
       font-size:.857142857em; }
-    .page_content.asset .edit {margin-top:.5em;}
-  .page_content.asset.one_to_many {}
-    .page_content.asset.one_to_many .content {margin-bottom:.5em;}
+    .datum.asset .edit {margin-top:.5em;}
+  .datum.asset.one_to_many {}
+    .datum.asset.one_to_many .content {margin-bottom:.5em;}
 
 
 body#pages_view #pages_list {list-style:none;}

@@ -1,0 +1,15 @@
+<div class="teaser" id="teaser_<%= content.id %>">
+  <span class="title"><%= content.title %></span>
+  <%= content.body %>
+  <% if content.assets.any? %>
+    <h2>Bilder</h2>
+    <ul id="assets" class="assets sortable_tree">
+    <% content.assets.each do |asset| %>
+      <li id="asset_<%= asset.id %>">
+        <%= image_tag('/graphics/admin/icons/move-vertical.gif', :class => "handle", :style => 'display:none') %>
+        <%= image_tag asset.version_url(:size => 'c80x80') %>
+      </li>
+    <% end %>
+    </ul>
+  <% end %>
+</div>

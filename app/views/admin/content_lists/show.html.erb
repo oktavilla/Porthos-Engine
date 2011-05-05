@@ -12,7 +12,7 @@
      <div class="sort_contents add controls">
         <a id="add_content" class="new" href="#">Lägg till innehåll</a>
       <% if @content_list.contents.any? and false -%>
-        <%= link_to("Sortera innehåll", sort_admin_contents_path, :id => 'sort_contents', :class => 'sort fr') %>
+        <%= link_to("Sortera innehåll", sort_admin_page_datum_contents_path(@page, @datum), :id => 'sort_contents', :class => 'sort fr') %>
         <%= display_indicator :id => 'page_contents_indicator' %>
       <% end -%>
      </div>

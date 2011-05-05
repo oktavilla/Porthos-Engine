@@ -6,10 +6,9 @@ class Page
   key :title, String
   key :uri, String
   key :layout_class, String
-  key :column_count, Integer
   key :active, Boolean
   key :restricted, Boolean
-  key :published_on, DateTime
+  key :published_on, Time
   timestamps!
 
   ensure_index :created_at
@@ -18,24 +17,28 @@ class Page
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
   belongs_to :field_set
-  has_many :data
+  has_many :data do
+    # def [](handle)
+    #   detect { |d| d.handle == handle.to_s }
+    # end
+  end
 
   validates_presence_of :title
 
   def clone_field_set
-    self.data = field_set.fields.collect do |field|
+    self.data = field_set.fields.map do |field|
       Datum.from_field(field)
     end
   end
 
   # TODO: Test me
   def data_attributes=(datum_array)
-    self.data = datum_array.collect do |i, datum_attrs|
+    self.data = datum_array.map do |i, datum_attrs|
       datum_attrs.to_options!
       if id = datum_attrs.delete(:id)
         unless datum_attrs[:_destroy]
           data.detect { |d| d.id.to_s == id }.tap do |datum|
-            datum.update_attributes(datum_attrs)
+            datum.update_attributes(datum_attrs) if datum_attrs.keys.any?
           end
         end
       else
@@ -117,8 +120,7 @@ class Page
 #  }
 
   before_create :set_created_by
-  before_save   :set_layout_attributes,
-                :generate_uri
+  before_save   :generate_uri
   before_update :set_updated_by
 
   #after_initialize :create_namespaced_tagging_methods
@@ -206,17 +208,17 @@ class Page
   alias_method :respond_to_without_data?, :respond_to?
   def respond_to?(method, include_private = false)
     sanitized_method = method.to_s.gsub(/\?/, '')
-    respond_to_without_data?(method, include_private) || self.data.one? { |datum| datum.handle == sanitized_method }
+    respond_to_without_data?(method, include_private) || self.data.one? { |d| d.handle == sanitized_method }
   end
 
   def method_missing_with_datum(method, *args)
-    sanitized_method = method.to_s.gsub(/\?/, '')
-    if datum = self.data.detect { |p| p.handle == sanitized_method }
-      create_reader_for_datum datum
-      return datum.value
-    else
+    # sanitized_method = method.to_s.gsub(/\?/, '')
+    # if datum = self.data[sanitized_method]
+    #   create_reader_for_datum datum
+    #   datum.value
+    # else
       method_missing_without_datum(method, *args)
-    end
+    # end
   end
   alias_method_chain :method_missing, :datum
 
@@ -247,24 +249,6 @@ protected
     #end
   end
 
-  # def method_missing_with_find_custom_attributes(method, *args)
-  #   # Check that we dont match any other method_missing hacks before we start query the database
-  #   begin
-  #     method_missing_without_find_custom_attributes(method, *args)
-  #   rescue
-  #     handle = method.to_s.gsub(/\?/, '')
-  #     # raise if we do not have a matching field
-  #     method_missing_without_find_custom_attributes(method, *args) unless fields.detect { |field| !field.is_a?(AssociationField) && field.handle == handle }
-  #     if custom_attribute = custom_attributes.detect { |c| c.handle == handle }
-  #       create_reader_for_custom_attribute custom_attribute
-  #       return custom_attribute.value
-  #     else
-  #       nil # we have a field but no data for it yet
-  #     end
-  #   end
-  # end
-  # alias_method_chain :method_missing, :find_custom_attributes
-  #
   # def method_missing_with_find_custom_associations(method, *args)
   #   # Check that we dont match any other method_missing hacks before we start query the database
   #   begin
@@ -314,17 +298,6 @@ private
 
   def generate_uri
     self.uri = title.parameterize unless uri.present?
-  end
-
-  def set_layout_attributes
-    unless column_count == template.columns or column_count.blank?
-      #contents.each do |content|
-      #  content.column_position = template.collumns
-      #  column_position = template.columns
-      #end
-    end
-    self.layout_class = template.handle
-    self.column_count = template.columns
   end
 
   def set_created_by

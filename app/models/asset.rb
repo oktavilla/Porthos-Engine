@@ -33,7 +33,7 @@ class Asset
   }
 
   scope :by_type, lambda { |type|
-    where(:type => type)
+    where(:_type => type)
   }
 
   scope :order_by, lambda { |order|

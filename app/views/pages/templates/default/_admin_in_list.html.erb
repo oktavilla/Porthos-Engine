@@ -5,7 +5,7 @@
 </span>
 <% end -%>
 <% if page.tags.any? -%>
-<span class="tags"><%= page.tags.collect { |tag| link_to(tag, admin_pages_path(:tags => [tag]))}.join(', ').html_safe %></span>
+<span class="tags"><%= page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => [tag.name]))}.join(', ').html_safe %></span>
 <% end -%>
 <span class="meta">
   <% if page.updated_at && page.updated_at != page.created_at -%>

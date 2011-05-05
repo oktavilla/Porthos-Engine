@@ -1,6 +1,6 @@
 class Page
   include MongoMapper::Document
-  include Porthos::Taggable
+  taggable
 
   key :position, Integer
   key :title, String

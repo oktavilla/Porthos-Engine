@@ -1,6 +1,6 @@
 class Asset
   include MongoMapper::Document
-  include Porthos::Taggable
+  taggable
 
   key :name, String
   key :extension, String

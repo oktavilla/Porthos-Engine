@@ -1,6 +1,6 @@
 class Page
   include MongoMapper::Document
-  include Porthos::Taggable
+  taggable
 
   key :position, Integer
   key :title, String
@@ -186,7 +186,7 @@ class Page
   end
 
   def category
-    #@category ||= field_set.allow_categories? ? all_tags.with_namespace(field_set.handle).first : nil
+    @category ||= field_set.allow_categories? ? Page.tags_by_count(:namespace => field_set.handle).first : nil
   end
 
   def category_name

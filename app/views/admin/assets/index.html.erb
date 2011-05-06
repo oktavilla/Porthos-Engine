@@ -50,7 +50,7 @@
           <%= asset.description.blank? ? "<a href=\"#{edit_admin_asset_path(asset.id)}\">Ingen beskrivning. Skriv en ...</a>".html_safe : truncate(asset.description, :length => 200) %>
         </div>
         <% if asset.tag_names.present? %>
-        <div class="tags"><%= asset.tags.collect { |tag| @current_tags.include?(tag) ? tag : link_to(tag, admin_assets_path(:tags => [tag])) }.join(', ').html_safe -%></div>
+        <div class="tags"><%= asset.tags.collect { |tag| @current_tags.include?(tag) ? tag.name : link_to(tag.name, admin_assets_path(:tags => [tag.name])) }.join(', ').html_safe -%></div>
         <% end %>
         <div class="meta">
           <span>Uppladdad</span> den <%= asset.created_at.strftime("%d %b %Y") %>

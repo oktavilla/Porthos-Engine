@@ -2,13 +2,14 @@ require_relative '../test_helper'
 
 class Thing
   include MongoMapper::Document
-  include Porthos::Taggable
+  plugin Porthos::Taggable::Plugin
+  taggable
   key :name, String
 end
 
 class TaggableTest < ActiveSupport::TestCase
   setup do
-    Porthos::Tag.delimiter = ', '
+    Porthos::Taggable.delimiter = ', '
     DatabaseCleaner.start
   end
 
@@ -21,7 +22,8 @@ class TaggableTest < ActiveSupport::TestCase
     my_thing.tag_names = %w(tag1 tag2)
     my_thing.save
     my_thing.reload
-    assert_equal ['tag1', 'tag2'], my_thing.tags
+    assert_equal 'tag1, tag2', my_thing.tag_names
+    assert_equal 2, my_thing.tags.count
   end
 
   test 'should be taggable with a string' do
@@ -29,7 +31,8 @@ class TaggableTest < ActiveSupport::TestCase
     my_thing.tag_names = 'tag1, tag2, tag with spaces'
     my_thing.save
     my_thing.reload
-    assert_equal ['tag1', 'tag2', 'tag with spaces'], my_thing.tags
+    assert_equal 'tag1, tag2, tag with spaces', my_thing.tag_names
+    assert_equal 3, my_thing.tags.count
   end
 
   test 'should return tags as a string' do
@@ -62,5 +65,36 @@ class TaggableTest < ActiveSupport::TestCase
     box.update_attributes(:name => 'Boxy', :tag_names => 'tag3')
     box.reload
     assert_equal 'tag3', box.tag_names
+  end
+
+  test 'should be taggable by namespace and without namespace' do
+    my_thing = Thing.create(:name => 'Box')
+    my_thing.tank_tag_names = %w(part1 part2)
+    my_thing.tag_names = %w(tag1 tag2)
+    my_thing.save
+    my_thing.reload
+    assert_equal 'part1, part2', my_thing.tank_tag_names
+    assert_equal 'tag1, tag2', my_thing.tag_names
+  end
+
+  test 'should be able to return instances by namespaced tag' do
+    box = Thing.create(:name => 'Box', :tank_tag_names => 'tag1, tag2')
+    circle = Thing.create(:name => 'Circle', :tank_tag_names => 'tag2, tag3')
+    triangle = Thing.create(:name => 'Triangle', :tank_tag_names => 'tag1, tag2, tag3')
+    skull = Thing.create(:name => 'Skull', :bone_tag_names => 'hip, leg, arm, tag1')
+    assert_equal [box, triangle], Thing.tagged_with(%w(tag1), :namespace => 'tank').all
+    assert_equal [triangle], Thing.tagged_with(%w(tag1 tag3), :namespace => 'tank').all
+  end
+
+  test 'should be able to return list of tags by namespace with count for model' do
+    box = Thing.create(:name => 'Box', :tank_tag_names => 'tag1, tag2')
+    circle = Thing.create(:name => 'Circle', :tank_tag_names => 'tag2')
+    triangle = Thing.create(:name => 'Triangle', :tank_tag_names => 'tag1, tag2, tag3')
+    skull = Thing.create(:name => 'Skull', :bone_tag_names => 'hip, leg, arm, tag2')
+    tags_by_count = Thing.tags_by_count(:namespace => 'tank')
+    assert_equal 'tag2', tags_by_count.first.name
+    assert_equal 3, tags_by_count.first.count
+    assert_equal 'tag3', tags_by_count.last.name
+    assert_equal 1, tags_by_count.last.count
   end
 end

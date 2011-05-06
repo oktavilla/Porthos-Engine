@@ -77,9 +77,8 @@ class AssetsTest < ActiveSupport::IntegrationCase
     asset2 = Factory.create(:asset, :tag_names => 'tag2', :file => new_tempfile('text'))
     asset3 = Factory.create(:asset, :tag_names => 'tag1 tag3', :file => new_tempfile('text'))
     visit admin_assets_path(:tags => ['tag1'])
-
     assert page.find("ul.items").has_content?(asset1.name), 'Should display asset1 in the assets list'
-    assert page.find("ul.items").has_content?(asset3.name), 'Should display assets3 in the assets list'
     assert !page.find("ul.items").has_content?(asset2.name), 'Should not display asset2 in the assets list'
+    assert page.find("ul.items").has_content?(asset3.name), 'Should display assets3 in the assets list'
   end
 end

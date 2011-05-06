@@ -37,7 +37,7 @@
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
       <div>
-        <%= f.select @page.category_method_name, Tag.on('Page').namespaced_to(@page.field_set.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
+        <%= f.select @page.category_method_name, Page.tags_by_count(:namespace => @page.field_set.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
         <a href="#" id="new_category">Lägg till</a><br>
         <input type="submit" value="Välj"> eller <a href="#" class="cancel">avbryt</a>
       </div>
@@ -54,7 +54,7 @@
   <div id="page_tags">
     <div id="page_tags_list">
       <p class="tags">
-      <%= @page.tags.collect { |tag| link_to(tag, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag)), :class => 'tag') }.join(', ').html_safe -%>
+      <%= @page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ').html_safe -%>
       </p>
       <!-- <p><a href="#">Ändra</a></p>-->
     </div>

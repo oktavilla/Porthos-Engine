@@ -1,5 +1,7 @@
 class Page
   include MongoMapper::Document
+  plugin MongoMapper::Plugins::MultiParameterAttributes
+
   taggable
 
   key :position, Integer

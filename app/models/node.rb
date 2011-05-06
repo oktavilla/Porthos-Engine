@@ -53,6 +53,7 @@ class Node
   end
 
   class << self
+
     def for_page(page)
       self.new.tap do |node|
         node.name       = page.title
@@ -60,9 +61,14 @@ class Node
         node.action     = 'show'
         node.resource   = page
         node.field_set = page.field_set
-        node.parent = Node.roots.first if node.parent_id.blank?
+        node.parent = Node.root if node.parent_id.blank?
       end
     end
+
+    def root
+      roots.first
+    end
+
   end
 
 private

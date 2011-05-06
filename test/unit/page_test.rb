@@ -24,14 +24,9 @@ class PageTest < ActiveSupport::TestCase
 
   test "accessing data values by their handles" do
     @page.data = [
-      Datum.from_field(Factory.build(:string_field, :handle => 'short_description'), :value => 'A string'),
-      Datum.from_field(Factory.build(:boolean_field, :handle => 'awesome'), :value => true)
+      Datum.from_field(Factory.build(:string_field, :handle => 'short_description'))
     ]
-    assert @page.respond_to?('short_description'), "Should respond to short_description"
-    assert_equal 'A string', @page.short_description, "Should return the string datum's value"
-    assert @page.respond_to?('awesome'), "Should respond to the boolean datum's handle"
-    assert true === @page.awesome, "Should return the boolean datum's value"
-    assert true === @page.awesome?
+    assert_equal @page.data.first, @page.data['short_description'], "Should return the datum by it's handle"
   end
 
 end

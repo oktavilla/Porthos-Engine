@@ -17,10 +17,10 @@ class Page
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
   belongs_to :field_set
-  has_many :data do
-    # def [](handle)
-    #   detect { |d| d.handle == handle.to_s }
-    # end
+  many :data do
+    def [](handle)
+      detect { |d| d.handle == handle.to_s }
+    end
   end
 
   validates_presence_of :title
@@ -204,23 +204,6 @@ class Page
   def in_restricted_context?
     @in_restricted_context ||= restricted? || node_restricted? || index_node_restricted?
   end
-
-  alias_method :respond_to_without_data?, :respond_to?
-  def respond_to?(method, include_private = false)
-    sanitized_method = method.to_s.gsub(/\?/, '')
-    respond_to_without_data?(method, include_private) || self.data.one? { |d| d.handle == sanitized_method }
-  end
-
-  def method_missing_with_datum(method, *args)
-    # sanitized_method = method.to_s.gsub(/\?/, '')
-    # if datum = self.data[sanitized_method]
-    #   create_reader_for_datum datum
-    #   datum.value
-    # else
-      method_missing_without_datum(method, *args)
-    # end
-  end
-  alias_method_chain :method_missing, :datum
 
 protected
 

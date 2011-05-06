@@ -107,4 +107,12 @@ end
 
 class ActiveSupport::TestCase
   include PorthosTestHelpers
+
+  setup do
+    DatabaseCleaner.start
+  end
+
+  teardown do
+    DatabaseCleaner.clean
+  end
 end

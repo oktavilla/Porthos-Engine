@@ -10,11 +10,6 @@ class AssetTest < ActiveSupport::TestCase
     end
     subject { @asset }
 
-    should belong_to(:created_by)
-    should have_many(:usages).dependent(:destroy)
-    should have_many(:custom_associations).dependent(:destroy)
-
-    # should validate_presence_of(:file).on(:create)
     # need to write matcher for validation on create
     should 'extract file attributes from uploaded file' do
       assert_equal 849, @asset.size

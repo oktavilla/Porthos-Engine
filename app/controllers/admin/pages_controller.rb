@@ -61,7 +61,9 @@ class Admin::PagesController < ApplicationController
   def create
     @page = Page.new(params[:page])
     @page.clone_field_set
-    @page.save!
+    if @page.save
+      flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
+    end
     respond_with(@page, :location => admin_page_path(@page.id))
   end
 
@@ -95,7 +97,7 @@ class Admin::PagesController < ApplicationController
         if @page.can_have_a_node?
           redirect_to new_admin_node_path(:resource_id => @page.id)
         else
-          redirect_back_or_default(admin_page_path(@page.id))
+          redirect_to admin_page_path(@page.id)
         end
       end
     end

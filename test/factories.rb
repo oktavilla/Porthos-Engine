@@ -66,9 +66,26 @@ Factory.define :field_set do |f|
   }
 end
 
+Factory.define :hero_field_set, :class => FieldSet do |f|
+  f.title "Hero"
+  f.page_label "Name"
+  f.handle 'hero'
+  f.fields {
+    [
+      Factory.build(:string_field, :label => 'Tagline', :handle => 'tagline', :required => true),
+      Factory.build(:text_field, :label => 'Description', :handle => 'description', :required => true),
+      Factory.build(:rich_text_field, :label => 'Biography', :handle => 'biography'),
+      Factory.build(:boolean_field, :label => 'Has superpowers', :handle => 'superpowers'),
+      Factory.build(:date_time_field, :label => 'Became publicly known at', :handle => 'debuted_at'),
+      Factory.build(:content_block_field, :label => 'Main content', :handle => 'main_content')
+    ]
+  }
+end
+
 Factory.define :field do |f|
   f.label { Factory.next(:title) }
   f.handle { Factory.next(:title) }
+  f.required false
 end
 
 Factory.define :string_field, :class => StringField, :parent => :field do |f|

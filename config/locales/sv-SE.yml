@@ -494,9 +494,6 @@
             show_in_nav: Syns i navigationen och är tillgänglig på internet
             not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
             restricted: Avstängd, inte tillgänglig på internet
-        pages:
-            show:
-              publish_now: publicera
   admin:
     contents:
       teasers:
@@ -515,6 +512,10 @@
         sort: Sortera
         blank_slate: Det finns inga fält skapade än
         add_field: Lägg till fält
+    pages:
+      show:
+        not_published: Sidan är inte publicerad
+        publish_now: Publicera
   save: Spara
   or: eller
   cancel: Avbryt

@@ -27,7 +27,6 @@ class NodesTest < ActiveSupport::IntegrationCase
     assert page.find("#nodes li").has_content?(new_node.name)
   end
 
-
   test 'editing a node' do
     new_node = create_page_node
     visit admin_nodes_path
@@ -51,6 +50,7 @@ class NodesTest < ActiveSupport::IntegrationCase
   end
 
 protected
+
   def create_page_node
     Factory(:node, :name => 'Node', :parent => @root_node, :resource => Factory(:page, :field_set => @field_set))
   end

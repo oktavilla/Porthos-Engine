@@ -75,7 +75,7 @@ module Porthos
         alias_method_chain :method_missing, :read_write_tag_names
 
         def tag_names(namespace = nil)
-          tags.find_all{|t| t.namespace == namespace}.collect{|tag| tag.name}.join(Porthos::Taggable.delimiter)
+          tags.find_all{|t| t.namespace == namespace}.collect{|tag| tag.name.include?(Porthos::Taggable.delimiter) ? "\"#{tag.name}\"" : tag.name}.join(Porthos::Taggable.delimiter)
         end
 
         def tag_names=(in_tags, namespace = nil)
@@ -90,7 +90,7 @@ module Porthos
           [/\s*#{Porthos::Taggable.delimiter}\s*(['"])(.*?)\1\s*/, /^\s*(['"])(.*?)\1\s*#{Porthos::Taggable.delimiter}?/].each do |exp|
             value.gsub!(exp) { tag_list << $2; "" }
           end
-          value.strip.split(Porthos::Taggable.delimiter).collect(&:strip).uniq.compact
+          tag_list + value.strip.split(Porthos::Taggable.delimiter).collect(&:strip).uniq.compact
         end
 
         def match_tag_names_methods(possible_method_name)

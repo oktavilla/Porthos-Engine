@@ -97,4 +97,11 @@ class TaggableTest < ActiveSupport::TestCase
     assert_equal 'tag3', tags_by_count.last.name
     assert_equal 1, tags_by_count.last.count
   end
+
+  test 'tagging with space as delimiter' do
+    Porthos::Taggable.delimiter = ' '
+    box = Thing.create(:name => 'Box', :tank_tag_names => 'tag1 tag2 "ta g3"')
+    assert_equal '"ta g3" tag1 tag2', box.tank_tag_names
+  end
+
 end

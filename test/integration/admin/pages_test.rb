@@ -34,7 +34,7 @@ class PagesTest < ActiveSupport::IntegrationCase
     batman = create_page
     visit admin_page_path(batman.id)
 
-    within "#content form.edit_page" do
+    within "form#datum_#{batman.data['tagline'].id}_edit" do
       fill_in 'Tagline', :with => 'Evil Fears The Knight'
       click_button I18n.t(:save)
     end

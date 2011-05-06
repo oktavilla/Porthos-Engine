@@ -4,6 +4,7 @@
   <div class="edit"><a href="#" class="change">Ändra</a></div>
 </div>
 <div class="editable">
-  <%= f.label :value, datum.label %>
-  <%= f.check_box :value %>
+  <%= f.label :value, datum.label, :for => "datum_#{datum.id}_value" %>
+  <%= f.check_box :value, :id => "datum_#{datum.id}_value" %>
+  <input type="submit" value="<%= t(:save) %>" />
 </div>

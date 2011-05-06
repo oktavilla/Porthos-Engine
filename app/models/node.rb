@@ -82,7 +82,7 @@ private
 
   # after save
   def generate_url_for_children
-    children.each(&:save) if url_changed? && children.any?
+    children.each(&:save) if changes.keys.include?('url') && children.any?
   end
 
 end

@@ -30,13 +30,12 @@ class PagesTest < ActiveSupport::IntegrationCase
     assert !published?, "Should not get published"
   end
 
-  test 'editing required page datum attributes and publishing a page' do
+  test 'editing page datum attributes' do
     batman = create_page
     visit admin_page_path(batman.id)
 
     within "#content form.edit_page" do
       fill_in 'Tagline', :with => 'Evil Fears The Knight'
-      fill_in 'Description', :with => "Batman relies on his own scientific knowledge, detective skills, and athletic prowess. Batman is regarded as one of the world's greatest detectives."
       click_button I18n.t(:save)
     end
 

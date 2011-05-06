@@ -25,9 +25,11 @@ Gem::Specification.new do |s|
   s.add_dependency 's3'
   s.add_dependency 'resizor'
   s.add_dependency 'ramdiv-mongo_mapper_acts_as_tree'
+  s.add_dependency 'mm-multi-parameter-attributes'
 
   # Dev dependencies
   s.add_development_dependency 'shoulda'
+  s.add_development_dependency 'launchy'
   s.add_development_dependency 'factory_girl'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'database_cleaner'

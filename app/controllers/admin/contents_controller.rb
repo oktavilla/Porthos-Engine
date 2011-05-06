@@ -60,13 +60,6 @@ class Admin::ContentsController < ApplicationController
     respond_with(@content, :location => admin_page_path(@page))
   end
 
-  def settings
-    @content = Content.find(params[:id])
-    respond_to do |format|
-      format.html { }
-    end
-  end
-
 protected
 
   def find_datum_and_page

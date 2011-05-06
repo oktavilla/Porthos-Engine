@@ -1,9 +1,9 @@
 require_relative '../../test_helper'
-
+require 'launchy'
 class PagesTest < ActiveSupport::IntegrationCase
   setup do
     login!
-    @field_set = Factory(:field_set)
+    @field_set = Factory(:hero_field_set)
   end
 
   test 'creating a page' do
@@ -15,15 +15,32 @@ class PagesTest < ActiveSupport::IntegrationCase
 
     assert_equal new_admin_page_path, current_path
 
-    fill_in 'page_title', :with => 'About us'
-    fill_in 'page_uri', :with => 'about'
+    fill_in 'page_title', :with => 'Batman'
+    fill_in 'page_uri', :with => 'batman'
     click_button I18n.t(:save)
 
-    assert_equal 'About us', page.find('h1').text
+    assert has_flash_message? I18n.t(:saved, :scope => [:app, :admin_pages])
+    assert_equal 'Batman', page.find('h1').text
+  end
 
-    @field_set.fields.each_with_index do |field, index|
-     # assert_equal field.label, page.find("label[for='page_data_attributes_#{index}_value']").text
+  test 'publishing a page without all required data' do
+    batman = create_page
+    visit admin_page_path(batman.id)
+    publish
+    assert !published?, "Should not get published"
+  end
+
+  test 'editing page datum attributes' do
+    batman = create_page
+    visit admin_page_path(batman.id)
+
+    within "form#datum_#{batman.data['tagline'].id}_edit" do
+      fill_in 'Tagline', :with => 'Evil Fears The Knight'
+      click_button I18n.t(:save)
     end
+
+    assert has_flash_message?(I18n.t(:saved, :scope => [:app, :admin_pages]))
+    assert page.has_content?('Evil Fears The Knight'), "Should find the tagline within content"
   end
 
   test 'listning pages by tag' do
@@ -66,5 +83,23 @@ class PagesTest < ActiveSupport::IntegrationCase
       click_button I18n.t(:choose)
       assert page.find('#page_category p').has_content?('Sausages'), "Category should be added"
     end
+  end
+
+protected
+  def create_page
+    page = Factory.build(:page, :field_set => @field_set, :title => 'Batman', :uri => 'batman')
+    page.clone_field_set
+    page.save
+    page
+  end
+
+  def publish
+    within "#page_publish_on_date" do
+      click_link I18n.t(:'admin.pages.show.publish_now')
+    end
+  end
+
+  def published?
+    page.find('#page_current_publish_on_date').has_content? I18n.t(:'admin.pages.show.not_published')
   end
 end

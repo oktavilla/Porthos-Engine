@@ -8,9 +8,9 @@
       <p>Publiceringsdatum: <%= @page.published_on.strftime("%d %B %Y") %></p>
       <p><a href="#" class="toggle_publish_date">Ändra</a></p>
     <% else %>
-      <p><strong>Sidan är inte publicerad</strong></p>
+      <p><strong><%=t '.not_published' %></strong></p>
       <p><a href="#" class="toggle_publish_date">Välj ett publiceringsdatum</a> eller
-      <%= link_to t(:publish_now, :scope => [:app, :views, :admin, :pages, :show]), publish_admin_page_path(@page.id), :method => :put, :class => 'new' %></p>
+      <%= link_to t('.publish_now'), publish_admin_page_path(@page.id), :method => :put, :class => 'new' %></p>
     <% end %>
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
@@ -104,43 +104,37 @@
     <% end %>
   </div>
   <div id="content" class="datums">
-  <%= form_for [:admin, @page] do |f| %>
-    <% @page.data.each_with_index do |datum, index| %>
-      <%= fields_for 'page[data_attributes][]', datum, :index => index do |datum_fields| %>
-        <%= datum_fields.hidden_field :id %>
-        <div class="datum <%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
-        <% if datum.is_a?(DatumAttribute) %>
-          <%= render :partial => "admin/datum/#{datum_fields.object.input_type}_form", :locals => { :f => datum_fields, :datum => datum } %>
-        <% elsif datum.is_a?(ContentBlock) %>
-          <h2><%= datum.label %></h2>
-          <div class="add controls">
-            <a class="new" href="#">Lägg till innehåll</a>
-          </div>
-          <div class="sub_controls" style="display:none;">
-            <ul>
-              <li><%= link_to Textfield.human_name, new_admin_page_datum_content_path(@page, datum, :type => 'Textfield') %></li>
-              <li><%= link_to Teaser.human_name, new_admin_page_datum_content_path(@page, datum, :type => 'Teaser') %></li>
-              <li><%= link_to Image.human_name, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => new_admin_page_datum_content_path(@page, datum), :asset_field_name => 'content[asset_id]', :params => { :type => 'Image' }}) %></li>
-            </ul>
-          </div>
-          <ul class="contents sortable" data-sort-uri="<%= sort_admin_page_datum_contents_path(@page, datum) %>">
-          <% datum.contents.sort_by(&:position).each do |content| %>
-            <li id="content_<%= content.id %>" class="content <%= content.class.to_s.underscore %><%= ' inactive' unless content.active? %>">
-              <%= render :partial => "admin/contents/#{content.class.to_s.tableize}/#{content.class.to_s.underscore}", :locals => { :content => content } %>
-              <span class="edit">
-                <%= link_to t(:edit), edit_admin_page_datum_content_path(@page, datum, content) %>
-                <%= link_to content.active? ? 'Dölj' : 'Visa', toggle_admin_page_datum_content_path(@page, datum, content), :method => :put, :class => 'visibility' %>
-                <%= link_to "Ta bort", admin_page_datum_content_path(@page, datum, content), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
-              </span>
-            </li>
-          <% end %>
-          </ul>
-        <% end %>
-        </div>
+  <% @page.data.each_with_index do |datum, index| %>
+    <div class="datum <%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
+    <% if datum.is_a?(DatumAttribute) %>
+      <%= form_for datum, :as => :datum, :url => admin_page_datum_path(@page, datum), :html => { :id => "datum_#{datum.id}_edit" } do |f| %>
+        <%= render :partial => "admin/data/#{datum.input_type}_form", :locals => { :f => f, :datum => datum } %>
       <% end %>
+    <% elsif datum.is_a?(ContentBlock) %>
+      <h2><%= datum.label %></h2>
+      <div class="add controls">
+        <a class="new" href="#">Lägg till innehåll</a>
+      </div>
+      <div class="sub_controls" style="display:none;">
+        <ul>
+          <li><%= link_to Textfield.human_name, new_admin_page_datum_content_path(@page, datum, :type => 'Textfield') %></li>
+          <li><%= link_to Teaser.human_name, new_admin_page_datum_content_path(@page, datum, :type => 'Teaser') %></li>
+          <li><%= link_to Image.human_name, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => new_admin_page_datum_content_path(@page, datum), :asset_field_name => 'content[asset_id]', :params => { :type => 'Image' }}) %></li>
+        </ul>
+      </div>
+      <ul class="contents sortable" data-sort-uri="<%= sort_admin_page_datum_contents_path(@page, datum) %>">
+      <% datum.contents.sort_by(&:position).each do |content| %>
+        <li id="content_<%= content.id %>" class="content <%= content.class.to_s.underscore %><%= ' inactive' unless content.active? %>">
+          <%= render :partial => "admin/contents/#{content.class.to_s.tableize}/#{content.class.to_s.underscore}", :locals => { :content => content } %>
+          <span class="edit">
+            <%= link_to t(:edit), edit_admin_page_datum_content_path(@page, datum, content) %>
+            <%= link_to content.active? ? 'Dölj' : 'Visa', toggle_admin_page_datum_content_path(@page, datum, content), :method => :put, :class => 'visibility' %>
+            <%= link_to "Ta bort", admin_page_datum_content_path(@page, datum, content), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+          </span>
+        </li>
+      <% end %>
+      </ul>
     <% end %>
-    <div>
-      <%= f.submit %>
     </div>
   <% end %>
   </div>

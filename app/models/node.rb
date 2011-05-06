@@ -53,6 +53,7 @@ class Node
   end
 
   class << self
+
     def for_page(page)
       self.new.tap do |node|
         node.name       = page.title
@@ -60,9 +61,14 @@ class Node
         node.action     = 'show'
         node.resource   = page
         node.field_set = page.field_set
-        node.parent = Node.roots.first if node.parent_id.blank?
+        node.parent = Node.root if node.parent_id.blank?
       end
     end
+
+    def root
+      roots.first
+    end
+
   end
 
 private
@@ -76,7 +82,7 @@ private
 
   # after save
   def generate_url_for_children
-    children.each(&:save) if url_changed? && children.any?
+    children.each(&:save) if changes.keys.include?('url') && children.any?
   end
 
 end

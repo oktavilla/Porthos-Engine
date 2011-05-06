@@ -1,5 +1,7 @@
 class Page
   include MongoMapper::Document
+  plugin MongoMapper::Plugins::MultiParameterAttributes
+
   taggable
 
   key :position, Integer
@@ -163,28 +165,6 @@ class Page
     # @full_uri ||= node ? node.url : (index_node ? [index_node.url, to_param].join('/') : uri)
   end
 
-  def custom_value_for(field)
-    unless field.data_type == CustomAssociation
-      if custom_attribute = custom_attribute_for_field(field.id)
-        custom_attribute.value
-      end
-    else
-      custom_associations.with_field(field.id).all
-    end
-  end
-
-  def custom_attribute_for_field(field_id)
-    custom_attributes.detect { |cd| cd.field_id == field_id.to_i }
-  end
-
-  def custom_association_for_field(field_id)
-    custom_associations.detect { |ca| ca.field_id == field_id.to_i }
-  end
-
-  def field_exists?(handle)
-    fields.one? { |field| field.handle == handle }
-  end
-
   def category
     @category ||= field_set.allow_categories? ? Page.tags_by_count(:namespace => field_set.handle).first : nil
   end
@@ -218,18 +198,6 @@ protected
 
   def index_node_restricted?
     index_node && (index_node.restricted? || index_node.ancestors.detect { |n| n.restricted? })
-  end
-
-  def create_namespaced_tagging_methods
-    if field_set.present? && field_set.allow_categories?
-      self.class.create_namespaced_tagging_methods_for(field_set.handle)
-    end
-  end
-
-  def cache_custom_attributes
-    #custom_attributes.each do |custom_attribute|
-    #  create_reader_for_custom_attribute(custom_attribute)
-    #end
   end
 
   # def method_missing_with_find_custom_associations(method, *args)
@@ -270,14 +238,6 @@ protected
   # alias_method_chain :method_missing, :find_custom_associations
 
 private
-
-  def custom_associations_by_handle(handle)
-    custom_associations.find_all { |ca| ca.handle == handle }
-  end
-
-  def custom_association_contexts_by_handle(handle)
-    custom_association_contexts.find_all { |ca| ca.handle == handle }
-  end
 
   def generate_uri
     self.uri = title.parameterize unless uri.present?

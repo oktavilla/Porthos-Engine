@@ -498,6 +498,12 @@
             show:
               publish_now: publicera
   admin:
+    pages:
+      show:
+        edit_category: Ändra kategori
+        choose_category: Välj kategori
+        add_new_category: Lägg till
+        choose: Välj
     contents:
       teasers:
         edit:

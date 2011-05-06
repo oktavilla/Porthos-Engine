@@ -18,6 +18,7 @@ WebMock.allow_net_connect!
 Capybara.default_driver   = :rack_test
 Capybara.default_selector = :css
 Capybara.app = Dummy::Application
+Capybara.javascript_driver = :selenium
 
 DatabaseCleaner[:mongo_mapper].strategy = :truncation
 

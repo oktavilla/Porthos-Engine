@@ -33,19 +33,19 @@
       <% if @page.category.present? -%>
       <p><%= @page.category.name %></p>
       <% end -%>
-      <p><a href="#" class="change"><%= @page.category.present? ? 'Ändra' : 'Välj' %> kategori</a></p>
+      <p><a href="#" class="change"><%= @page.category.present? ? t('.edit_category') : t('.choose_category') %></a></p>
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.select @page.category_method_name, Page.tags_by_count(:namespace => @page.field_set.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
-        <a href="#" id="new_category">Lägg till</a><br>
-        <input type="submit" value="Välj"> eller <a href="#" class="cancel">avbryt</a>
+        <a href="#" id="new_category"><%= t('.add_new_category') %></a><br>
+        <input type="submit" value="<%= t('choose') %>"> <%= t(:or) %> <a href="#" class="cancel"><%= t(:cancel) %></a>
       </div>
     <% end -%>
     <%= form_for [:admin, @page], :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field @page.category_method_name, :value => '' %>
-        <input type="submit" value="Spara"> eller <a href="#">avbryt</a>
+        <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <a href="#"><%= t(:cancel) %></a>
       </div>
     <% end -%>
   </div>

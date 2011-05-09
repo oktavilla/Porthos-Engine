@@ -281,8 +281,19 @@ ul.tags.alphabetical {
   .vcard .tele {
     display:block; }
 
-
-
+.ui-datepicker {
+  background:#fff;
+  padding:5px;
+  -webkit-box-shadow: 2px 2px 5px #525252;
+  -moz-box-shadow: 2px 2px 5px #525252;
+  box-shadow: 2px 2px 5px #525252; }
+  .ui-datepicker .ui-corner-all {
+    font-size:1em; }
+  .ui-datepicker-next {
+    position:absolute;
+    top:5px;
+    right:5px;}
+  .ui-datepicker-title {text-align:center;}
 ul.sortable {margin-left:-25px;}
   ul.sortable .drag_handle {display:none;}
   ul.sortable li {

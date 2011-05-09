@@ -39,7 +39,11 @@
 	    });
 
       $content.find('div.viewable').append('<a href="#" class="change">Ändra</a>');
-      $content.find('div.editable').hide().append('eller <a href="#" class="cancel">avbryt</a>');
+      $content.find('div.editable').hide()
+        .append('eller <a href="#" class="cancel">avbryt</a>')
+        .find('input.date').datepicker({
+          dateFormat: 'yy-mm-dd'
+        });
 	    $content.delegate('a.change, a.add, a.cancel', 'click', function(event) {
 	      event.preventDefault();
 	      var $element = $(this)

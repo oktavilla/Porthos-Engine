@@ -56,6 +56,11 @@
         $element.closest('div.datum').find('div.editable, div.viewable').toggle();
 	    });
 
+      $('#page_tags_form').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
+      $('#page_tags').delegate('a.edit, a.cancel', 'click', function() {
+        $('#page_tags_list, #page_tags_form').toggle();
+      }).find('#page_tags_list').append('<p><a href="#" class="edit">Ändra</a></p>');
+
 	    $('#page_publish_on_date a.toggle_publish_date, #page_published_on_form a').click(function(event) {
 	      event.preventDefault();
 	      $('#page_current_publish_on_date, #page_published_on_form').toggle();

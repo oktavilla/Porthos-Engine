@@ -56,12 +56,13 @@
       <p class="tags">
       <%= @page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ').html_safe -%>
       </p>
-      <!-- <p><a href="#">Ändra</a></p>-->
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'page_tags_form' } do |f| -%>
       <div>
         <%= f.text_field :tag_names %>
-        <input type="submit" value="Spara"> eller <a href="#">avbryt</a>
+        <div class="submit">
+          <input type="submit" value="Spara">
+        </div>
       </div>
     <% end -%>
   </div>

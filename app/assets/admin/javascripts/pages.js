@@ -3,7 +3,6 @@
 	  var Ready = function(container) {
 	    var $container = $(container),
 	        $content = $('#content'),
-	        // page_id = Porthos.Helpers.extractId($columns_container.attr('id')),
 	        $sortables = $content.find('ul.sortable');
 
 	    $container.delegate('div.header a.toggler', 'click', function(event) {

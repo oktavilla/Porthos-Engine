@@ -3,7 +3,6 @@
 	  var Ready = function(container) {
 	    var $container = $(container),
 	        $content = $('#content'),
-	        // page_id = Porthos.Helpers.extractId($columns_container.attr('id')),
 	        $sortables = $content.find('ul.sortable');
 
 	    $container.delegate('div.header a.toggler', 'click', function(event) {
@@ -39,8 +38,13 @@
 	      }
 	    });
 
-      $content.find('div.editable').hide();
-	    $content.delegate('div.edit a.change, div.edit a.add, a.cancel', 'click', function(event) {
+      $content.find('div.viewable').append('<a href="#" class="change">Ändra</a>');
+      $content.find('div.editable').hide()
+        .append('eller <a href="#" class="cancel">avbryt</a>')
+        .find('input.date').datepicker({
+          dateFormat: 'yy-mm-dd'
+        });
+	    $content.delegate('a.change, a.add, a.cancel', 'click', function(event) {
 	      event.preventDefault();
 	      var $element = $(this)
         $element.closest('div.datum').find('div.editable, div.viewable').toggle();

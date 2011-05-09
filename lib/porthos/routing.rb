@@ -19,7 +19,9 @@ module Porthos
                   :action
 
       def initialize(attrs)
-        attrs.each do |key, value|
+        {
+          :constraints => {}
+        }.merge(attrs.to_options).each do |key, value|
           instance_variable_set("@#{key.to_s}".to_sym, value)
         end
       end

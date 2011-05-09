@@ -14,7 +14,7 @@
           <%= link_to t(:edit), edit_admin_node_path(@root), :class => 'settings' %>
         </span>
       </div>
-      <div id="navigation">
+      <div id="navigation" data-sort-uri="<%= sort_admin_nodes_path %>">
         <%= render :partial => 'nodes_tree', :locals => { :nodes => @nodes, :open_nodes => @open_nodes, :trail => @trail, :place => false} %>
       </div>
       <% else -%>

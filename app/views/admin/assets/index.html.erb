@@ -12,7 +12,7 @@
   </div>
   <div class="tools">
     <div class="add">
-      <a href="<%= new_admin_asset_path %>" class="new"><%= I18n.t(:'app.views.assets.index.upload_files') %></a>
+      <a href="<%= new_admin_asset_path %>" class="new"><%= t('.upload') %></a>
     </div>
     <%= form_tag admin_assets_path, :method => :get do |f| %>
     <div class="sort">
@@ -47,7 +47,7 @@
         </a>
         <div class="title"><%= link_to asset.title, edit_admin_asset_path(asset.id) %></div>
         <div class="description<%= ' blank' if asset.description.blank? %>">
-          <%= asset.description.blank? ? "<a href=\"#{edit_admin_asset_path(asset.id)}\">Ingen beskrivning. Skriv en ...</a>".html_safe : truncate(asset.description, :length => 200) %>
+          <%= asset.description.blank? ? link_to('Ingen beskrivning, skriv en ...', edit_admin_asset_path(asset.id)) : truncate(asset.description, :length => 200) %>
         </div>
         <% if asset.tag_names.present? %>
         <div class="tags"><%= asset.tags.collect { |tag| @current_tags.include?(tag) ? tag.name : link_to(tag.name, admin_assets_path(:tags => [tag.name])) }.join(', ').html_safe -%></div>

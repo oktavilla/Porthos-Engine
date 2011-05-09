@@ -3,7 +3,6 @@
   <div class="content">
     <%= datum.allow_rich_text? ? datum.value : simple_format(datum.value) %>
   </div>
-  <div class="edit"><a href="#" class="change">Ändra</a></div>
 </div>
 <div class="editable">
   <%= f.label :value, datum.label, :for => "datum_#{datum.id}_value" %>

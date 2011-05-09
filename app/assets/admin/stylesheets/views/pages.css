@@ -10,7 +10,7 @@
     color:#000;}
   .content_block .controls {}
     .content_block .controls .add {margin-bottom:0;}
-    .content_block .controls .new:hover {cursor:pointer}
+    .content_block .controls .new {cursor:pointer}
     .content_block .controls ul {
         z-index:9999;
         font-size:.857142857em;

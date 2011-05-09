@@ -5,7 +5,7 @@
     <h1><span class="pre"><%= t(:title, :scope => [:app, :views, :admin, :nodes, :edit])  %></span> <%= @node.name %></h1>
   </div>
   <div id="content">
-    <%= form_for :node, :url => admin_node_path(@node), :html => { :method => :put } do |f| %>
+    <%= form_for [:admin, @node] do |f| %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
       <fieldset>
         <%= render :partial => 'form', :locals => { :f => f } %>

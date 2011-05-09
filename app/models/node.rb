@@ -15,6 +15,8 @@ class Node
   key :resource_id, ObjectId
   key :resource_type, String
 
+  key :field_set_id, ObjectId
+
   belongs_to :resource,
              :polymorphic => true
   belongs_to :field_set

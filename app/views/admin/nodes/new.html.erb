@@ -5,7 +5,7 @@
     <h1><%= t(:title, :scope => [:app, :views, :admin, :nodes, :new])  %></h1>
   </div>
   <div id="content">
-    <%= form_for @node, :url => admin_nodes_path do |f| %>
+    <%= form_for [:admin, @node] do |f| %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
       <% if @resource %>
       <%= f.hidden_field :resource_type %>

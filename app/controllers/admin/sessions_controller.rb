@@ -15,13 +15,13 @@ class Admin::SessionsController < ApplicationController
   def create
     user = warden.authenticate!
     sign_in user
-    flash[:notice] = t(:'authentication.signed_in')
+    flash[:notice] = t(:'admin.sessions.signed_in')
     redirect_to admin_root_path
   end
 
   def destroy
     sign_out
-    flash[:notice] = t(:logged_out, :scope => [:app, :admin_general])
+    flash[:notice] = t(:'admin.sessions.signed_out')
     redirect_to admin_login_path
   end
 

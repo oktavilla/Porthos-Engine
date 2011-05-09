@@ -20,7 +20,7 @@ class AssetsTest < ActiveSupport::IntegrationCase
     login!
     visit admin_assets_path
 
-    click_link I18n.t(:'app.views.assets.index.upload_files')
+    click_link I18n.t(:'admin.assets.index.upload')
 
     assert_equal new_admin_asset_path, current_path
 

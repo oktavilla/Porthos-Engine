@@ -5,3 +5,4 @@
 #= require field_sets
 #= require fields
 #= require pages
+#= require nodes

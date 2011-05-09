@@ -2,7 +2,8 @@ class Node
   include MongoMapper::Document
   include MongoMapper::Acts::Tree
 
-  acts_as_tree
+  acts_as_tree :order => "position asc"
+
 
   key :name, String
   key :url, String

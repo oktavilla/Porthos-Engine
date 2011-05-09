@@ -39,8 +39,9 @@
 	      }
 	    });
 
-      $content.find('div.editable').hide();
-	    $content.delegate('div.edit a.change, div.edit a.add, a.cancel', 'click', function(event) {
+      $content.find('div.viewable').append('<a href="#" class="change">Ändra</a>');
+      $content.find('div.editable').hide().append('eller <a href="#" class="cancel">avbryt</a>');
+	    $content.delegate('a.change, a.add, a.cancel', 'click', function(event) {
 	      event.preventDefault();
 	      var $element = $(this)
         $element.closest('div.datum').find('div.editable, div.viewable').toggle();

@@ -3,7 +3,6 @@
   <div class="content">
     <%= datum.value.in_time_zone.strftime("%Y-%m-%d %H:%M") if datum.value.present? %>
   </div>
-  <div class="edit"><a href="#" class="change">Ändra</a></div>
 </div>
 <div class="editable">
   <%= f.label :value, datum.label, :for => "datum_#{datum.id}_value" %>

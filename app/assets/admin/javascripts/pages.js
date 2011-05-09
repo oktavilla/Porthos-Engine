@@ -6,13 +6,15 @@
 	        $sortables = $content.find('ul.sortable');
 
       $content.find('div.viewable').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
-      $content.find('div.editable').hide().find('input.date').datepicker({
-          dateFormat: 'yy-mm-dd'
-      }).end().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
+      $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
 
       if ($.fn.hasOwnProperty('ckeditor')) {
         $('textarea.editor').ckeditor();
       }
+
+      $('input.date').datepicker({
+        dateFormat: 'yy-mm-dd'
+      });
 
       $content.find('div.controls ul').hide();
 

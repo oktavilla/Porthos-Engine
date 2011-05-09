@@ -5,7 +5,7 @@
   <div id="page_publish_on_date">
     <div id="page_current_publish_on_date">
     <% if @page.published_on %>
-      <p>Publiceringsdatum: <%= @page.published_on.strftime("%d %B %Y") %></p>
+      <p>Publiceringsdatum: <%= @page.published_on.in_time_zone.strftime("%d %B %Y") %></p>
       <p><a href="#" class="toggle_publish_date">Ändra</a></p>
     <% else %>
       <p><strong><%=t '.not_published' %></strong></p>
@@ -15,8 +15,10 @@
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
       <div>
-        <%= f.date_select :published_on, :order => [:day, :month, :year ] %>
-        <input type="submit" value="Spara publiceringsdatum"> eller <a href="#">avbryt</a>
+        <%= f.text_field :published_on, :value => (@page.published_on.present? ? @page.published_on.in_time_zone.to_date : nil), :class => 'date', :placeholder => 'År-Månad-Dag' %>
+        <div class="submit">
+          <input type="submit" value="Spara publiceringsdatum"> eller <a href="#">avbryt</a>
+        </div>
       </div>
     <% end %>
   </div>

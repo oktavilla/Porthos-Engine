@@ -182,6 +182,11 @@
   .datum.asset.one_to_many {}
     .datum.asset.one_to_many .content {margin-bottom:.5em;}
 
+#pages_view.show #sub_nav div.submit {
+  margin-top:0.5em;
+  font-size:.857142857em; }
+#pages_view.show #sub_nav div.submit input {
+  font-size:1em; }
 
 body#pages_view #pages_list {list-style:none;}
   body#pages_view #pages_list li {

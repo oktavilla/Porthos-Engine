@@ -10,6 +10,10 @@
           dateFormat: 'yy-mm-dd'
       }).end().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
 
+      if ($.fn.hasOwnProperty('ckeditor')) {
+        $('textarea.editor').ckeditor();
+      }
+
       $content.find('div.controls ul').hide();
 
 	    $content.delegate('h3.new', 'click', function(event) {

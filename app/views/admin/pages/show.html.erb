@@ -113,9 +113,7 @@
     <% elsif datum.is_a?(ContentBlock) %>
       <h2><%= datum.label %></h2>
       <div class="add controls">
-        <a class="new" href="#">Lägg till innehåll</a>
-      </div>
-      <div class="sub_controls" style="display:none;">
+        <h3 class="new"><%= t('.add_content') %></h3>
         <ul>
           <li><%= link_to Textfield.human_name, new_admin_page_datum_content_path(@page, datum, :type => 'Textfield') %></li>
           <li><%= link_to Teaser.human_name, new_admin_page_datum_content_path(@page, datum, :type => 'Teaser') %></li>

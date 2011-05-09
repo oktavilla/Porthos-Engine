@@ -506,6 +506,7 @@
         choose: Välj
         not_published: Sidan är inte publicerad
         publish_now: Publicera
+        add_content: Lägg till innehåll
     contents:
       teasers:
         edit:

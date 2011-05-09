@@ -1,4 +1,5 @@
 .content_block {
+  position:relative;
   margin-bottom:3em;
   padding-top:0; }
   .content_block > .title,
@@ -7,20 +8,20 @@
     padding:10px 40px 10px 40px;
     font-weight:bold;
     color:#000;}
-  .content_block .controls,
-  .content_block .controls {
-    padding:1em 40px 1em 40px;
-    line-height:1em; }
+  .content_block .controls {}
     .content_block .controls .add {margin-bottom:0;}
-  .content_block .contents {min-height:50px;}
+    .content_block .controls .new:hover {cursor:pointer}
+    .content_block .controls ul {
+        z-index:9999;
+        font-size:.857142857em;
+        list-style:none;
+        margin:0 0 1em 0; }
+        .content_block .controls li {
+          margin:0 0 .25em 10px; }
+        .content_block .controls a {display:block;}
 
-.sub_controls {padding:0 40px;}
-  .sub_controls ul {
-    list-style:none;
-    margin:0 0 1em 0; }
-    .sub_controls li {
-      margin:0 0 .25em 0; }
-
+.contents {
+  min-height:50px;}
 .contents li.content {
   position:relative;
   list-style:none;
@@ -48,7 +49,9 @@
     background:transparent url(/graphics/porthos/ui_new.png) 10px -780px no-repeat;
     display:none; }
   .contents li.content:hover > .draghandle,
-  .contents li.content:hover > .edit {display:block;}
+  .contents li.content:hover > .edit {
+    font-size:.75em;
+    display:block; }
 
   .contents .actual_content {}
     .contents .actual_content .title {margin:0;}
@@ -126,7 +129,8 @@
     padding:20px 40px 20px 40px;
     border-top:1px solid #ddd;}
     .datum:first-child {border-top:none;}
-    .datum .viewable > h2 {
+    .datum .viewable > h2,
+    .datum.content_block > h2 {
       margin:0 0 .5em 0;
       font-size:1em;
       color:#999; }
@@ -136,13 +140,11 @@
       margin-top:.5em;}
     .datum .content {
       color:#000;}
-    .datum .edit,
-    .datum .delete {font-size:.857142857em;}
-  .datum.string_attribute {}
-    .datum.string_attribute .content {
+    .datum div.edit {
+      margin-top:.5em;
+      font-size:.857142857em;}
+    .datum .content {
       font-size:1.142857143em; }
-    .datum.string_attribute .edit {
-      margin-top:.5em; }
   .datum.association {}
     .datum.association ul {
       list-style:none;
@@ -160,7 +162,6 @@
     .datum.association li .page {
       font-size:1.142857143em; }
     .datum.association li .delete {margin-left:1em;}
-    .datum.association .edit {margin-top:.5em;}
     .datum.association .select_page {
       margin-top:.5em;
       padding:10px;
@@ -178,7 +179,6 @@
       font-weight:bold; }
     .datum.asset .caption {
       font-size:.857142857em; }
-    .datum.asset .edit {margin-top:.5em;}
   .datum.asset.one_to_many {}
     .datum.asset.one_to_many .content {margin-bottom:.5em;}
 

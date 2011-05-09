@@ -5,14 +5,22 @@
 	        $content = $('#content'),
 	        $sortables = $content.find('ul.sortable');
 
+      $content.find('div.viewable').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
+      $content.find('div.editable').hide().find('input.date').datepicker({
+          dateFormat: 'yy-mm-dd'
+      }).end().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
+
+      $content.find('div.controls ul').hide();
+
+	    $content.delegate('h3.new', 'click', function(event) {
+	      event.preventDefault();
+	      $(this).toggleClass('active').parents('div.controls').find('ul').toggle();
+	    });
+
+
 	    $container.delegate('div.header a.toggler', 'click', function(event) {
 	      event.preventDefault();
 	      $container.find('div.header').toggle();
-	    });
-
-	    $content.delegate('a.new', 'click', function(event) {
-	      event.preventDefault();
-	      $(this).toggleClass('active').parents('div.content_block').find('div.sub_controls').toggle();
 	    });
 
 	    // TODO: Rewrite with nested containments when we have content collections
@@ -38,12 +46,6 @@
 	      }
 	    });
 
-      $content.find('div.viewable').append('<a href="#" class="change">Ändra</a>');
-      $content.find('div.editable').hide()
-        .append('eller <a href="#" class="cancel">avbryt</a>')
-        .find('input.date').datepicker({
-          dateFormat: 'yy-mm-dd'
-        });
 	    $content.delegate('a.change, a.add, a.cancel', 'click', function(event) {
 	      event.preventDefault();
 	      var $element = $(this)

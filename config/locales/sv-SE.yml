@@ -495,6 +495,9 @@
             not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
             restricted: Avstängd, inte tillgänglig på internet
   admin:
+    assets:
+      index:
+        upload: Ladda upp filer
     pages:
       show:
         edit_category: Ändra kategori

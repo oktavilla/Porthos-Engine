@@ -104,7 +104,7 @@
       content_teaser: Teaser
       user: Användare
       redirect: Vidarebefordring
-      field_set: Sidtyp
+      field_set: Innehållstyp
       field: Fält
       content_block_field: Innehållsblock
       date_time_field: Datum
@@ -247,7 +247,7 @@
       content_teaser: Teaser
       user: Användare
       redirect: Vidarebefordring
-      field_set: Sidtyp
+      field_set: Innehållstyp
       field: Fält
       date_time_field: Datum
       string_field: Sträng
@@ -437,7 +437,7 @@
             title: Innehåll
             site_settings: Inställningar
             content_lists: Delat innehåll
-            field_sets: Sidtyper
+            field_sets: Innehållstyper
             redirects: Vidarebefordringar
             tags: Nyckelord
             content_modules: Moduler
@@ -518,12 +518,12 @@
         edit:
           add_image: Lägg till bild
     field_sets:
-      all_field_sets: Alla sidtyper
+      all_field_sets: Alla innehållstyper
       index:
-        title: Alla sidtyper
-        new: Lägg till ny sidtyp
+        title: Alla innehållstyper
+        new: Lägg till ny innehållstyp
       new:
-        title: Ny sidtyp
+        title: Ny innehållstyp
       show:
         edit: Ändra
         destroy: Radera

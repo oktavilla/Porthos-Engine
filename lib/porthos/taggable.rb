@@ -42,9 +42,13 @@ module Porthos
           namespace = _options.delete(:namespace)
           options = {:raw => true, :out => { :inline => true}, :query => {:'tags.namespace' => namespace}}.merge(_options)
           response = collection.map_reduce(self.tags_by_count_map, self.tags_by_count_reduce, options)
-          response['results'].collect do |t|
-            OpenStruct.new(:name => t['_id'], :count => t['value'].to_i)
-          end.sort {|x,y| y.count <=> x.count }
+          if response['results']
+            response['results'].collect do |t|
+              OpenStruct.new(:name => t['_id'], :count => t['value'].to_i)
+            end.sort {|x,y| y.count <=> x.count }
+          else
+            []
+          end
         end
 
         def tags_by_count_map

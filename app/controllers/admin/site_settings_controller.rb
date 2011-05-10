@@ -1,21 +1,21 @@
 class Admin::SiteSettingsController < ApplicationController
   include Porthos::Admin
-  
-  
+
+
   def index
-    @site_settings = SiteSetting.find(:all)
+    @site_settings = SiteSetting.all
     respond_to do |format|
       format.html {}
     end
   end
-  
+
   def new
     @site_setting = SiteSetting.new
     respond_to do |format|
       format.html {}
     end
   end
-  
+
   def create
     @site_setting = SiteSetting.new(params[:site_setting])
     respond_to do |format|
@@ -27,14 +27,14 @@ class Admin::SiteSettingsController < ApplicationController
       end
     end
   end
-  
+
   def edit
     @site_setting = SiteSetting.find(params[:id])
     respond_to do |format|
       format.html {}
     end
   end
-  
+
   def update
     @site_setting = SiteSetting.find(params[:id])
     respond_to do |format|
@@ -46,7 +46,7 @@ class Admin::SiteSettingsController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     @site_setting = SiteSetting.find(params[:id])
     @site_setting.destroy

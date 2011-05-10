@@ -1,6 +1,6 @@
 #= require rails
-#= require lib/ckeditor/ckeditor
-#= require lib/ckeditor/adapters/jquery
+#= require settings
+#= require editor
 #= require helpers
 #= require field_sets
 #= require fields

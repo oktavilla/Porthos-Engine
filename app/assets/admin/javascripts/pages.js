@@ -5,14 +5,28 @@
 	        $content = $('#content'),
 	        $sortables = $content.find('ul.sortable');
 
+      $content.find('div.viewable').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
+      $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
+
+      if ($.fn.hasOwnProperty('ckeditor')) {
+        $('textarea.editor').ckeditor();
+      }
+
+      $('input.date').datepicker({
+        dateFormat: 'yy-mm-dd'
+      });
+
+      $content.find('div.controls ul').hide();
+
+	    $content.delegate('h3.new', 'click', function(event) {
+	      event.preventDefault();
+	      $(this).toggleClass('active').parents('div.controls').find('ul').toggle();
+	    });
+
+
 	    $container.delegate('div.header a.toggler', 'click', function(event) {
 	      event.preventDefault();
 	      $container.find('div.header').toggle();
-	    });
-
-	    $content.delegate('a.new', 'click', function(event) {
-	      event.preventDefault();
-	      $(this).toggleClass('active').parents('div.content_block').find('div.sub_controls').toggle();
 	    });
 
 	    // TODO: Rewrite with nested containments when we have content collections
@@ -38,17 +52,16 @@
 	      }
 	    });
 
-      $content.find('div.viewable').append('<a href="#" class="change">Ändra</a>');
-      $content.find('div.editable').hide()
-        .append('eller <a href="#" class="cancel">avbryt</a>')
-        .find('input.date').datepicker({
-          dateFormat: 'yy-mm-dd'
-        });
 	    $content.delegate('a.change, a.add, a.cancel', 'click', function(event) {
 	      event.preventDefault();
 	      var $element = $(this)
         $element.closest('div.datum').find('div.editable, div.viewable').toggle();
 	    });
+
+      $('#page_tags_form').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
+      $('#page_tags').delegate('a.edit, a.cancel', 'click', function() {
+        $('#page_tags_list, #page_tags_form').toggle();
+      }).find('#page_tags_list').append('<p><a href="#" class="edit">Ändra</a></p>');
 
 	    $('#page_publish_on_date a.toggle_publish_date, #page_published_on_form a').click(function(event) {
 	      event.preventDefault();

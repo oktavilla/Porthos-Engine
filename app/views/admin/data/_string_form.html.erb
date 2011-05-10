@@ -6,10 +6,14 @@
 </div>
 <div class="editable">
   <%= f.label :value, datum.label, :for => "datum_#{datum.id}_value" %>
+  <div class="fullwidth">
   <% if datum.multiline? %>
     <%= f.text_area :value, :class => (datum.allow_rich_text? ? 'editor' : 'normal'), :id => "datum_#{datum.id}_value" %>
   <% else %>
     <%= f.text_field :value, :id => "datum_#{datum.id}_value" %>
   <% end %>
-  <input type="submit" value="<%= t(:save) %>" />
+  </div>
+  <div class="submit">
+    <%= f.submit t(:save) %>
+  </div>
 </div>

@@ -498,6 +498,12 @@
     assets:
       index:
         upload: Ladda upp filer
+    sessions:
+      signed_in: Du är nu inloggad
+      signed_out: Du är nu utloggad
+      failed: Användarnamnet och lösenordet stämde inte överens
+      new:
+        login: Logga in
     pages:
       show:
         edit_category: Ändra kategori
@@ -506,6 +512,7 @@
         choose: Välj
         not_published: Sidan är inte publicerad
         publish_now: Publicera
+        add_content: Lägg till innehåll
     contents:
       teasers:
         edit:

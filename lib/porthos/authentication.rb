@@ -64,7 +64,7 @@ module Porthos
       end
 
       def redirect
-        flash[:alert] = I18n.t(:'authentication.failed')
+        flash[:error] = I18n.t(:'admin.sessions.failed') if params['username'] || params['password']
         redirect_to admin_login_path
       end
     end

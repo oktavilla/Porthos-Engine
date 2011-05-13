@@ -54,6 +54,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :templates do
+      resources :datum_templates
+    end
+    resources :page_templates
+    resources :content_templates
+
     resources :pages do
       collection do
         get 'search'

@@ -1,4 +1,5 @@
 class Textfield < Content
+  include MongoMapper::EmbeddedDocument
   key :title, String
   key :filter, String
   key :body, String

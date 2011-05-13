@@ -86,6 +86,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
 protected
+
   def create_page
     page = Factory.build(:page, :field_set => @field_set, :title => 'Batman', :uri => 'batman')
     page.clone_field_set

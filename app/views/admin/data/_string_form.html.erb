@@ -13,7 +13,9 @@
     <%= f.text_field :value, :id => "datum_#{datum.id}_value" %>
   <% end %>
   </div>
+  <% if datum._parent_document.is_a?(Page) %>
   <div class="submit">
     <%= f.submit t(:save) %>
   </div>
+  <% end %>
 </div>

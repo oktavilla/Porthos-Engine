@@ -1,0 +1,2 @@
+class ContentBlockTemplate < DatumTemplate
+end

@@ -9,7 +9,9 @@
   <div class="fullwidth">
     <%= f.text_field :value, :value => (datum.value.present? ? datum.value.in_time_zone.strftime("%Y-%m-%d %H:%M") : ''), :class => 'date', :id => "datum_#{datum.id}_value" %>
   </div>
+  <% if datum._parent_document.is_a?(Page) %>
   <div class="submit">
     <%= f.submit t(:save) %>
   </div>
+  <% end %>
 </div>

@@ -55,7 +55,7 @@
 	    $content.delegate('a.change, a.add, a.cancel', 'click', function(event) {
 	      event.preventDefault();
 	      var $element = $(this)
-        $element.closest('div.datum').find('div.editable, div.viewable').toggle();
+        $element.parents('div.datum').find('div.editable, div.viewable').toggle();
 	    });
 
       $('#page_tags_form').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');

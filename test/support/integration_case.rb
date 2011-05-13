@@ -30,6 +30,6 @@ protected
     fill_in User.human_attribute_name('username'), :with => 'a-user'
     fill_in User.human_attribute_name('password'), :with => 'password'
 
-    click_button I18n.t(:login, :scope => :'views.admin.sessions.new')
+    click_button I18n.t(:'admin.sessions.new.login')
   end
 end

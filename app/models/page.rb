@@ -18,8 +18,9 @@ class Page
 
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
-  belongs_to :field_set
-  many :data do
+  belongs_to :page_template
+
+  many :data, :order => 'position asc' do
     def [](handle)
       detect { |d| d.handle == handle.to_s }
     end
@@ -27,9 +28,15 @@ class Page
 
   validates_presence_of :title
 
-  def clone_field_set
-    self.data = field_set.fields.map do |field|
-      Datum.from_field(field)
+  before_save :sort_data
+
+  class << self
+    def from_template(template, attributes = {})
+      self.new(attributes.merge(:page_template_id => template.id)).tap do |page|
+        page.data = template.datum_templates.map do |datum_template|
+          datum_template.datum_class.constantize.from_template(datum_template)
+        end
+      end
     end
   end
 
@@ -238,6 +245,10 @@ protected
   # alias_method_chain :method_missing, :find_custom_associations
 
 private
+
+  def sort_data
+    self.data.sort_by!(&:position)
+  end
 
   def generate_uri
     self.uri = title.parameterize unless uri.present?

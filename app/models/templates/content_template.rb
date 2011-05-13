@@ -1,0 +1,2 @@
+class ContentTemplate < Template
+end

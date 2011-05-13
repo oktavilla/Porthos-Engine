@@ -1,0 +1,38 @@
+<% @page_title = t('.title') %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+<div id="sub_nav">
+  <%= render 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1><%= t('.title') %></h1>
+  </div>
+  <div class="tools">
+    <div class="add">
+      <%= link_to t('.new'), new_admin_content_template_path, :class => "new" %>
+    </div>
+  </div>
+  <div id="content">
+  <% if @content_templates.any? -%>
+    <table class="sortable">
+      <thead>
+        <tr>
+          <th class="placeholder"></th>
+          <th><%= FieldSetTemplate.human_attribute_name(:title) %></th>
+          <th><%= FieldSetTemplate.human_attribute_name(:handle) %></th>
+        </tr>
+      </thead>
+      <tbody id="content_templates">
+      <% @content_templates.each do |content_template| %>
+        <tr id="content_template_<%= content_template.id %>">
+          <td class="handle"><span class="drag_handle"></span></td>
+          <td class="title"><%= link_to content_template.title, admin_content_template_path(content_template) %></td>
+          <td><%= content_template.handle %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <% end -%>
+  </div>
+</div>

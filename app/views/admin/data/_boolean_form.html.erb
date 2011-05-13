@@ -7,7 +7,9 @@
     <%= f.check_box :value, :id => "datum_#{datum.id}_value" %>
     <%= datum.label %>
   </label>
+  <% if datum._parent_document.is_a?(Page) %>
   <div class="submit">
     <%= f.submit t(:save) %>
   </div>
+  <% end %>
 </div>

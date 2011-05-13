@@ -1,0 +1,16 @@
+<%= form_for [:admin, @content_template] do |f| %>
+  <%= render 'admin/shared/error_messages', :object => f.object %>
+
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+
+  <%= f.label :handle %>
+  <%= f.text_field :handle %>
+
+  <%= f.label :description %>
+  <%= f.text_area :description, :rows => 3 %>
+
+  <div class="submit">
+    <%= f.submit t(:save) %>
+  </div>
+<% end %>

@@ -46,8 +46,8 @@
 
         <%= f.label :action %>
         <%= f.text_field :action %>
-        <%= f.label :field_set_id %>
-        <%= f.select :field_set_id, FieldSet.all.collect { |f| [f.title, f.id] }, :include_blank => 'Välj en sidtyp' %>
+        <%= f.label :page_template_id %>
+        <%= f.select :page_template_id, PageTemplate.all.collect { |f| [f.title, f.id] }, :include_blank => 'Välj en sidtyp' %>
       <% end %>
       <% if @nodes.any? %>
       <div id="navigation">

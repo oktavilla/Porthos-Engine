@@ -9,8 +9,8 @@ class Admin::PagesController < ApplicationController
   has_scope :is_published, :type => :boolean
 
   def index
-    @field_sets = FieldSet.all
-    @field_set = FieldSet.find(params[:with_field_set]) if params[:with_field_set].present?
+    @page_templates = PageTemplate.all
+    @page_template = PageTemplate.find(params[:with_field_set]) if params[:with_field_set].present?
 
     @tags = Page.tags_by_count(:limit => 30)
     @current_tags = params[:tags] || []
@@ -38,7 +38,7 @@ class Admin::PagesController < ApplicationController
     end
     @query = query
     @page = page
-    @field_sets = FieldSet.all
+    @page_templates = PageTemplate.all
     respond_to do |format|
       format.html
     end

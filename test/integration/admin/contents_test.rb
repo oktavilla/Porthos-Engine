@@ -119,7 +119,7 @@ protected
   def create_textfield
     visit admin_page_path(@page)
     within "div.datum.content_block div.controls" do
-      click_link Textfield.human_name
+      click_link Textfield.model_name.human
     end
 
     fill_in 'content_body', :with => 'Some text for this page'
@@ -129,7 +129,7 @@ protected
   def create_teaser
     visit admin_page_path(@page)
     within "div.datum.content_block div.controls" do
-      click_link Teaser.human_name
+      click_link Teaser.model_name.human
     end
     fill_in 'content_title', :with => 'Teaser heading'
     fill_in 'content_body', :with => 'Teaser body'
@@ -140,7 +140,7 @@ protected
     image = create_image_asset
     visit admin_page_path(@page)
     within "div.datum.content_block div.controls" do
-      click_link Image.human_name
+      click_link Image.model_name.human
     end
     within "#asset_#{image.id}" do
       click_button I18n.t(:choose)

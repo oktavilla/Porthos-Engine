@@ -1,4 +1,5 @@
 class Teaser < Textfield
+  include MongoMapper::EmbeddedDocument
   key :asset_ids, Array, :typecast => 'ObjectId'
   has_many :assets, :in => :asset_ids
 

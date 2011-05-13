@@ -1,0 +1,19 @@
+<% @page_title = "Sidtyper > #{@field_set_template.title} > Lägg till fält" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1>Nytt <%= @field_template.class.model_name.human %> i <%= @field_set_template.title %></h1>
+  </div>
+  <div id="content">
+    <%= form_for @field, :as => :field, :url => admin_field_set_template_field_templates_path(@field_set_template), :html => { :id =>  'field_form' } do |f| %>
+      <%= render :partial => 'form', :locals => { :f => f } %>
+      <div class="submit">
+        <%= f.submit t(:save) %> eller <%= link_to "avbryt", previous_view_path(admin_field_set_template_path(@field_set_template)) %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,4 +1,5 @@
-class Image < Content
+class Image
+  include MongoMapper::EmbeddedDocument
   key :caption, String
   key :copyright, String
 

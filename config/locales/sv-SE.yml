@@ -106,7 +106,7 @@
       redirect: Vidarebefordring
       field_set: Innehållstyp
       field: Fält
-      content_block_field: Innehållsblock
+      content_block: Innehållsblock
       date_time_field: Datum
       string_field: Sträng
       text_field: Text
@@ -305,7 +305,7 @@
       # custom blank validation message for login attribute of User model.
       # models:
 
-    # Translate model names. Used in Model.human_name().
+    # Translate model names. Used in Model.model_name.human().
     #models:
       # For example,
       #   user: "Dude"
@@ -504,6 +504,13 @@
       failed: Användarnamnet och lösenordet stämde inte överens
       new:
         login: Logga in
+    page_templates:
+      index:
+        new: Lägg till
+      show:
+        blank_slate: Det finns inga fält definerade än
+        edit: Ändra
+        destroy: Radera
     pages:
       show:
         edit_category: Ändra kategori

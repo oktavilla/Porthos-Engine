@@ -1,0 +1,19 @@
+<% @page_title = "Sidtyper > #{@field_set_template.title} > Ändra @field_template.label" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1>Ändra fältet ”<%= @field_template.label %>”</h1>
+  </div>
+  <div id="content">
+    <%= form_for :field, :url => admin_field_set_template_field_template_path(@field_set_template, @field_template), :html => { :method => :put, :id =>  'field_form' } do |f| %>
+      <%= render :partial => 'form', :locals => { :f => f } %>
+      <div class="submit">
+        <input type="submit" value="Spara"> eller <%= link_to "avbryt", previous_view_path(admin_field_set_template_path(@field_set_template)) %>
+      </div>
+    <% end %>
+  </div>
+</div>

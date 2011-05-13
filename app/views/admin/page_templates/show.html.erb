@@ -1,0 +1,58 @@
+<% @page_title = t('.title', :title => @page_template.title) %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+<div id="sub_nav">
+  <%= render 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1><%= @page_template.title %></h1>
+    <span class="away">
+      <%= link_to t('.edit'), edit_admin_page_template_path(@page_template), :class => 'edit_settings action' %>
+      <%= link_to t('.destroy'), admin_page_template_path(@page_template), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @page_template.title), :class => 'destroy action' %>
+      <%= link_to t('.all_page_templates'), admin_page_templates_path, :class => 'action' %>
+      <% if @page_template.pages_sortable? %>
+      <%= link_to t('.sort'), pages_admin_page_template_path(@page_template), :class => 'action' %>
+      <% end %>
+    </span>
+  </div>
+  <div class="tools">
+    <div class="add">
+      <form action="<%= new_admin_page_template_datum_template_path(@page_template) %>">
+        <%# select_tag 'template_type', options_for_select(DatumTemplate.types.collect { |type| [type.model_name.human, type.to_s] }, :selected => @field.class.to_s) %>
+        <input type="submit" value="<%=t '.add_field' %>" />
+      </form>
+    </div>
+  </div>
+  <div id="content">
+    <% if @page_template.datum_templates.any? -%>
+    <table id="fields_for_page_template_<%= @page_template.id %>" class="sortable">
+      <thead>
+        <tr>
+          <th class="placeholder"></th>
+          <th><%= DatumTemplate.human_attribute_name(:label) %></th>
+          <th><%= DatumTemplate.human_attribute_name(:handle) %></th>
+          <th><%= DatumTemplate.human_attribute_name(:_type) %></th>
+          <th><%= DatumTemplate.human_attribute_name(:required) %></th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody id="fields">
+        <% @page_template.datum_templates.each do |datum_template| -%>
+        <tr class="datum_template" id="datum_template_<%= datum_template.id %>">
+          <td class="handle"><span class="drag_handle"></span></td>
+          <td class="label"><%= datum_template.label %></td>
+          <td><%= datum_template.handle %></td>
+          <td><%= datum_template.class.model_name.human %></td>
+          <td><%= t(datum_template.required? ? :yes : :no) %></td>
+          <td><%= link_to t(:edit), edit_admin_page_template_datum_template_path(@page_template, datum_template) %></td>
+          <td><%= link_to t(:destroy), admin_page_template_datum_template_path(@page_template, datum_template), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess infomation kommer tas bort från alla #{@page_template.title} sidor." %>
+        </tr>
+        <% end -%>
+      </tbody>
+    </table>
+    <% else -%>
+    <p class="notice"><%= t('.blank_slate') %></p>
+    <% end -%>
+  </div>
+</div>

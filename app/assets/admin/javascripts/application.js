@@ -2,7 +2,7 @@
 #= require settings
 #= require editor
 #= require helpers
-#= require field_sets
+#= require datum_templates
 #= require fields
 #= require pages
 #= require nodes

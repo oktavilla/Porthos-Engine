@@ -7,9 +7,6 @@
   <%= f.label :page_label %>
   <%= f.text_field :page_label %>
 
-  <%= f.label :handle %>
-  <%= f.text_field :handle %>
-
   <div class="contans_input">
     <%= f.label :template_name %>
     <%= f.select :template_name, PageFileTemplate.all.collect { |t| [t.name.titlecase, t.handle] } %>

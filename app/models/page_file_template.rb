@@ -65,7 +65,7 @@ class PageFileTemplate
     end
 
     def find(template_handle)
-      self.all.detect { |template| template.handle == template_handle }
+      self.all.detect{|template| template.handle == template_handle }
     end
 
   end

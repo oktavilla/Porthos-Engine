@@ -99,6 +99,7 @@
     models:
       asset: Fil
       content_module: Innehållsmodul
+      content_template: Innehållstyp
       node: Navigationsnode
       page: Sida
       content_teaser: Teaser
@@ -111,9 +112,11 @@
       string_field: Sträng
       text_field: Text
       boolean_field: Booleanskt värde
+      page_template: Sidtyp
       page_association_field: Relation till sida
       reversed_page_association_field: Relation från en annan sidtyp
       asset_association_field: Relation till fil
+      string_field_template: Sträng fält
     errors:
       template:
         header:
@@ -161,6 +164,10 @@
       content_module:
         name: Namn
         template: Modul
+      content_template:
+        title: Namn
+        handle: Identifierare
+        description: Beskrivning
       field_set:
         title: Titel
         template_name: Template
@@ -506,7 +513,10 @@
         login: Logga in
     page_templates:
       index:
+        title: Sidtyper
         new: Lägg till
+      new:
+        title: Ny sidtyp
       show:
         add_datum_template: Lägg till fält
         blank_slate: Det finns inga fält definerade än
@@ -521,6 +531,18 @@
         not_published: Sidan är inte publicerad
         publish_now: Publicera
         add_content: Lägg till innehåll
+    content_templates:
+      index:
+        title: Innehållstyper
+        new: Skapa innehållstyp
+      new:
+        title: Ny innehållstyp
+      show:
+        add_field_template: Lägg till fält
+        edit: Ändra
+        destroy: Ta bort
+        all_content_templates: Visa alla
+        blank_slate: Det finns inga fält skapade än
     contents:
       teasers:
         edit:

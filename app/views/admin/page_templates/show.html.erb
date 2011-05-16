@@ -50,7 +50,7 @@
           <th colspan="2"></th>
         </tr>
       </thead>
-      <tbody id="fields">
+      <tbody id="datum_templates" data-sort-uri="<%= sort_admin_template_datum_templates_path(@page_template) %>">
         <% @page_template.datum_templates.each do |datum_template| -%>
         <tr class="datum_template" id="datum_template_<%= datum_template.id %>">
           <td class="handle"><span class="drag_handle"></span></td>

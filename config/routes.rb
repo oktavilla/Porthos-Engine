@@ -55,7 +55,11 @@ Rails.application.routes.draw do
     end
 
     resources :templates do
-      resources :datum_templates
+      resources :datum_templates do
+        collection do
+          put 'sort'
+        end
+      end
     end
     resources :page_templates
     resources :content_templates

@@ -1,5 +1,5 @@
 <%= f.hidden_field :field_set_id %>
-<label for="page_title"><%= f.object.field_set && f.object.field_set.page_label.present? ? f.object.field_set.page_label : Page.human_attribute_name(:title) %></label>
+<label for="page_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>
 <div class="fullwidth">
   <%= f.text_field :title, :class => "title" %>
 </div>
@@ -7,12 +7,6 @@
 <div class="fullwidth">
   <%= f.text_field :uri, :class => "uri" %>
 </div>
-
-<% f.fields_for :custom_fields do |custom_fields| %>
-  <% f.object.field_set.fields.each do |field| -%>
-    <%= form_field_for_custom_field(f.object, custom_fields, field) unless field.is_a?(ReversedPageAssociationField) %>
-  <% end -%>
-<% end if f.object.field_set && f.object.field_set.fields.any? -%>
 
 <label for="page_tag_names">
   Nyckelord (ej obligatoriskt)

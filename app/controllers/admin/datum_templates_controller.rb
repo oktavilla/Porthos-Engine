@@ -40,7 +40,7 @@ class Admin::DatumTemplatesController < ApplicationController
     if params[:datum_template]
       params[:datum_template].each_with_index do |id, i|
         @template.datum_templates.detect { |c| c.id.to_s == id }.tap do |datum_template|
-          datum_template.position = i
+          datum_template.position = i+1
         end
       end
       @template.save

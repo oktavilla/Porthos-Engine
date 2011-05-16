@@ -1,7 +1,7 @@
 <div class="viewable">
   <h2><%= datum.label %></h2>
   <div class="content">
-    <%= datum.allow_rich_text? ? datum.value : simple_format(datum.value) %>
+    <%= datum.allow_rich_text? ? datum.value.html_safe : simple_format(datum.value) %>
   </div>
 </div>
 <div class="editable">

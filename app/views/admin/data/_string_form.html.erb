@@ -1,7 +1,7 @@
 <div class="viewable">
   <h2><%= datum.label %></h2>
   <div class="content">
-    <%= datum.allow_rich_text? ? datum.value.html_safe : simple_format(datum.value) %>
+    <%= datum.allow_rich_text? ? datum.value.to_s.html_safe : simple_format(datum.value) %>
   </div>
 </div>
 <div class="editable">
@@ -13,7 +13,7 @@
     <%= f.text_field :value, :id => "datum_#{datum.id}_value" %>
   <% end %>
   </div>
-  <% if datum._parent_document.is_a?(Page) %>
+  <% unless datum._parent_document.is_a?(FieldSet) %>
   <div class="submit">
     <%= f.submit t(:save) %>
   </div>

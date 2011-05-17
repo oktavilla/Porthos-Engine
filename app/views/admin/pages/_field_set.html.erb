@@ -1,0 +1,17 @@
+<h2 class="label"><%= datum.label %></h2>
+<%= form_for datum, :as => :datum, :url => admin_page_datum_path(@page, datum), :html => { :id => "datum_#{datum.id}_edit" } do |f| %>
+  <% if datum._parent_document.is_a?(ContentBlock) %>
+  <%= hidden_field_tag 'parent_id', datum._parent_document.id %>
+  <% end %>
+  <% datum.data.each_with_index do |d, i| %>
+    <%= fields_for 'datum[data_attributes][]', d, :index => i do |datum_fields| %>
+      <%= datum_fields.hidden_field :id %>
+      <%= render :partial => "admin/data/#{d.input_type}_form", :locals => { :f => datum_fields, :datum => d } %>
+    <% end %>
+  <% end %>
+  <div class="editable">
+    <div class="submit">
+      <%= f.submit t(:save) %>
+    </div>
+  </div>
+<% end %>

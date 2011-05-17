@@ -47,7 +47,19 @@ end
 Factory.define :root_node, :parent => :node do |f|
   f.url nil
   f.name 'Start'
-  f.field_set_template { Factory(:field_set_template) }
+end
+
+Factory.define :content_template do |f|
+  f.label { Factory.next(:title) }
+  f.datum_templates {
+    [
+      Factory.build(:string_field_template),
+      Factory.build(:text_field_template),
+      Factory.build(:rich_text_field_template),
+      Factory.build(:boolean_field_template),
+      Factory.build(:date_field_template)
+    ]
+  }
 end
 
 Factory.define :datum_template do |f|
@@ -83,31 +95,9 @@ Factory.define :content_block_template, :class => ContentBlockTemplate, :parent 
 end
 
 Factory.define :field_set_template do |f|
-  f.label "Default"
-  f.handle 'default'
-  f.field_templates {
-    [
-      Factory.build(:string_field_template),
-      Factory.build(:text_field_template),
-      Factory.build(:rich_text_field_template),
-      Factory.build(:boolean_field_template),
-      Factory.build(:date_field_template)
-    ]
-  }
-end
-
-Factory.define :hero_field_set_template, :class => FieldSetTemplate do |f|
-  f.label "Hero"
-  f.handle 'hero'
-  f.field_templates {
-    [
-      Factory.build(:string_field_template, :label => 'Tagline', :handle => 'tagline', :required => true),
-      Factory.build(:text_field_template, :label => 'Description', :handle => 'description', :required => true),
-      Factory.build(:rich_text_field, :label => 'Biography', :handle => 'biography'),
-      Factory.build(:boolean_field_template, :label => 'Has superpowers', :handle => 'superpowers'),
-      Factory.build(:date_field_template, :label => 'Became publicly known at', :handle => 'debuted_at')
-    ]
-  }
+  f.label { Factory.next(:title) }
+  f.handle { Factory.next(:handle) }
+  f.content_template { Factory.build(:content_template) }
 end
 
 Factory.define :datum do |f|

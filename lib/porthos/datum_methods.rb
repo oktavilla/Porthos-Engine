@@ -9,7 +9,7 @@ module Porthos
       key :position, Integer
 
       before_validation :parameterize_handle
-      before_save :move_to_list_bottom
+      before_validation :move_to_list_bottom
 
       validates_presence_of :label
       validates_presence_of :handle, :if => proc { |d| d.require_handle? }
@@ -20,12 +20,16 @@ module Porthos
 
     protected
 
+      def in_list?
+        _parent_document && _parent_document.respond_to?(:data)
+      end
+
       def require_handle?
         @require_handle ||= _parent_document && !(_parent_document.class.to_s.match(/ContentBlock/))
       end
 
       def uniqueness_of_handle
-        if _parent_document && _parent_document.respond_to?(:data) && _parent_document.data.detect { |d| d.id != self.id && d.handle == self.handle }
+        if in_list? && _parent_document.data.detect { |d| d.id != self.id && d.handle == self.handle }
           errors.add(:handle, :taken)
         end
       end
@@ -35,7 +39,7 @@ module Porthos
       end
 
       def move_to_list_bottom
-        if position.blank? && _parent_document && _parent_document.respond_to?(:data)
+        if position.blank? && in_list?
           siblings = _parent_document.data.find_all { |d| d.position.present? && d.id != self.id }
           self.position = siblings.any? ? siblings.sort_by(&:position).last.position + 1 : 1
         end

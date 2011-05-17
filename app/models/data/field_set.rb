@@ -24,9 +24,10 @@ class FieldSet < Datum
 
   class << self
     def from_template(template)
-      FieldSet.new(:attributes => template.shared_attributes.except(:data)).tap do |field_set|
-        field_set.data = template.content_template.datum_templates.collect do |t|
-          t.datum_class.constantize.from_template(t)
+      content_template = template.is_a?(FieldSetTemplate) ? template.content_template : template
+      content_template.to_datum.tap do |field_set|
+        unless template == content_template
+          field_set.attributes = field_set.attributes.stringify_keys.merge!(template.shared_attributes.stringify_keys)
         end
       end
     end

@@ -161,15 +161,11 @@
         file_name: Filnamn
         author: Copyright
         description: Beskrivning
-      content_module:
-        name: Namn
-        template: Modul
       content_template:
-        title: Namn
-        handle: Identifierare
+        label: Namn
         description: Beskrivning
       field_set:
-        title: Titel
+        label: Titel
         template_name: Template
       field:
         _type: Typ

@@ -1,0 +1,3 @@
+<%= form_for datum, :as => :datum, :url => admin_page_datum_path(@page, datum), :html => { :id => "datum_#{datum.id}_edit" } do |f| %>
+  <%= render :partial => "admin/data/#{datum.input_type}_form", :locals => { :f => f, :datum => datum } %>
+<% end %>

@@ -19,6 +19,10 @@ class DatumTemplate
     end
   end
 
+  def to_datum
+    datum_class.constantize.from_template(self)
+  end
+
   def datum_class
     (self.class.ancestors - self.class.included_modules).collect do |klass|
       klass.to_s.gsub('Template', '')

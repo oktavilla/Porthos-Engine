@@ -58,14 +58,12 @@ Rails.application.routes.draw do
         put 'publish'
       end
       resources :data do
-        resources :contents do
-          collection do
-            put 'sort'
-          end
-          member do
-            put 'toggle'
-            get 'settings'
-          end
+        collection do
+          put 'sort'
+        end
+        member do
+          put 'toggle'
+          get 'settings'
         end
       end
     end

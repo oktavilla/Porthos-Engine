@@ -52,7 +52,7 @@
   .contents li.content:hover > .edit {
     font-size:.75em;
     display:block; }
-
+  .contents h2.label {display:none;}
   .contents .actual_content {}
     .contents .actual_content .title {margin:0;}
     .contents .actual_content h1 {

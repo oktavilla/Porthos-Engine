@@ -164,6 +164,18 @@
       content_template:
         label: Namn
         description: Beskrivning
+      datum_template:
+        _type: Typ
+        label: Namn
+        handle: Identifierare
+        required: Krävs
+        instructions: Beskrivning
+      datum:
+        _type: Typ
+        label: Namn
+        handle: Identifierare
+        required: Krävs
+        instructions: Beskrivning
       field_set:
         label: Titel
         template_name: Template
@@ -179,11 +191,19 @@
         name: Namn i navigationen
         status: Status
         restricted: Kräver inloggning (även undersidor)
+      page_templates:
+        label: Namn
       page:
         title: Namn
         description: Beskrivning
         published_on: Publiceringsdatum
         parent_id: Sidtyp
+      string_field_template:
+        multiline: Textfält
+        allow_rich_text: Tillåt formatering
+      string_field:
+        multiline: Textfält
+        allow_rich_text: Tillåt formatering
       teaser:
         title: Rubrik
         body: Text
@@ -514,7 +534,11 @@
       new:
         title: Ny sidtyp
       show:
-        add_datum_template: Lägg till fält
+        title: Sidtyper > %{title}
+        add_field_template: Lägg till fält
+        add_field_set_template: Lägg till fördefinerat innehåll
+        add_content_block_template: Lägg till ett innehållsblock
+        all_page_templates: Alla sidtyper
         blank_slate: Det finns inga fält definerade än
         edit: Ändra
         destroy: Radera

@@ -5,7 +5,7 @@
 	        $content = $('#content'),
 	        $sortables = $content.find('ul.sortable');
 
-      $content.find('div.viewable').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
+      $content.find('form.datum_edit').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
       $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
 
       if ($.fn.hasOwnProperty('ckeditor')) {
@@ -22,7 +22,6 @@
 	      event.preventDefault();
 	      $(this).toggleClass('active').parents('div.controls').find('ul').toggle();
 	    });
-
 
 	    $container.delegate('div.header a.toggler', 'click', function(event) {
 	      event.preventDefault();
@@ -52,10 +51,9 @@
 	      }
 	    });
 
-	    $content.delegate('a.change, a.add, a.cancel', 'click', function(event) {
+	    $content.delegate('a.change, a.cancel', 'click', function(event) {
 	      event.preventDefault();
-	      var $element = $(this)
-        $element.parents('div.datum').find('div.editable, div.viewable').toggle();
+        $(this).parents('form').find('div.editable, div.viewable, div.edit').toggle();
 	    });
 
       $('#page_tags_form').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');

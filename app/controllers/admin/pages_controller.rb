@@ -6,7 +6,7 @@ class Admin::PagesController < ApplicationController
   has_scope :created_by
   has_scope :updated_by
   has_scope :order_by, :default => 'updated_at desc'
-  has_scope :is_published, :type => :boolean
+  has_scope :is_published
 
   def index
     @page_templates = PageTemplate.all

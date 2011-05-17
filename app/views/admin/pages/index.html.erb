@@ -46,6 +46,8 @@
           <% end -%>
           <% if page.published? %>
           Publicerad <%= page.published_on.strftime("%d %b %Y %H:%M") %>.
+          <% elsif page.published_on.present? %>
+          Publiceras <%= page.published_on.strftime("%d %b %Y %H:%M") %>.
           <% end %>
         </span>
         <span class="edit">

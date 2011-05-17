@@ -114,10 +114,11 @@ class Page
   }
 
   scope :is_published, lambda { |is_published|
-    if is_published
-      where(:published_on.lt => Time.now)
+    published = Boolean.to_mongo(is_published)
+    if published
+      where(:published_on.lte => Time.now)
     else
-      where(:$or => [{:published_on => nil}, {:published_on.lt => Time.now}])
+      where(:published_on => nil)
     end
   }
 
@@ -127,27 +128,6 @@ class Page
 
   #after_initialize :create_namespaced_tagging_methods
   # after_save :commit_to_sunspot
-
-  def contents_as_text
-    contents.select{|c| c.active? }.collect do |content|
-      def render_content(content_resource)
-        if content_resource.is_a?(ContentImage) or content_resource.is_a?(ContentVideo)
-          "#{content_resource.asset.title} #{content_resource.asset.description}"
-        elsif content_resource.is_a?(ContentTextfield)
-          content_resource.body
-        elsif content_resource.is_a?(ContentTeaser)
-          "#{content_resource.title} #{content_resource.body}"
-        end
-      end
-      if !content.restricted? && !content.module?
-        if content.collection?
-          content.contents.collect {|c| render_content(c)}
-        else
-          render_content(content.resource)
-        end
-      end
-    end.join(' ').gsub(/<\/?[^>]*>/, "")
-  end
 
   def published_on_parts
     @published_on_parts ||= {

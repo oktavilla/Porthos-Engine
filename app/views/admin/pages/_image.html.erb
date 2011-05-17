@@ -1,0 +1,14 @@
+<%= form_for datum, :as => :datum, :url => admin_page_datum_path(@page, datum), :html => { :id => "datum_#{datum.id}_edit" } do |f| %>
+  <div class="viewable">
+    <h2><%= datum.label %></h2>
+    <div class="content">
+      <% if datum.asset %>
+        <%= image_tag datum.asset.version_url(:size => 'c80x80') %>
+      <% end %>
+    </div>
+  </div>
+  <div class="editable">
+    <h2 class="label"><%= datum.label %></h2>
+    <%= link_to t('.change_image'), admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => admin_page_datum_path(@page, datum, :parent_id => (datum._parent_document unless datum._parent_document.is_a?(Page))), :method => 'put', :asset_field_name => 'datum[asset_id]' }) %>
+  </div>
+<% end %>

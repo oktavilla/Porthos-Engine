@@ -1,7 +1,5 @@
 class Admin::AssetsController < ApplicationController
   include Porthos::Admin
-
-
   before_filter :set_callback,
                 :only => [:index, :search]
   before_filter :find_tags,
@@ -89,7 +87,7 @@ class Admin::AssetsController < ApplicationController
         Asset.from_upload(:file => upload, :created_by => current_user) unless upload.blank?
       end.compact
     end
-    @not_saved = @assets.collect{ |a| a.save }.include? false
+    @not_saved = @assets.collect { |a| a.save }.include? false
     respond_to do |format|
       unless @not_saved
         flash[:notice] = t(:saved, :scope => [:app, :admin_assets])
@@ -98,6 +96,7 @@ class Admin::AssetsController < ApplicationController
           render :text => @assets.collect{ |asset| asset.attributes_for_js }.to_json, :layout => false, :status => 200
         end
       else
+        @asset = @assets.first
         format.html { render :action => "new" }
       end
     end

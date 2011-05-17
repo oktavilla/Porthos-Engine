@@ -519,6 +519,8 @@
             restricted: Avstängd, inte tillgänglig på internet
   admin:
     assets:
+      new:
+        submit: Ladda upp
       index:
         upload: Ladda upp filer
     sessions:

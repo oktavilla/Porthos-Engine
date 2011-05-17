@@ -3,7 +3,6 @@
     var Ready = function() {
       $('#datum_templates').bind('sortstop', function() {
         var $datum_template = $(this);
-        console.log($datum_template);
         $.ajax({
           type: 'PUT',
           url: $datum_template.data('sort-uri'),

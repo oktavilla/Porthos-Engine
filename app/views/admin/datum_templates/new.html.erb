@@ -1,4 +1,4 @@
-<% @page_title = "Sidtyper > #{@template.title} > Lägg till fält" %>
+<% @page_title = "Sidtyper > #{@template.label} > Lägg till fält" %>
 <% @page_class = 'layout2' -%>
 <% @page_id = 'site-settings' -%>
 <div id="sub_nav">
@@ -6,7 +6,7 @@
 </div>
 <div id="workspace">
   <div class="header">
-    <h1>Nytt <%= @datum_template.class.model_name.human %> i <%= @template.title %></h1>
+    <h1>Nytt <%= @datum_template.class.model_name.human %> i <%= @template.label %></h1>
   </div>
   <div id="content">
     <%= render 'form' %>

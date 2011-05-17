@@ -128,7 +128,7 @@
           </li>
         <% ContentTemplate.all.each do |content_template| %>
           <li>
-            <%= button_to content_template.title, admin_page_data_path(@page, :parent_id => datum, :type => 'FieldSet', :template_id => content_template) %>
+            <%= button_to content_template.label, admin_page_data_path(@page, :parent_id => datum, :type => 'FieldSet', :template_id => content_template) %>
           </li>
         <% end %>
         </ul>

@@ -1,4 +1,4 @@
-<% @page_title = t('.title', :title => @content_template.title) %>
+<% @page_title = t('.title', :title => @content_template.label) %>
 <% @page_class = 'layout2' -%>
 <% @page_id = 'site-settings' -%>
 <div id="sub_nav">
@@ -6,10 +6,10 @@
 </div>
 <div id="workspace">
   <div class="header">
-    <h1><%= @content_template.title %></h1>
+    <h1><%= @content_template.label %></h1>
     <span class="away">
       <%= link_to t('.edit'), edit_admin_content_template_path(@content_template), :class => 'edit_settings action' %>
-      <%= link_to t('.destroy'), admin_content_template_path(@content_template), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @content_template.title), :class => 'destroy action' %>
+      <%= link_to t('.destroy'), admin_content_template_path(@content_template), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @content_template.label), :class => 'destroy action' %>
       <%= link_to t('.all_content_templates'), admin_content_templates_path, :class => 'action' %>
     </span>
   </div>
@@ -35,7 +35,7 @@
           <th colspan="2"></th>
         </tr>
       </thead>
-      <tbody id="datum_templates">
+      <tbody id="datum_templates" data-sort-uri="<%= sort_admin_template_datum_templates_path(@content_template) %>">
         <% @content_template.datum_templates.each do |datum_template| -%>
         <tr class="datum_template" id="datum_template_<%= datum_template.id %>">
           <td class="handle"><span class="drag_handle"></span></td>
@@ -44,7 +44,7 @@
           <td><%= datum_template.class.model_name.human %></td>
           <td><%= t(datum_template.required? ? :yes : :no) %></td>
           <td><%= link_to t(:edit), edit_admin_template_datum_template_path(@content_template, datum_template) %></td>
-          <td><%= link_to t(:destroy), admin_template_datum_template_path(@content_template, datum_template), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess infomation kommer tas bort från alla #{@content_template.title} sidor." %>
+          <td><%= link_to t(:destroy), admin_template_datum_template_path(@content_template, datum_template), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess infomation kommer tas bort från alla #{@content_template.label} sidor." %>
         </tr>
         <% end -%>
       </tbody>

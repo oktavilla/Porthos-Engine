@@ -9,7 +9,7 @@
     <div class="add">
       Lägg till:
       <% @page_templates.each do |page_template| -%>
-        <%= link_to page_template.title, (!current_scopes[:with_parent] ? new_admin_page_path(:page => { :page_template_id => page_template.id }) : new_admin_page_path(:page => { :page_template_id => page_template, :parent_id => current_scopes[:with_parent].split(',')[0], :parent_type => current_scopes[:with_parent].split(',')[1] })), :class => 'new' %>
+        <%= link_to page_template.label, (!current_scopes[:with_parent] ? new_admin_page_path(:page => { :page_template_id => page_template.id }) : new_admin_page_path(:page => { :page_template_id => page_template, :parent_id => current_scopes[:with_parent].split(',')[0], :parent_type => current_scopes[:with_parent].split(',')[1] })), :class => 'new' %>
       <% end if @page_templates.any? %>
     </div>
   </div>

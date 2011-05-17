@@ -2,7 +2,7 @@
 <% @page_class = "AB content" -%>
 <div id="workspace">
   <div class="header">
-    <h1>Lägg till <%= @page.page_template ? @page.page_template.title.downcase : 'sida' %></h1>
+    <h1>Lägg till <%= @page.page_template ? @page.page_template.label.downcase : 'sida' %></h1>
   </div>
   <div id="content">
     <%= form_for [:admin, @page] do |f| %>

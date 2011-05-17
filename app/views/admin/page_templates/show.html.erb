@@ -1,4 +1,4 @@
-<% @page_title = t('.title', :title => @page_template.title) %>
+<% @page_title = t('.title', :title => @page_template.label) %>
 <% @page_class = 'layout2' -%>
 <% @page_id = 'site-settings' -%>
 <div id="sub_nav">
@@ -6,10 +6,10 @@
 </div>
 <div id="workspace">
   <div class="header">
-    <h1><%= @page_template.title %></h1>
+    <h1><%= @page_template.label %></h1>
     <span class="away">
       <%= link_to t('.edit'), edit_admin_page_template_path(@page_template), :class => 'edit_settings action' %>
-      <%= link_to t('.destroy'), admin_page_template_path(@page_template), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @page_template.title), :class => 'destroy action' %>
+      <%= link_to t('.destroy'), admin_page_template_path(@page_template), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @page_template.label), :class => 'destroy action' %>
       <%= link_to t('.all_page_templates'), admin_page_templates_path, :class => 'action' %>
       <% if @page_template.pages_sortable? %>
       <%= link_to t('.sort'), pages_admin_page_template_path(@page_template), :class => 'action' %>
@@ -59,7 +59,7 @@
           <td><%= datum_template.class.model_name.human %></td>
           <td><%= t(datum_template.required? ? :yes : :no) %></td>
           <td><%= link_to t(:edit), edit_admin_template_datum_template_path(@page_template, datum_template) %></td>
-          <td><%= link_to t(:destroy), admin_template_datum_template_path(@page_template, datum_template), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess infomation kommer tas bort från alla #{@page_template.title} sidor." %>
+          <td><%= link_to t(:destroy), admin_template_datum_template_path(@page_template, datum_template), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess infomation kommer tas bort från alla #{@page_template.label} sidor." %>
         </tr>
         <% end -%>
       </tbody>

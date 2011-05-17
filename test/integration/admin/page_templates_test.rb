@@ -8,7 +8,7 @@ class PagesTest < ActiveSupport::IntegrationCase
     page_template = Factory(:page_template)
 
     visit admin_page_templates_path
-    assert page.find("#page_templates #page_template_#{page_template.id}").has_content?(page_template.title), 'Page template should be in the list'
+    assert page.find("#page_templates #page_template_#{page_template.id}").has_content?(page_template.label), 'Page template should be in the list'
   end
 
   test 'creating a page template' do
@@ -34,7 +34,7 @@ class PagesTest < ActiveSupport::IntegrationCase
     visit admin_page_templates_path
 
     within("#page_templates #page_template_#{page_template.id}") do
-      click_link page_template.title
+      click_link page_template.label
     end
 
     within(".header") do
@@ -56,7 +56,7 @@ class PagesTest < ActiveSupport::IntegrationCase
     end
 
     assert_equal admin_page_templates_path, current_path
-    assert has_flash_message?(page_template.title), 'Should have a flash notice with the new title'
+    assert has_flash_message?(page_template.label), 'Should have a flash notice with the new title'
     assert !page.has_css?("#page_templates #page_template_#{page_template.id}"), 'page template removed'
   end
 

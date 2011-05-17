@@ -14,7 +14,7 @@
     <div class="add">
       <span class="label">Lägg till:</span>
       <% @page_templates.each do |page_template| -%>
-        <%= link_to page_template.title, new_admin_page_path(:page_template_id => page_template.id), :class => 'new' %>
+        <%= link_to page_template.label, new_admin_page_path(:page_template_id => page_template.id), :class => 'new' %>
       <% end if @page_templates.any? %>
     </div>
     <%= form_tag admin_pages_path, :method => :get do |f| %>

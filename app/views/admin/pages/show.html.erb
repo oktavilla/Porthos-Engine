@@ -79,7 +79,7 @@
       <%= link_to "Förhandsgranska", preview_page_path(@page.id), :class => 'public_link action' %>
       <% end -%>
     </span>
-    <div class="parents"><%# link_to @page.page_template.title, admin_pages_path(:with_page_template => @page.page_template) %></div>
+    <div class="parents"><%# link_to @page.page_template.label, admin_pages_path(:with_page_template => @page.page_template) %></div>
     <div class="page_title">
       <h1><%= @page.title %></h1>
     </div>

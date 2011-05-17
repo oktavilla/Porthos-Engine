@@ -19,7 +19,7 @@ class Admin::PageTemplatesController < ApplicationController
   def create
     @page_template = PageTemplate.new(params[:page_template])
     if @page_template.save
-      flash[:notice] = "#{@page_template.title}  #{t(:saved, :scope => [:app, :admin_general])}"
+      flash[:notice] = "#{@page_template.label}  #{t(:saved, :scope => [:app, :admin_general])}"
     end
     respond_with(@page_template, :location => admin_page_template_path(@page_template))
   end
@@ -31,7 +31,7 @@ class Admin::PageTemplatesController < ApplicationController
   def update
     @page_template = PageTemplate.find(params[:id])
     if @page_template.update_attributes(params[:page_template])
-      flash[:notice] = "#{@page_template.title}  #{t(:updated, :scope => [:app, :admin_general])}"
+      flash[:notice] = "#{@page_template.label}  #{t(:updated, :scope => [:app, :admin_general])}"
     end
     respond_with(@page_template, :location => admin_page_template_path(@page_template))
   end
@@ -39,7 +39,7 @@ class Admin::PageTemplatesController < ApplicationController
   def destroy
     @page_template = PageTemplate.find(params[:id])
     if @page_template.destroy
-      flash[:notice] = "#{@page_template.title}  #{t(:deleted, :scope => [:app, :admin_general])}"
+      flash[:notice] = "#{@page_template.label}  #{t(:deleted, :scope => [:app, :admin_general])}"
     end
     redirect_to admin_page_templates_path
   end

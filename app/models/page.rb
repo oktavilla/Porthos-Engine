@@ -3,7 +3,9 @@ class Page
   plugin MongoMapper::Plugins::MultiParameterAttributes
 
   taggable
-
+  key :page_template_id, ObjectId
+  key :created_by_id, ObjectId
+  key :updated_by_id, ObjectId
   key :position, Integer
   key :title, String
   key :uri, String
@@ -72,9 +74,8 @@ class Page
     field_set.node
   end
 
-
   delegate :template,
-           :to => :field_set
+           :to => :page_template
 
   scope :unpublished, lambda {
     where(:$or => [{:published_on => nil}, {:published_on.gt => Time.now}])
@@ -96,8 +97,8 @@ class Page
 
   scope :updated_latest, where(:updated_at.gt => :created_at).sort(:updated_at.desc)
 
-  scope :with_field_set, lambda { |field_set_id|
-    where(:field_set_id => field_set_id)
+  scope :with_page_template, lambda { |page_template_id|
+    where(:page_template_id => page_template_id)
   }
 
   scope :created_by, lambda { |user_id|

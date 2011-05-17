@@ -2,7 +2,7 @@ class Admin::PagesController < ApplicationController
   include Porthos::Admin
   respond_to :html
 
-  has_scope :with_field_set
+  has_scope :with_page_template
   has_scope :created_by
   has_scope :updated_by
   has_scope :order_by, :default => 'updated_at desc'

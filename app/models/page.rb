@@ -1,6 +1,6 @@
 class Page
   include MongoMapper::Document
-  plugin MongoMapper::Plugins::MultiParameterAttributes
+  plugin MongoMapper::Plugins::IdentityMap
 
   taggable
   key :page_template_id, ObjectId
@@ -14,6 +14,9 @@ class Page
   key :restricted, Boolean
   key :published_on, Time
   timestamps!
+
+  ensure_index :page_template_id
+  ensure_index :updated_by_id
 
   ensure_index :created_at
   ensure_index :updated_at
@@ -35,11 +38,7 @@ class Page
   class << self
 
     def contributors
-      @contributors ||= [].tap do |contributors|
-        user_ids = fields(:updated_by_id).distinct(:updated_by_id)
-        contributors << User.find(*user_ids)
-        contributors.flatten!
-      end.compact
+      User.find(self.fields(:updated_by_id).distinct(:updated_by_id))
     end
 
     def from_template(template, attributes = {})
@@ -49,26 +48,7 @@ class Page
         end
       end
     end
-  end
 
-  # TODO: Test me
-  def data_attributes=(datum_array)
-    self.data = datum_array.map do |i, datum_attrs|
-      datum_attrs.to_options!
-      if id = datum_attrs.delete(:id)
-        unless datum_attrs[:_destroy]
-          data.detect { |d| d.id.to_s == id }.tap do |datum|
-            datum.update_attributes(datum_attrs) if datum_attrs.keys.any?
-          end
-        end
-      else
-        Datum.new(datum_attrs)
-      end
-    end.compact
-  end
-
-  def fields
-    field_set.fields
   end
 
   def node
@@ -79,10 +59,6 @@ class Page
     node ? node.attributes.merge(node_attributes) : Node.new(node_attributes)
   end
 
-  def index_node
-    field_set.node
-  end
-
   delegate :template,
            :to => :page_template
 
@@ -91,11 +67,11 @@ class Page
   }
 
   scope :published, lambda {
-    where(:published_on.lt => Time.now)
+    where(:published_on.lte => Time.now)
   }
 
   scope :published_within, lambda { |from, to|
-    where(:published_on.gt > from, :published_on.lt => to)
+    where(:published_on.gte => from, :published_on.lte => to)
   }
 
   scope :include_restricted, lambda { |restricted|
@@ -155,7 +131,7 @@ class Page
   end
 
   def category
-    @category ||= field_set.allow_categories? ? Page.tags_by_count(:namespace => field_set.handle).first : nil
+    @category ||= page_template.allow_categories? ? Page.tags_by_count(:namespace => page_template.handle).first : nil
   end
 
   def category_name
@@ -163,11 +139,11 @@ class Page
   end
 
   def category_method_name
-    @category_method_name ||= "#{field_set.handle}_tag_names"
+    @category_method_name ||= "#{page_template.handle}_tag_names"
   end
 
   def can_have_a_node?
-    published_on.present? && field_set.allow_node_placements? && node.blank?
+    published_on.present? && page_template.allow_node_placements? && node.blank?
   end
 
   def in_restricted_context?

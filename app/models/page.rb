@@ -39,7 +39,7 @@ class Page
         user_ids = fields(:updated_by_id).distinct(:updated_by_id)
         contributors << User.find(*user_ids)
         contributors.flatten!
-      end
+      end.compact
     end
 
     def from_template(template, attributes = {})

@@ -33,6 +33,15 @@ class Page
   before_save :sort_data
 
   class << self
+
+    def contributors
+      @contributors ||= [].tap do |contributors|
+        user_ids = fields(:updated_by_id).distinct(:updated_by_id)
+        contributors << User.find(*user_ids)
+        contributors.flatten!
+      end
+    end
+
     def from_template(template, attributes = {})
       self.new(attributes.merge(:page_template_id => template.id)).tap do |page|
         page.data = template.datum_templates.map do |datum_template|

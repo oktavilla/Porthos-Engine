@@ -1,4 +1,5 @@
 class PageTemplate < Template
+  key :handle, String
   key :page_label, String
   key :template_name, String
   key :pages_sortable, Boolean, :default => lambda { false }

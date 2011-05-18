@@ -7,19 +7,14 @@ class FieldSet < Datum
     end
   end
 
-  def data_attributes=(datum_array)
-    self.data = datum_array.map do |i, attrs|
+  def data_attributes=(_data)
+    _data.map do |i, attrs|
       attrs.to_options!
-      if id = attrs.delete(:id)
-        unless attrs[:_destroy]
-          data.detect { |d| d.id.to_s == id }.tap do |datum|
-            datum.assign(attrs) if attrs.keys.any?
-          end
-        end
-      else
-        Datum.new(attrs)
+      id = attrs.delete(:id)
+      data.detect { |d| d.id.to_s == id }.tap do |datum|
+        datum.assign(attrs) if datum && attrs.keys.any?
       end
-    end.compact
+    end
   end
 
   class << self

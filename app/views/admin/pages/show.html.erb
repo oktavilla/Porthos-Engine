@@ -109,9 +109,13 @@
   <div id="content" class="datums">
   <% @page.data.each_with_index do |datum, index| %>
     <div class="datum <%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
-    <% unless datum.is_a?(ContentBlock) %>
-      <%= render :partial => datum.class.to_s.underscore, :locals => { :datum => datum } %>
-    <% else %>
+    <% if datum.is_a?(Field) %>
+      <%= render :partial => 'field', :locals => { :datum => datum } %>
+    <% elsif datum.is_a?(FieldSet) %>
+      <%= render :partial => 'field_set', :locals => { :datum => datum } %>
+    <% elsif datum.is_a?(Image) %>
+      <%= render :partial => 'image', :locals => { :datum => datum } %>
+    <% elsif datum.is_a?(ContentBlock) %>
       <h2><%= datum.label %></h2>
       <div class="add controls">
         <h3 class="new"><%= t('.add_content') %></h3>

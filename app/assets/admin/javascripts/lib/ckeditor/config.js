@@ -22,4 +22,5 @@ CKEDITOR.editorConfig = function(config) {
   ];
   config.stylesSet = 'my_styles';
   config.toolbar = 'Basic';
+  config.forcePasteAsPlainText = true;
 };

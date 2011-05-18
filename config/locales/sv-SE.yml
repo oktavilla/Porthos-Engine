@@ -523,6 +523,10 @@
         submit: Ladda upp
       index:
         upload: Ladda upp filer
+    data:
+      image_form:
+        edit_asset: Ändra bildtext
+        choose_image: Välj bild
     sessions:
       signed_in: Du är nu inloggad
       signed_out: Du är nu utloggad

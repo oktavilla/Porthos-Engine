@@ -20,13 +20,15 @@
           margin:0 0 .25em 10px; }
         .content_block .controls a {display:block;}
 
-.contents {
+.content_block .contents {
+  margin-left:0;
   min-height:50px;}
 .contents li.content {
+  margin:0;
   position:relative;
   list-style:none;
   font-size:1em;
-  padding:1em 250px 1em 40px;
+  padding:1em 1em 1em 0;
   border-top:1px solid #ddd;
   background:#fff; }
   .contents li.content > .edit {
@@ -42,7 +44,7 @@
   .contents li.content > .draghandle {
     position:absolute;
     top:0;
-    left:0;
+    left:-40px;
     vertical-align:middle;
     width:40px;
     height:50px;
@@ -53,8 +55,10 @@
   .contents li.content:hover > .edit {
     font-size:.75em;
     display:block; }
-  .contents h2.label {display:none;}
-  .contents .viewable {}
+  .datums h2.label {
+    clear:left;
+    margin-top:0;
+    margin-left:120px; }
     .contents .viewable .title {margin:0;}
     .contents .viewable h1 {
       font-size:2em;
@@ -74,11 +78,13 @@
       font-weight:bold;
       color:#000; }
     .contents .viewable p,
-    .contents .viewable ul {margin:.8em 0 .8em 0;}
+    .contents .viewable ul,
+    .datums .editable input {margin:.8em 0 .8em 0;}
       .contents .viewable ul li {
         margin:0 0 .5em 1.5em;
         padding:0; }
-    .contents .viewable *:first-child {margin-top:0;}
+    .datums *:first-child {
+      margin-top:0;}
 
     .contents .viewable p {}
     .contents .inactive {
@@ -87,15 +93,9 @@
       .contents .inactive .viewable {
         opacity:.3; }
 
-  .contents .image .viewable,
-  .contents .video .viewable {padding-left:95px;}
     .contents .image .viewable img,
     .contents .video .viewable img {
-      float:left;
-      margin-left:-95px;
-      font-size:12px;
-      text-align:center;
-      border:1px solid #eee;  }
+      float:left; }
 
   .contents .video .viewable .title {
     padding-left:20px;
@@ -120,12 +120,25 @@
     padding:20px 40px 20px 40px;
     border-top:1px solid #ddd;}
     .datum:first-child {border-top:none;}
+    .datum .viewable,
+     .datum .editable,
+     .datum form div.edit {
+       padding-left:120px; }
+    .datum .editable .image_form {display:none;}
     .datum .viewable > h2,
-    .datum.content_block > h2 {
-      margin:0 0 .5em 0;
+    .datum.content_block > h2,
+    .datum .editable label,
+    .datum .editable h2.label {
+      clear:left;
+      width:100px;
+      margin:0 0 .5em -120px;
+      float:left;
       font-size:1em;
       color:#999; }
-    .datum label {margin-top:0;}
+    .datum label {
+      color:#000;
+      font-weight:normal;
+      margin-top:0;}
     .datum .submit {
       font-size:.857142857em;
       margin-top:.5em;}
@@ -134,8 +147,7 @@
     .datum div.edit {
       margin-top:.5em;
       font-size:.857142857em;}
-    .datum .content {
-      font-size:1.142857143em; }
+    .datum .content { }
   .datum.association {}
     .datum.association ul {
       list-style:none;
@@ -161,13 +173,12 @@
       .datum.association .select_page .submit_inline {
         display:inline;
         font-size:.857142857em;}
-  .datum.field_set form h2.label {display:none;}
   .datums .image {}
     .datums .image img {
       float:left;
       margin-right:20px; }
     .datums .image .title {
-      padding-top:1.5em;
+      padding-top:1em;
       font-weight:bold; }
     .datums .image .caption {
       font-size:.857142857em; }

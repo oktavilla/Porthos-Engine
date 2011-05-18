@@ -1,6 +1,6 @@
 <div class="viewable">
   <h2 class="label"><%= datum.label %></h2>
-  <div class="content">
+  <div class="content image">
   <% if datum.asset %>
     <%= image_tag datum.asset.version_url(:size => 'c80x80') %>
   <% end %>
@@ -31,23 +31,25 @@
   </div>
 </div>
 <div class="editable">
-  <h2 class="label"><%= datum.label %></h2>
-  <% if datum.asset %>
-    <%= image_tag datum.asset.version_url(:size => 'c80x80') %>
-  <% end %>
-  <%= f.label :title %>
-  <div class="fullwidth">
-    <%= f.text_field :title, :disabled => true %>
-  </div>
+  <div class="image_form">
+    <h2 class="label"><%= datum.label %></h2>
+    <% if datum.asset %>
+      <%= image_tag datum.asset.version_url(:size => 'c80x80') %>
+    <% end %>
+    <%= f.label :title %>
+    <div class="fullwidth">
+      <%= f.text_field :title, :disabled => true %>
+    </div>
 
-  <%= f.label :description %>
-  <div class="fullwidth">
-    <%= f.text_area :description, :disabled => true %>
-  </div>
+    <%= f.label :description %>
+    <div class="fullwidth">
+      <%= f.text_area :description, :disabled => true %>
+    </div>
 
-  <% if datum._parent_document.is_a?(Page) %>
-  <div class="submit">
-    <%= f.submit t(:save) %>
+    <% if datum._parent_document.is_a?(Page) %>
+    <div class="submit">
+      <%= f.submit t(:save) %>
+    </div>
+    <% end %>
   </div>
-  <% end %>
 </div>

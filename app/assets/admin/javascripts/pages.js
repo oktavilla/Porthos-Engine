@@ -5,7 +5,7 @@
           $content = $('#content'),
           $sortables = $content.find('ul.sortable');
 
-      $content.find('form.datum_edit, div.datum.image div.viewable').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
+      $content.find('form.datum_edit').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
       $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
 
       if ($.fn.hasOwnProperty('ckeditor')) {

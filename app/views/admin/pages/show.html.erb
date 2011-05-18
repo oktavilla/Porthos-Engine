@@ -115,6 +115,8 @@
       <%= render :partial => 'field_set', :locals => { :datum => datum } %>
     <% elsif datum.is_a?(Image) %>
       <%= render :partial => 'image', :locals => { :datum => datum } %>
+    <% elsif datum.is_a?(PageAssociation) %>
+      <%= render :partial => 'page_association', :locals => { :datum => datum } %>
     <% elsif datum.is_a?(ContentBlock) %>
       <h2><%= datum.label %></h2>
       <div class="add controls">

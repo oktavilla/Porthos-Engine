@@ -1,0 +1,20 @@
+<div class="viewable">
+  <h2 class="label"><%= datum.label %></h2>
+  <div class="content">
+  <% if datum.page %>
+    <div class="title"><%= datum.page.title %></div>
+  <% end %>
+  </div>
+</div>
+<div class="editable">
+  <h2 class="label"><%= datum.label %></h2>
+  <div class="contains_input">
+    <%= f.label :page_id %>
+    <%= f.select :page_id, datum.targets.collect { |page| [page.title, page.id] } %>
+  </div>
+  <% if datum._parent_document.is_a?(Page) %>
+  <div class="submit">
+    <%= f.submit t(:save) %>
+  </div>
+  <% end %>
+</div>

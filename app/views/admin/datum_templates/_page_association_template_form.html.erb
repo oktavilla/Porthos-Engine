@@ -1,0 +1,4 @@
+<div class="contains_input">
+  <%= f.label :page_template_id %>
+  <%= f.select :page_template_id, PageTemplate.all.collect { |template| [template.label, template.id] } %>
+</div>

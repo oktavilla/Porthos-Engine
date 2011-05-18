@@ -161,6 +161,7 @@
       .datum.association .select_page .submit_inline {
         display:inline;
         font-size:.857142857em;}
+  .datum.field_set form h2.label {display:none;}
   .datums .image {}
     .datums .image img {
       float:left;
@@ -171,6 +172,7 @@
     .datums .image .caption {
       font-size:.857142857em; }
     .datums .image .editable label {clear:left}
+
 
 #pages_view.show #sub_nav div.submit {
   margin-top:0.5em;

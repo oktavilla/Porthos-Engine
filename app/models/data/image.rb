@@ -10,8 +10,8 @@ private
 
   def dup_asset_attributes
     if asset
-      self.title = asset.title if title.blank?
-      self.description = asset.description if description.blank?
+      self.title = asset.title
+      self.description = asset.description
     end
   end
 

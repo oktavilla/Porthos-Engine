@@ -51,10 +51,6 @@ class Asset
   VIDEO_FORMATS = [:flv, :mov, :qt, :mpg, :avi, :mp4]
   SOUND_FORMATS = [:mp3, :wav, :aiff, :aif]
 
-  def to_param
-    name
-  end
-
   def full_name
     @full_name ||= "#{name}.#{extension}"
   end

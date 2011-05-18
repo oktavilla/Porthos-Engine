@@ -118,7 +118,7 @@ class Admin::AssetsController < ApplicationController
   end
 
   def update
-    @asset = Asset.find_by_name(params[:id])
+    @asset = Asset.find(params[:id])
 
     respond_to do |format|
       if @asset.update_attributes(params[:asset])

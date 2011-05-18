@@ -1,9 +1,8 @@
 <div class="label"><%= t(:title, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]) %></div>
 <ul class="nav">
   <li><%= link_to t(:site_settings, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]), admin_site_settings_path %></li>
-  <li><%= link_to t(:content_lists, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]), admin_content_lists_path %></li>
-  <li><%= link_to t(:field_sets, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]), admin_field_sets_path %></li>
+  <li><%= link_to t(:page_templates, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]), admin_page_templates_path %></li>
+  <li><%= link_to t(:content_templates, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]), admin_content_templates_path %></li>
   <li><%= link_to t(:redirects, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]), admin_redirects_path %></li>
   <li><%= link_to t(:tags, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]), admin_tags_path %></li>
-  <li><%= link_to t(:content_modules, :scope => [:app, :views, :admin, :shared, :settings_sub_nav]), admin_content_modules_path %></li>
 </ul>

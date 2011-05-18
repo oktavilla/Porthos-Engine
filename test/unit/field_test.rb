@@ -1,27 +1,45 @@
 require_relative '../test_helper'
-
 class FieldTest < ActiveSupport::TestCase
-  context "A field" do
-    setup do
-      @field = Factory(:field)
+
+  test 'building a field from a template' do
+    field_template = Factory.build(:field_template)
+    field = Field.from_template(field_template)
+    assert field.kind_of?(Field)
+    assert_equal field_template.shared_attributes, field.attributes.except(:_id, :_type, :value, :active), "Should have mirrored the templates attributes"
+  end
+
+  test 'type casting the value for a date' do
+    field = Field.new(:input_type => 'date')
+
+    field.input_type = 'date'
+    field.value = '2000-01-01'
+    field.valid? # Trigger type casting
+    assert_equal Time, field.value.class
+  end
+
+
+  test 'type casting the value for a boolean' do
+    field = Field.new(:input_type => 'boolean')
+
+    ['1', 1, true, 'true', 't'].each do |bool|
+      field.value = bool
+      field.valid?
+      assert_equal TrueClass, field.value.class, "#{bool} should get type cast to TrueClass"
     end
-    subject { @field }
 
-    should have_many(:custom_attributes).dependent(:destroy)
-    should have_many(:custom_associations).dependent(:destroy)
-
-    should validate_uniqueness_of(:label).scoped_to(:field_set_id)
-    should validate_uniqueness_of(:handle).scoped_to(:field_set_id)
-
-    should validate_presence_of :field_set_id
-    should validate_presence_of :label
-    should validate_presence_of :handle
-    should parameterize_attribute :handle
-
-    should 'not allow handles that is currently methods on a Page object' do
-      @field.handle = Page.new.public_methods.first.to_s
-      assert !@field.valid?
-      assert @field.errors[:handle].any?
+    ['0', 0, false, 'false', 'f'].each do |bool|
+      field.value = bool
+      field.valid?
+      assert_equal FalseClass, field.value.class, "#{bool} should get type cast to FalseClass"
     end
   end
+
+  test 'string field rendering settings' do
+    field_template = Factory.build(:string_field_template)
+    string_field = Field.from_template(field_template)
+
+    assert string_field.respond_to?(:multiline)
+    assert string_field.respond_to?(:allow_rich_text)
+  end
+
 end

@@ -1,5 +1,6 @@
 class User
   include MongoMapper::Document
+  plugin MongoMapper::Plugins::IdentityMap
 
   attr_reader :password
 
@@ -31,16 +32,6 @@ class User
   validates :email,
             :presence => true,
             :uniqueness => { :case_sensitive => false }
-
-  # scope :recent_contributers,
-  #       select('users.*').
-  #       joins('LEFT OUTER JOIN pages ON pages.updated_by_id = users.id').
-  #       where('pages.updated_by_id IS NOT NULL')
-  #
-  # scope :recent_uploaders,
-  #       select('DISTINCT users.id, users.*').
-  #       joins('LEFT OUTER JOIN assets ON assets.created_by_id = users.id').
-  #       where('assets.created_by_id IS NOT NULL')
 
   def password=(unencrypted_password)
     @password = unencrypted_password

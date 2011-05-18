@@ -8,9 +8,9 @@
   <% end %>
   <% end %>
   <ul class="filter">
-    <li<%= ' class="current"'.html_safe if current_scopes[:with_field_set].blank? %>><%= link_to "Alla", admin_pages_path(current_scopes.except(:with_field_set)) %></li>
-    <% FieldSet.all.each do |field_set| -%>
-    <li<%= ' class="current"'.html_safe if current_scopes[:with_field_set] == field_set.id.to_s %>><%= link_to field_set.title, admin_pages_path(current_scopes.merge(:with_field_set => field_set.id)) %></li>
+    <li<%= ' class="current"'.html_safe if current_scopes[:with_page_template].blank? %>><%= link_to "Alla", admin_pages_path(current_scopes.except(:with_page_template)) %></li>
+    <% PageTemplate.all.each do |page_template| -%>
+    <li<%= ' class="current"'.html_safe if current_scopes[:with_page_template] == page_template.id.to_s %>><%= link_to page_template.label, admin_pages_path(current_scopes.merge(:with_page_template => page_template.id)) %></li>
     <% end -%>
   </ul>
   <div class="label">Status</div>
@@ -22,16 +22,24 @@
       <%= link_to "Utkast", admin_pages_path(current_scopes.merge(:is_published => 'false')) %>
     </li>
   </ul>
+  <div class="label">Senast ändrad av</div>
+  <ul class="filter">
+    <li<%= ' class="current"'.html_safe if current_scopes[:updated_by].blank? %>><%= link_to "Alla", admin_pages_path(current_scopes.except(:updated_by)) %></li>
+    <% Page.contributors.each do |user| %>
+    <li<%= ' class="current"'.html_safe if current_scopes[:updated_by] == user.id.to_s %>><%= link_to user.name, admin_pages_path(current_scopes.merge(:updated_by => user.id)) %></li>
+    <% end -%>
+  </ul>
   <% if @tags && @tags.any? -%>
-    <div class="label">Nyckelord</div>
-    <ul class="tags alphabetical">
-      <% @tags.sort_by(&:name).group_by { |tag| tag.name[0...1].upcase }.each do |first_letter, tags| -%>
-        <li>
-        <span class="letter"><%= first_letter %></span>
-        <% tags.each do |tag| -%>
-          <%= !@current_tags.include?(tag.name) ? link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') : link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags].dup - [tag.name])), :class => 'tag current') -%><%= ', ' unless tag == tags.last -%>
-        <% end -%>
-        </li>
+  <div class="label">Nyckelord</div>
+  <ul class="tags alphabetical">
+    <% @tags.sort_by(&:name).group_by { |tag| tag.name[0...1].upcase }.each do |first_letter, tags| -%>
+      <li>
+      <span class="letter"><%= first_letter %></span>
+      <% tags.each do |tag| -%>
+        <%= !@current_tags.include?(tag.name) ? link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') : link_to("#{tag.name.downcase}", admin_pages_path(:tags => (params[:tags].dup - [tag.name])), :class => 'tag current') -%><%= ', ' unless tag == tags.last -%>
       <% end -%>
-    </ul><% end -%>
+      </li>
+    <% end -%>
+  </ul>
+  <% end -%>
 </div>

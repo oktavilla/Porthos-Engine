@@ -99,10 +99,10 @@ module PorthosApplicationHelper
   def flash_messages(type = "")
     if type.blank?
       flash.collect do |type, message|
-        content_tag('p', message, :class => "flash #{type}")
+        content_tag('p', message, :class => "flash #{type}", :id => 'flash')
       end.join("\n").html_safe
     elsif flash[type.to_sym]
-      content_tag('p', flash[type.to_sym], :class => "flash #{type}").html_safe
+      content_tag('p', flash[type.to_sym], :class => "flash #{type}", :id => 'flash').html_safe
     end
   end
 

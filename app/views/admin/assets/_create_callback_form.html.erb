@@ -1,12 +1,11 @@
 <%= form_tag create_callback[:path], :method => (create_callback[:method].present? ? create_callback[:method] : 'get') do %>
   <% create_callback[:params].each do |key, value| %>
-    <%= if value.is_a?(Hash)
-      value.collect{|sub_key, sub_value| hidden_field_tag("#{key}[#{sub_key}]", sub_value)}.join.html_safe
-    else
-      hidden_field_tag(key, value)
-    end
-    %>
-  <% end %>
-  <%= hidden_field_tag create_callback[:asset_field_name], asset.id %>
+    <% if value.is_a?(Hash) %>
+      <%= value.collect { |sub_key, sub_value| hidden_field_tag("#{key}[#{sub_key}]", sub_value)}.join.html_safe %>
+    <% else %>
+      <%= hidden_field_tag(CGI::unescape(key), CGI::unescape(value)) %>
+    <% end %>
+  <% end if create_callback[:params] %>
+  <%= hidden_field_tag CGI::unescape(create_callback[:asset_field_name]), asset.id %>
   <%= submit_tag t(:choose), :class => 'new' %>
 <% end %>

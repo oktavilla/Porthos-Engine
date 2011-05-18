@@ -2,14 +2,14 @@
 <% @page_class = "AB content" -%>
 <div id="workspace">
   <div class="header">
-    <h1>Lägg till <%= @page.field_set ? @page.field_set.title.downcase : 'sida' %></h1>
+    <h1>Lägg till <%= @page.page_template ? @page.page_template.label.downcase : 'sida' %></h1>
   </div>
   <div id="content">
     <%= form_for [:admin, @page] do |f| %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
-      <%= f.hidden_field :field_set_id %>
+      <%= hidden_field_tag 'page_template_id', @template.id %>
 
-      <label for="page_title"><%= f.object.field_set && f.object.field_set.page_label.present? ? f.object.field_set.page_label : Page.human_attribute_name(:title) %></label>
+      <label for="page_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>
       <%= f.text_field :title, :class => "title" %>
 
       <%= f.label :uri %>

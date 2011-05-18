@@ -16,7 +16,8 @@
 #tags_view .taggable:after,
 .page_content:after,
 .page_content .content:after,
-.contents li.content:after {
+.contents li.content:after,
+.datum .viewable:after {
   content:".";
   display:block;
   height:0;

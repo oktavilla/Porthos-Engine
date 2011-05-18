@@ -32,7 +32,7 @@ class Admin::UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     @user.save!
-    flash[:notice] = "#{@user.login} #{t(:saved, :scope => [:app, :admin_general])}"
+    flash[:notice] = "#{@user.name} #{t(:saved, :scope => [:app, :admin_general])}"
     respond_to do |format|
       format.html { redirect_to params[:return_to] || admin_users_path }
     end
@@ -62,7 +62,7 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
     raise SecurityTransgression unless current_user.can_destroy?(@user)
     @user.destroy
-    flash[:notice] = "#{@user.login} #{t(:deleted, :scope => [:app, :admin_general])}"
+    flash[:notice] = "#{@user.name} #{t(:deleted, :scope => [:app, :admin_general])}"
     respond_to do |format|
       format.html { redirect_to admin_users_path }
     end

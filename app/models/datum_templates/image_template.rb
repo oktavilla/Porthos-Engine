@@ -1,0 +1,2 @@
+class ImageTemplate < DatumTemplate
+end

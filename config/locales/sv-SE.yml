@@ -99,21 +99,24 @@
     models:
       asset: Fil
       content_module: Innehållsmodul
+      content_template: Innehållstyp
       node: Navigationsnode
       page: Sida
       content_teaser: Teaser
       user: Användare
       redirect: Vidarebefordring
-      field_set: Sidtyp
+      field_set: Innehållstyp
       field: Fält
-      content_block_field: Innehållsblock
+      content_block: Innehållsblock
       date_time_field: Datum
       string_field: Sträng
       text_field: Text
       boolean_field: Booleanskt värde
+      page_template: Sidtyp
       page_association_field: Relation till sida
       reversed_page_association_field: Relation från en annan sidtyp
       asset_association_field: Relation till fil
+      string_field_template: Sträng fält
     errors:
       template:
         header:
@@ -158,11 +161,23 @@
         file_name: Filnamn
         author: Copyright
         description: Beskrivning
-      content_module:
-        name: Namn
-        template: Modul
+      content_template:
+        label: Namn
+        description: Beskrivning
+      datum_template:
+        _type: Typ
+        label: Namn
+        handle: Identifierare
+        required: Krävs
+        instructions: Beskrivning
+      datum:
+        _type: Typ
+        label: Namn
+        handle: Identifierare
+        required: Krävs
+        instructions: Beskrivning
       field_set:
-        title: Titel
+        label: Titel
         template_name: Template
       field:
         _type: Typ
@@ -176,11 +191,19 @@
         name: Namn i navigationen
         status: Status
         restricted: Kräver inloggning (även undersidor)
+      page_templates:
+        label: Namn
       page:
         title: Namn
         description: Beskrivning
         published_on: Publiceringsdatum
         parent_id: Sidtyp
+      string_field_template:
+        multiline: Textfält
+        allow_rich_text: Tillåt formatering
+      string_field:
+        multiline: Textfält
+        allow_rich_text: Tillåt formatering
       teaser:
         title: Rubrik
         body: Text
@@ -247,7 +270,7 @@
       content_teaser: Teaser
       user: Användare
       redirect: Vidarebefordring
-      field_set: Sidtyp
+      field_set: Innehållstyp
       field: Fält
       date_time_field: Datum
       string_field: Sträng
@@ -305,7 +328,7 @@
       # custom blank validation message for login attribute of User model.
       # models:
 
-    # Translate model names. Used in Model.human_name().
+    # Translate model names. Used in Model.model_name.human().
     #models:
       # For example,
       #   user: "Dude"
@@ -437,7 +460,7 @@
             title: Innehåll
             site_settings: Inställningar
             content_lists: Delat innehåll
-            field_sets: Sidtyper
+            field_sets: Innehållstyper
             redirects: Vidarebefordringar
             tags: Nyckelord
             content_modules: Moduler
@@ -496,14 +519,35 @@
             restricted: Avstängd, inte tillgänglig på internet
   admin:
     assets:
+      new:
+        submit: Ladda upp
       index:
         upload: Ladda upp filer
+    data:
+      image_form:
+        edit_asset: Ändra bildtext
+        choose_image: Välj bild
     sessions:
       signed_in: Du är nu inloggad
       signed_out: Du är nu utloggad
       failed: Användarnamnet och lösenordet stämde inte överens
       new:
         login: Logga in
+    page_templates:
+      index:
+        title: Sidtyper
+        new: Lägg till
+      new:
+        title: Ny sidtyp
+      show:
+        title: Sidtyper > %{title}
+        add_field_template: Lägg till fält
+        add_field_set_template: Lägg till fördefinerat innehåll
+        add_content_block_template: Lägg till ett innehållsblock
+        all_page_templates: Alla sidtyper
+        blank_slate: Det finns inga fält definerade än
+        edit: Ändra
+        destroy: Radera
     pages:
       show:
         edit_category: Ändra kategori
@@ -513,17 +557,29 @@
         not_published: Sidan är inte publicerad
         publish_now: Publicera
         add_content: Lägg till innehåll
+    content_templates:
+      index:
+        title: Innehållstyper
+        new: Skapa innehållstyp
+      new:
+        title: Ny innehållstyp
+      show:
+        add_field_template: Lägg till fält
+        edit: Ändra
+        destroy: Ta bort
+        all_content_templates: Visa alla
+        blank_slate: Det finns inga fält skapade än
     contents:
       teasers:
         edit:
           add_image: Lägg till bild
     field_sets:
-      all_field_sets: Alla sidtyper
+      all_field_sets: Alla innehållstyper
       index:
-        title: Alla sidtyper
-        new: Lägg till ny sidtyp
+        title: Alla innehållstyper
+        new: Lägg till ny innehållstyp
       new:
-        title: Ny sidtyp
+        title: Ny innehållstyp
       show:
         edit: Ändra
         destroy: Radera

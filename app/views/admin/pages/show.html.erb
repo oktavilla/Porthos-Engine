@@ -28,7 +28,7 @@
   <% end -%>
   <p>Senast ändrad: <%= @page.updated_at.strftime("%d %B %Y") %><%= " av #{@page.updated_by.name}" if @page.updated_by %>.</p>
 
-  <% if @page.field_set.allow_categories? -%>
+  <% if @page.page_template.allow_categories? -%>
   <h2 class="label">Kategori</h2>
   <div id="page_category">
     <div id="category_view">
@@ -39,7 +39,7 @@
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
       <div>
-        <%= f.select @page.category_method_name, Page.tags_by_count(:namespace => @page.field_set.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
+        <%= f.select @page.category_method_name, Page.tags_by_count(:namespace => @page.page_template.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
         <a href="#" id="new_category"><%= t('.add_new_category') %></a><br>
         <input type="submit" value="<%= t('choose') %>"> <%= t(:or) %> <a href="#" class="cancel"><%= t(:cancel) %></a>
       </div>
@@ -74,12 +74,12 @@
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span>Ändra</span></a>
       <% if @page.published? -%>
-        <%= link_to "Visa på webbplatsen", page_path(:id => @page.uri, :field_set_id => @page.field_set_id), :class => 'public_link action' %>
+        <%# link_to "Visa på webbplatsen", page_path(:id => @page.uri, :page_template_id => @page.page_template_id), :class => 'public_link action' %>
       <% else -%>
-      <%= link_to "Förhandsgranska", preview_page_path(@page.id), :class => 'public_link action' %>
+      <%# link_to "Förhandsgranska", preview_page_path(@page.id), :class => 'public_link action' %>
       <% end -%>
     </span>
-    <div class="parents"><%# link_to @page.field_set.title, admin_pages_path(:with_field_set => @page.field_set) %></div>
+    <div class="parents"><%# link_to @page.page_template.label, admin_pages_path(:with_page_template => @page.page_template) %></div>
     <div class="page_title">
       <h1><%= @page.title %></h1>
     </div>
@@ -87,7 +87,7 @@
   <div class="header" style="display:none;">
     <%= form_for @page, :url => admin_page_path(@page.id) do |f| %>
       <%= render :partial => 'admin/shared/error_messages', :locals => { :object => @page } %>
-      <label for="page_title" class="first_label"><%= @page.field_set.page_label.present? ? @page.field_set.page_label : "Titel" %></label>
+      <label for="page_title" class="first_label"><%= @page.page_template.page_label.present? ? @page.page_template.page_label : "Titel" %></label>
       <div class="fullwidth">
         <%= f.text_field :title, :class => 'title' %>
       </div>
@@ -109,28 +109,50 @@
   <div id="content" class="datums">
   <% @page.data.each_with_index do |datum, index| %>
     <div class="datum <%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
-    <% if datum.is_a?(DatumAttribute) %>
-      <%= form_for datum, :as => :datum, :url => admin_page_datum_path(@page, datum), :html => { :id => "datum_#{datum.id}_edit" } do |f| %>
-        <%= render :partial => "admin/data/#{datum.input_type}_form", :locals => { :f => f, :datum => datum } %>
-      <% end %>
+    <% if datum.is_a?(Field) %>
+      <%= render :partial => 'field', :locals => { :datum => datum } %>
+    <% elsif datum.is_a?(FieldSet) %>
+      <%= render :partial => 'field_set', :locals => { :datum => datum } %>
+    <% elsif datum.is_a?(Image) %>
+      <%= render :partial => 'image', :locals => { :datum => datum } %>
+    <% elsif datum.is_a?(PageAssociation) %>
+      <%= render :partial => 'page_association', :locals => { :datum => datum } %>
     <% elsif datum.is_a?(ContentBlock) %>
       <h2><%= datum.label %></h2>
       <div class="add controls">
         <h3 class="new"><%= t('.add_content') %></h3>
         <ul>
-          <li><%= link_to Textfield.human_name, new_admin_page_datum_content_path(@page, datum, :type => 'Textfield') %></li>
-          <li><%= link_to Teaser.human_name, new_admin_page_datum_content_path(@page, datum, :type => 'Teaser') %></li>
-          <li><%= link_to Image.human_name, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => new_admin_page_datum_content_path(@page, datum), :asset_field_name => 'content[asset_id]', :params => { :type => 'Image' }}) %></li>
+          <li>
+            <%= form_for [:admin, @page, StringField.new(:input_type => 'string', :multiline => true, :allow_rich_text => true)], :as => :datum,  :url => admin_page_data_path(@page, :parent_id => datum, :type => 'StringField') do |f| %>
+              <%= f.hidden_field :input_type %>
+              <%= f.hidden_field :multiline %>
+              <%= f.hidden_field :allow_rich_text %>
+              <button type="submit"><%= StringField.model_name.human %></button>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to Image.human_name, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => admin_page_data_path(@page, :parent_id => datum, :type => 'Image'), :method => 'post', :asset_field_name => 'datum[asset_id]' }) %>
+          </li>
+        <% ContentTemplate.all.each do |content_template| %>
+          <li>
+            <%= button_to content_template.label, admin_page_data_path(@page, :parent_id => datum, :type => 'FieldSet', :template_id => content_template) %>
+          </li>
+        <% end %>
         </ul>
       </div>
-      <ul class="contents sortable" data-sort-uri="<%= sort_admin_page_datum_contents_path(@page, datum) %>">
-      <% datum.contents.sort_by(&:position).each do |content| %>
-        <li id="content_<%= content.id %>" class="content <%= content.class.to_s.underscore %><%= ' inactive' unless content.active? %>">
-          <%= render :partial => "admin/contents/#{content.class.to_s.tableize}/#{content.class.to_s.underscore}", :locals => { :content => content } %>
+      <ul class="contents sortable" data-sort-uri="<%= sort_admin_page_data_path(@page, :parent_id => datum) %>">
+        <% datum.data.each do |d, i| %>
+        <li id="datum_<%= d.id %>" class="content <%= d.class.to_s.underscore %><%= ' inactive' unless d.active? %>">
+          <% if d.is_a?(Field) %>
+            <%= render :partial => 'field', :locals => { :datum => d } %>
+          <% elsif d.is_a?(FieldSet) %>
+            <%= render :partial => 'field_set', :locals => { :datum => d } %>
+          <% elsif d.is_a?(Image) %>
+            <%= render :partial => 'image', :locals => { :datum => d } %>
+          <% end %>
           <span class="edit">
-            <%= link_to t(:edit), edit_admin_page_datum_content_path(@page, datum, content) %>
-            <%= link_to content.active? ? 'Dölj' : 'Visa', toggle_admin_page_datum_content_path(@page, datum, content), :method => :put, :class => 'visibility' %>
-            <%= link_to "Ta bort", admin_page_datum_content_path(@page, datum, content), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+            <%= link_to d.active? ? 'Dölj' : 'Visa', toggle_admin_page_datum_path(@page, d, :parent_id => datum), :method => :put, :class => 'visibility' %>
+            <%= link_to "Ta bort", admin_page_datum_path(@page, d, :parent_id => datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
           </span>
         </li>
       <% end %>

@@ -2,15 +2,15 @@ class Admin::PagesController < ApplicationController
   include Porthos::Admin
   respond_to :html
 
-  has_scope :with_field_set
+  has_scope :with_page_template
   has_scope :created_by
   has_scope :updated_by
   has_scope :order_by, :default => 'updated_at desc'
-  has_scope :is_published, :type => :boolean
+  has_scope :is_published
 
   def index
-    @field_sets = FieldSet.all
-    @field_set = FieldSet.find(params[:with_field_set]) if params[:with_field_set].present?
+    @page_templates = PageTemplate.all
+    @page_template = PageTemplate.find(params[:with_field_set]) if params[:with_field_set].present?
 
     @tags = Page.tags_by_count(:limit => 30)
     @current_tags = params[:tags] || []
@@ -38,7 +38,7 @@ class Admin::PagesController < ApplicationController
     end
     @query = query
     @page = page
-    @field_sets = FieldSet.all
+    @page_templates = PageTemplate.all
     respond_to do |format|
       format.html
     end
@@ -55,12 +55,13 @@ class Admin::PagesController < ApplicationController
   end
 
   def new
-    @page = Page.new(params[:page])
+    @template = Template.find(params[:page_template_id])
+    @page = Page.from_template(@template, params[:page] || {})
   end
 
   def create
-    @page = Page.new(params[:page])
-    @page.clone_field_set
+    @template = Template.find(params[:page_template_id])
+    @page = Page.from_template(@template, params[:page] || {})
     if @page.save
       flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
     end

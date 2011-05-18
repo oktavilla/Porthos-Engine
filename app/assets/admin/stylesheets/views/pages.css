@@ -25,6 +25,7 @@
 .contents li.content {
   position:relative;
   list-style:none;
+  font-size:1em;
   padding:1em 250px 1em 40px;
   border-top:1px solid #ddd;
   background:#fff; }
@@ -53,63 +54,53 @@
     font-size:.75em;
     display:block; }
   .contents h2.label {display:none;}
-  .contents .actual_content {}
-    .contents .actual_content .title {margin:0;}
-    .contents .actual_content h1 {
+  .contents .viewable {}
+    .contents .viewable .title {margin:0;}
+    .contents .viewable h1 {
       font-size:2em;
       margin:0; }
-    .contents .actual_content h2 {
+    .contents .viewable h2 {
       font-size:1.5em;
       margin:0; }
-    .contents .actual_content p + h1,
-    .contents .actual_content p + h2 {
+    .contents .viewable p + h1,
+    .contents .viewable p + h2 {
       margin-top:1em; }
-    .contents .actual_content h3,
-    .contents .actual_content h4,
-    .contents .actual_content h5,
-    .contents .actual_content h6 {
+    .contents .viewable h3,
+    .contents .viewable h4,
+    .contents .viewable h5,
+    .contents .viewable h6 {
       margin:0;
       font-size:1em;
       font-weight:bold;
       color:#000; }
-    .contents .actual_content p,
-    .contents .actual_content ul {margin:.8em 0 .8em 0;}
-      .contents .actual_content ul li {
+    .contents .viewable p,
+    .contents .viewable ul {margin:.8em 0 .8em 0;}
+      .contents .viewable ul li {
         margin:0 0 .5em 1.5em;
         padding:0; }
-    .contents .actual_content *:first-child {margin-top:0;}
+    .contents .viewable *:first-child {margin-top:0;}
 
-    .contents .actual_content p {}
+    .contents .viewable p {}
     .contents .inactive {
       max-height:40px;
       overflow:hidden; }
-      .contents .inactive .actual_content {
+      .contents .inactive .viewable {
         opacity:.3; }
 
-  .contents .actual_content.teaser,
-  .contents .actual_content.image,
-  .contents .actual_content.video {padding-left:95px;}
-    .contents .actual_content.teaser .thumbnail,
-    .contents .actual_content.teaser .no_image,
-    .contents .actual_content.image img,
-    .contents .actual_content.video img {
+  .contents .image .viewable,
+  .contents .video .viewable {padding-left:95px;}
+    .contents .image .viewable img,
+    .contents .video .viewable img {
       float:left;
-      width:80px;
-      height:80px;
       margin-left:-95px;
       font-size:12px;
       text-align:center;
       border:1px solid #eee;  }
-      .contents .actual_content.teaser .no_image:hover {border-color:#ccc;}
-      .contents .actual_content.teaser .no_image span {
-        display:block;
-        margin-top:25px; }
 
-  .contents .actual_content.module .title,
-  .contents .actual_content.video .title {
+  .contents .video .viewable .title {
     padding-left:20px;
     background:transparent url(/graphics/porthos/ui_new.png) 0 -1050px no-repeat; }
-  .contents .actual_content.video .title {background-position:0 -1120px;}
+  .contents .video .viewable .title {background-position:0 -1120px;}
 
   .contents li.collection {
     margin:0;
@@ -170,17 +161,16 @@
       .datum.association .select_page .submit_inline {
         display:inline;
         font-size:.857142857em;}
-  .datum.asset {}
-    .datum.asset img {
+  .datums .image {}
+    .datums .image img {
       float:left;
       margin-right:20px; }
-    .datum.asset .title {
+    .datums .image .title {
       padding-top:1.5em;
       font-weight:bold; }
-    .datum.asset .caption {
+    .datums .image .caption {
       font-size:.857142857em; }
-  .datum.asset.one_to_many {}
-    .datum.asset.one_to_many .content {margin-bottom:.5em;}
+    .datums .image .editable label {clear:left}
 
 #pages_view.show #sub_nav div.submit {
   margin-top:0.5em;

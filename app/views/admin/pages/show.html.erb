@@ -131,7 +131,7 @@
             <% end %>
           </li>
           <li>
-            <%= link_to Image.human_name, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => admin_page_data_path(@page, :parent_id => datum, :type => 'Image'), :method => 'post', :asset_field_name => 'datum[asset_id]' }) %>
+            <%= link_to Image.model_name.human, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => admin_page_data_path(@page, :parent_id => datum, :type => 'Image'), :method => 'post', :asset_field_name => 'datum[asset_id]' }) %>
           </li>
         <% ContentTemplate.all.each do |content_template| %>
           <li>

@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'mm-multi-parameter-attributes'
 
   # Dev dependencies
+  s.add_development_dependency 'mongo-rails-instrumentation', '~>0.2'
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'factory_girl'

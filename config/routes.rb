@@ -46,8 +46,16 @@ Rails.application.routes.draw do
         end
       end
     end
-    resources :page_templates
-    resources :content_templates
+    resources :page_templates do
+      collection do
+        put 'sort'
+      end
+    end
+    resources :content_templates do
+      collection do
+        put 'sort'
+      end
+    end
 
     resources :pages do
       collection do

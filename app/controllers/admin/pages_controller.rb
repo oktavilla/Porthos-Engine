@@ -9,7 +9,7 @@ class Admin::PagesController < ApplicationController
   has_scope :is_published
 
   def index
-    @page_templates = PageTemplate.all
+    @page_templates = PageTemplate.sort(:position).all
     @page_template = PageTemplate.find(params[:with_field_set]) if params[:with_field_set].present?
 
     @tags = Page.tags_by_count(:limit => 30)

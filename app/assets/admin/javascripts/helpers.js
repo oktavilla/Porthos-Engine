@@ -51,6 +51,17 @@
         handle: 'span.drag_handle',
         items: 'tr',
         axis: 'y'
+      }).bind('sortstop', function() {
+        var $sortable = $(this),
+            sort_uri = $sortable.data('sort-uri');
+        if (sort_uri) {
+          $.ajax({
+            type: 'PUT',
+            url: sort_uri,
+            data: $sortable.sortable('serialize'),
+            dataType: 'json'
+          });
+        }
       });
     }
     $('select#order_by').bind('change', function(event) {

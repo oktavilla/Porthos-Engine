@@ -3,7 +3,7 @@ class Admin::ContentTemplatesController < ApplicationController
   include Porthos::Admin
 
   def index
-    @content_templates = ContentTemplate.all
+    @content_templates = ContentTemplate.sort(:position).all
     respond_with(@content_templates)
   end
 
@@ -43,4 +43,14 @@ class Admin::ContentTemplatesController < ApplicationController
     end
     redirect_to admin_content_templates_path
   end
+
+  def sort
+    params[:content_template].each_with_index do |id, i|
+      ContentTemplate.update(id, :position => i+1)
+    end if params[:content_template]
+    respond_to do |format|
+      format.js { render :nothing => true }
+    end
+  end
+
 end

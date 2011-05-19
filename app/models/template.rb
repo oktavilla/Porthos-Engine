@@ -2,6 +2,7 @@ class Template
   include MongoMapper::Document
   key :label, String
   key :description, String
+  key :position, Integer
 
   many :datum_templates, :order => 'position asc'
 

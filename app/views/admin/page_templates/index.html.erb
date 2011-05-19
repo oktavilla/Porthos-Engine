@@ -23,7 +23,7 @@
           <th><%= FieldSetTemplate.human_attribute_name(:handle) %></th>
         </tr>
       </thead>
-      <tbody id="page_templates">
+      <tbody id="page_templates" data-sort-uri="<%= sort_admin_page_templates_path %>">
       <% @page_templates.each do |page_template| %>
         <tr id="page_template_<%= page_template.id %>">
           <td class="handle"><span class="drag_handle"></span></td>

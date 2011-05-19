@@ -22,7 +22,7 @@
           <th><%= FieldSetTemplate.human_attribute_name(:title) %></th>
         </tr>
       </thead>
-      <tbody id="content_templates">
+      <tbody id="content_templates" data-sort-uri="<%= sort_admin_content_templates_path %>">
       <% @content_templates.each do |content_template| %>
         <tr id="content_template_<%= content_template.id %>">
           <td class="handle"><span class="drag_handle"></span></td>

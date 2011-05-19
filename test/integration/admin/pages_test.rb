@@ -3,14 +3,14 @@ require 'launchy'
 class PagesTest < ActiveSupport::IntegrationCase
   setup do
     login!
-    @field_set = Factory(:hero_field_set)
+    @page_template = Factory(:hero_page_template)
   end
 
   test 'creating a page' do
     visit admin_pages_path
 
     within('.tools') do
-      click_link @field_set.title
+      click_link @page_template.label
     end
 
     assert_equal new_admin_page_path, current_path
@@ -44,9 +44,9 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'listning pages by tag' do
-    page1 = Factory.create(:page, :field_set => @field_set, :tag_names => 'tag1 tag2')
-    page2 = Factory.create(:page, :field_set => @field_set, :tag_names => 'tag2')
-    page3 = Factory.create(:page, :field_set => @field_set, :tag_names => 'tag1 tag3')
+    page1 = Factory.create(:page, :page_template => @page_template, :tag_names => 'tag1 tag2')
+    page2 = Factory.create(:page, :page_template => @page_template, :tag_names => 'tag2')
+    page3 = Factory.create(:page, :page_template => @page_template, :tag_names => 'tag1 tag3')
     visit admin_pages_path(:tags => ['tag1'])
 
     assert page.find("ul.items").has_content?(page1.title), 'Should display page1 in the pages list'
@@ -59,12 +59,12 @@ class PagesTest < ActiveSupport::IntegrationCase
       # Need to reset env/session for selenium
       User.delete_all
       login!
-      @field_set.update_attribute(:allow_categories, true)
-      new_page = Factory.create(:page, :field_set => @field_set)
+      @page_template.update_attribute(:allow_categories, true)
+      new_page = Factory.create(:page, :page_template => @page_template)
       visit admin_page_path(new_page)
       click_link I18n.t(:'admin.pages.show.choose_category')
       click_link I18n.t(:'admin.pages.show.add_new_category')
-      fill_in "page_#{@field_set.handle}_tag_names", :with => 'Beverages'
+      fill_in "page_#{@page_template.handle}_tag_names", :with => 'Beverages'
       click_button I18n.t(:save)
       assert page.find('#page_category p').has_content?('Beverages'), "Category should be added"
     end
@@ -74,12 +74,12 @@ class PagesTest < ActiveSupport::IntegrationCase
     Capybara.using_driver(:selenium) do
       User.delete_all
       login!
-      @field_set.update_attribute(:allow_categories, true)
-      sausage_page = Factory.create(:page, :field_set => @field_set, :"#{@field_set.handle}_tag_names" => 'Sausages')
-      new_page = Factory.create(:page, :field_set => @field_set, :"#{@field_set.handle}_tag_names" => 'Beverages')
+      @page_template.update_attribute(:allow_categories, true)
+      sausage_page = Factory.create(:page, :page_template => @page_template, :"#{@page_template.handle}_tag_names" => 'Sausages')
+      new_page = Factory.create(:page, :page_template => @page_template, :"#{@page_template.handle}_tag_names" => 'Beverages')
       visit admin_page_path(new_page)
       click_link I18n.t(:'admin.pages.show.edit_category')
-      select 'Sausages', :from => "page_#{@field_set.handle}_tag_names"
+      select 'Sausages', :from => "page_#{@page_template.handle}_tag_names"
       click_button I18n.t(:choose)
       assert page.find('#page_category p').has_content?('Sausages'), "Category should be added"
     end
@@ -88,8 +88,7 @@ class PagesTest < ActiveSupport::IntegrationCase
 protected
 
   def create_page
-    page = Factory.build(:page, :field_set => @field_set, :title => 'Batman', :uri => 'batman')
-    page.clone_field_set
+    page = Page.from_template(@page_template, :title => 'Batman', :uri => 'batman')
     page.save
     page
   end

@@ -108,7 +108,7 @@
   </div>
   <div id="content" class="datums">
   <% @page.data.each_with_index do |datum, index| %>
-    <div class="datum <%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
+    <div id="datum_<%= datum.id %>" class="datum <%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
     <% if datum.is_a?(Field) %>
       <%= render :partial => 'field', :locals => { :datum => datum } %>
     <% elsif datum.is_a?(FieldSet) %>

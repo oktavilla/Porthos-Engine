@@ -7,6 +7,11 @@
 
       $content.find('form.datum_edit').not('.image_form').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
       $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
+      $content.delegate('a.change, a.cancel', 'click', function(event) {
+        event.preventDefault();
+        $(this).parents('form, div.image').find('div.editable, div.viewable, div.edit').toggle();
+      });
+      $(window.location.hash+ ' a.change').click();
 
       if ($.fn.hasOwnProperty('ckeditor')) {
         $('textarea.editor').ckeditor();
@@ -49,11 +54,6 @@
             });
           });
         }
-      });
-
-      $content.delegate('a.change, a.cancel', 'click', function(event) {
-        event.preventDefault();
-        $(this).parents('form, div.image').find('div.editable, div.viewable, div.edit').toggle();
       });
 
       $('#page_tags_form').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');

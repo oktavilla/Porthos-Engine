@@ -146,13 +146,30 @@ Factory.define :content_block, :class => ContentBlock, :parent => :datum do |f|
 end
 
 Factory.define :page_template do |f|
-  f.title { Factory.next(:title) }
+  f.label { Factory.next(:title) }
   f.handle { Factory.next(:handle) }
   f.datum_templates {
     [
+      Factory.build(:string_field_template, :label => 'Tagline'),
       Factory.build(:string_field_template),
       Factory.build(:field_set_template),
       Factory.build(:content_block_template)
+    ]
+  }
+end
+
+Factory.define :hero_page_template, :class => PageTemplate do |f|
+  f.label "Hero"
+  f.page_label "Name"
+  f.handle 'hero'
+  f.datum_templates {
+    [
+      Factory.build(:string_field_template, :label => 'Tagline', :handle => 'tagline', :required => true),
+      Factory.build(:text_field_template, :label => 'Description', :handle => 'description', :required => true),
+      Factory.build(:rich_text_field_template, :label => 'Biography', :handle => 'biography'),
+      Factory.build(:boolean_field_template, :label => 'Has superpowers', :handle => 'superpowers'),
+      Factory.build(:date_field_template, :label => 'Became publicly known at', :handle => 'debuted_at'),
+      Factory.build(:content_block_template, :label => 'Main content', :handle => 'main_content')
     ]
   }
 end

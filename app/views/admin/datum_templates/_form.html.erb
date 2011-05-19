@@ -1,4 +1,4 @@
-<%= form_for @datum_template, :as => :datum_template, :url => (@datum_template.new_record? ? admin_template_datum_templates_path(@template) : admin_template_datum_template_path(@template, @datum_template)), :html => { :id =>  'field_form' } do |f| %>
+<%= form_for @datum_template, :as => :datum_template, :url => (@datum_template.new_record? ? admin_template_datum_templates_path(@template) : admin_template_datum_template_path(@template, @datum_template)) do |f| %>
   <%= render 'admin/shared/error_messages', :object => f.object %>
   <%= hidden_field_tag 'template_type', f.object.class %>
   <%= f.label :label %>

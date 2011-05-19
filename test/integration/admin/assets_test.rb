@@ -25,7 +25,7 @@ class AssetsTest < ActiveSupport::IntegrationCase
     assert_equal new_admin_asset_path, current_path
 
     attach_file 'asset_file', test_file_path('page.txt')
-    click_button I18n.t(:'app.views.assets.new.submit')
+    click_button I18n.t(:'admin.assets.new.submit')
 
     assert_equal incomplete_admin_assets_path, current_path
 

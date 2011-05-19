@@ -15,7 +15,7 @@ class Admin::DataController < ApplicationController
     if @page.save
       flash[:notice] = t(:saved, :scope => [:app, :admin_general])
     end
-    respond_with(@datum, :location => admin_page_path(@page, :anchor => "datum_#{@datum.id}"))
+    respond_with(@datum, :location => admin_page_path(@page, :anchor => "datum_#{@datum.id}_edit"))
   end
 
   def edit

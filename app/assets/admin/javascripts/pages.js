@@ -11,7 +11,9 @@
         event.preventDefault();
         $(this).parents('form, div.image').find('div.editable, div.viewable, div.edit').toggle();
       });
-      $(window.location.hash+ ' a.change').click();
+      $(window.location.hash).each(function() {
+        $(this).find('a.change').click();
+      });
 
       if ($.fn.hasOwnProperty('ckeditor')) {
         $('textarea.editor').ckeditor();

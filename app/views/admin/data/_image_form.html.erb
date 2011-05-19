@@ -1,5 +1,10 @@
 <div class="viewable">
-  <h2 class="label"><%= datum.label %></h2>
+  <h2 class="label">
+    <%= datum.label %>
+    <% if datum.instruction_body %>
+      <span class="form_help"><%= datum.instruction_body %></span>
+    <% end %>
+  </h2>
   <div class="content image">
   <% if datum.asset %>
     <%= image_tag datum.asset.version_url(:size => 'c80x80') %>

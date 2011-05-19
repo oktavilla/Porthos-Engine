@@ -2,8 +2,6 @@ class DatumTemplate
   include MongoMapper::EmbeddedDocument
   include Porthos::DatumMethods
 
-  key :instructions, String
-
   class << self
     def from_type(type, attributes = {})
       case type

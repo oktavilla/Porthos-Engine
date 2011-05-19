@@ -12,8 +12,8 @@
     <%= f.label :required %>
   </div>
 
-  <%= f.label :instructions %>
-  <%= f.text_area :instructions, :rows => 3 %>
+  <%= f.label :instruction_body %>
+  <%= f.text_area :instruction_body, :rows => 3 %>
 
   <% begin %>
   <%= render :partial => "#{@datum_template.class.to_s.underscore}_form", :locals => { :f => f } %>

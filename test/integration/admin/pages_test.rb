@@ -66,7 +66,8 @@ class PagesTest < ActiveSupport::IntegrationCase
       click_link I18n.t(:'admin.pages.show.add_new_category')
       fill_in "page_#{@page_template.handle}_tag_names", :with => 'Beverages'
       click_button I18n.t(:save)
-      assert page.find('#page_category p').has_content?('Beverages'), "Category should be added"
+      assert page.find('#page_category p').has_content?('Beverages'), 'Category should be added'
+      assert !page.find('#page_tags p').has_content?('Beverages'), 'category should not be listed as a tag'
     end
   end
 

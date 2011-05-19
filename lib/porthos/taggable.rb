@@ -17,8 +17,8 @@ module Porthos
       module ClassMethods
 
         def taggable(_options = {})
-          has_many :tags, :class_name => 'Porthos::Tag'
-          ensure_index 'tags.name'
+          has_many :_tags, :class_name => 'Porthos::Tag'
+          ensure_index '_tags.name'
           class_eval <<-EOV
             def assign_with_read_write_tag_names(attrs={})
               attrs.each do |key, value|
@@ -35,12 +35,12 @@ module Porthos
 
         def tagged_with(tags_list, options = {})
           namespace = options.delete(:namespace)
-          self.where(:'tags.name'.all => tags_list, :'tags.namespace' => namespace)
+          self.where(:'_tags.name'.all => tags_list, :'_tags.namespace' => namespace)
         end
 
         def tags_by_count(_options = {})
           namespace = _options.delete(:namespace)
-          options = {:raw => true, :out => { :inline => true}, :query => {:'tags.namespace' => namespace}}.merge(_options)
+          options = {:raw => true, :out => { :inline => true}, :query => {:'_tags.namespace' => namespace}}.merge(_options)
           response = collection.map_reduce(self.tags_by_count_map, self.tags_by_count_reduce, options)
           if response['results']
             response['results'].collect do |t|
@@ -53,8 +53,8 @@ module Porthos
 
         def tags_by_count_map
           "function() {
-              if (!this.tags) { return; }
-              for (index in this.tags) { emit(this.tags[index].name, 1); }
+              if (!this._tags) { return; }
+              for (index in this._tags) { emit(this._tags[index].name, 1); }
             }"
         end
 
@@ -78,14 +78,18 @@ module Porthos
         end
         alias_method_chain :method_missing, :read_write_tag_names
 
+        def tags(namespace = nil)
+          _tags.find_all { |t| t.namespace == namespace }
+        end
+
         def tag_names(namespace = nil)
-          tags.find_all{|t| t.namespace == namespace}.collect{|tag| tag.name.include?(Porthos::Taggable.delimiter) ? "\"#{tag.name}\"" : tag.name}.join(Porthos::Taggable.delimiter)
+          tags(namespace).collect { |tag| tag.name.include?(Porthos::Taggable.delimiter) ? "\"#{tag.name}\"" : tag.name }.join(Porthos::Taggable.delimiter)
         end
 
         def tag_names=(in_tags, namespace = nil)
           tags_array = in_tags.is_a?(String) ? split_tags(in_tags) : in_tags
-          self.tags.delete_if{|t| t.namespace == namespace}
-          self.tags += tags_array.collect { |tag_name| Porthos::Tag.new(:name => tag_name, :namespace => namespace)}
+          self._tags.delete_if{|t| t.namespace == namespace}
+          self._tags += tags_array.collect { |tag_name| Porthos::Tag.new(:name => tag_name, :namespace => namespace)}
         end
 
       protected

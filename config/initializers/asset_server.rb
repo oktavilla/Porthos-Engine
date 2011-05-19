@@ -11,8 +11,8 @@ class AssetServer < Sprockets::Environment
     super Porthos.root.join('app', 'assets')
     paths << 'admin/javascripts' << 'admin/stylesheets'
     if Rails.env.production?
-      self.js_compressor = YUI::JavaScriptCompressor.new :munge => true, :optimize => true
-      self.css_compressor = YUI::CssCompressor.new
+      #self.js_compressor = YUI::JavaScriptCompressor.new :munge => true, :optimize => true
+      #self.css_compressor = YUI::CssCompressor.new
     end
   end
 end

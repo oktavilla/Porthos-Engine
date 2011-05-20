@@ -19,7 +19,7 @@ class FieldsTest < ActiveSupport::IntegrationCase
       fill_in "field_label", :with => 'Description'
       fill_in "field_handle", :with => 'description'
       check "field_required"
-      fill_in "field_instructions", :with => 'Please put in a descriptive description'
+      fill_in "field_instruction_body", :with => 'Please put in a descriptive description'
       check 'field_multiline'
       check 'field_allow_rich_text'
 

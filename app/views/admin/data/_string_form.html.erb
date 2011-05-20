@@ -12,6 +12,9 @@
   <% else %>
     <%= f.text_field :value, :id => "datum_#{datum.id}_value" %>
   <% end %>
+  <% if datum.instruction_body %>
+    <p class="form_help"><%= datum.instruction_body %></p>
+  <% end %>
   </div>
   <% unless datum._parent_document.is_a?(FieldSet) %>
   <div class="submit">

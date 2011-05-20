@@ -5,7 +5,7 @@
   </div>
   <div id="content">
     <div id="c_1"><div class="inner">
-      <%= form_for @asset, :url => admin_asset_url(@asset), :html => { :method => :put } do |f| %>
+      <%= form_for [:admin, @asset], :as => :asset, :url => admin_asset_url(@asset) do |f| %>
         <% if params[:return_to] %>
         <%= hidden_field_tag :return_to, params[:return_to] %>
         <% end %>

@@ -169,13 +169,13 @@
         label: Namn
         handle: Identifierare
         required: Krävs
-        instructions: Beskrivning
+        instruction_body: Beskrivning
       datum:
         _type: Typ
         label: Namn
         handle: Identifierare
         required: Krävs
-        instructions: Beskrivning
+        instruction_body: Beskrivning
       field_set:
         label: Titel
         template_name: Template
@@ -184,7 +184,7 @@
         label: Namn
         handle: Fältnamn
         required: Obligatorisk
-        instructions: Instruktioner
+        instruction_body: Instruktioner
         multiline: Löptext
         allow_rich_text: Tillåt textformatering
       node:

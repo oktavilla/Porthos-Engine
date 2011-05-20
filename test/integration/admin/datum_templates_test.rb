@@ -18,7 +18,7 @@ class DatumTemplatesTest < ActiveSupport::IntegrationCase
       fill_in "datum_template_label", :with => 'Description'
       fill_in "datum_template_handle", :with => 'description'
       check "datum_template_required"
-      fill_in "datum_template_instructions", :with => 'Please put in a descriptive description'
+      fill_in "datum_template_instruction_body", :with => 'Please put in a descriptive description'
       check 'datum_template_multiline'
       check 'datum_template_allow_rich_text'
 

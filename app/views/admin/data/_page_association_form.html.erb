@@ -12,6 +12,9 @@
     <%= f.label :page_id %>
     <%= f.select :page_id, datum.targets.collect { |page| [page.title, page.id] } %>
   </div>
+  <% if datum.instruction_body %>
+    <p class="form_help"><%= datum.instruction_body %></p>
+  <% end %>
   <% if datum._parent_document.is_a?(Page) %>
   <div class="submit">
     <%= f.submit t(:save) %>

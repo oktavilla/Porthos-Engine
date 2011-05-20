@@ -3,6 +3,7 @@ module Porthos
     extend ActiveSupport::Concern
 
     included do
+      plugin Porthos::MongoMapper::Plugins::Instructable
       key :label, String
       key :handle, String
       key :required, Boolean, :default => lambda { false }

@@ -11,9 +11,6 @@ class Asset
   key :description, String
   key :hidden, Boolean, :default => lambda { false }
   timestamps!
-  ensure_index :created_at
-  ensure_index :updated_at
-
 
   belongs_to :created_by,
              :class_name => 'User'

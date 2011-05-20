@@ -18,7 +18,6 @@ module Porthos
 
         def taggable(_options = {})
           has_many :_tags, :class_name => 'Porthos::Tag'
-          ensure_index '_tags.name'
           class_eval <<-EOV
             def assign_with_read_write_tag_names(attrs={})
               attrs.each do |key, value|

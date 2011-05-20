@@ -60,7 +60,6 @@ class Admin::UsersController < ApplicationController
 
   def destroy
     @user = User.find(params[:id])
-    raise SecurityTransgression unless current_user.can_destroy?(@user)
     @user.destroy
     flash[:notice] = "#{@user.name} #{t(:deleted, :scope => [:app, :admin_general])}"
     respond_to do |format|

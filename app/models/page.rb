@@ -15,12 +15,6 @@ class Page
   key :published_on, Time
   timestamps!
 
-  ensure_index :page_template_id
-  ensure_index :updated_by_id
-
-  ensure_index :created_at
-  ensure_index :updated_at
-
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
   belongs_to :page_template

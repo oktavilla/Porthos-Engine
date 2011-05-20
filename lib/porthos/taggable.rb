@@ -18,6 +18,8 @@ module Porthos
 
         def taggable(_options = {})
           has_many :_tags, :class_name => 'Porthos::Tag'
+          after_save :cache_tags_if_changed
+
           class_eval <<-EOV
             def assign_with_read_write_tag_names(attrs={})
               attrs.each do |key, value|
@@ -37,34 +39,45 @@ module Porthos
           self.where(:'_tags.name'.all => tags_list, :'_tags.namespace' => namespace)
         end
 
-        def tags_by_count(_options = {})
-          namespace = _options.delete(:namespace)
-          options = {:raw => true, :out => { :inline => true}, :query => {:'_tags.namespace' => namespace}}.merge(_options)
-          response = collection.map_reduce(self.tags_by_count_map, self.tags_by_count_reduce, options)
-          if response['results']
-            response['results'].collect do |t|
-              OpenStruct.new(:name => t['_id'], :count => t['value'].to_i)
-            end.sort {|x,y| y.count <=> x.count }
-          else
-            []
+        def all_tags_collection_name
+          "#{self.name}_tags".downcase
+        end
+
+        def cache_tags!
+          options = { :raw => true, :out => { :merge => all_tags_collection_name } }
+          collection.map_reduce(self.tags_with_count_map, self.tags_with_count_reduce, options)
+        end
+
+        def all_tags(selector = {}, options = {})
+          database[all_tags_collection_name].find(selector, options).collect do |tag|
+            OpenStruct.new(:name => tag['value']['name'], :count => tag['value']['count'].to_i, :namespace => tag['value']['namespace'], :id => tag['_id'])
           end
         end
 
-        def tags_by_count_map
+        def tags_by_count(options = {})
+          all_tags({:'value.namespace' => options.delete(:namespace)}.merge(options), {:sort => ['value.count', :desc]})
+        end
+
+        def tags_with_count_map
           "function() {
-              if (!this._tags) { return; }
-              for (index in this._tags) { emit(this._tags[index].name, 1); }
-            }"
+             if (!this._tags) { return; }
+             for (index in this._tags) {
+               emit(this._tags[index].name+this._tags[index].namespace, {count: 1, name: this._tags[index].name, namespace: this._tags[index].namespace});
+             }
+           }"
         end
 
-        def tags_by_count_reduce
+        def tags_with_count_reduce
           "function(previous, current) {
-              var count = 0;
-              for (index in current) { count += current[index]; }
-              return count;
-            }"
+             var result = {count: 0, name: '', namespace: ''};
+             for (index in current) {
+               result.count += current[index].count;
+               result.name = current[index].name;
+               result.namespace = current[index].namespace;
+             }
+             return result;
+           }"
         end
-
       end
 
       module InstanceMethods
@@ -89,6 +102,11 @@ module Porthos
           tags_array = in_tags.is_a?(String) ? split_tags(in_tags) : in_tags
           self._tags.delete_if{|t| t.namespace == namespace}
           self._tags += tags_array.collect { |tag_name| Porthos::Tag.new(:name => tag_name, :namespace => namespace)}
+          @tags_changed = true
+        end
+
+        def tags_changed?
+          @tags_changed
         end
 
       protected
@@ -102,6 +120,12 @@ module Porthos
 
         def match_tag_names_methods(possible_method_name)
           possible_method_name.to_s.match(/(.*)_(tag_names=|tag_names)$/)
+        end
+
+        def cache_tags_if_changed
+          if tags_changed?
+            Rails.env.production? ? '' : self.class.cache_tags!
+          end
         end
       end
     end

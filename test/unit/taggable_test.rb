@@ -48,6 +48,13 @@ class TaggableTest < ActiveSupport::TestCase
     assert_equal [triangle], Thing.tagged_with(%w(tag1 tag3)).all
   end
 
+  test 'should return all tags' do
+    box = Thing.create(:name => 'Box', :tag_names => 'tag1, tag2')
+    circle = Thing.create(:name => 'Circle', :tag_names => 'tag2, tag3')
+    triangle = Thing.create(:name => 'Triangle', :tag_names => 'tag1, tag2, tag3')
+    assert_equal %w(tag1 tag2 tag3), Thing.all_tags.collect { |tag| tag.name }
+  end
+
   test 'should be able to return list of tags with count for model' do
     box = Thing.create(:name => 'Box', :tag_names => 'tag1, tag2')
     circle = Thing.create(:name => 'Circle', :tag_names => 'tag2')

@@ -61,7 +61,7 @@
     </div>
     <%= form_for [:admin, @page], :html => { :id => 'page_tags_form' } do |f| -%>
       <div>
-        <%= f.text_field :tag_names %>
+        <%= f.text_field :tag_names, :autocomplete => 'off' %>
         <div class="submit">
           <input type="submit" value="Spara">
         </div>

@@ -1,3 +1,4 @@
+#= require "lib/jquery.smart_autocomplete"
 (function() {
   Porthos.Page = (function() {
     var Ready = function(container) {
@@ -64,6 +65,26 @@
       $('#page_tags').delegate('a.edit, a.cancel', 'click', function() {
         $('#page_tags_list, #page_tags_form').toggle();
       }).find('#page_tags_list').append('<p><a href="#" class="edit">Ändra</a></p>');
+      $('#page_tag_names').smartAutoComplete({minCharLimit: 3, source: '/admin/tags.json?taggable=Page'});
+      $('#page_tag_names').bind({
+        keyIn: function(ev){
+                 var tag_list = ev.smartAutocompleteData.query.split(" "); 
+                 ev.smartAutocompleteData.query = $.trim(tag_list[tag_list.length - 1]);
+               },
+        itemSelect: function(ev, selected_item){ 
+                      var options = $(this).smartAutoComplete();
+                      var selected_value = $(selected_item).text();
+                      var cur_list = $(this).val().split(" "); 
+
+                      cur_list[cur_list.length - 1] = selected_value;
+                      $(this).val(cur_list.join(" ") + " "); 
+                      options.setItemSelected(true);
+                      $(this).trigger('lostFocus');
+                      ev.preventDefault();
+                    },
+
+      });
+
 
       $('#page_publish_on_date a.toggle_publish_date, #page_published_on_form a').click(function(event) {
         event.preventDefault();

@@ -271,3 +271,5 @@ body.layout3 #workspace {
       float:left;
       margin:0 0 0 -330px; }
       #workspace #c_2 > .inner {padding-left:40px;}
+
+.smart_autocomplete_container { background: #fff; }

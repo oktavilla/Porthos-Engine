@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   mount AssetServer.instance => '/assets/admin'
+  mount TagsAutocompleteApp.instance => '/admin/tags'
 
   filter :url_resolver
   resources :pages do

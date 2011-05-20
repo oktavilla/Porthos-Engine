@@ -4,3 +4,4 @@
 #= require helpers
 #= require pages
 #= require nodes
+#= require assets

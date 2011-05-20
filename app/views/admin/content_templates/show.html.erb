@@ -17,7 +17,7 @@
     <div class="add">
       <form action="<%= new_admin_template_datum_template_path(@content_template) %>">
         <input type="hidden" name="template_type" value="FieldTemplate" />
-        <%= select_tag 'datum_template[input_type]', options_for_select(%w(string boolean date).collect { |type| [t(".#{type}"), type] }) %>
+        <%= select_tag 'datum_template[input_type]', options_for_select(FieldTemplate.input_types.collect { |type| [t(".#{type}"), type] }) %>
         <button type="submit"><%=t '.add_field_template' %></button>
       </form>
     </div>

@@ -50,7 +50,7 @@ module Porthos
 
         def all_tags(selector = {}, options = {})
           database[all_tags_collection_name].find(selector, options).collect do |tag|
-            OpenStruct.new(:name => tag['value']['name'], :count => tag['value']['count'].to_i, :namespace => tag['value']['namespace'], :id => tag['_id'])
+            OpenStruct.new(:name => tag['value']['name'], :count => tag['value']['count'].to_i, :namespace => tag['value']['namespace'])
           end
         end
 

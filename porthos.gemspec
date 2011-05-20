@@ -9,8 +9,6 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = ">= 1.3.6"
 
-  s.add_dependency "bundler"
-  s.add_dependency "rails", "3.0.7"
   s.add_dependency 'bson_ext'
   s.add_dependency 'mongo_mapper'
   s.add_dependency 'bcrypt-ruby'
@@ -19,8 +17,6 @@ Gem::Specification.new do |s|
   s.add_dependency "mime-types"
   s.add_dependency "mini_magick"
   s.add_dependency 'delayed_job'
-  s.add_dependency 'sunspot'
-  s.add_dependency 'sunspot_rails'
   s.add_dependency 'has_scope'
   s.add_dependency 's3'
   s.add_dependency 'resizor'

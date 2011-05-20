@@ -5,6 +5,7 @@ module Porthos
 end
 
 require 'bcrypt'
+require 'warden'
 require 'resizor'
 require 'has_scope'
 require 's3'

@@ -1,5 +1,5 @@
 require_relative '../../test_helper'
-class PagesTest < ActiveSupport::IntegrationCase
+class PageTemplatesTest < ActiveSupport::IntegrationCase
   setup do
     login!
   end
@@ -18,7 +18,7 @@ class PagesTest < ActiveSupport::IntegrationCase
 
     assert_equal new_admin_page_template_path, current_path
 
-    fill_in 'page_template_title', :with => 'Article'
+    fill_in 'page_template_label', :with => 'Article'
     fill_in 'page_template_page_label', :with => 'Title'
     fill_in 'page_template_handle', :with => 'article'
     check 'page_template_allow_node_placements'
@@ -41,7 +41,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       click_link I18n.t(:'admin.page_templates.show.edit')
     end
 
-    fill_in 'page_template_title', :with => 'New awesome title'
+    fill_in 'page_template_label', :with => 'New awesome title'
     click_button I18n.t(:save)
 
     assert has_flash_message?('New awesome title'), 'Should have a flash notice with the new title'

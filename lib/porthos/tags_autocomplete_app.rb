@@ -7,10 +7,11 @@ class TagsAutocompleteApp
 
   def call(env)
     @params = ::Rack::Utils.parse_query(env['QUERY_STRING'])
-    [200, {}, result.to_json ]
+    [200, {}, [result.to_json]]
   end
 
 private
+
   def valid_request?
     params['term'].present? and %w(Page Asset).include?(params['taggable'])
   end

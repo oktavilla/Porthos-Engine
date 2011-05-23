@@ -1,12 +1,10 @@
-require "porthos"
-require "rails"
-
 module Porthos
   class Engine < Rails::Engine
+    isolate_namespace Porthos
+
     config.autoload_paths += Dir[Porthos.root.join('app', 'models', '{**}')]
     config.i18n.default_locale = "sv-SE"
     config.i18n.fallbacks = true
-
     config.use_fulltext_search = false
 
     config.active_record.identity_map = true

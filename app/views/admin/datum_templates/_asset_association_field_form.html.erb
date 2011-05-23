@@ -9,7 +9,7 @@
           <% elsif asset.respond_to?(:thumbnail) and not asset.thumbnail.blank? %>
             <%= image_tag display_image_path(:size => 'c100x100', :id => asset.thumbnail, :format => asset.thumbnail.extname), :id => "asset_#{asset.id}", :width => 100, :height => 100 %>
           <% else %>
-            <img src="/assets/admin/graphics/icons/filetypes/<%= asset.extname %>.png" alt="" width="100" height="100">
+            <img src="/assets/icons/filetypes/<%= asset.extname %>.png" alt="" width="100" height="100">
           <% end %>
           <div class="title"><%= asset.title %></div>
           <div class="caption"><%= asset.description %></div>

@@ -1,3 +1,12 @@
+require 'bcrypt'
+require 'warden'
+require 'resizor'
+require 'has_scope'
+require 's3'
+require 'mongo_mapper_acts_as_tree'
+require 'mm-multi-parameter-attributes'
+require 'delayed_job'
+
 module Porthos
   def self.root
     Pathname.new(File.expand_path(File.dirname(__FILE__)+'../..'))
@@ -8,17 +17,8 @@ module Porthos
   end
 end
 
-require 'bcrypt'
-require 'resizor'
-require 'has_scope'
-require 's3'
-require 'sprockets'
-require 'mongo_mapper_acts_as_tree'
-require 'mm-multi-parameter-attributes'
-require 'delayed_job'
-
-require 'porthos/redirects'
 require 'porthos/engine'
+require 'porthos/redirects'
 require 'porthos/routing'
 require 'porthos/url_resolver'
 require 'porthos/authentication'

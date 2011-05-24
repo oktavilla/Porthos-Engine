@@ -70,7 +70,7 @@ code {font-size:12px;}
   cursor:move;
   height:25px;
   width:25px;
-  background:transparent url(/graphics/porthos/ui_new.png) 0 -792px no-repeat;
+  background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -792px no-repeat;
 	display:none; }
 
 .pagination {
@@ -96,11 +96,11 @@ code {font-size:12px;}
   color: #333;
   font-size:1.1667em;
   color:#390;
-  background: #cfc url(/graphics/porthos/ui_new.png) 40px -889px no-repeat; }
+  background: #cfc url(<%= asset_path 'ui_new.png' %>) 40px -889px no-repeat; }
   .flash.error {
     color:#f60;
     border-color:#ffdc92;
-    background:#ffedae url(/graphics/porthos/ui_new.png) 40px -948px no-repeat; }
+    background:#ffedae url(<%= asset_path 'ui_new.png' %>) 40px -948px no-repeat; }
 
 .blank_slate {
   font-size:36px; }
@@ -122,7 +122,7 @@ code {font-size:12px;}
     padding:6px 10px 5px 10px;
     font-size:12px;
     color:rgba(0,0,0,.85);
-    background:rgb(240,240,240) url(/graphics/porthos/button_grey_bg.png) 0 0 repeat-x;
+    background:rgb(240,240,240) url(<%= asset_path 'button_grey_bg.png' %>) 0 0 repeat-x;
     border:1px solid rgb(215,215,215);
     text-shadow:1px 1px 1px rgb(255,255,255);
     -webkit-border-radius:5px;
@@ -147,7 +147,7 @@ code {font-size:12px;}
       height: 100px;
       margin-left: -115px;
       float: left;
-      background: url('/graphics/porthos/icons/filetypes/default.png'); }
+      background: url(<%= asset_path 'icons/filetypes/default.png' %>); }
     .items.thumbnails img {
       float:left;
       margin-left:-115px;

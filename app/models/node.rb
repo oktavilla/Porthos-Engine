@@ -15,11 +15,12 @@ class Node
   key :resource_id, ObjectId
   key :resource_type, String
 
-  key :field_set_id, ObjectId
+  #key :page_template_id, ObjectId
 
   belongs_to :resource,
              :polymorphic => true
-  belongs_to :field_set
+
+  belongs_to :page_template
 
   validates :url,
             :presence => true,
@@ -63,7 +64,7 @@ class Node
         node.controller = page.class.to_s.tableize
         node.action     = 'show'
         node.resource   = page
-        node.field_set = page.field_set
+        node.page_template = page.page_template
         node.parent = Node.root if node.parent_id.blank?
       end
     end

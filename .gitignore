@@ -5,3 +5,4 @@ test/dummy/db/*.sqlite3
 test/dummy/db/migrate/*_create_porthos_tables.rb
 test/dummy/tmp/*
 config/environment.rb
+.rvmrc

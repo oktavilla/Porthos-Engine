@@ -2,11 +2,6 @@
 <% @page_title = @page_renderer.title -%>
 <% @page_id = 'pages-show' -%>
 <div id="content">
-<% (1..@page_renderer.page.column_count).each do |column| %>
-  <div id="c_<%= column %>" class="column">
-  <% @page_renderer.page.contents.active.find_all { |content| content.column_position == column }.each do |content| -%>
-    <%= render_page_content(@page_renderer.page, content) %>
+  <% @page_renderer.page.data.each do |datum| -%>
   <% end -%>
-  </div>
-<% end %>
 </div>

@@ -9,10 +9,10 @@ class PagesController < ApplicationController
   end
 
   def index
-    @field_set = @node.field_set
-    template = @field_set ? @field_set.template : PageTemplate.default
-    @page_renderer = page_renderer(template, {
-      :field_set => @field_set
+    @page_template = @node.page_template
+    template = @page_template ? @page_template.template : PageFileTemplate.default
+    @page_template = page_renderer(template, {
+      :page_template => @page_template
     })
 
     respond_to do |format|
@@ -25,8 +25,8 @@ class PagesController < ApplicationController
     @page = Page.find(params[:id]) ||
             Page.find(:uri => params[:id]) ||
             (raise ActiveRecord::RecordNotFound)
-    template = @page.field_set.template
-    @page_renderer = page_renderer(template, :field_set => @page.field_set, :page => @page)
+    template = @page.page_template.template
+    @page_renderer = page_renderer(template, :page_template => @page.page_template, :page => @page)
 
     if !@page.restricted? || logged_in?
       respond_to do |format|
@@ -39,8 +39,8 @@ class PagesController < ApplicationController
 
   def preview
     @page = Page.find(params[:id])
-    template = @page.field_set.template
-    @page_renderer = page_renderer(template, :field_set => @page.field_set, :page => @page)
+    template = @page.page_template.template
+    @page_renderer = page_renderer(template, :page_template => @page.page_template, :page => @page)
     respond_to do |format|
       format.html { render :template => template.views.show }
     end
@@ -48,13 +48,13 @@ class PagesController < ApplicationController
 
   def search
     filters = params[:filters] || {}
-    @field_set = @node.field_set
+    @page_template = @node.page_template
 
-    template = @field_set ? @field_set.template : PageTemplate.default
+    template = @page_template ? @page_template.template : PageTemplate.default
 
     search_query = params[:query] if params[:query].present?
     if search_query.present? or filters.any?
-      field_set = @field_set
+      page_template = @page_template
       @search = Page.search do
         keywords search_query
         if filters.any?
@@ -66,7 +66,7 @@ class PagesController < ApplicationController
         end
         with(:is_active, true)
         with(:is_restricted, false)
-        with(:field_set_id, field_set.id) if field_set
+        with(:page_template_id, page_template.id) if page_template
         with(:published_on).less_than Time.now
       end
       @query, @filters = params[:query], filters
@@ -77,9 +77,9 @@ class PagesController < ApplicationController
   end
 
   def categories
-    @field_set = @node.field_set
-    template = @field_set ? @field_set.template : PageTemplate.default
-    @page_renderer = page_renderer(template, :field_set => @field_set)
+    @page_template = @node.page_template
+    template = @page_template ? @page_template.template : PageTemplate.default
+    @page_renderer = page_renderer(template, :page_template => @page_template)
 
     respond_to do |format|
       format.html { render :template => template.views.categories }
@@ -87,9 +87,9 @@ class PagesController < ApplicationController
   end
 
   def category
-    @field_set = @node.field_set
-    template = @field_set ? @field_set.template : PageTemplate.default
-    @page_renderer = page_renderer(template, :field_set => @field_set)
+    @page_template = @node.page_template
+    template = @page_template ? @page_template.template : PageTemplate.default
+    @page_renderer = page_renderer(template, :page_template => @page_template)
 
     respond_to do |format|
       format.html { render :template => template.views.category }
@@ -97,9 +97,9 @@ class PagesController < ApplicationController
   end
 
   def tagged_with
-    @field_set = @node.field_set
-    template = @field_set ? @field_set.template : PageTemplate.default
-    @page_renderer = page_renderer(template, :field_set => @field_set)
+    @page_template = @node.page_template
+    template = @page_template ? @page_template.template : PageTemplate.default
+    @page_renderer = page_renderer(template, :page_template => @page_template)
 
     respond_to do |format|
       format.html { render :template => template.views.tagged_with }

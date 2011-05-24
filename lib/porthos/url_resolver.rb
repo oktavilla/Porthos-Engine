@@ -61,10 +61,10 @@ module RoutingFilter
         yield.tap do |path|
           if node
             if node.resource_id.present?
-              path.replace("/#{node.url}")
+              path.replace(["/#{node.url}"])
             else
               rule = Porthos::Routing.rules.find_matching_params(params)
-              path.replace(rule ? rule.computed_path(node, params) : "/#{node.url}")
+              path.replace([rule ? rule.computed_path(node, params) : "/#{node.url}"])
             end
           end
         end

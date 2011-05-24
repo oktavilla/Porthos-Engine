@@ -4,20 +4,20 @@ module DefaultRenderer
   class Index < Porthos::PageRenderer
 
     def layout_class
-      "#{@field_set.handle}-index"
+      "#{@page_template.handle}-index"
     end
 
     def title
-      @field_set.title
+      @page_template.title
     end
 
     def page_id
-      @field_set.handle
+      @page_template.handle
     end
 
     def pages
       return @pages if @pages
-      scope = @field_set.pages.
+      scope = @page_template.pages.
                          published
       if params[:year]
         scope = scope.published_within(*Time.delta(params[:year], params[:month], params[:day]))
@@ -26,9 +26,7 @@ module DefaultRenderer
         :page => (params[:page] || 1),
         :per_page => (params[:per_page] || 25),
         :order => 'pages.published_on DESC, pages.id DESC'
-      }).tap do |pages|
-        pages.each { |p| p.send :cache_custom_attributes }
-      end
+      })
     end
     register_methods :pages
 
@@ -37,7 +35,7 @@ module DefaultRenderer
   class Categories < Porthos::PageRenderer
     def categories
       return @categories if @categories
-      @categories = Tag.on('Page').namespaced_to(@field_set.handle).all
+      @categories = Tag.on('Page').namespaced_to(@page_template.handle).all
       @categories
     end
     register_methods :categories
@@ -52,14 +50,12 @@ module DefaultRenderer
 
     def pages
       return @pages if @pages
-      @pages = Page.tagged_with(:tags => category.name, :namespace => @field_set.handle).tap do |pages|
-        pages.each { |p| p.send :cache_custom_attributes }
-      end
+      @pages = Page.tagged_with(:tags => category.name, :namespace => @page_template.handle)
     end
   end
 
   class Show < Porthos::PageRenderer
-    self.required_objects = [:field_set, :page]
+    self.required_objects = [:page_template, :page]
 
     def layout_class
       @page.layout_class
@@ -68,18 +64,12 @@ module DefaultRenderer
     def title
       @page.title
     end
-
-  protected
-
-    def after_initialize
-      @page.send :cache_custom_attributes
-    end
   end
 
   class TaggedWith < Porthos::PageRenderer
 
     def categories
-      @categories ||= Tag.on('Page').namespaced_to(@field_set.handle).all
+      @categories ||= Tag.on('Page').namespaced_to(@page_template.handle).all
     end
 
     def category
@@ -88,9 +78,7 @@ module DefaultRenderer
 
     def pages
       return @pages if @pages
-      @pages = Page.tagged_with(:tags => selected_tag_names).tap do |pages|
-        pages.each { |p| p.send :cache_custom_attributes }
-      end
+      @pages = Page.tagged_with(:tags => selected_tag_names)
     end
 
     def tags

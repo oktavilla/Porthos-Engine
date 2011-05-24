@@ -12,7 +12,6 @@ module Porthos
       before_validation :parameterize_handle
       before_validation :move_to_list_bottom
 
-      validates_presence_of :label
       validates_presence_of :handle, :if => proc { |d| d.require_handle? }
       validate :uniqueness_of_handle, :if => proc { |d| d.require_handle? }
     end

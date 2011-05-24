@@ -21,7 +21,7 @@ module Porthos
 
     initializer 'porthos.helpers' do |app|
       ActiveSupport.on_load :action_view do
-        include PorthosApplicationHelper
+        include Porthos::ApplicationHelper
       end
     end
 

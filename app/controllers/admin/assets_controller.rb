@@ -32,18 +32,12 @@ class Admin::AssetsController < ApplicationController
 
   def search
     @type = params[:type] ? params[:type] : 'Asset'
-    @tags = Tag.on('Asset').limit(30)
+    @tags = Asset.tags_by_count(:limit => 30)
     unless params[:query].blank?
-      query = params[:query]
+      @query = params[:query]
       page = params[:page] || 1
-      per_page = params[:per_page] ? params[:per_page].to_i : 44
-      @search = Asset.search do
-        keywords(query)
-        with(:is_private, false)
-        paginate :page => page, :per_page => per_page
-      end
-      @query = query
-      @page = page
+      per_page = params[:per_page] ? params[:per_page].to_i : 45
+      @assets = Asset.search_tank(@query, :conditions => {'hidden' => false}, :per_page => per_page, :page => page)
       respond_to do |format|
         format.html do
           @current_tags = params[:tags] || []

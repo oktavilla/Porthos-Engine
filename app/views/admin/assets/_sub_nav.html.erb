@@ -2,7 +2,7 @@
   <% if Rails.application.config.use_fulltext_search %>
   <%= form_for :asset, :url => search_admin_assets_path(:type => params[:type]), :html => { :method => :get } do |f| %>
     <div class="search fullwidth">
-      <%= text_field_tag :query, (@query || 'Sök efter filer'), :class => "search_query", :id=> "search_query" %>
+      <%= text_field_tag :query, @query, :placeholder => 'Sök efter filer', :class => "search_query", :id=> "search_query", :autocomplete => 'off' %>
       <%= submit_tag "Sök", :style => "display:none" %>
     </div>
   <% end %>

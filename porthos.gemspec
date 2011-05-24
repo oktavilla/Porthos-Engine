@@ -9,15 +9,15 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = ">= 1.3.6"
 
-  s.add_dependency "bundler"
-  s.add_dependency "rails", "3.0.7"
+  s.add_dependency 'bundler'
+  s.add_dependency 'rails', '3.0.7'
   s.add_dependency 'bson_ext'
-  s.add_dependency 'mongo_mapper'
+  s.add_dependency 'mongo_mapper', '0.9.0'
   s.add_dependency 'bcrypt-ruby'
   s.add_dependency 'warden'
-  s.add_dependency "routing-filter"
-  s.add_dependency "mime-types"
-  s.add_dependency "mini_magick"
+  s.add_dependency 'routing-filter'
+  s.add_dependency 'mime-types'
+  s.add_dependency 'mini_magick'
   s.add_dependency 'delayed_job'
   s.add_dependency 'sunspot'
   s.add_dependency 'sunspot_rails'
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'resizor'
   s.add_dependency 'ramdiv-mongo_mapper_acts_as_tree'
   s.add_dependency 'mm-multi-parameter-attributes'
+  s.add_dependency 'delayed_job'
 
   # Dev dependencies
   s.add_development_dependency 'mongo-rails-instrumentation', '~>0.2'

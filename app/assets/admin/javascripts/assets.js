@@ -21,6 +21,7 @@
                     },
 
       });
+      $('#search_query').smartAutoComplete({minCharLimit: 3, source: '/admin/tags?taggable=Asset'});
     };
     return {
       init: function() {

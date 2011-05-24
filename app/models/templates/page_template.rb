@@ -7,7 +7,7 @@ class PageTemplate < Template
   key :allow_node_placements, Boolean, :default => lambda { false }
 
   def template
-    @template ||= template_name.present? ? PageTemplate.new(template_name) : PageTemplate.default
+    @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default
   end
 
   # Instantiates a new page renderer

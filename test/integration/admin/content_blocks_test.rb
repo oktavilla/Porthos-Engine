@@ -1,21 +1,21 @@
 require_relative '../../test_helper'
 
-class ContentsTest < ActiveSupport::IntegrationCase
+class ContentBlocksTest < ActiveSupport::IntegrationCase
   setup do
     login!
-    @page = Factory.build(:page)
-    @page.clone_field_set
-    @page.save!
+    @page_template = Factory(:page_template)
+    @page = Page.from_template(@page_template)
+    @page.save
   end
 
-  test 'adding a textfield' do
-    create_textfield
+  test 'adding a text' do
+    create_text
     assert has_flash_message?(I18n.t(:saved, :scope => [:app, :admin_general]))
     assert page.find("div.datum.content_block").has_content?('Some text for this page'), 'Should see the textfield in the contents list'
   end
 
   test 'editing a textfield' do
-    create_textfield
+    create_text
     within "div.datum.content_block li.content.textfield" do
       click_link I18n.t(:edit)
     end
@@ -28,7 +28,7 @@ class ContentsTest < ActiveSupport::IntegrationCase
   end
 
   test 'destroying a textfield' do
-    create_textfield
+    create_text
     within "div.datum.content_block li.content.textfield" do
       click_link I18n.t(:destroy)
     end
@@ -119,7 +119,7 @@ protected
   def create_textfield
     visit admin_page_path(@page)
     within "div.datum.content_block div.controls" do
-      click_link Textfield.model_name.human
+      click_button StringField.model_name.human
     end
 
     fill_in 'content_body', :with => 'Some text for this page'

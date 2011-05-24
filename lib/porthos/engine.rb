@@ -21,7 +21,14 @@ module Porthos
 
     initializer 'porthos.helpers' do |app|
       ActiveSupport.on_load :action_view do
-        include PorthosApplicationHelper
+        include Porthos::ApplicationHelper
+      end
+    end
+
+    initializer 'porthos.active_record' do |app|
+      ActiveSupport.on_load :active_record do
+        include Porthos::ActiveRecord::Restrictions
+        include Porthos::ActiveRecord::Settingable
       end
     end
 

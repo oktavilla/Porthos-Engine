@@ -14,8 +14,4 @@ class PageTemplate < Template
   def renderer(action, controller, objects = {})
     "#{template.name.camelize}Renderer::#{action.to_s.camelize}".constantize.new(controller, objects.to_options.merge({ :field_set => self }))
   end
-
-  def tags_for_pages
-    []#@tags_for_pages ||= Tag.on('Page').joins('LEFT OUTER JOIN pages ON pages.id = taggings.taggable_id').where(['pages.id IS NOT NULL AND pages.field_set_id = ? AND namespace IS NULL', self.id])
-  end
 end

@@ -31,29 +31,7 @@
     <ul class="items">
     <% @pages.each do |page| %>
       <li>
-        <span class="title"><%= link_to page.title, admin_page_path(page.id) %></span>
-        <% unless page.full_uri.blank? -%>
-        <span class="uri">
-          <%= page_path(:page_template_id => page.page_template_id, :id => page.uri) %>
-        </span>
-        <% end -%>
-        <% if page.tags.any? -%>
-        <span class="tags"><%= page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => [tag.name]))}.join(', ').html_safe %></span>
-        <% end -%>
-        <span class="meta">
-          <% if page.updated_at && page.updated_at != page.created_at -%>
-          Senast ändrad <%= page.updated_at.strftime("%d %b %Y %H:%M") %>.
-          <% end -%>
-          <% if page.published? %>
-          Publicerad <%= page.published_on.strftime("%d %b %Y %H:%M") %>.
-          <% elsif page.published_on.present? %>
-          Publiceras <%= page.published_on.strftime("%d %b %Y %H:%M") %>.
-          <% end %>
-        </span>
-        <span class="edit">
-          <%= link_to "Ändra", admin_page_path(page.id) %>
-          <%= link_to "Ta bort", admin_page_path(page.id), { :method => :delete, :confirm => "Är du säker, detta går inte att ångra." } %>
-        </span>
+        <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
       </li>
     <% end %>
     </ul>

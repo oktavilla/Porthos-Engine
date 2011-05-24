@@ -124,7 +124,7 @@ module Porthos
 
         def cache_tags_if_changed
           if tags_changed?
-            Rails.env.production? ? '' : self.class.cache_tags!
+            Rails.env.production? ? self.class.delay.cache_tags! : self.class.cache_tags!
           end
         end
       end

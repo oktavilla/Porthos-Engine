@@ -94,7 +94,7 @@ module DefaultRenderer
     end
 
     def tags
-      @tags ||= @field_set.tags_for_pages
+      @tags ||= Page.all_tags
     end
 
     def selected_tags

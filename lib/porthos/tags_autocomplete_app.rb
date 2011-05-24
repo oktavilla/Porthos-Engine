@@ -26,7 +26,7 @@ private
 
   def tags
     taggable.all_tags(:'value.name' => /^#{params['term']}/).collect do |tag|
-      tag.name.include?(Porthos::Taggable.delimiter) ? "\"#{tag.name}\"" : tag.name
+      tag.name.include?(Porthos::MongoMapper::Taggable.delimiter) ? "\"#{tag.name}\"" : tag.name
     end
   end
 end

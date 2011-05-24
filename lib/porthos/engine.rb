@@ -25,6 +25,13 @@ module Porthos
       end
     end
 
+    initializer 'porthos.active_record' do |app|
+      ActiveSupport.on_load :active_record do
+        include Porthos::ActiveRecord::Restrictions
+        include Porthos::ActiveRecord::Settingable
+      end
+    end
+
     initializer 'porthos.authentication' do |app|
       app.middleware.use ::Warden::Manager do |manager|
         manager.default_strategies :password

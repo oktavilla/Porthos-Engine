@@ -5,10 +5,15 @@ require 'has_scope'
 require 's3'
 require 'mongo_mapper_acts_as_tree'
 require 'mm-multi-parameter-attributes'
+require 'delayed_job'
 
 module Porthos
   def self.root
     Pathname.new(File.expand_path(File.dirname(__FILE__)+'../..'))
+  end
+
+  def self.app_name
+    Rails.application.class.to_s.split("::").first
   end
 end
 
@@ -27,3 +32,4 @@ require 'porthos/taggable'
 require 'porthos/mongo_mapper/instructable'
 require 'porthos/datum_methods'
 require 'porthos/tags_autocomplete_app'
+require 'porthos/asset_tanker_settings'

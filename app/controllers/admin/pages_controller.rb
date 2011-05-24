@@ -29,15 +29,10 @@ class Admin::PagesController < ApplicationController
   end
 
   def search
-    query = params[:query]
+    @query = params[:query]
     page  = params[:page] || 1
     per_page = params[:per_page] ? params[:per_page].to_i : 45
-    @search = Page.search do
-      keywords(query)
-      paginate :page => page, :per_page => per_page
-    end
-    @query = query
-    @page = page
+    @pages = Page.search_tank(@query, :per_page => per_page, :page => page)
     @page_templates = PageTemplate.all
     respond_to do |format|
       format.html

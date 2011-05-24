@@ -15,7 +15,7 @@
   </div>
   <div id="content">
     <ul class="items">
-    <% @search.results.each do |page| %>
+    <% @pages.each do |page| %>
       <li>
         <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
       </li>

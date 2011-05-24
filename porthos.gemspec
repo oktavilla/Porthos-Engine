@@ -1,13 +1,13 @@
 # Provide a simple gemspec so you can easily use your enginex
 # project in your rails apps through git.
 Gem::Specification.new do |s|
-  s.name = "porthos"
-  s.summary = "Insert Porthos summary."
-  s.description = "Insert Porthos description."
-  s.files = Dir["{app,public,lib,config}/**/*"] + ["MIT-LICENSE", "Rakefile", "Gemfile", "README.rdoc"]
-  s.version = "0.0.1"
+  s.name = 'porthos'
+  s.summary = 'Insert Porthos summary.'
+  s.description = 'Insert Porthos description.'
+  s.files = Dir['{app,public,lib,config}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'Gemfile', 'README.rdoc']
+  s.version = '0.0.1'
 
-  s.required_rubygems_version = ">= 1.3.6"
+  s.required_rubygems_version = '>= 1.3.6'
 
   s.add_dependency 'rails', '3.1.0.rc1'
 
@@ -15,10 +15,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'sass'
   s.add_dependency 'coffee-script'
   s.add_dependency 'uglifier'
-
-  s.add_dependency 's3'
-  s.add_dependency 'resizor'
-
   s.add_dependency 'jquery-rails'
 
   # Mongo
@@ -34,7 +30,9 @@ Gem::Specification.new do |s|
   # Utilities
   s.add_dependency 'delayed_job'
   s.add_dependency 'has_scope'
-  s.add_dependency "routing-filter"
+  s.add_dependency 'routing-filter'
+  s.add_dependency 's3'
+  s.add_dependency 'resizor'
 
   # Dev dependencies
   s.add_development_dependency 'sqlite3'

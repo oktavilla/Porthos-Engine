@@ -13,6 +13,7 @@ require 'database_cleaner'
 require 'bcrypt'
 require 'has_scope'
 require 'porthos/test_helpers/assets_test_helper'
+require 'porthos/test_helpers/pages_test_helper'
 
 WebMock.allow_net_connect!
 
@@ -27,6 +28,8 @@ ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.default_url_options[:host] = "test.com"
 
+Tanker.configuration = { :url => 'http://test.api.indextank.com' }
+
 Rails.backtrace_cleaner.remove_silencers!
 
 # Load support files
@@ -35,6 +38,7 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 class ActiveSupport::TestCase
   include PorthosAssetTestHelpers
+  include PorthosPageTestHelpers
 
   setup do
     DatabaseCleaner.start

@@ -11,7 +11,7 @@ class PagesController < ApplicationController
   def index
     @page_template = @node.page_template
     template = @page_template ? @page_template.template : PageFileTemplate.default
-    @page_template = page_renderer(template, {
+    @page_renderer = page_renderer(template, {
       :page_template => @page_template
     })
 

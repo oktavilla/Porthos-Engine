@@ -1,13 +1,12 @@
 <% @page_class = @page_renderer.layout_class -%>
-<% @page_title = @page_renderer.title -%>
+<% @page_title = @page_renderer.label -%>
 <% @page_id    = @page_renderer.page_id -%>
 <div id="content">
-  <h1><%= @page_renderer.title %></h2>
+  <h1><%= @page_renderer.label %></h2>
   <ul>
   <% @page_renderer.pages.each do |page| %>
     <li>
       <h2><%= page.title %></h2>
-      <%= page.long_description %>
     </li>
   <% end %>
   </ul>

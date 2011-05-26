@@ -7,8 +7,8 @@ module DefaultRenderer
       "#{@page_template.handle}-index"
     end
 
-    def title
-      @page_template.title
+    def label
+      @page_template.label
     end
 
     def page_id
@@ -17,8 +17,7 @@ module DefaultRenderer
 
     def pages
       return @pages if @pages
-      scope = @page_template.pages.
-                         published
+      scope = Page.where(:page_template_id => @page_template.id).published
       if params[:year]
         scope = scope.published_within(*Time.delta(params[:year], params[:month], params[:day]))
       end

@@ -1,76 +1,10 @@
 <% @page_class = "layout1" -%>
-<% @page_title = "Navigation" -%>
+<% @page_title = t('.title') -%>
 <div id="workspace">
   <div class="header">
-    <h1><%= t(:title, :scope => [:app, :views, :admin, :nodes, :new])  %></h1>
+    <h1><%= t('.title')  %></h1>
   </div>
   <div id="content">
-    <%= form_for [:admin, @node] do |f| %>
-      <%= render 'admin/shared/error_messages', :object => f.object %>
-      <% if @resource %>
-      <%= f.hidden_field :resource_type %>
-      <%= f.hidden_field :resource_id %>
-      <%= f.hidden_field :controller %>
-      <%= f.hidden_field :action %>
-      <% end %>
-
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-
-      <%= f.label :url %>
-      <%= f.text_field :url %>
-
-      <ul class="multiple_choice">
-        <li>
-          <label for="shown_in_nav">
-            <%= f.radio_button :status, 1, :id => 'shown_in_nav' %>
-            <%= t(:show_in_nav, :scope => [:app, :views, :admin, :nodes, :shared])  %>
-          </label>
-        </li>
-        <li>
-          <label for="not_shown_in_nav">
-            <%= f.radio_button :status, 0, :id => 'not_shown_in_nav' %>
-            <%= t(:not_shown_in_nav, :scope => [:app, :views, :admin, :nodes, :shared])  %>
-          </label>
-        </li>
-        <li>
-          <label for="restricted">
-            <%= f.radio_button :status, -1, :id => 'restricted' %>
-            <%= t(:restricted, :scope => [:app, :views, :admin, :nodes, :shared])  %>
-          </label>
-        </li>
-      </ul>
-      <% unless @resource %>
-        <%= f.label :controller %>
-        <%= f.text_field :controller %>
-
-        <%= f.label :action %>
-        <%= f.text_field :action %>
-        <%= f.label :page_template_id %>
-        <%= f.select :page_template_id, PageTemplate.all.collect { |f| [f.title, f.id] }, :include_blank => 'Välj en sidtyp' %>
-      <% end %>
-      <% if @nodes.any? %>
-      <div id="navigation">
-        <%= nested_list_of(@nodes, {
-            :end_points => @nodes,
-            :allow_inactive => true,
-            :except => @node
-          }, {
-            :id => 'nodes'
-        }) do |node| %>
-          <div>
-            <% if node != @nodes.first && node.children.any? -%>
-              <%= link_to "+", admin_nodes_path(:nodes => [node.id], :place => true), :class => 'toggle_handle' %>
-            <% end -%>
-            <%= radio_button_tag('node[parent_id]', node.id, (node.id == @node.parent_id), :id => "node_parent_id_#{node.id}") unless node == @node %>
-            <span class="name"><%= node.name %></span>
-          </div>
-        <% end %>
-      </div>
-      <% end %>
-      <div class="submit">
-        <%= submit_tag t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), previous_view_path((@resource ? admin_page_path(:id => @resource.id) : admin_nodes_path)) %>
-      </div>
-    <% end %>
+    <%= render 'form' %>
   </div>
 </div>

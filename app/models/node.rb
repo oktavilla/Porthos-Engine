@@ -4,7 +4,6 @@ class Node
 
   acts_as_tree :order => "position asc"
 
-
   key :name, String
   key :url, String
   key :controller, String
@@ -14,17 +13,18 @@ class Node
 
   key :resource_id, ObjectId
   key :resource_type, String
-
-  key :field_set_id, ObjectId
+  key :page_template_id, ObjectId
 
   belongs_to :resource,
              :polymorphic => true
-  belongs_to :field_set
+
+  belongs_to :page_template
 
   validates :url,
             :presence => true,
             :uniqueness => true,
-            :if => Proc.new {!Node.count.zero?}
+            :if => Proc.new { !Node.count.zero? }
+
   validates :controller, :presence => true
   validates :action, :presence => true
 
@@ -59,11 +59,11 @@ class Node
 
     def for_page(page)
       self.new.tap do |node|
-        node.name       = page.title
+        node.name = page.title
         node.controller = page.class.to_s.tableize
-        node.action     = 'show'
-        node.resource   = page
-        node.field_set = page.field_set
+        node.action = 'show'
+        node.resource = page
+        node.page_template_id = page.page_template_id
         node.parent = Node.root if node.parent_id.blank?
       end
     end

@@ -1,18 +1,10 @@
-<% @page_title = "#{t(:node, :scope => [:activerecord, :models])} > #{@node.name}" %>
+<% @page_title = "#{Node.model_name.human} > #{@node.name}" %>
 <% @page_class = "A content" -%>
 <div id="workspace">
   <div class="header">
-    <h1><span class="pre"><%= t(:title, :scope => [:app, :views, :admin, :nodes, :edit])  %></span> <%= @node.name %></h1>
+    <h1><span class="pre"><%= t('.title')  %></span> <%= @node.name %></h1>
   </div>
   <div id="content">
-    <%= form_for [:admin, @node] do |f| %>
-      <%= render 'admin/shared/error_messages', :object => f.object %>
-      <fieldset>
-        <%= render :partial => 'form', :locals => { :f => f } %>
-      </fieldset>
-      <div class="submit">
-        <%= submit_tag t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), previous_view_path(admin_nodes_path(:nodes => @node)) %>
-      </div>
-    <% end %>
+    <%= render 'form' %>
   </div>
 </div>

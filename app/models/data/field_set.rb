@@ -8,12 +8,13 @@ class FieldSet < Datum
   end
 
   def data_attributes=(_data)
-    _data.map do |i, attrs|
+    _data = _data.values if _data.kind_of?(Hash)
+    _data.each do |attrs|
       attrs.to_options!
-      id = attrs.delete(:id)
-      data.detect { |d| d.id.to_s == id }.tap do |datum|
+      datum_id = attrs.delete(:id)
+      data.detect { |d| d.id.to_s == datum_id.to_s }.tap do |datum|
         datum.assign(attrs) if datum && attrs.keys.any?
-      end
+      end if datum_id
     end
   end
 

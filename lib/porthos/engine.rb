@@ -9,12 +9,6 @@ module Porthos
 
     config.active_record.identity_map = true
 
-    initializer "porthos.static_assets" do |app|
-      if app.config.serve_static_assets
-        app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/assets"
-      end
-    end
-
     initializer "porthos.redirects" do |app|
       app.middleware.use Porthos::Redirects
     end

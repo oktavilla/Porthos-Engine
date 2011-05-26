@@ -1,13 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
-
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="utf-8">
   <meta name="<%= request_forgery_protection_token %>" id="authenticity-token" content="<%= form_authenticity_token %>">
   <meta name="csrf-token" content="<%= form_authenticity_token %>" />
   <meta name="csrf-param" content="authenticity_token" />
   <title><%= @page_title if @page_title %></title>
-  <%= stylesheet_link_tag 'application' %>
+  <%= stylesheet_link_tag 'admin' %>
   <%= installation_specific_stylesheet_link_tag %>
 </head>
 <body<%= body_attributes.html_safe %>>
@@ -21,6 +20,6 @@
 </div>
 <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" %>
 <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" %>
-<%= javascript_include_tag 'application' %>
+<%= javascript_include_tag 'admin' %>
 </body>
 </html>

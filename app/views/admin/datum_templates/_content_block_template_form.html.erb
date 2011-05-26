@@ -1,0 +1,10 @@
+<div class="contains_input">
+  <%= f.check_box :allow_images %>
+  <%= f.label :allow_images %>
+</div>
+<div class="contains_input">
+  <%= f.check_box :allow_pages %>
+  <%= f.label :allow_pages %>
+</div>
+<%= f.label :content_templates_ids %>
+<%= f.select :content_templates_ids, ContentTemplate.all.collect { |ct| [ct.label, ct.id] }, {}, :multiple => true %>

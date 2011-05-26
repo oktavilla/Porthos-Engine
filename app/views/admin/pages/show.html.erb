@@ -122,6 +122,7 @@
       <div class="add controls">
         <h3 class="new"><%= t('.add_content') %></h3>
         <ul>
+          <% if datum.allow_texts? %>
           <li>
             <%= form_for [:admin, @page, StringField.new(:input_type => 'string', :multiline => true, :allow_rich_text => true)], :as => :datum,  :url => admin_page_data_path(@page, :parent_id => datum, :type => 'StringField') do |f| %>
               <%= f.hidden_field :input_type %>
@@ -130,10 +131,20 @@
               <button type="submit"><%= StringField.model_name.human %></button>
             <% end %>
           </li>
+          <% end %>
+          <% if datum.allow_pages? %>
+          <li>
+            <%= form_for [:admin, @page, PageAssociation.new], :as => :datum,  :url => admin_page_data_path(@page, :parent_id => datum, :type => 'PageAssociation') do |f| %>
+              <button type="submit"><%= PageAssociation.model_name.human %></button>
+            <% end %>
+          </li>
+          <% end %>
+          <% if datum.allow_images? %>
           <li>
             <%= link_to Image.model_name.human, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => admin_page_data_path(@page, :parent_id => datum, :type => 'Image'), :method => 'post', :asset_field_name => 'datum[asset_id]' }) %>
           </li>
-        <% ContentTemplate.all.each do |content_template| %>
+          <% end %>
+        <% datum.content_templates.each do |content_template| %>
           <li>
             <%= button_to content_template.label, admin_page_data_path(@page, :parent_id => datum, :type => 'FieldSet', :template_id => content_template) %>
           </li>
@@ -149,6 +160,8 @@
             <%= render :partial => 'field_set', :locals => { :datum => d } %>
           <% elsif d.is_a?(Image) %>
             <%= render :partial => 'image', :locals => { :datum => d } %>
+          <% elsif d.is_a?(PageAssociation) %>
+            <%= render :partial => 'page_association', :locals => { :datum => d } %>
           <% end %>
           <span class="edit">
             <%= link_to d.active? ? 'Dölj' : 'Visa', toggle_admin_page_datum_path(@page, d, :parent_id => datum), :method => :put, :class => 'visibility' %>

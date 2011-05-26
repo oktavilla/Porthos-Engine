@@ -4,12 +4,10 @@ class PageAssociation < Datum
   belongs_to :page
 
   def targets
-    @targets ||= [].tap do |targets|
-      if page_template_id.present?
-        targets.replace Page.where(:page_template_id => page_template_id).all
-      else
-        targets.replace Page.all
-      end
+    @targets ||= if page_template_id.present?
+      Page.where(:page_template_id => page_template_id, :_id.ne => self._root_document.id)
+    else
+      Page.where(:_id.ne => self._root_document.id)
     end
   end
 

@@ -15,7 +15,7 @@
   <% if datum.instruction_body %>
     <p class="form_help"><%= datum.instruction_body %></p>
   <% end %>
-  <% if datum._parent_document.is_a?(Page) %>
+  <% unless datum._parent_document.is_a?(FieldSet) %>
   <div class="submit">
     <%= f.submit t(:save) %>
   </div>

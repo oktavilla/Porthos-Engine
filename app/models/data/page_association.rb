@@ -4,11 +4,14 @@ class PageAssociation < Datum
   belongs_to :page
 
   def targets
-    @targets ||= if page_template_id.present?
-      Page.where(:page_template_id => page_template_id, :_id.ne => self._root_document.id)
-    else
-      Page.where(:_id.ne => self._root_document.id)
+    return @targets if @targets
+    exclude_ids = [self._root_document.id]
+    if _parent_document.is_a?(ContentBlock)
+      exclude_ids += _parent_document.data.find_all { |d| d.is_a?(PageAssociation) }.map { |d| d.page_id }
     end
+    scope = Page.where(:_id.nin => exclude_ids)
+    scope = scope.where(:page_template_id => page_template_id) if page_template_id.present?
+    scope
   end
 
 end

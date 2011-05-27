@@ -9,6 +9,18 @@ class ContentBlock < Datum
 
   before_save :sort_data
 
+  def pages
+    @pages ||= data.find_all { |d| d.is_a?(PageAssociation) }.collect { |d| d.page }
+  end
+
+  def images
+    @images ||= data.find_all { |d| d.is_a?(Image) }
+  end
+
+  def texts
+    @texts ||= data.find_all { |d| d.is_a?(StringField) }
+  end
+
 protected
 
   def sort_data

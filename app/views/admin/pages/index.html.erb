@@ -35,6 +35,6 @@
       </li>
     <% end %>
     </ul>
-    <%= paginate @pages %>
+    <%= paginate @pages if @pages.any? %>
   </div>
 </div>

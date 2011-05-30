@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'routing-filter'
   s.add_dependency 's3'
   s.add_dependency 'resizor'
+  s.add_dependency 'kaminari'
 
   # Dev dependencies
   s.add_development_dependency 'sqlite3'

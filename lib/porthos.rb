@@ -6,6 +6,7 @@ require 's3'
 require 'mongo_mapper_acts_as_tree'
 require 'mm-multi-parameter-attributes'
 require 'delayed_job'
+require 'kaminari'
 
 module Porthos
   def self.root

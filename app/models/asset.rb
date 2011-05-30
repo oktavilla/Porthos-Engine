@@ -46,7 +46,7 @@ class Asset
   after_destroy :cleanup
 #  after_save :commit_to_sunspot, :if => Rails.application.config.use_fulltext_search
 
-  IMAGE_FORMATS = [:jpg, :jpeg, :png, :gif]
+  IMAGE_FORMATS = [:jpg, :jpeg, :png, :gif, :tiff, :tif]
   VIDEO_FORMATS = [:flv, :mov, :qt, :mpg, :avi, :mp4]
   SOUND_FORMATS = [:mp3, :wav, :aiff, :aif]
 

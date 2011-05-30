@@ -25,18 +25,6 @@ class Page
     end
   end
 
-  include Tanker
-
-  tankit Porthos::Tanker.index_name do
-    indexes :title
-    indexes :uri
-    indexes :tag_names
-    indexes :data
-  end
-
-  after_save proc { |page| Rails.env.production? ? page.delay.update_tank_indexes : page.update_tank_indexes }
-  after_destroy proc { |page| Rails.env.production? ? page.delay.delete_tank_indexes : page.delete_tank_indexes }
-
   validates_presence_of :title
 
   before_save :sort_data

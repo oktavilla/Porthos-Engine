@@ -8,6 +8,7 @@ require 'mm-multi-parameter-attributes'
 require 'delayed_job'
 require 'kaminari'
 
+require 'porthos/config'
 module Porthos
   def self.root
     Pathname.new(File.expand_path(File.dirname(__FILE__)+'../..'))
@@ -16,6 +17,15 @@ module Porthos
   def self.app_name
     Rails.application.class.to_s.split("::").first
   end
+
+  def self.configure
+    yield Porthos::Config
+  end
+
+  def self.config
+    Porthos::Config
+  end
+
 end
 
 require 'porthos/engine'
@@ -34,4 +44,4 @@ require 'porthos/mongo_mapper/taggable'
 require 'porthos/mongo_mapper/instructable'
 require 'porthos/datum_methods'
 require 'porthos/tags_autocomplete_app'
-require 'porthos/asset_tanker_settings'
+require 'porthos/tanking'

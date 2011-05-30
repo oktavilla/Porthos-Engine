@@ -1,7 +1,5 @@
 module Porthos
   class Engine < Rails::Engine
-    isolate_namespace Porthos
-
     config.autoload_paths += Dir[Porthos.root.join('app', 'models', '{**}')]
     config.i18n.default_locale = "sv-SE"
     config.i18n.fallbacks = true
@@ -23,6 +21,12 @@ module Porthos
       ActiveSupport.on_load :active_record do
         include Porthos::ActiveRecord::Restrictions
         include Porthos::ActiveRecord::Settingable
+      end
+    end
+
+    initializer 'porthos.tanking' do |app|
+      app.config.to_prepare do
+        Porthos::Tanking::Indexes.setup
       end
     end
 

@@ -16,10 +16,7 @@ class Admin::PagesController < ApplicationController
     @current_tags = params[:tags] || []
 
     @pages = unless @current_tags.any?
-      apply_scopes(Page).paginate({
-        :page     => (params[:page] || 1),
-        :per_page => (params[:per_page] || 50)
-      })
+      apply_scopes(Page).page(params[:page])
     else
       Page.tagged_with(@current_tags).sort(:updated_at.desc)
     end

@@ -18,10 +18,7 @@ class Admin::AssetsController < ApplicationController
   def index
     @tags = Asset.tags_by_count(:limit => 30)
     @assets = unless @current_tags.any?
-      apply_scopes(Asset).paginate({
-        :page     => (params[:page] || 1),
-        :per_page => (params[:per_page] || 20)
-      })
+      apply_scopes(Asset).page(params[:page])
     else
       Asset.tagged_with(params[:tags]).where(:hidden => false).sort(:created_at.desc)
     end

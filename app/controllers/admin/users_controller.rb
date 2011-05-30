@@ -2,10 +2,7 @@ class Admin::UsersController < ApplicationController
   include Porthos::Admin
 
   def index
-    @users = apply_scopes(User).paginate({
-      :page     => (params[:page] || 1),
-      :per_page => (params[:per_page] || 90)
-    })
+    @users = apply_scopes(User).page(params[:page])
     respond_to do |format|
       format.html
       end

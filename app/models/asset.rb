@@ -12,8 +12,6 @@ class Asset
   key :hidden, Boolean, :default => lambda { false }
   timestamps!
 
-  include Porthos::Tanker::AssetSettings
-
   belongs_to :created_by,
              :class_name => 'User'
   #has_many :usages,

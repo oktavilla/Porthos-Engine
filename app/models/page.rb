@@ -46,11 +46,15 @@ class Page
   end
 
   def node
-    Node.where(:resource_type => 'Page', :resource_id => self.id)
+    @node ||= Node.where(:resource_type => 'Page', :resource_id => self.id).first
   end
 
   def node=(node_attributes)
-    node ? node.attributes.merge(node_attributes) : Node.new(node_attributes)
+    node ? node.attributes.merge(node_attributes) : Node.new(node_attributes).first
+  end
+
+  def index_node
+    @index_node ||= Node.where(controller: 'pages', action: 'index', page_template_id: self.page_template_id)
   end
 
   delegate :template,

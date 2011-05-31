@@ -10,6 +10,7 @@ class Asset
   key :author, String
   key :description, String
   key :hidden, Boolean, :default => lambda { false }
+  key :created_by_id, ObjectId
   timestamps!
 
   belongs_to :created_by,
@@ -61,6 +62,10 @@ class Asset
   end
 
   class << self
+    def uploaders
+      User.find(self.fields(:created_by_id).distinct(:created_by_id))
+    end
+
     def from_upload(attrs)
       extension = File.extname(attrs[:file].original_filename.downcase).gsub(/\./,'')
       if IMAGE_FORMATS.include?(extension.to_sym)
@@ -70,7 +75,6 @@ class Asset
       end
       klass.new(attrs)
     end
-
   end
 
 protected

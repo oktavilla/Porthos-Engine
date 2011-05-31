@@ -9,15 +9,13 @@
   <% end %>
   <div class="label">Uppladdad av</div>
   <ul class="filter">
-    <li<%= ' class="current"' unless current_scopes[:created_by] %>>
+    <li<%= ' class="current"'.html_safe unless current_scopes[:created_by] %>>
       <%= link_to "Alla", admin_assets_path(current_scopes.except(:created_by)) %>
     </li>
-    <% if false %>
-    <% Asset.recent_uploaders.sort_by(&:first_name).each do |user| -%>
-      <li<%= ' class="current"' if current_scopes[:created_by].to_i == user.id %>>
+    <% Asset.uploaders.sort_by(&:first_name).each do |user| -%>
+      <li<%= ' class="current"'.html_safe if current_scopes[:created_by] == user.id.to_s %>>
         <%= link_to user.short_name, admin_assets_path(current_scopes.merge(:created_by => user.id)) %>
       </li>
-    <% end -%>
     <% end %>
   </ul>
 <% if @tags.present? and @tags.any? -%>

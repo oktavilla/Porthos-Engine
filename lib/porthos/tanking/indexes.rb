@@ -5,7 +5,7 @@ module Porthos
       def self.setup
         Porthos.config.tanking.models.each do |model_name|
           "::#{model_name}".constantize.send :include, "Porthos::Tanking::Indexes::#{model_name}".constantize
-        end
+        end if Porthos.config.tanking.models
       end
 
       module Page

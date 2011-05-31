@@ -104,7 +104,7 @@ class PageFileTemplate
       if names.include?(_method)
         File.join(@template.path, _method)
       else
-        default_template = self.class.default
+        default_template = PageFileTemplate.default
         if @template != default_template and default_template.views.respond_to?(method)
           default_template.views.send(method, *args)
         else

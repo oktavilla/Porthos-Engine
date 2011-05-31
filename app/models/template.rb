@@ -9,6 +9,9 @@ class Template
 
   before_save :sort_datum_templates
 
+  validates_presence_of :label
+  validates_uniqueness_of :label, :case_sensitive => false
+
 protected
 
   def sort_datum_templates

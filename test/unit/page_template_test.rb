@@ -5,6 +5,19 @@ class PageTemplateTest < ActiveSupport::TestCase
     @page_template = Factory.build(:page_template, :template_name => nil)
   end
 
+  test 'presence of label' do
+    @page_template.label = nil
+    assert !@page_template.valid?, 'should not be valid'
+    assert_not_nil @page_template.errors[:label], 'should have errors on label'
+  end
+
+  test 'uniqueness of label' do
+    @page_template.save
+    page_template2 = Factory.build(:page_template, :label => @page_template.label)
+    assert !page_template2.valid?, 'should not be valid'
+    assert_not_nil page_template2.errors[:label], 'should have errors on label'
+  end
+
   test "instantiating a template from the template_name" do
     assert_equal PageFileTemplate.default, @page_template.template, "Should get the default template if no handle specified"
 

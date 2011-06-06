@@ -16,10 +16,7 @@ class AssetTest < ActiveSupport::TestCase
       assert_equal 'text/plain', @asset.mime_type
       assert_equal 'txt', @asset.extension
       assert_equal 'page', @asset.name
-    end
-
-    should 'return name for to_param' do
-      assert_equal @asset.name, @asset.to_param
+      assert_equal 'document', @asset.filetype
     end
 
     should 'return full name' do
@@ -50,4 +47,13 @@ class AssetTest < ActiveSupport::TestCase
       assert_requested :delete, "http://#{Porthos.s3_storage.bucket_name}.s3.amazonaws.com/#{@asset.full_name}?"
     end
   end
+
+  context 'the Asset class' do
+    should 'resolve asset filetype' do
+      assert_equal 'document', Asset.filetype_for_extension('pdf')
+      assert_equal 'image', Asset.filetype_for_extension('jpg')
+      assert_equal 'sound', Asset.filetype_for_extension('mp3')
+    end
+  end
+
 end

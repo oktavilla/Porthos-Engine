@@ -17,7 +17,7 @@
 .page_content:after,
 .page_content .content:after,
 .contents li.content:after,
-.datum .viewable:after {
+.datum:after {
   content:".";
   display:block;
   height:0;

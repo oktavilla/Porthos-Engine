@@ -6,14 +6,14 @@
           $content = $('#content'),
           $sortables = $content.find('ul.sortable');
 
-      $content.find('form.datum_edit').not('.image_form').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
+      $content.find('.datum .controls').not('.datum.image .controls').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
       $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
       $content.delegate('a.change, a.cancel', 'click', function(event) {
         event.preventDefault();
-        $(this).parents('form, div.image').find('div.editable, div.viewable, div.edit').toggle();
+        $(this).parents('.datum, div.image').find('div.editable, div.viewable, div.edit').toggle();
       });
       if (window.location.hash.match(/\_edit/)) {
-        $(window.location.hash).each(function() {
+        $(window.location.hash.replace(/\_edit/, '')).each(function() {
           $(this).find('a.change').click();
         });
       }
@@ -39,7 +39,7 @@
       });
 
       // TODO: Rewrite with nested containments when we have content collections
-      $sortables.find('li').prepend('<span class="draghandle"></span>');
+      $sortables.find('li .controls').prepend('<span class="draghandle"></span>');
       $sortables.sortable({
         handle: 'span.draghandle',
         connectWith: $sortables,

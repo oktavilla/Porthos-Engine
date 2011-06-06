@@ -5,8 +5,9 @@
     <h1>Lägg till <%= @page.page_template ? @page.page_template.label.downcase : 'sida' %></h1>
   </div>
   <div id="content">
-    <%= form_for [:admin, @page] do |f| %>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path do |f| %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
+      <%= hidden_field_tag 'type', params[:type] if params[:type] %>
       <%= hidden_field_tag 'page_template_id', @template.id %>
 
       <label for="page_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>

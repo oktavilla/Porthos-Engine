@@ -1,8 +1,12 @@
 class Admin::DataController < ApplicationController
-  respond_to :html
+  respond_to :html, :json
   include Porthos::Admin
   before_filter :find_page
   skip_after_filter :remember_uri
+
+  def new
+    @datum = params[:type].constantize.new(params[:datum])
+  end
 
   def create
     unless params[:template_id]

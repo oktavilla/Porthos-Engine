@@ -13,7 +13,7 @@
       <%= link_to t('.publish_now'), publish_admin_page_path(@page.id), :method => :put, :class => 'new' %></p>
     <% end %>
     </div>
-    <%= form_for [:admin, @page], :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field :published_on, :value => (@page.published_on.present? ? @page.published_on.in_time_zone.to_date : nil), :class => 'date', :placeholder => 'År-Månad-Dag' %>
         <div class="submit">
@@ -37,14 +37,14 @@
       <% end -%>
       <p><a href="#" class="change"><%= @page.category.present? ? t('.edit_category') : t('.choose_category') %></a></p>
     </div>
-    <%= form_for [:admin, @page], :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.select @page.category_method_name, Page.tags_by_count(:namespace => @page.page_template.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
         <a href="#" id="new_category"><%= t('.add_new_category') %></a><br>
         <input type="submit" value="<%= t('choose') %>"> <%= t(:or) %> <a href="#" class="cancel"><%= t(:cancel) %></a>
       </div>
     <% end -%>
-    <%= form_for [:admin, @page], :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field @page.category_method_name, :value => '' %>
         <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <a href="#"><%= t(:cancel) %></a>
@@ -59,7 +59,7 @@
       <%= @page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ').html_safe -%>
       </p>
     </div>
-    <%= form_for [:admin, @page], :html => { :id => 'page_tags_form' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_tags_form' } do |f| -%>
       <div>
         <%= f.text_field :tag_names, :autocomplete => 'off' %>
         <div class="submit">
@@ -121,6 +121,20 @@
       </div>
     <% end %>
   </div>
+  <% if @page.is_a?(Section) %>
+  <div class="tools">
+    Lägg till:
+    <%= link_to StringField.model_name.human, new_admin_page_datum_path(@page, datum: { input_type: 'string' }, type: 'StringField') %>
+    <%= link_to t('.date_field'), new_admin_page_datum_path(@page, datum: { input_type: 'date' }, type: 'Field') %>
+    <%= link_to t('.boolean_field'), new_admin_page_datum_path(@page, datum: { input_type: 'boolean' }, type: 'Field') %>
+    <%= link_to PageAssociation.model_name.human, new_admin_page_datum_path(@page, type: 'PageAssociation') %>
+    <%= link_to Image.model_name.human, admin_assets_path(by_type: 'ImageAsset', create_callback: { path: admin_page_data_path(@page, type: 'Image'), method: 'post', asset_field_name: 'datum[asset_id]' }) %>
+    <%= link_to ContentBlock.model_name.human, new_admin_page_datum_path(@page, type: 'ContentBlock') %>
+    <% ContentTemplate.all.each do |content_template| %>
+      <%= link_to content_template.label, new_admin_page_datum_path(@page, :type => 'FieldSet', :template_id => content_template) %>
+    <% end %>
+  </div>
+  <% end %>
   <div id="content" class="datums">
   <% @page.data.each_with_index do |datum, index| %>
     <div id="datum_<%= datum.id %>" class="<%= "datum " unless datum.is_a?(ContentBlock) %><%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
@@ -202,6 +216,12 @@
         </li>
       <% end %>
       </ul>
+    <% end %>
+    <% if @page.is_a?(Section) %>
+      <span class="edit">
+        <%= link_to datum.active? ? 'Dölj' : 'Visa', toggle_admin_page_datum_path(@page, datum), :method => :put, :class => 'visibility' %>
+        <%= link_to "Ta bort", admin_page_datum_path(@page, datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+      </span>
     <% end %>
     </div>
   <% end %>

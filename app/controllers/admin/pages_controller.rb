@@ -48,12 +48,12 @@ class Admin::PagesController < ApplicationController
 
   def new
     @template = Template.find(params[:page_template_id])
-    @page = Page.from_template(@template, params[:page] || {})
+    @page = (params[:type] ? params[:type].constantize : Page).from_template(@template, params[:page] || {})
   end
 
   def create
     @template = Template.find(params[:page_template_id])
-    @page = Page.from_template(@template, params[:page] || {})
+    @page = (params[:type] ? params[:type].constantize : Page).from_template(@template, params[:page] || {})
     if @page.save
       flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
     end

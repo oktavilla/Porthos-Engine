@@ -45,18 +45,18 @@ module RoutingFilter
           if resource.class.include?(MongoMapper::Document)
             params[:id] = resource.to_param
             conditions.merge!(:resource_type => resource.class.to_s, :resource_id => resource.id)
-            if resource.respond_to?(:field_set_id)
-              index_conditions.merge!(:field_set_id => resource.field_set_id)
+            if resource.respond_to?(:page_template_id)
+              index_conditions.merge!(:page_template_id => resource.page_template_id)
             else
-              index_conditions.merge!(:field_set_id => params[:field_set_id])
+              index_conditions.merge!(:page_template_id => params[:page_template_id])
             end
           else
             conditions.merge!(:resource_type => params[:controller].classify, :resource_id => resource)
-            index_conditions.merge!(:field_set_id => params[:field_set_id])
+            index_conditions.merge!(:page_template_id => params[:page_template_id])
           end
           node = Node.where(conditions).first || Node.where(index_conditions).first
         else
-          node = Node.where(conditions.merge(:field_set_id => params[:field_set_id])).first
+          node = Node.where(conditions.merge(:page_template_id => params[:page_template_id])).first
         end
         yield.tap do |path|
           if node

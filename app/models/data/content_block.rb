@@ -5,20 +5,24 @@ class ContentBlock < Datum
   key :content_templates_ids, Array, :typecast => 'ObjectId'
 
   many :content_templates, :in => :content_templates_ids
-  many :data
+  many :data do
+    def active
+      find_all { |d| d.active? }
+    end
+  end
 
   before_save :sort_data
 
   def pages
-    @pages ||= data.find_all { |d| d.is_a?(PageAssociation) }.collect { |d| d.page }
+    @pages ||= data.active.find_all { |d| d.is_a?(PageAssociation) }.collect { |d| d.page }
   end
 
   def images
-    @images ||= data.find_all { |d| d.is_a?(Image) }
+    @images ||= data.active.find_all { |d| d.is_a?(Image) }
   end
 
   def texts
-    @texts ||= data.find_all { |d| d.is_a?(StringField) }
+    @texts ||= data.active.find_all { |d| d.is_a?(StringField) }
   end
 
 protected

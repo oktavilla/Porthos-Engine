@@ -37,6 +37,8 @@ class ContentBlockTest < ActiveSupport::TestCase
     end
 
     assert_equal pages, @content_block.pages
+    @content_block.data.last.active = false
+    @content_block.send :remove_instance_variable, :@pages
+    assert_equal 2, @content_block.pages.size, 'should not include inactive data'
   end
-
 end

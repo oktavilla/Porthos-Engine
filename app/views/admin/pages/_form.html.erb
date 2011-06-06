@@ -1,4 +1,4 @@
-<%= f.hidden_field :field_set_id %>
+<%= f.hidden_field :page_template_id %>
 <label for="page_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>
 <div class="fullwidth">
   <%= f.text_field :title, :class => "title" %>

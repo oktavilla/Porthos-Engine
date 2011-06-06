@@ -71,12 +71,12 @@ class Admin::AssetsController < ApplicationController
   end
 
   def create
-    if params[:asset]
-      @assets = [Asset.from_upload(params[:asset].merge({:created_by => current_user}))]
+    @assets = if params[:asset][:file].is_a?(Array)
+      params[:asset][:file].collect do |file|
+        Asset.from_upload(:file => file, :created_by => current_user)
+      end
     else
-      @assets = params[:files].collect do |upload|
-        Asset.from_upload(:file => upload, :created_by => current_user) unless upload.blank?
-      end.compact
+      [Asset.from_upload(params[:asset].merge({:created_by => current_user}))]
     end
     @not_saved = @assets.collect { |a| a.save }.include? false
     respond_to do |format|

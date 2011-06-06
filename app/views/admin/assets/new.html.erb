@@ -10,7 +10,7 @@
     <%= form_for [:admin, @asset], :as => :asset, :url => admin_assets_path_with_session_key(), :html => { :multipart => true, :id => 'upload' } do |f| %>
     <%= render :partial => 'admin/shared/error_messages', :locals => { :object => f.object } %>
     <fieldset id="files">
-      <%= f.file_field :file, :size => 15 %>
+      <%= f.file_field :file, size: 15, multiple: 'multiple' %>
     </fieldset>
     <fieldset class="submit" id="submit_container">
       <input type="submit" value="<%= t('.submit') %>"> <%= t(:or) %> <%= link_to t(:cancel), admin_assets_path %>

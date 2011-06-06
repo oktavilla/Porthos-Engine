@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency 's3'
   s.add_dependency 'resizor'
   s.add_dependency 'kaminari'
+  s.add_dependency 'tanker'
 
   # Dev dependencies
   s.add_development_dependency 'sqlite3'
@@ -44,6 +45,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'rack-test'
-  s.add_development_dependency 'addressable', '2.2.4' # 2.2.5 (lastest version) seem to braek webmock
+  s.add_development_dependency 'addressable', '2.2.4' # 2.2.5 (lastest version) seem to break webmock
   s.add_development_dependency 'webmock'
 end

@@ -21,8 +21,6 @@ Rails.application.routes.draw do
     resources :users do
       collection do
         get 'admins'
-        get 'public'
-        get 'new_public'
         get 'search'
       end
     end

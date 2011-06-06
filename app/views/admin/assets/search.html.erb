@@ -9,7 +9,7 @@
     <div class="inner">
       <span class="notice">
         <% if @assets.any? %>
-          <%= @assets.total_entries %> filer hittades med sökningen ”<span class="query"><%= @query %></span>”.
+          <%= @assets.total_count %> filer hittades med sökningen ”<span class="query"><%= @query %></span>”.
           <%= link_to "Tillbaka", admin_assets_path, :class => 'back' %>
         <% else %>
           Inga filer hittades på din sökning. <%= link_to "Tillbaka till senaste filer", admin_assets_path, :class => 'back' %>
@@ -53,6 +53,7 @@
           </div></li>
         <% end %>
       </ul>
+      <%= paginate @assets %>
       <% end %>
     </div>
   </div>

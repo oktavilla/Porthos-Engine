@@ -18,6 +18,7 @@ class Admin::DataController < ApplicationController
     @parent.data << @datum
     if @page.save
       flash[:notice] = t(:saved, :scope => [:app, :admin_general])
+      @datum.send :propagate_self
     end
     respond_with(@datum, :location => admin_page_path(@page, :anchor => "datum_#{@datum.id}_edit"))
   end
@@ -44,10 +45,11 @@ class Admin::DataController < ApplicationController
   def destroy
     @datum = @parent.data.find(params[:id])
     @parent.data.delete_if { |d| d._id == @datum.id }
+    @datum.send :propagate_removal
     if @page.save
       flash[:notice] = t(:deleted, :scope => [:app, :admin_general])
     end
-    respond_with @content, :location => admin_page_path(@page, :location => "datum_#{@datum.id}")
+    respond_with @datum, :location => admin_page_path(@page, :location => "datum_#{@datum.id}")
   end
 
   def sort

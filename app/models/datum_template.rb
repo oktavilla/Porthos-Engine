@@ -4,6 +4,8 @@ class DatumTemplate
 
   validates_presence_of :label
 
+  # after_destroy :propagate_removal
+
   class << self
     def from_type(type, attributes = {})
       case type
@@ -41,6 +43,23 @@ class DatumTemplate
       hash[key] = value.duplicable? ? value.clone : value
       hash
     end
+  end
+
+private
+
+  def propagate_self
+    nil # overwrite in subclasses
+  end
+
+  def propagate_removal
+    pages = MongoMapper.database.collection('pages')
+    pages.update({
+      'page_template_id' => self._root_document.id
+    }, {
+      '$pull' => {
+        'data' => { 'handle' => self.handle }
+      }
+    }, :multi => false, :safe => true)
   end
 
 end

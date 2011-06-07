@@ -2,5 +2,5 @@
   <% if datum._parent_document.is_a?(ContentBlock) %>
   <%= hidden_field_tag 'parent_id', datum._parent_document.id %>
   <% end %>
-  <%= render :partial => 'admin/data/image_form', :locals => { :f => f, :datum => datum } %>
+  <%= render :partial => 'admin/data/asset_association_form', :locals => { :f => f, :datum => datum } %>
 <% end %>

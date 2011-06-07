@@ -1,6 +1,6 @@
 class ContentBlockTemplate < DatumTemplate
-  key :allow_images, Boolean, :default => lambda { false }
-  key :allow_pages, Boolean, :default => lambda { false }
+  key :allowed_asset_filetypes, Array, :default => lambda { [] }
+  key :allowed_page_template_ids, Array, :default => lambda { [] }
   key :allow_texts, Boolean, :default => lambda { false }
   key :content_templates_ids, Array, :typecast => 'ObjectId'
 

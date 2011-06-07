@@ -1,6 +1,6 @@
 class ContentBlock < Datum
-  key :allow_images, Boolean, :default => lambda { false }
-  key :allow_pages, Boolean, :default => lambda { false }
+  key :allowed_asset_filetypes, Array, :default => lambda { [] }
+  key :allowed_page_template_ids, Array, :default => lambda { [] }
   key :allow_texts, Boolean, :default => lambda { false }
   key :content_templates_ids, Array, :typecast => 'ObjectId'
 
@@ -12,6 +12,10 @@ class ContentBlock < Datum
   end
 
   before_save :sort_data
+
+  def allowed_page_templates
+    @allowed_page_templates ||= PageTemplate.find(allowed_page_template_ids)
+  end
 
   def pages
     @pages ||= data.active.find_all { |d| d.is_a?(PageAssociation) }.collect { |d| d.page }

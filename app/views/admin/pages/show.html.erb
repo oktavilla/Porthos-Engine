@@ -128,8 +128,8 @@
       <%= render :partial => 'field', :locals => { :datum => datum } %>
     <% elsif datum.is_a?(FieldSet) %>
       <%= render :partial => 'field_set', :locals => { :datum => datum } %>
-    <% elsif datum.is_a?(Image) %>
-      <%= render :partial => 'image', :locals => { :datum => datum } %>
+    <% elsif datum.is_a?(AssetAssociation) %>
+      <%= render :partial => 'asset_association', :locals => { :datum => datum } %>
     <% elsif datum.is_a?(PageAssociation) %>
       <%= render :partial => 'page_association', :locals => { :datum => datum } %>
     <% elsif datum.is_a?(ContentBlock) %>
@@ -147,17 +147,27 @@
             <% end %>
           </li>
           <% end %>
-          <% if datum.allow_pages? %>
-          <li>
-            <%= form_for [:admin, @page, PageAssociation.new], :as => :datum,  :url => admin_page_data_path(@page, :parent_id => datum, :type => 'PageAssociation') do |f| %>
-              <button type="submit"><%= PageAssociation.model_name.human %></button>
+          <% if datum.allowed_page_template_ids? %>
+            <% datum.allowed_page_templates.each do |page_template| %>
+              <li>
+              <%= form_for [:admin, @page, PageAssociation.new(:page_template_id => page_template.id)], :as => :datum,  :url => admin_page_data_path(@page, :parent_id => datum, :type => 'PageAssociation') do |f| %>
+                <%= f.hidden_field :page_template_id %>
+                <button type="submit"><%= t('.add_datum', :label => page_template.label) %></button>
+              <% end %>
+              </li>
             <% end %>
-          </li>
           <% end %>
-          <% if datum.allow_images? %>
-          <li>
-            <%= link_to Image.model_name.human, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => admin_page_data_path(@page, :parent_id => datum, :type => 'Image'), :method => 'post', :asset_field_name => 'datum[asset_id]' }) %>
-          </li>
+          <% if datum.allowed_asset_filetypes.any? %>
+            <% datum.allowed_asset_filetypes.each do |filetype| %>
+              <li>
+              <%= link_to t('.add_datum', :label => t(:"mongo_mapper.attributes.asset.filetypes.#{filetype}")),
+                          admin_assets_path(:by_filetype => [filetype],
+                            :create_callback =>
+                              { :path => admin_page_data_path(@page, :parent_id => datum, :type => 'AssetAssociation'),
+                                :method => 'post',
+                                :asset_field_name => 'datum[asset_id]' }) %>
+              </li>
+            <% end %>
           <% end %>
         <% datum.content_templates.each do |content_template| %>
           <li>
@@ -173,8 +183,8 @@
             <%= render :partial => 'field', :locals => { :datum => d } %>
           <% elsif d.is_a?(FieldSet) %>
             <%= render :partial => 'field_set', :locals => { :datum => d } %>
-          <% elsif d.is_a?(Image) %>
-            <%= render :partial => 'image', :locals => { :datum => d } %>
+          <% elsif d.is_a?(AssetAssociation) %>
+            <%= render :partial => 'asset_association', :locals => { :datum => d } %>
           <% elsif d.is_a?(PageAssociation) %>
             <%= render :partial => 'page_association', :locals => { :datum => d } %>
           <% end %>

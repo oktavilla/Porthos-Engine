@@ -1,10 +1,8 @@
-<div class="contains_input">
-  <%= f.check_box :allow_images %>
-  <%= f.label :allow_images %>
-</div>
-<div class="contains_input">
-  <%= f.check_box :allow_pages %>
-  <%= f.label :allow_pages %>
-</div>
+<%= f.label :allowed_asset_filetypes %>
+<%= f.select :allowed_asset_filetypes, Asset.filetypes.keys.collect { |filetype| [t(:"mongo_mapper.attributes.asset.filetypes.#{filetype}"), filetype] }, {}, :multiple => true %>
+
+<%= f.label :allowed_page_template_ids %>
+<%= f.select :allowed_page_template_ids, PageTemplate.all.collect { |ct| [ct.label, ct.id] }, {}, :multiple => true %>
+
 <%= f.label :content_templates_ids %>
 <%= f.select :content_templates_ids, ContentTemplate.all.collect { |ct| [ct.label, ct.id] }, {}, :multiple => true %>

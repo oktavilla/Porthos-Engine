@@ -1,0 +1,2 @@
+<%= f.label :allowed_asset_filetypes %>
+<%= f.select :allowed_asset_filetypes, Asset.filetypes.keys.collect { |filetype| [t(:"mongo_mapper.attributes.asset.filetypes.#{filetype}"), filetype] }, {}, :multiple => true %>

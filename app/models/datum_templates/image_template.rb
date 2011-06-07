@@ -1,2 +1,0 @@
-class ImageTemplate < DatumTemplate
-end

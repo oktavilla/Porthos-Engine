@@ -78,8 +78,6 @@ p.fieldset_help {margin-top:0;}
     margin-left:.5em;
     font-weight:normal; }
 
-label + .form_help {margin-top:-.3em;}
-
 .fullwidth {padding-right:10px;}
   .fullwidth input {width:100%;}
   .fullwidth textarea {width:100%;}

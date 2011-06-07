@@ -1,0 +1,5 @@
+<% datum.data.each do |d| %>
+  <div class="field_datum">
+    <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}", :locals => { :datum => d }%>
+  </div>
+<% end %>

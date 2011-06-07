@@ -1,0 +1,7 @@
+<% if datum.input_type == 'string' %>
+  <%= datum.allow_rich_text? ? datum.value.to_s.html_safe : simple_format(datum.value) %>
+<% elsif datum.input_type == 'date' %>
+  <%= datum.value.in_time_zone.strftime("%Y-%m-%d") if datum.value.present? %>
+<% elsif datum.input_type == 'boolean' %>
+  <%= datum.value? ? 'Ja' : 'Nej' %>
+<% end %>

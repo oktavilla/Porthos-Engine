@@ -161,6 +161,11 @@
         file_name: Filnamn
         author: Copyright
         description: Beskrivning
+        filetypes:
+          image: Bild
+          sound: Ljud
+          video: Video
+          document: Dokument 
       content_template:
         label: Namn
         description: Beskrivning
@@ -557,6 +562,7 @@
         not_published: Sidan är inte publicerad
         publish_now: Publicera
         add_content: Lägg till innehåll
+        add_datum: Lägg till %{label}
     content_templates:
       index:
         title: Innehållstyper

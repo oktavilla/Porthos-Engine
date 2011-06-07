@@ -35,6 +35,10 @@ class Asset
     where(:_type => type)
   }
 
+  scope :by_filetype, lambda { |filetype|
+    where(:filetype => filetype)
+  }
+
   scope :order_by, lambda { |order|
     sort(order)
   }
@@ -48,9 +52,15 @@ class Asset
   @@filetypes = {
     :image => %w(jpg jpeg png gif tiff tif),
     :video => %w(flv mov qt mpg avi mp4),
-    :sound => %w(mp3 wav aiff aif)
+    :sound => %w(mp3 wav aiff aif),
+    :document => []
   }
-  def self.default_filetype; 'document' end
+  def self.filetypes; @@filetypes end
+  def self.default_filetype
+    @@filetypes.keys.detect do |key|
+      @@filetypes[key].empty?
+    end.to_s
+  end
 
   def full_name
     @full_name ||= "#{name}.#{extension}"

@@ -6,6 +6,8 @@ class PageTemplate < Template
   key :allow_categories, Boolean, :default => lambda { false }
   key :allow_node_placements, Boolean, :default => lambda { false }
 
+  has_one :section
+
   def template
     @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default
   end

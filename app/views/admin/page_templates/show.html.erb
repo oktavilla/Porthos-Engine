@@ -30,6 +30,11 @@
         <button type="submit" class="new"><%=t '.add' %></button>
       </form>
     </div>
+    <% unless @page_template.section %>
+    <div class="add">
+      <%= link_to t('.add_section'), new_admin_page_path(:type => 'Section', :page_template_id => @page_template) %>
+    </div>
+    <% end %>
   </div>
   <div id="content">
     <% if @page_template.datum_templates.any? -%>

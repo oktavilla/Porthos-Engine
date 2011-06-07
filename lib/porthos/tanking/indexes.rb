@@ -24,6 +24,22 @@ module Porthos
         end
       end
 
+      module Section
+        def self.included(base)
+          base.send :include, ::Tanker
+
+          base.tankit Porthos.config.tanking.index_name do
+            indexes :title
+            indexes :uri
+            indexes :tag_names
+            indexes :data
+          end
+
+          base.after_save proc { |page| Rails.env.production? ? page.delay.update_tank_indexes : page.update_tank_indexes }
+          base.after_destroy proc { |page| Rails.env.production? ? page.delay.delete_tank_indexes : page.delete_tank_indexes }
+        end
+      end
+
       module Asset
         def self.included(base)
           base.send :include, ::Tanker

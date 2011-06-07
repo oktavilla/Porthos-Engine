@@ -7,7 +7,7 @@
 <% datum.data.each_with_index do |d, i| %>
   <%= fields_for 'datum[data_attributes][]', d, :index => i do |datum_fields| %>
     <%= datum_fields.hidden_field :id %>
-    <% unless d.is_a?(Image) %>
+    <% unless d.is_a?(AssetAssociation) %>
     <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}_form", :locals => { :datum => d, :f => datum_fields } %>
     <% end %>
   <% end %>

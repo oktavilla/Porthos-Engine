@@ -2,18 +2,27 @@ class ContentBlockTemplate < DatumTemplate
   key :allow_texts, Boolean, :default => lambda { false }
   key :allowed_asset_filetypes, Array, :default => lambda { [] }
   key :allowed_page_template_ids, Array, :typecast => 'ObjectId', :default => lambda { [] }
-  key :content_templates_ids, Array, :typecast => 'ObjectId'
+  key :content_templates_ids, Array, :typecast => 'ObjectId', :default => lambda { [] }
 
   many :content_templates, :in => :content_templates_ids
+
+  before_validation do
+    self.allowed_asset_filetypes = allowed_asset_filetypes.compact.reject { |i| i.blank? }
+    self.allowed_page_template_ids = allowed_page_template_ids.compact.reject { |i| i.blank? }
+    self.content_templates_ids = content_templates_ids.compact.reject { |i| i.blank? }
+  end
 
 private
 
   # FIXME: This should not run after sorting
   def propagate_changes
-    query_handle = self.handle #!handle_changed? ? handle : handle_was
+    query_handle = if respond_to?(:handle_changed?)
+      handle_changed? ? handle_was : handle
+    else
+      handle
+    end
 
-    pages = MongoMapper.database.collection('pages')
-    pages.update({
+    Page.collection.update({
       'page_template_id' => self._root_document.id,
       'data.handle' => query_handle,
     }, {
@@ -26,18 +35,17 @@ private
         'data.$.content_templates_ids' => self.content_templates_ids,
         'data.$.allow_texts' => self.allow_texts
       }
-    }, :multi => false, :safe => true)
+    }, :multi => true, :safe => true)
   end
 
   def propagate_self
-    pages = MongoMapper.database.collection('pages')
-    pages.update({
+    Page.collection.update({
       'page_template_id' => self._root_document.id
     }, {
       '$addToSet' => {
         'data' => ContentBlock.from_template(self).to_mongo
       }
-    }, :multi => false, :safe => true)
+    }, :multi => true, :safe => true)
   end
 
 end

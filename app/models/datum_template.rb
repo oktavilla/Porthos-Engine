@@ -4,7 +4,15 @@ class DatumTemplate
 
   validates_presence_of :label
 
-  # after_destroy :propagate_removal
+  after_destroy :propagate_removal
+
+  def destroy
+    run_callbacks(:destroy) { delete }
+  end
+
+  def delete
+    _root_document.pull(:datum_templates => { :_id => self.id })
+  end
 
   class << self
     def from_type(type, attributes = {})
@@ -46,6 +54,10 @@ class DatumTemplate
   end
 
 private
+
+  def propagate_changes
+    nil # overwrite in subclasses
+  end
 
   def propagate_self
     nil # overwrite in subclasses

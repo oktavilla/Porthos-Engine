@@ -32,9 +32,7 @@ class Admin::DatumTemplatesController < ApplicationController
 
   def destroy
     @datum_template = @template.datum_templates.find(params[:id])
-    @datum_template.send :propagate_removal
-    if @template.pull(:datum_templates => { :_id => @datum_template.id })
-      @datum_template.send :propagate_removal
+    if @datum_template.destroy
       flash[:notice] = "#{@datum_template.label}  #{t(:deleted, :scope => [:app, :admin_general])}"
     end
     respond_with @datum_template, :location => url_for(:controller => @template.class.to_s.tableize, :action => 'show', :id => @template.id.to_s)

@@ -27,6 +27,10 @@ class DatumTemplate
         type.constantize.new(attributes)
       end
     end
+
+    def propagate_changes_job(find_query, updates)
+      Page.collection.update(find_query, updates, :multi => true)
+    end
   end
 
   def to_datum
@@ -56,13 +60,15 @@ class DatumTemplate
 private
 
   def propagate_self
-    Page.collection.update({
+    [{
       'page_template_id' => self._root_document.id
     }, {
       '$addToSet' => {
         'data' => self.to_datum.to_mongo
       }
-    }, :multi => true, :safe => true)
+    }].tap do |_payload|
+      Rails.env.production? ? DatumTemplate.delay.propagate_changes_job(*_payload) : DatumTemplate.propagate_changes_job(*_payload)
+    end
   end
 
   def propagate_changes
@@ -72,22 +78,26 @@ private
       handle
     end
 
-    Page.collection.update({
+    [{
       'page_template_id' => self._root_document.id,
       'data.handle' => query_handle,
     }, {
       '$set' => shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) }
-    }, :multi => true)
+    }].tap do |_payload|
+      Rails.env.production? ? DatumTemplate.delay.propagate_changes_job(*_payload) : DatumTemplate.propagate_changes_job(*_payload)
+    end
   end
 
   def propagate_removal
-    Page.collection.update({
+    [{
       'page_template_id' => self._root_document.id
     }, {
       '$pull' => {
         'data' => { 'handle' => self.handle }
       }
-    }, :multi => true)
+    }].tap do |_payload|
+      Rails.env.production? ? DatumTemplate.delay.propagate_changes_job(*_payload) : DatumTemplate.propagate_changes_job(*_payload)
+    end
   end
 
 end

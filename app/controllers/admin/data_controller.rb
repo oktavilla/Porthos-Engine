@@ -47,7 +47,7 @@ class Admin::DataController < ApplicationController
     if @page.save
       flash[:notice] = t(:deleted, :scope => [:app, :admin_general])
     end
-    respond_with @content, :location => admin_page_path(@page, :location => "datum_#{@datum.id}")
+    respond_with @datum, :location => admin_page_path(@page, :location => "datum_#{@datum.id}")
   end
 
   def sort

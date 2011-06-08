@@ -7,6 +7,10 @@ module Porthos
 
     config.active_record.identity_map = true
 
+    rake_tasks do
+      load Porthos.root.join("lib/tasks/porthos_tasks.rake")
+    end
+
     initializer "porthos.redirects" do |app|
       app.middleware.use Porthos::Redirects
     end

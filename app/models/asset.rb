@@ -5,6 +5,7 @@ class Asset
   key :name, String
   key :extension, String
   key :mime_type, String
+  key :filetype, String
   key :size, Integer
   key :title, String
   key :author, String
@@ -34,6 +35,10 @@ class Asset
     where(:_type => type)
   }
 
+  scope :by_filetype, lambda { |filetype|
+    where(:filetype => filetype)
+  }
+
   scope :order_by, lambda { |order|
     sort(order)
   }
@@ -43,11 +48,19 @@ class Asset
 
   before_validation :process, :if => :new_record?
   after_destroy :cleanup
-#  after_save :commit_to_sunspot, :if => Rails.application.config.use_fulltext_search
 
-  IMAGE_FORMATS = [:jpg, :jpeg, :png, :gif, :tiff, :tif]
-  VIDEO_FORMATS = [:flv, :mov, :qt, :mpg, :avi, :mp4]
-  SOUND_FORMATS = [:mp3, :wav, :aiff, :aif]
+  @@filetypes = {
+    :image => %w(jpg jpeg png gif tiff tif),
+    :video => %w(flv mov qt mpg avi mp4),
+    :sound => %w(mp3 wav aiff aif),
+    :document => []
+  }
+  def self.filetypes; @@filetypes end
+  def self.default_filetype
+    @@filetypes.keys.detect do |key|
+      @@filetypes[key].empty?
+    end.to_s
+  end
 
   def full_name
     @full_name ||= "#{name}.#{extension}"
@@ -68,12 +81,18 @@ class Asset
 
     def from_upload(attrs)
       extension = File.extname(attrs[:file].original_filename.downcase).gsub(/\./,'')
-      if IMAGE_FORMATS.include?(extension.to_sym)
+      if @@filetypes[:image].include?(extension)
         klass = ImageAsset
       else
         klass = Asset
       end
       klass.new(attrs)
+    end
+
+    def filetype_for_extension(_extension)
+      Asset.default_filetype.tap do |_filetype|
+        @@filetypes.each { |key, extensions| _filetype.replace(key.to_s) and break if extensions.include?(_extension) }
+      end
     end
   end
 
@@ -94,6 +113,7 @@ protected
       self.name    = original_filename.parameterize.to_s
       self.title   = original_filename
     end
+    self.filetype = Asset.filetype_for_extension(extension)
   end
 
   def ensure_unique_name
@@ -113,10 +133,5 @@ protected
   def cleanup
     Porthos.s3_storage.destroy(full_name)
   end
-
-  # after save
-  # def commit_to_sunspot
-  #   Delayed::Job.enqueue SunspotIndexJob.new('Asset', self.id)
-  # end
 end
 

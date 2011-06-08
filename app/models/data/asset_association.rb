@@ -1,7 +1,8 @@
-class Image < Datum
+class AssetAssociation < Datum
   key :title, String
   key :description
   key :asset_id, ObjectId
+  key :allowed_asset_filetypes, Array, :default => lambda { [] }
   belongs_to :asset
 
   before_save :dup_asset_attributes

@@ -128,7 +128,7 @@
     <%= link_to t('.date_field'), new_admin_page_datum_path(@page, datum: { input_type: 'date' }, type: 'Field') %>
     <%= link_to t('.boolean_field'), new_admin_page_datum_path(@page, datum: { input_type: 'boolean' }, type: 'Field') %>
     <%= link_to PageAssociation.model_name.human, new_admin_page_datum_path(@page, type: 'PageAssociation') %>
-    <%= link_to Image.model_name.human, admin_assets_path(by_type: 'ImageAsset', create_callback: { path: admin_page_data_path(@page, type: 'Image'), method: 'post', asset_field_name: 'datum[asset_id]' }) %>
+    <%= link_to AssetAssociation.model_name.human, admin_assets_path(create_callback: { path: admin_page_data_path(@page, type: 'AssetAssociation'), method: 'post', asset_field_name: 'datum[asset_id]' }) %>
     <%= link_to ContentBlock.model_name.human, new_admin_page_datum_path(@page, type: 'ContentBlock') %>
     <% ContentTemplate.all.each do |content_template| %>
       <%= link_to content_template.label, new_admin_page_datum_path(@page, :type => 'FieldSet', :template_id => content_template) %>
@@ -146,7 +146,7 @@
         <div class="viewable">
           <%= render :partial => "admin/data/#{(datum.is_a?(StringField) ? 'field' : datum.class.to_s.underscore)}", :locals => { :datum => datum }%>
         </div>
-        <% unless datum.is_a?(Image) %>
+        <% unless datum.is_a?(AssetAssociation) %>
         <div class="editable">
           <%= form_for [:admin, @page, datum], :as => :datum, :url => admin_page_datum_path(@page, datum), :html => { :id => "datum_#{datum.id}_edit" } do |f| %>
             <%= render :partial => "admin/data/#{(datum.is_a?(StringField) ? 'field' : datum.class.to_s.underscore)}_form", :locals => { :datum => datum, :f => f }%>
@@ -172,17 +172,27 @@
             <% end %>
           </li>
           <% end %>
-          <% if datum.allow_pages? %>
-          <li>
-            <%= form_for [:admin, @page, PageAssociation.new], :as => :datum,  :url => admin_page_data_path(@page, :parent_id => datum, :type => 'PageAssociation') do |f| %>
-              <button type="submit"><%= PageAssociation.model_name.human %></button>
+          <% if datum.allowed_page_template_ids? %>
+            <% datum.allowed_page_templates.each do |page_template| %>
+              <li>
+              <%= form_for [:admin, @page, PageAssociation.new(:page_template_id => page_template.id)], :as => :datum,  :url => admin_page_data_path(@page, :parent_id => datum, :type => 'PageAssociation') do |f| %>
+                <%= f.hidden_field :page_template_id %>
+                <button type="submit"><%= t('.add_datum', :label => page_template.label) %></button>
+              <% end %>
+              </li>
             <% end %>
-          </li>
           <% end %>
-          <% if datum.allow_images? %>
-          <li>
-            <%= link_to Image.model_name.human, admin_assets_path(:by_type => 'ImageAsset', :create_callback => { :path => admin_page_data_path(@page, :parent_id => datum, :type => 'Image'), :method => 'post', :asset_field_name => 'datum[asset_id]' }) %>
-          </li>
+          <% if datum.allowed_asset_filetypes.any? %>
+            <% datum.allowed_asset_filetypes.each do |filetype| %>
+              <li>
+              <%= link_to t('.add_datum', :label => t(:"mongo_mapper.attributes.asset.filetypes.#{filetype}")),
+                          admin_assets_path(:by_filetype => [filetype],
+                            :create_callback =>
+                              { :path => admin_page_data_path(@page, :parent_id => datum, :type => 'AssetAssociation'),
+                                :method => 'post',
+                                :asset_field_name => 'datum[asset_id]' }) %>
+              </li>
+            <% end %>
           <% end %>
         <% datum.content_templates.each do |content_template| %>
           <li>
@@ -202,7 +212,7 @@
             <div class="viewable">
               <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}", :locals => { :datum => d }%>
             </div>
-            <% unless d.is_a?(Image) %>
+            <% unless d.is_a?(AssetAssociation) %>
             <div class="editable">
               <%= form_for [:admin, @page, d], :as => :datum, :url => admin_page_datum_path(@page, d), :html => { :id => "datum_#{d.id}_edit" } do |f| %>
                 <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}_form", :locals => { :datum => d, :f => f }%>

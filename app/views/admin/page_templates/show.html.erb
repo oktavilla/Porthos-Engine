@@ -26,7 +26,7 @@
     </div>
     <div class="add">
       <form action="<%= new_admin_template_datum_template_path(@page_template) %>">
-        <%= select_tag 'template_type', options_for_select(%w(ImageTemplate PageAssociationTemplate FieldSetTemplate ContentBlockTemplate).collect { |type| [t(".#{type}"), type] }) %>
+        <%= select_tag 'template_type', options_for_select(%w(AssetAssociationTemplate PageAssociationTemplate FieldSetTemplate ContentBlockTemplate).collect { |type| [t(".#{type}"), type] }) %>
         <button type="submit" class="new"><%=t '.add' %></button>
       </form>
     </div>

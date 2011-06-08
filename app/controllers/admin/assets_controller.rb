@@ -13,6 +13,7 @@ class Admin::AssetsController < ApplicationController
   has_scope :is_hidden, :default => false
   has_scope :created_by
   has_scope :by_type
+  has_scope :by_filetype, :type => :array
   has_scope :order_by, :default => 'created_at DESC'
 
   def index

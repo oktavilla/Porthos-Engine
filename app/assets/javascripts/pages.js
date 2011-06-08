@@ -6,11 +6,11 @@
           $content = $('#content'),
           $sortables = $content.find('ul.sortable');
 
-      $content.find('.datum .controls').not('.datum.image .controls').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
+      $content.find('.datum .controls').not('.datum.asset_association .controls').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
       $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
       $content.delegate('a.change, a.cancel', 'click', function(event) {
         event.preventDefault();
-        $(this).parents('.datum, div.image').find('div.editable, div.viewable, div.edit').toggle();
+        $(this).parents('.datum, div.asset_association').find('div.editable, div.viewable, div.edit').toggle();
       });
       if (window.location.hash.match(/\_edit/)) {
         $(window.location.hash.replace(/\_edit/, '')).each(function() {

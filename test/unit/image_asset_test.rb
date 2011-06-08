@@ -12,6 +12,10 @@ class ImageAssetTest < ActiveSupport::TestCase
       @image_asset = Factory.create(:image_asset, :file => new_tempfile('image'))
     end
 
+    should 'set correct file type' do
+      assert_equal 'image', @image_asset.filetype
+    end
+
     should 'return its original path' do
       assert @image_asset.remote_url.include?("/assets/1.jpg?size=original&token=")
     end

@@ -4,6 +4,16 @@ class DatumTemplate
 
   validates_presence_of :label
 
+  after_destroy :propagate_removal
+
+  def destroy
+    run_callbacks(:destroy) { delete }
+  end
+
+  def delete
+    _root_document.pull(:datum_templates => { :_id => self.id })
+  end
+
   class << self
     def from_type(type, attributes = {})
       case type
@@ -41,6 +51,43 @@ class DatumTemplate
       hash[key] = value.duplicable? ? value.clone : value
       hash
     end
+  end
+
+private
+
+  def propagate_self
+    Page.collection.update({
+      'page_template_id' => self._root_document.id
+    }, {
+      '$addToSet' => {
+        'data' => self.to_datum.to_mongo
+      }
+    }, :multi => true, :safe => true)
+  end
+
+  def propagate_changes
+    query_handle = if respond_to?(:handle_changed?)
+      handle_changed? ? handle_was : handle
+    else
+      handle
+    end
+
+    Page.collection.update({
+      'page_template_id' => self._root_document.id,
+      'data.handle' => query_handle,
+    }, {
+      '$set' => shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) }
+    }, :multi => true)
+  end
+
+  def propagate_removal
+    Page.collection.update({
+      'page_template_id' => self._root_document.id
+    }, {
+      '$pull' => {
+        'data' => { 'handle' => self.handle }
+      }
+    }, :multi => true)
   end
 
 end

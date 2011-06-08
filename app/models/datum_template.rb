@@ -55,23 +55,39 @@ class DatumTemplate
 
 private
 
-  def propagate_changes
-    nil # overwrite in subclasses
+  def propagate_self
+    Page.collection.update({
+      'page_template_id' => self._root_document.id
+    }, {
+      '$addToSet' => {
+        'data' => self.to_datum.to_mongo
+      }
+    }, :multi => true, :safe => true)
   end
 
-  def propagate_self
-    nil # overwrite in subclasses
+  def propagate_changes
+    query_handle = if respond_to?(:handle_changed?)
+      handle_changed? ? handle_was : handle
+    else
+      handle
+    end
+
+    Page.collection.update({
+      'page_template_id' => self._root_document.id,
+      'data.handle' => query_handle,
+    }, {
+      '$set' => shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) }
+    }, :multi => true)
   end
 
   def propagate_removal
-    pages = MongoMapper.database.collection('pages')
-    pages.update({
+    Page.collection.update({
       'page_template_id' => self._root_document.id
     }, {
       '$pull' => {
         'data' => { 'handle' => self.handle }
       }
-    }, :multi => false, :safe => true)
+    }, :multi => true)
   end
 
 end

@@ -5,6 +5,7 @@ module Porthos
       controller.send :include, ClassMethods
       controller.send :helper_method, :root_node, :root_nodes, :node, :nodes
       controller.send :helper_method, :trail, :breadcrumbs
+      controller.send :layout, 'public'
     end
 
     module ClassMethods

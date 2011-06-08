@@ -21,10 +21,6 @@ class ContentBlock < Datum
     @pages ||= data.active.find_all { |d| d.is_a?(PageAssociation) }.collect { |d| d.page }
   end
 
-  def images
-    @images ||= data.active.find_all { |d| d.is_a?(Image) }
-  end
-
   def texts
     @texts ||= data.active.find_all { |d| d.is_a?(StringField) }
   end

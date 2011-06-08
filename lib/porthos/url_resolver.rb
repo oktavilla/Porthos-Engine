@@ -19,6 +19,7 @@ module RoutingFilter
 
         if node
           mapping_params = { :controller => node.controller, :action => node.action }
+          mapping_params[:page_template_id] = node.page_template_id if node.page_template_id.present?
           mapping_params[:id] = node.resource_id if node.resource_id.present?
           path.replace('/' + mapping_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
           custom_params[:node] = {

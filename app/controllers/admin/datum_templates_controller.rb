@@ -24,7 +24,7 @@ class Admin::DatumTemplatesController < ApplicationController
   def update
     @datum_template = @template.datum_templates.find(params[:id])
     if @datum_template.update_attributes(params[:datum_template])
-      @datum_template.send :propagate_changes
+      @datum_template.send :propagate_updates
       flash[:notice] = "#{@datum_template.label} #{t(:saved, :scope => [:app, :admin_general])}"
     end
     respond_with @datum_template, :location => url_for(:controller => @template.class.to_s.tableize, :action => 'show', :id => @template.id.to_s)

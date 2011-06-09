@@ -27,6 +27,14 @@ class DatumTemplate
         type.constantize.new(attributes)
       end
     end
+
+    def propagate_change(change_method, critera, updates)
+      if ::Rails.env.production?
+        Page.delay.send(change_method, critera, updates)
+      else
+        Page.send(change_method, critera, updates)
+      end
+    end
   end
 
   def to_datum
@@ -56,38 +64,25 @@ class DatumTemplate
 private
 
   def propagate_self
-    Page.collection.update({
-      'page_template_id' => self._root_document.id
-    }, {
-      '$addToSet' => {
-        'data' => self.to_datum.to_mongo
-      }
-    }, :multi => true, :safe => true)
+    DatumTemplate.propagate_change(:add_to_set,
+      { 'page_template_id' => self._root_document.id },
+      { 'data'=> self.to_datum.to_mongo})
   end
 
-  def propagate_changes
-    query_handle = if respond_to?(:handle_changed?)
-      handle_changed? ? handle_was : handle
-    else
+  def propagate_updates
+    query_handle = respond_to?(:handle_changed?) ?
+      (handle_changed? ? handle_was : handle) :
       handle
-    end
-
-    Page.collection.update({
-      'page_template_id' => self._root_document.id,
-      'data.handle' => query_handle,
-    }, {
-      '$set' => shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) }
-    }, :multi => true)
+    DatumTemplate.propagate_change(:set,
+      { 'page_template_id' => self._root_document.id,
+        'data.handle' => query_handle },
+      shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) })
   end
 
   def propagate_removal
-    Page.collection.update({
-      'page_template_id' => self._root_document.id
-    }, {
-      '$pull' => {
-        'data' => { 'handle' => self.handle }
-      }
-    }, :multi => true)
+    DatumTemplate.propagate_change(:pull,
+      { 'page_template_id' => self._root_document.id },
+      { 'data' => { 'handle' => self.handle }})
   end
 
 end

@@ -54,7 +54,7 @@ class Admin::DataController < ApplicationController
     if params[:datum]
       params[:datum].each_with_index do |id, i|
         @parent.data.detect { |c| c.id.to_s == id }.tap do |datum|
-          datum.position = i+1
+          datum.position = i+1 if datum
         end
       end
       @page.save

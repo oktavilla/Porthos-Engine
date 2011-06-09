@@ -214,7 +214,7 @@
             </div>
             <% unless d.is_a?(AssetAssociation) %>
             <div class="editable">
-              <%= form_for [:admin, @page, d], :as => :datum, :url => admin_page_datum_path(@page, d), :html => { :id => "datum_#{d.id}_edit" } do |f| %>
+              <%= form_for [:admin, @page, d], :as => :datum, :url => admin_page_datum_path(@page, d, :parent_id => datum), :html => { :id => "datum_#{d.id}_edit" } do |f| %>
                 <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}_form", :locals => { :datum => d, :f => f }%>
                 <div class="submit">
                   <%= f.submit t(:save) %>

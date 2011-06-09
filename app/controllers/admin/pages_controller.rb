@@ -20,9 +20,7 @@ class Admin::PagesController < ApplicationController
     else
       Page.tagged_with(@current_tags).sort(:updated_at.desc)
     end
-    respond_to do |format|
-      format.html
-    end
+    respond_with(@pages)
   end
 
   def search
@@ -31,19 +29,12 @@ class Admin::PagesController < ApplicationController
     per_page = params[:per_page] ? params[:per_page].to_i : 45
     @pages = Page.search_tank(@query, :per_page => per_page, :page => page)
     @page_templates = PageTemplate.all
-    respond_to do |format|
-      format.html
-    end
+    respond_with(@pages)
   end
 
   def show
     @page = Page.find(params[:id])
-    # if @page.node and @page.node.parent
-    #   cookies[:last_opened_node] = { :value => @page.node.parent.id.to_s, :expires => 1.week.from_now }
-    # end
-    respond_to do |format|
-      format.html
-    end
+    respond_with(@page)
   end
 
   def new
@@ -62,24 +53,17 @@ class Admin::PagesController < ApplicationController
 
   def update
     @page = Page.find(params[:id])
-    respond_to do |format|
-      if @page.update_attributes(params[:page])
-        @page.reload
-        flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
-        format.html { redirect_to params[:return_to] || admin_page_path(@page.id) }
-      else
-        format.html { render :action => 'show' }
-      end
+    if @page.update_attributes(params[:page])
+      flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
     end
+    respond_with(@page, :location => (redirect_to params[:return_to] || admin_page_path(@page.id)))
   end
 
   def destroy
     @page = Page.find(params[:id])
     @page.destroy
-    respond_to do |format|
-      flash[:notice] = "#{@page.title} #{t(:deleted, :scope => [:app, :admin_general])}"
-      format.html { redirect_to admin_pages_path }
-    end
+    flash[:notice] = "#{@page.title} #{t(:deleted, :scope => [:app, :admin_general])}"
+    respond_with @page, :location => admin_pages_path(:with_page_template => @page.page_template_id)
   end
 
   def publish
@@ -99,12 +83,7 @@ class Admin::PagesController < ApplicationController
   def sort
     timestamp = Time.now
     params[:page].each_with_index do |id, i|
-      Page.update_all({
-        :first => (i == 0),
-        :next_id => params[:page][i+1],
-        :position => i+1,
-        :updated_at => timestamp
-      }, ["id = ?", id])
+      Page.update(id, :position => i+1)
     end
     respond_to do |format|
       format.js { render :nothing => true }

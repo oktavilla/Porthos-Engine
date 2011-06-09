@@ -6,17 +6,13 @@ class PageFileTemplate
   attr_reader :name,
               :handle,
               :path,
-              :full_path,
-              :settings
+              :full_path
 
   def initialize(name)
     @full_path = self.class.available_template_paths[name]
     @path = @full_path.gsub(/(.*)app\/views\//,'')
-    @template_file = File.join(@full_path, 'template.yml')
-    raise "Template not found (template.yml missing from #{@path})" unless File.exists?(@template_file)
     @handle = name
-    @settings = YAML::load(File.read(@template_file))
-    @name = settings['name']
+    @name = @handle.capitalize
     require File.join(@full_path, "#{@handle}_renderer")
   end
 
@@ -69,15 +65,6 @@ class PageFileTemplate
     end
 
   end
-
-  def respond_to?(*args)
-    super(*args) || !settings[args.first.to_s].blank?
-  end
-
-  def method_missing_with_settings(method, *args)
-    settings[method.to_s] || method_missing_without_settings(method, *args)
-  end
-  alias_method_chain :method_missing, :settings
 
   class Views
     include Enumerable

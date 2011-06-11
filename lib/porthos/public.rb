@@ -15,10 +15,6 @@ module Porthos
         raise ActiveRecord::RecordNotFound if trail.detect { |n| n.inactive? }
       end
 
-      def porthos_session_id
-        session[:porthos_id] ||= CGI::Session.generate_unique_id
-      end
-
     protected
 
       def root_node
@@ -40,10 +36,6 @@ module Porthos
         else
           []
         end
-      end
-
-      def porthos_session_id
-        session[:porthos_id] ||= ActiveSupport::SecureRandom.hex
       end
 
       def node_ancestors

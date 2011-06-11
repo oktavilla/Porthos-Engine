@@ -4,15 +4,15 @@ class DatumTest < ActiveSupport::TestCase
 
   test 'uniqueness of handle within collection' do
     parent = Factory.build(:page, :data => [])
-    Factory.build(:field, :handle => 'le_handle').tap do |datum|
-      parent.fields << datum
-      assert datum.valid?
+    Factory.build(:string_field, :handle => 'le_handle').tap do |datum|
+      parent.data << datum
+      assert datum.valid?, "datum should be valid"
     end
 
-    Factory.build(:field, :handle => 'le_handle').tap do |datum|
-      parent.fields << datum
-      assert !datum.valid?
-      assert_not_nil datum.errors.on(:handle)
+    Factory.build(:string_field, :handle => 'le_handle').tap do |datum|
+      parent.data << datum
+      assert !datum.valid?, "datum should not be valid"
+      assert_not_nil datum.errors[:handle], "should have error on handle"
     end
   end
 

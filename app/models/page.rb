@@ -28,7 +28,7 @@ class Page
   validates_presence_of :title
 
   before_create :set_created_by
-  before_update :set_updated_by
+  before_save :set_updated_by
   before_save :sort_data
 
   before_validation do

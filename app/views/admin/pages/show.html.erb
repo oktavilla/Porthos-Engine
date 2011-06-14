@@ -136,7 +136,7 @@
   </div>
   <% end %>
   <div id="content" class="datums">
-  <% @page.data.each_with_index do |datum, index| %>
+  <% (@page.is_a?(Section) ? @page.data : @page.data.sort_by { |d| @page.page_template.datum_templates[d.handle].position }).each_with_index do |datum, index| %>
     <div id="datum_<%= datum.id %>" class="<%= "datum " unless datum.is_a?(ContentBlock) %><%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
     <% unless datum.is_a?(ContentBlock) %>
       <div class="controls">

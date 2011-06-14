@@ -118,7 +118,7 @@ protected
 
   def ensure_unique_name
     while !Asset.where(:name => self.name).count.zero? do
-      self.name = "#{self.name}_#{ActiveSupport::SecureRandom.hex(8)}"
+      self.name = "#{self.name}_#{SecureRandom.hex(8)}"
     end
   end
 

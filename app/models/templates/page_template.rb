@@ -8,6 +8,10 @@ class PageTemplate < Template
 
   has_one :section
 
+  validates_uniqueness_of :handle,
+                          :case_sensitive => false,
+                          :allow_blank => true
+
   def template
     @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default
   end

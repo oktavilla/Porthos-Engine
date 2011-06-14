@@ -31,6 +31,10 @@ class Page
   before_update :set_updated_by
   before_save :sort_data
 
+  before_validation do
+    self.title.strip! if title.present?
+  end
+
   acts_as_uri :title,
               :target => :uri,
               :only_when_blank => true,

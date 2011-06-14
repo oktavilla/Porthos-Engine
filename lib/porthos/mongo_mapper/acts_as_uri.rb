@@ -27,7 +27,7 @@ module Porthos
               validate :uniqueness_of_uri_among_siblings
             else
               validation_options = {
-                :case_sensitive => true,
+                :case_sensitive => false,
                 :allow_nil => true
               }
               validation_options[:scope] = acts_as_uri_options[:scope] if acts_as_uri_options[:scope]

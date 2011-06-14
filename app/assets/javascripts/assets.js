@@ -27,6 +27,14 @@
         minCharLimit: 3,
         source: '/admin/tags?taggable=Asset'
       });
+
+      $('#content').delegate('ul.items img', 'click', function(event) {
+        if (event.target.nodeName !== 'IMG') { return; }
+        event.preventDefault();
+        $(event.currentTarget).parents('li').find('form').trigger('submit');
+      }).delegate('ul.items img', 'hover', function(event) {
+        $(event.currentTarget).parents('li').toggleClass('over');
+      });
     };
     return {
       init: function() {

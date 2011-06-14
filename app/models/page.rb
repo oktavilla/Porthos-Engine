@@ -27,7 +27,14 @@ class Page
 
   validates_presence_of :title
 
+  before_create :set_created_by
+  before_update :set_updated_by
   before_save :sort_data
+
+  acts_as_uri :title,
+              :target => :uri,
+              :only_when_blank => true,
+              :scope => :page_template_id
 
   class << self
 
@@ -105,13 +112,6 @@ class Page
     end
   }
 
-  before_create :set_created_by
-  before_save   :generate_uri
-  before_update :set_updated_by
-
-  #after_initialize :create_namespaced_tagging_methods
-  # after_save :commit_to_sunspot
-
   def published_on_parts
     @published_on_parts ||= {
       :year => published_on.strftime("%Y"),
@@ -167,10 +167,6 @@ private
 
   def sort_data
     self.data.sort_by!(&:position)
-  end
-
-  def generate_uri
-    self.uri = title.parameterize unless uri.present?
   end
 
   def set_created_by

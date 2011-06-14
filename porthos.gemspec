@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'resizor'
   s.add_dependency 'kaminari'
   s.add_dependency 'tanker'
+  s.add_dependency 'stringex'
 
   # Dev dependencies
   s.add_development_dependency 'sqlite3'

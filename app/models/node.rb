@@ -79,7 +79,7 @@ private
   # before save
   def generate_url
     if parent
-      self.url = !parent.parent_id.blank? ? [parent.url, name.parameterize.to_s].join('/') : name.parameterize.to_s
+      self.url = !parent.parent_id.blank? ? [parent.url, name.to_s.to_url].join('/') : name.to_s.to_url
     end
   end
 

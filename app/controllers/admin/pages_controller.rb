@@ -56,7 +56,7 @@ class Admin::PagesController < ApplicationController
     if @page.update_attributes(params[:page])
       flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
     end
-    respond_with(@page, :location => (redirect_to params[:return_to] || admin_page_path(@page.id)))
+    respond_with @page, :location => (params[:return_to] || admin_page_path(@page.id))
   end
 
   def destroy

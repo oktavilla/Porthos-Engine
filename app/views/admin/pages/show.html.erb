@@ -13,7 +13,7 @@
       <%= link_to t('.publish_now'), publish_admin_page_path(@page.id), :method => :put, :class => 'new' %></p>
     <% end %>
     </div>
-    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_page_path(@page), :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field :published_on, :value => (@page.published_on.present? ? @page.published_on.in_time_zone.to_date : nil), :class => 'date', :placeholder => 'År-Månad-Dag' %>
         <div class="submit">

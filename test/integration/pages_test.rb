@@ -8,11 +8,10 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'rendering a index node by url' do
-    _page = create_page(:data => [ Factory.build(:string_field, :handle => 'description', :value => 'Lorem ipsum')])
-    _page2 = create_page(:title => 'Spiderman', :data => [ Factory.build(:string_field, :handle => 'description', :value => 'Some other text')])
-    node = Factory(:node,
-                   :url => 'posts',
-                   :page_template => @page_template)
+    page1 = create_page(:data => [ Factory.build(:string_field, :handle => 'description', :value => 'Lorem ipsum')])
+    page2 = create_page(:title => 'Spiderman', :data => [ Factory.build(:string_field, :handle => 'description', :value => 'Some other text')])
+
+    node = Factory(:node, :url => 'posts', :page_template => @page_template)
 
     visit '/posts'
 
@@ -21,22 +20,23 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'rendering a page by url' do
-    _page = create_page(:data => [ Factory.build(:string_field, :handle => 'description', :value => 'Lorem ipsum')])
-    node = Factory(:node,
-                   :url => 'my-page',
-                   :action => 'show',
-                   :resource_type => 'Page',
-                   :resource_id => _page.id)
+    _page = create_page
+    node = Factory(:node, {
+      :url => 'my-page',
+      :action => 'show',
+      :resource_type => 'Page',
+      :resource_id => _page.id
+    })
 
-    visit 'my-page'
+    visit '/my-page'
 
-    assert page.find('body').has_content?('Lorem ipsum'), 'Should see description content'
+    assert page.has_content?(_page.title), 'Should see the page title'
   end
 
 private
+
   def create_page(options = {})
-    page = Page.from_template(@page_template, { :title => 'Batman', :uri => 'batman', :published_on => (Time.now-3600) }.merge(options))
-    page.save
-    page
+    Page.create_from_template(@page_template, { :title => 'Batman', :published_on => (Time.now-3600) }.merge(options))
   end
+
 end

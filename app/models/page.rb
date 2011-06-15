@@ -134,10 +134,6 @@ class Page
     published_on.present? && published_on <= DateTime.now
   end
 
-  def full_uri
-    # @full_uri ||= node ? node.url : (index_node ? [index_node.url, to_param].join('/') : uri)
-  end
-
   def category
     @category ||= page_template.allow_categories? ? Page.tags_by_count(:namespace => page_template.handle).first : nil
   end

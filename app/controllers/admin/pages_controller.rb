@@ -10,7 +10,7 @@ class Admin::PagesController < ApplicationController
 
   def index
     @page_templates = PageTemplate.sort(:position).all
-    @page_template = PageTemplate.find(params[:with_field_set]) if params[:with_field_set].present?
+    @page_template = PageTemplate.find(params[:with_page_template]) if params[:with_page_template].present?
 
     @tags = Page.tags_by_count(:limit => 30)
     @current_tags = params[:tags] || []

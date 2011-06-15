@@ -57,9 +57,9 @@
           </td>
           <td class="status">
             <% if page.published? %>
-            <span class="status published"><%= Page.human_attribute_name(:published) %></span>
+            <span class="status published"><%= t(:published) %></span>
             <% else %>
-            <span class="status unpublished"><%= Page.human_attribute_name(:unpublished) %></span>
+            <span class="status unpublished"><%= t(:unpublished) %></span>
             <% end %>
           </td>
         </tr>

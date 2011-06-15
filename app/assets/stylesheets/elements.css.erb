@@ -32,24 +32,23 @@ a img { border:none; }
 a:focus { outline:none }
 p {}
 
+.tablewrap {margin:0 -20px 10px -20px;}
+
 table {
   width:100%;
-  margin-bottom:10px;
-  border-collapse:collapse;
-  font-size:12px; }
+  border-collapse:collapse; }
   th,
   td {
     vertical-align:top;
     text-align:left;
-    padding:7px 10px; }
+    padding:10px 20px; }
   th {
-    background:rgba(55, 128, 199, 0.046875);
-    font-weight:bold; }
-  td {}
-  tr:nth-child(odd) td {
-    background:rgb(248, 249, 249); }
-  tr:hover td {
-    background:rgba(55, 128, 199, 0.046875); }
+    font-size:.857142857em;
+    color:#000; }
+  td {
+    border-top:1px solid #f2f2f2; 
+    border-bottom:1px solid #f2f2f2;
+    font-size:13px; }
   tr .num { text-align:right; }
   th,
   tr .num,
@@ -63,15 +62,10 @@ code {font-size:12px;}
 
 
 .drag_handle {
-  position:absolute;
   display:block;
-  top:0px;
-  left:0px;
   cursor:move;
   height:25px;
-  width:25px;
-  background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -792px no-repeat;
-	display:none; }
+  background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -792px no-repeat; }
 
 .pagination {
   text-align:center;
@@ -295,37 +289,43 @@ ul.tags.alphabetical {
     top:5px;
     right:5px;}
   .ui-datepicker-title {text-align:center;}
+
 ul.sortable {margin-left:-25px;}
   ul.sortable .drag_handle {display:none;}
   ul.sortable li {
     padding-left:25px;
-    position:relative;}
+    position:relative; }
   ul.sortable li:hover .drag_handle {
     display:block;
     top:4px;
     left:0; }
 
 table.sortable {
-  margin-left:-40px; }
-  table.sortable th.placeholder {
+  margin-left:-30px; }
+  table.sortable .sort {
     padding:0;
-    width:40px;
-    background:transparent;  }
-  table.sortable tbody tr {
-    width:100%; }
-  table.sortable tr:nth-child(odd) td.handle,
-  table.sortable td.handle,
-  table.sortable tr:hover td.handle {
-    padding:0;
-    text-align:center;
-    width:40px;
-    background:transparent;
-    cursor:pointer;}
-  table.sortable tr .drag_handle {display:none;}
-  table.sortable tr:hover .drag_handle {
-    position:relative;
-    display:block;
-    margin-left:15px;
-    margin-top:1px; }
+    width:30px; }
+  table.sortable .sort + th,
+  table.sortable .sort + td {
+    padding-left:0; }
+    table.sortable tr td.sort .drag_handle {
+      width:25px;
+      margin-top:5px;
+      margin-left:3px;
+      display:none; }
+    table.sortable tr:hover td.sort .drag_handle {
+      display:inline-block; }
 
 table td.instructions {width:25%;}
+
+span.status {
+  line-height:1;
+  padding:3px 4px 2px 4px;
+  color:#fff;
+  text-transform:uppercase;
+  font-size:9px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px; }
+  .status.published {background:green;}
+  .status.unpublished {background:#d00;}

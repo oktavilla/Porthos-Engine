@@ -40,10 +40,12 @@
         <tr>
           <td class="content">
             <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
-            <% unless page.full_uri.blank? -%>
-              <% page_path(:field_set_id => page.field_set_id, :id => page.uri) %>
+            <% if page.published? -%>
+              <% page_path(:id => page.uri, :page_template_id => page.page_template_id).tap do |uri| %>
+                <%= link_to uri, uri %>
+              <% end %>
             <% end -%>
-            <% if page.tags.any? -%>
+            <% if page.tags && page.tags.any? -%>
             <div class="tags"><%= page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => [tag.name]))}.join(', ').html_safe %></div>
             <% end -%>
           </td>

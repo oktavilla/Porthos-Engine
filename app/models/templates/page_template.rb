@@ -6,6 +6,7 @@ class PageTemplate < Template
   key :allow_categories, Boolean, :default => lambda { false }
   key :allow_node_placements, Boolean, :default => lambda { false }
 
+  validates_presence_of :handle
   has_one :section
 
   def template

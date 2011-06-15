@@ -14,11 +14,10 @@ class Admin::PagesController < ApplicationController
 
     @tags = Page.tags_by_count(:limit => 30)
     @current_tags = params[:tags] || []
-
     @pages = unless @current_tags.any?
       apply_scopes(Page).page(params[:page])
     else
-      Page.tagged_with(@current_tags).sort(:updated_at.desc)
+      Page.tagged_with(@current_tags).sort(:updated_at.desc).page(params[:page])
     end
     respond_with(@pages)
   end
@@ -56,7 +55,7 @@ class Admin::PagesController < ApplicationController
     if @page.update_attributes(params[:page])
       flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
     end
-    respond_with(@page, :location => (redirect_to params[:return_to] || admin_page_path(@page.id)))
+    respond_with @page, :location => (params[:return_to] || admin_page_path(@page.id))
   end
 
   def destroy

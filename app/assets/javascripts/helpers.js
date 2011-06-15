@@ -15,7 +15,7 @@
       for (i, l; i < l; i++) {
         source = source.replace(new RegExp(from[i], 'g'), to[i]);
       }
-      return source.replace(/[^a-zA-Z0-9 \-]/g, '').replace(/\s+/g, '-');
+      return source.replace(/[^a-zA-Z0-9 \-]/g, '').replace(/\s+/g, '-').replace(/\-+/, '-');
     },
 
     cloneAsUrl: function(source, target) {

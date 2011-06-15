@@ -5,7 +5,11 @@ class Template
   key :description, String
   key :position, Integer
 
-  many :datum_templates, :order => 'position asc'
+  many :datum_templates, :order => 'position asc' do
+    def [](handle)
+      detect { |d| d.handle == handle.to_s }
+    end
+  end
 
   before_save :sort_datum_templates
 

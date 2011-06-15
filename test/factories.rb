@@ -158,10 +158,8 @@ Factory.define :page_template do |f|
   }
 end
 
-Factory.define :hero_page_template, :class => PageTemplate do |f|
-  f.label "Hero"
+Factory.define :hero_page_template, :parent => :page_template, :class => PageTemplate do |f|
   f.page_label "Name"
-  f.handle 'hero'
   f.datum_templates {
     [
       Factory.build(:string_field_template, :label => 'Tagline', :handle => 'tagline', :required => true),

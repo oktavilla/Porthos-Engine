@@ -37,4 +37,10 @@ class PageTest < ActiveSupport::TestCase
     assert @page.published?
   end
 
+  test 'trims its title before validation' do
+    @page.title = ' A title with spaces '
+    @page.valid?
+    assert_equal 'A title with spaces', @page.title
+  end
+
 end

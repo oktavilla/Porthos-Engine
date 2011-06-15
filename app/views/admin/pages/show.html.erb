@@ -37,14 +37,14 @@
       <% end -%>
       <p><a href="#" class="change"><%= @page.category.present? ? t('.edit_category') : t('.choose_category') %></a></p>
     </div>
-    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_page_path(@page), :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.select @page.category_method_name, Page.tags_by_count(:namespace => @page.page_template.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
         <a href="#" id="new_category"><%= t('.add_new_category') %></a><br>
         <input type="submit" value="<%= t('choose') %>"> <%= t(:or) %> <a href="#" class="cancel"><%= t(:cancel) %></a>
       </div>
     <% end -%>
-    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_page_path(@page), :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field @page.category_method_name, :value => '' %>
         <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <a href="#"><%= t(:cancel) %></a>
@@ -59,7 +59,7 @@
       <%= @page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ').html_safe -%>
       </p>
     </div>
-    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_tags_form' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_page_path(@page), :html => { :id => 'page_tags_form' } do |f| -%>
       <div>
         <%= f.text_field :tag_names, :autocomplete => 'off' %>
         <div class="submit">

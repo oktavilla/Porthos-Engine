@@ -21,13 +21,13 @@
       <form action="<%= new_admin_template_datum_template_path(@page_template) %>">
         <input type="hidden" name="template_type" value="FieldTemplate" />
         <%= select_tag 'datum_template[input_type]', options_for_select(%w(string boolean date).collect { |type| [t(".#{type}"), type] }) %>
-        <button type="submit" class="new"><%=t '.add' %></button>
+        <button type="submit" class="new"><%=t '.add_datum_template' %></button>
       </form>
     </div>
     <div class="add">
       <form action="<%= new_admin_template_datum_template_path(@page_template) %>">
-        <%= select_tag 'template_type', options_for_select(%w(AssetAssociationTemplate PageAssociationTemplate FieldSetTemplate ContentBlockTemplate).collect { |type| [t(".#{type}"), type] }) %>
-        <button type="submit" class="new"><%=t '.add' %></button>
+        <%= select_tag 'template_type', options_for_select(%w(AssetAssociationTemplate PageAssociationTemplate FieldSetTemplate ContentBlockTemplate).collect { |type| [type.constantize.model_name.human, type] }) %>
+        <button type="submit" class="new"><%=t '.add_datum_template' %></button>
       </form>
     </div>
     <% unless @page_template.section %>

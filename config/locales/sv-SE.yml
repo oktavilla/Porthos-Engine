@@ -165,7 +165,7 @@
           image: Bild
           sound: Ljud
           video: Video
-          document: Dokument 
+          document: Dokument
       content_template:
         label: Namn
         description: Beskrivning
@@ -553,6 +553,10 @@
         blank_slate: Det finns inga fält definerade än
         edit: Ändra
         destroy: Radera
+        add_datum_template: Lägg till
+        string: Text
+        date: Datum
+        boolean: Ja/Nej
     pages:
       show:
         edit_category: Ändra kategori

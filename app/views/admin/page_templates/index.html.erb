@@ -20,7 +20,7 @@
         <tr>
           <th class="placeholder"></th>
           <th><%= FieldSetTemplate.human_attribute_name(:title) %></th>
-          <th><%= FieldSetTemplate.human_attribute_name(:handle) %></th>
+          <th><%= FieldSetTemplate.human_attribute_name(:template_name) %></th>
         </tr>
       </thead>
       <tbody id="page_templates" data-sort-uri="<%= sort_admin_page_templates_path %>">
@@ -28,7 +28,7 @@
         <tr id="page_template_<%= page_template.id %>">
           <td class="handle"><span class="drag_handle"></span></td>
           <td class="title"><%= link_to page_template.label, admin_page_template_path(page_template) %></td>
-          <td><%= page_template.handle %></td>
+          <td><%= page_template.template_name %></td>
         </tr>
       <% end %>
       </tbody>

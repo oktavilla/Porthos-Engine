@@ -43,6 +43,7 @@
         <tr>
           <th class="placeholder"></th>
           <th><%= DatumTemplate.human_attribute_name(:label) %></th>
+          <th><%= DatumTemplate.human_attribute_name(:instruction_body) %></th>
           <th><%= DatumTemplate.human_attribute_name(:handle) %></th>
           <th><%= DatumTemplate.human_attribute_name(:_type) %></th>
           <th><%= DatumTemplate.human_attribute_name(:required) %></th>
@@ -54,6 +55,7 @@
         <tr class="datum_template" id="datum_template_<%= datum_template.id %>">
           <td class="handle"><span class="drag_handle"></span></td>
           <td class="label"><%= datum_template.label %></td>
+          <td class="instructions"><%= datum_template.instruction_body %></td>
           <td><%= datum_template.handle %></td>
           <td><%= datum_template.class.model_name.human %></td>
           <td><%= t(datum_template.required? ? :yes : :no) %></td>

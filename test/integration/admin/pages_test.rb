@@ -42,10 +42,35 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'publishing a page without all required data' do
-    batman = create_page
-    visit admin_page_path(batman.id)
-    publish
-    assert !published?, "Should not get published"
+    Capybara.using_driver(:selenium) do
+      # Need to reset env/session for selenium
+      User.delete_all
+      login!
+      batman = create_page
+      batman.data.each { |d| d.required = true }
+
+      visit admin_page_path(batman.id)
+
+      publish
+      assert !published?, "Should not get published (NOT IMPLEMENTED)"
+    end
+  end
+
+  test 'publishing a page' do
+    Capybara.using_driver(:selenium) do
+      # Need to reset env/session for selenium
+      User.delete_all
+      login!
+      batman = create_page
+      batman.data.each { |d| d.required = false } && batman.save
+
+      assert batman.valid?
+
+      visit admin_page_path(batman.id)
+      publish
+
+      assert published?, "Should get published"
+    end
   end
 
   test 'editing page datum attributes' do
@@ -96,16 +121,16 @@ class PagesTest < ActiveSupport::IntegrationCase
 protected
 
   def create_page
-    Page.create_from_template(@page_template, :title => 'Batman', :uri => 'batman')
+    Page.create_from_template(@page_template, :title => 'Batman')
   end
 
   def publish
-    within "#page_publish_on_date" do
+    within "#page_current_publish_on_date" do
       click_link I18n.t(:'admin.pages.show.publish_now')
     end
   end
 
   def published?
-    page.find('#page_current_publish_on_date').has_content? I18n.t(:'admin.pages.show.not_published')
+    !page.has_content? I18n.t(:'admin.pages.show.not_published')
   end
 end

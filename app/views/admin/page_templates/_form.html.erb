@@ -35,6 +35,6 @@
   </div>
 
   <div class="submit">
-    <%= f.submit t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), (params[:return_to] || admin_page_template_path(f.object)) %>
+    <%= f.submit t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), (params[:return_to] || admin_page_template_path(f.object.id)) %>
   </div>
 <% end %>

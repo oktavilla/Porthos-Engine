@@ -1,6 +1,6 @@
 # Define a bare test case to use with Capybara
 class ActiveSupport::IntegrationCase < ActiveSupport::TestCase
-  include Capybara
+  include Capybara::DSL
   Rails.application.routes.default_url_options[:host]= 'example.com'
   include Rails.application.routes.url_helpers
   self.use_transactional_fixtures = false

@@ -73,6 +73,7 @@
   <div class="header">
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span>Ändra</span></a>
+      <%= link_to "Ta bort", admin_page_path(@page.id), { :method => :delete, :confirm => "Är du säker att du vill ta bort sidan. Det går inte att ångra.", :class => 'action delete' } %>
       <% if @page.published? -%>
         <%# link_to "Visa på webbplatsen", page_path(:id => @page.uri, :page_template_id => @page.page_template_id), :class => 'public_link action' %>
       <% else -%>

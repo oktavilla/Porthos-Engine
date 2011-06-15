@@ -199,7 +199,7 @@
       page_templates:
         label: Namn
       page:
-        title: Namn
+        title: Titel
         description: Beskrivning
         published_on: Publiceringsdatum
         parent_id: Sidtyp
@@ -475,13 +475,13 @@
             table:
               name: Namn
               value: Värde
-            no_data: Det finns inta inställningar inlagda än.
+            no_data: Det finns inga inställningar inlagda än.
           new:
             title: Ny inställning
         redirects:
           index:
             title: Vidarebefordring
-            add_redirect: Skapa ny Vidarebefordring
+            add_redirect: Skapa ny vidarebefordring
             table:
               from: Från
               to: Till
@@ -554,6 +554,9 @@
         edit: Ändra
         destroy: Radera
     pages:
+      index:
+        all_pages: "Alla sidor"
+        create_new: "Skapa ny %{template}sida"
       show:
         edit_category: Ändra kategori
         choose_category: Välj kategori

@@ -1,6 +1,6 @@
 #nav {
   position:relative;
-  padding:10px 30px 0 30px;
+  padding:10px 50px 0 60px;
   background:#000;
   overflow:hidden;}
 
@@ -31,30 +31,21 @@
     margin-bottom:-3px;
     padding-bottom:10px;
     padding-top:42px; }
-  #main_nav a:hover,
-  #account_nav a:hover,
-  #site-structure_view .nodes_index a,
-  #users_view .users_index a,
-  #assets_view .assets_index a,
-  #pages_view .pages_index a,
-  #link_lists_view .link_lists_index a {color:#fff;}
     #main_nav .pages_index a  { background:transparent url(<%= asset_path 'ui_new.png' %>) 50% -200px no-repeat; }
     #main_nav .nodes_index a  { background:transparent url(<%= asset_path 'ui_new.png' %>) 50% -280px no-repeat; }
     #main_nav .assets_index a { background:transparent url(<%= asset_path 'ui_new.png' %>) 50% -130px no-repeat; }
     #main_nav .users_index a  { background:transparent url(<%= asset_path 'ui_new.png' %>) 50% -358px no-repeat; }
+    #main_nav a:hover,
+    #account_nav a:hover,
+    #site-structure_view .nodes_index a,
+    #users_view .users_index a,
+    #assets_view .assets_index a,
+    #pages_view .pages_index a,
+    #link_lists_view .link_lists_index a {
+      color:#fff;
+      background-color:#222;}
   #account_nav {float:right;}
     #account_nav a {padding:7px 12px 7px 12px;}
-  #recent_nav a {
-    float:left;
-    margin-right:10px;
-    padding:8px 15px 7px 15px;
-    font-size:1em;
-    font-weight:bold;
-    color:#fff; }
-  #recent_nav a:hover {background:#222;}
-  #recent_nav li.current a {
-    color:#000;
-    background:#fff; }
 
 #users_view #nav ul li.user a {
   text-decoration:none;
@@ -102,10 +93,10 @@ body.layout3 #workspace {
   #sub_nav ul.tags,
   #sub_nav ul.nav li a,
   #sub_nav .label {
-    padding:.5em 40px .45em 20px; }
+    padding:.5em 60px .45em 20px; }
   #sub_nav .back {
     display:block;
-    padding:.3em 20px .3em 40px;}
+    padding:.3em 20px .3em 60px;}
   #sub_nav p {
     margin:0;
     font-size:12px;
@@ -136,7 +127,7 @@ body.layout3 #workspace {
   margin:0 0 0 0;
   background:#fff; }
   #workspace .header {
-    padding:20px 40px 20px 40px;
+    padding:20px 60px 20px 60px;
     border-bottom:1px solid #e1e1e1;
     background:rgba(55,128,199,.05); }
     #workspace .header h1 {display:inline;}
@@ -198,7 +189,7 @@ body.layout3 #workspace {
         #workspace .header form .multiple_choice {margin:1em 0;}
   #workspace .tools,
   #workspace .adding {
-    padding:10px 40px;
+    padding:10px 60px;
     font-size:.8571em;
     background:#f8f9f9;
     border-bottom:1px solid #e1e1e1; }
@@ -257,19 +248,19 @@ body.layout3 #workspace {
     line-height:1;}
   #workspace #content {
     background:#fff;
-    padding:20px 40px;}
+    padding:20px 60px;}
     #workspace #c_1 {
       float:left;
       width:100%;
       margin-bottom:30px;}
       #workspace #c_1 > .inner {
-        padding-right:40px;
+        padding-right:60px;
         border-right:1px dashed #ccc;
         margin-right:330px; }
     #workspace #c_2 {
       width:330px;
       float:left;
       margin:0 0 0 -330px; }
-      #workspace #c_2 > .inner {padding-left:40px;}
+      #workspace #c_2 > .inner {padding-left:60px;}
 
 .smart_autocomplete_container { background: #fff; }

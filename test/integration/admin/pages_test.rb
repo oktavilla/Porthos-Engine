@@ -2,8 +2,10 @@ require_relative '../../test_helper'
 require 'launchy'
 class PagesTest < ActiveSupport::IntegrationCase
   setup do
+    WebMock.allow_net_connect!
+    stub_index_tank_put
     login!
-    @page_template = Factory(:hero_page_template)
+    @page_template = Factory.create(:hero_page_template)
   end
 
   test 'listning pages by tag' do
@@ -13,16 +15,20 @@ class PagesTest < ActiveSupport::IntegrationCase
 
     visit admin_pages_path(:tags => ['tag1'])
 
-    assert page.find("ul.items").has_content?(page1.title), 'Should display page1 in the pages list'
-    assert page.find("ul.items").has_content?(page3.title), 'Should display page2 the pages list'
-    assert !page.find("ul.items").has_content?(page2.title), 'Should not display page2 in the pages list'
+    assert page.find("table#pages").has_content?(page1.title), 'Should display page1 in the pages list'
+    assert page.find("table#pages").has_content?(page3.title), 'Should display page2 the pages list'
+    assert !page.find("table#pages").has_content?(page2.title), 'Should not display page2 in the pages list'
   end
 
   test 'creating a page' do
     visit admin_pages_path
 
-    within('.tools') do
+    within('#sub_nav') do
       click_link @page_template.label
+    end
+
+    within('.tools') do
+      click_link I18n.t(:'admin.pages.index.create_new', :template => @page_template.label.downcase)
     end
 
     assert_equal new_admin_page_path, current_path

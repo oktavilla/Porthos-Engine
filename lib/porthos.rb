@@ -28,7 +28,6 @@ module Porthos
 
 end
 
-require 'porthos/engine'
 require 'porthos/redirects'
 require 'porthos/routing'
 require 'porthos/url_resolver'
@@ -42,6 +41,8 @@ require 'porthos/active_record/restrictions'
 require 'porthos/active_record/settingable'
 require 'porthos/mongo_mapper/taggable'
 require 'porthos/mongo_mapper/instructable'
+require 'porthos/mongo_mapper/acts_as_uri'
 require 'porthos/datum_methods'
 require 'porthos/tags_autocomplete_app'
 require 'porthos/tanking'
+require 'porthos/engine'

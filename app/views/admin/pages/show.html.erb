@@ -13,7 +13,7 @@
       <%= link_to t('.publish_now'), publish_admin_page_path(@page.id), :method => :put, :class => 'new' %></p>
     <% end %>
     </div>
-    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_page_path(@page), :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field :published_on, :value => (@page.published_on.present? ? @page.published_on.in_time_zone.to_date : nil), :class => 'date', :placeholder => 'År-Månad-Dag' %>
         <div class="submit">
@@ -37,14 +37,14 @@
       <% end -%>
       <p><a href="#" class="change"><%= @page.category.present? ? t('.edit_category') : t('.choose_category') %></a></p>
     </div>
-    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_page_path(@page), :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.select @page.category_method_name, Page.tags_by_count(:namespace => @page.page_template.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
         <a href="#" id="new_category"><%= t('.add_new_category') %></a><br>
         <input type="submit" value="<%= t('choose') %>"> <%= t(:or) %> <a href="#" class="cancel"><%= t(:cancel) %></a>
       </div>
     <% end -%>
-    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_page_path(@page), :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
       <div>
         <%= f.text_field @page.category_method_name, :value => '' %>
         <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <a href="#"><%= t(:cancel) %></a>
@@ -59,7 +59,7 @@
       <%= @page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ').html_safe -%>
       </p>
     </div>
-    <%= form_for [:admin, @page], :as => :page, :url => admin_pages_path, :html => { :id => 'page_tags_form' } do |f| -%>
+    <%= form_for [:admin, @page], :as => :page, :url => admin_page_path(@page), :html => { :id => 'page_tags_form' } do |f| -%>
       <div>
         <%= f.text_field :tag_names, :autocomplete => 'off' %>
         <div class="submit">
@@ -73,6 +73,7 @@
   <div class="header">
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span>Ändra</span></a>
+      <%= link_to "Ta bort", admin_page_path(@page.id), { :method => :delete, :confirm => "Är du säker att du vill ta bort sidan. Det går inte att ångra.", :class => 'action delete' } %>
       <% if @page.published? -%>
         <%# link_to "Visa på webbplatsen", page_path(:id => @page.uri, :page_template_id => @page.page_template_id), :class => 'public_link action' %>
       <% else -%>
@@ -136,7 +137,7 @@
   </div>
   <% end %>
   <div id="content" class="datums">
-  <% @page.data.each_with_index do |datum, index| %>
+  <% (@page.is_a?(Section) ? @page.data : @page.data.sort_by { |d| @page.page_template.datum_templates[d.handle].position }).each_with_index do |datum, index| %>
     <div id="datum_<%= datum.id %>" class="<%= "datum " unless datum.is_a?(ContentBlock) %><%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
     <% unless datum.is_a?(ContentBlock) %>
       <div class="controls">

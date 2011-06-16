@@ -32,9 +32,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'has_scope'
   s.add_dependency 'routing-filter'
   s.add_dependency 's3'
-  s.add_dependency 'resizor'
+  s.add_dependency 'resizor', '>=0.0.8'
   s.add_dependency 'kaminari'
   s.add_dependency 'tanker'
+  s.add_dependency 'stringex'
 
   # Dev dependencies
   s.add_development_dependency 'sqlite3'
@@ -42,9 +43,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'factory_girl'
-  s.add_development_dependency 'capybara'
+  s.add_development_dependency 'capybara', '~>1.0'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'addressable', '2.2.4' # 2.2.5 (lastest version) seem to break webmock
   s.add_development_dependency 'webmock'
+  s.add_development_dependency 'simplecov'
 end

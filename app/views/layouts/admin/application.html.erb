@@ -18,8 +18,11 @@
 <div id="wrap">
 <%= yield %>
 </div>
-<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" %>
-<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" %>
+
+<%= javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" %>
+<script>window.hasOwnProperty('jQuery') || document.write('<script src="<%= asset_path 'lib/jquery-1.6.1.min.js' %>"><\/script>')</script>
+<%= javascript_include_tag "//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" %>
+<script>window.jQuery.hasOwnProperty('ui') || document.write('<script src="<%= asset_path 'lib/jquery-ui-1.8.13.min.js' %>"><\/script>')</script>
 <%= javascript_include_tag 'admin' %>
 </body>
 </html>

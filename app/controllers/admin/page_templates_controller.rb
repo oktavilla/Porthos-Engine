@@ -33,7 +33,7 @@ class Admin::PageTemplatesController < ApplicationController
     if @page_template.update_attributes(params[:page_template])
       flash[:notice] = "#{@page_template.label}  #{t(:updated, :scope => [:app, :admin_general])}"
     end
-    respond_with(@page_template, :location => admin_page_template_path(@page_template))
+    respond_with(@page_template, :location => params[:return_to] || admin_page_template_path(@page_template))
   end
 
   def destroy

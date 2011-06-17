@@ -13,12 +13,14 @@ class Node
 
   key :resource_id, ObjectId
   key :resource_type, String
-  key :page_template_id, ObjectId
+  key :handle, String
 
   belongs_to :resource,
              :polymorphic => true
 
-  belongs_to :page_template
+  validates :handle,
+            :uniqueness => true,
+            :allow_blank => true
 
   validates :url,
             :presence => true,
@@ -63,7 +65,6 @@ class Node
         node.controller = page.class.to_s.tableize
         node.action = 'show'
         node.resource = page
-        node.page_template_id = page.page_template_id
         node.parent = Node.root if node.parent_id.blank?
       end
     end

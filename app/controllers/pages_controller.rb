@@ -9,7 +9,7 @@ class PagesController < ApplicationController
   end
 
   def index
-    @page_template = @node.page_template
+    @page_template = PageTemplate.first(:handle => @node.handle)
     template = @page_template ? @page_template.template : PageFileTemplate.default
     @page_renderer = page_renderer(template, {
       :page_template => @page_template
@@ -46,7 +46,7 @@ class PagesController < ApplicationController
 
   def search
     filters = params[:filters] || {}
-    @page_template = @node.page_template
+    @page_template = PageTemplate.first(:handle => @node.handle)
 
     template = @page_template ? @page_template.template : PageTemplate.default
 
@@ -75,7 +75,7 @@ class PagesController < ApplicationController
   end
 
   def categories
-    @page_template = @node.page_template
+    @page_template = PageTemplate.first(:handle => @node.handle)
     template = @page_template ? @page_template.template : PageTemplate.default
     @page_renderer = page_renderer(template, :page_template => @page_template)
 
@@ -85,7 +85,7 @@ class PagesController < ApplicationController
   end
 
   def category
-    @page_template = @node.page_template
+    @page_template = PageTemplate.first(:handle => @node.handle)
     template = @page_template ? @page_template.template : PageTemplate.default
     @page_renderer = page_renderer(template, :page_template => @page_template)
 
@@ -95,7 +95,7 @@ class PagesController < ApplicationController
   end
 
   def tagged_with
-    @page_template = @node.page_template
+    @page_template = PageTemplate.first(:handle => @node.handle)
     template = @page_template ? @page_template.template : PageTemplate.default
     @page_renderer = page_renderer(template, :page_template => @page_template)
 

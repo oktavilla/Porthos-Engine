@@ -71,11 +71,11 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
 
       context 'for an index action' do
         setup do
-          @node = Factory(:test_blog_node)
+          @node = Factory(:test_blog_node, :url => 'apa')
         end
 
         should 'have a /posts route' do
-          visit '/posts'
+          visit posts_path
           assert_equal 200, response.status.to_i
         end
 
@@ -108,7 +108,7 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
         end
 
         should 'rewrite params to match the node' do
-          visit @node.url
+          visit "/#{@node.url}"
           assert_equal "posts", params[:controller]
           assert_equal "show", params[:action]
           assert_equal @post.id, params[:id]

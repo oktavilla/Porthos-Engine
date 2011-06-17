@@ -4,7 +4,7 @@ class NodesTest < ActiveSupport::IntegrationCase
   setup do
     login!
     @page_template = Factory(:page_template, :allow_node_placements => true)
-    @root_node = Factory(:root_node, :page_template => @page_template)
+    @root_node = Factory(:root_node, :handle => @page_template.handle)
   end
 
   test 'adding a node pointing to a page' do
@@ -17,6 +17,7 @@ class NodesTest < ActiveSupport::IntegrationCase
     choose('not_shown_in_nav')
     choose("node_parent_id_#{@root_node.id}")
     click_button I18n.t(:save)
+
     assert page.find("#nodes li").has_content?('My page'), 'Should see node whitin nodes list'
   end
 
@@ -52,7 +53,7 @@ class NodesTest < ActiveSupport::IntegrationCase
 protected
 
   def create_page_node
-    Factory(:node, :name => 'Node', :parent => @root_node, :resource => Factory(:page, :page_template => @page_template))
+    Factory(:node, :name => 'Node', :parent => @root_node, :resource => Factory(:page, :page_template_id => @page_template.id))
   end
 
 end

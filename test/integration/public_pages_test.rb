@@ -13,7 +13,7 @@ class PublicPagesTest < ActiveSupport::IntegrationCase
     page1 = create_page(:data => [ Factory.build(:string_field, :handle => 'description', :value => 'Lorem ipsum')])
     page2 = create_page(:title => 'Spiderman', :data => [ Factory.build(:string_field, :handle => 'description', :value => 'Some other text')])
 
-    node = Factory(:node, :url => 'posts', :page_template => @page_template)
+    node = Factory(:node, :url => 'posts', :handle => @page_template.handle)
 
     visit '/posts'
 

@@ -12,7 +12,7 @@
   <% end -%>
   <span class="edit">
     <% if node.controller == 'pages' && node.action == 'index' -%>
-      <%= link_to "#{t(:show_all)}", admin_pages_path(:with_page_template => node.page_template_id), :class => 'edit' %>
+      <%= link_to "#{t(:show_all)}", admin_pages_path(:with_page_template => node.handle), :class => 'edit' %>
       <%= link_to t(:edit), edit_admin_node_path(node), :class => 'settings' %>
     <% elsif node.controller == 'pages' && node.action == 'show' -%>
       <%= link_to t(:edit), edit_admin_node_path(node), :class => 'edit' %>

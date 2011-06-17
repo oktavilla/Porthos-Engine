@@ -22,7 +22,7 @@ class PagesController < ApplicationController
   end
 
   def show
-    @page = Page.find(params[:id]) || Page.where(:uri => params[:id], :page_template_id => params[:page_template_id]).first || (raise ActiveRecord::RecordNotFound)
+    @page = Page.published.find(params[:id]) || Page.published.where(:uri => params[:id], :page_template_id => params[:page_template_id]).first || (raise ActiveRecord::RecordNotFound)
     template = @page.template
     @page_renderer = page_renderer(template, :page_template => @page.page_template, :page => @page)
 

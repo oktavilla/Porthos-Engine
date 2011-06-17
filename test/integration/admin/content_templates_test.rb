@@ -23,7 +23,7 @@ class ContentTemplatesTest < ActiveSupport::IntegrationCase
 
     click_button I18n.t(:save)
 
-    assert has_flash_message?('Article'), 'Should have a flash notice about the new content template'
+    assert has_flash_message?('Teaser'), 'Should have a flash notice about the new content template'
     assert page.find("#content .notice").has_content?(I18n.t(:'admin.content_templates.show.blank_slate')), 'Should display blank slate message'
   end
 

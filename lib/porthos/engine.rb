@@ -28,6 +28,12 @@ module Porthos
       end
     end
 
+    initializer 'porthos.mongo_mapper' do |app|
+      ActiveSupport.on_load :mongo_mapper do
+        ::MongoMapper::Document.plugin Porthos::MongoMapper::Plugins::ActsAsUri
+      end
+    end
+
     initializer 'porthos.tanking' do |app|
       app.config.to_prepare do
         Porthos::Tanking::Indexes.setup

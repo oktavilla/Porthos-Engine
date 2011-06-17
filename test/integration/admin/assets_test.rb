@@ -2,14 +2,15 @@ require_relative '../../test_helper'
 
 class AssetsTest < ActiveSupport::IntegrationCase
   setup do
-      WebMock.disable_net_connect!
-      stub_s3_put
-      stub_s3_head
+    WebMock.disable_net_connect!
+    stub_s3_put
+    stub_s3_head
+    login!
   end
+
   teardown { WebMock.allow_net_connect! }
 
   test 'listning assets' do
-    login!
     asset = Factory.create(:asset, :file => new_tempfile('text'))
     visit admin_assets_path
 
@@ -17,7 +18,6 @@ class AssetsTest < ActiveSupport::IntegrationCase
   end
 
   test 'uploading a new asset' do
-    login!
     visit admin_assets_path
 
     click_link I18n.t(:'admin.assets.index.upload')
@@ -42,7 +42,6 @@ class AssetsTest < ActiveSupport::IntegrationCase
   end
 
   test 'editing a asset' do
-    login!
     asset = Factory.create(:asset, :file => new_tempfile('text'))
     visit admin_assets_path
 
@@ -58,7 +57,6 @@ class AssetsTest < ActiveSupport::IntegrationCase
 
   test 'deleting an asset' do
     stub_s3_delete
-    login!
     asset = Factory.create(:asset, :file => new_tempfile('text'))
     visit admin_assets_path
 
@@ -72,13 +70,16 @@ class AssetsTest < ActiveSupport::IntegrationCase
   end
 
   test 'listning assets by tag' do
-    login!
-    asset1 = Factory.create(:asset, :tag_names => 'tag1 tag2', :file => new_tempfile('text'))
-    asset2 = Factory.create(:asset, :tag_names => 'tag2', :file => new_tempfile('text'))
-    asset3 = Factory.create(:asset, :tag_names => 'tag1 tag3', :file => new_tempfile('text'))
+    asset1 = Factory.create(:asset, :title => 'Asset 1', :tag_names => 'tag1 tag2', :file => new_tempfile('text'))
+    asset2 = Factory.create(:asset, :title => 'Asset 2', :tag_names => 'tag2', :file => new_tempfile('text'))
+    asset3 = Factory.create(:asset, :title => 'Asset 3', :tag_names => 'tag1 tag3', :file => new_tempfile('text'))
+
     visit admin_assets_path(:tags => ['tag1'])
-    assert page.find("ul.items").has_content?(asset1.name), 'Should display asset1 in the assets list'
-    assert !page.find("ul.items").has_content?(asset2.name), 'Should not display asset2 in the assets list'
-    assert page.find("ul.items").has_content?(asset3.name), 'Should display assets3 in the assets list'
+
+    page.find("ul.items").tap do |assets_list|
+      assert assets_list.has_content?(asset1.title), 'Should display asset1 in the assets list'
+      assert !assets_list.has_content?(asset2.title), 'Should not display asset2 in the assets list'
+      assert assets_list.has_content?(asset3.title), 'Should display assets3 in the assets list'
+    end
   end
 end

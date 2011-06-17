@@ -27,7 +27,18 @@ class Page
 
   validates_presence_of :title
 
+  before_create :set_created_by
+  before_save :set_updated_by
   before_save :sort_data
+
+  before_validation do
+    self.title.strip! if title.present?
+  end
+
+  acts_as_uri :title,
+              :target => :uri,
+              :only_when_blank => true,
+              :scope => :page_template_id
 
   class << self
 
@@ -40,6 +51,12 @@ class Page
         page.data = template.datum_templates.map do |datum_template|
           datum_template.datum_class.constantize.from_template(datum_template)
         end
+      end
+    end
+
+    def create_from_template(template, attributes)
+      self.from_template(template, attributes).tap do |page|
+        page.save
       end
     end
 
@@ -105,13 +122,6 @@ class Page
     end
   }
 
-  before_create :set_created_by
-  before_save   :generate_uri
-  before_update :set_updated_by
-
-  #after_initialize :create_namespaced_tagging_methods
-  # after_save :commit_to_sunspot
-
   def published_on_parts
     @published_on_parts ||= {
       :year => published_on.strftime("%Y"),
@@ -122,10 +132,6 @@ class Page
 
   def published?
     published_on.present? && published_on <= DateTime.now
-  end
-
-  def full_uri
-    # @full_uri ||= node ? node.url : (index_node ? [index_node.url, to_param].join('/') : uri)
   end
 
   def category
@@ -167,10 +173,6 @@ private
 
   def sort_data
     self.data.sort_by!(&:position)
-  end
-
-  def generate_uri
-    self.uri = title.parameterize unless uri.present?
   end
 
   def set_created_by

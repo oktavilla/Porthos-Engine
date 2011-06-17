@@ -33,7 +33,7 @@
     <table class="sortable">
       <thead>
         <tr>
-          <th class="placeholder"></th>
+          <th class="sort"></th>
           <th><%= DatumTemplate.human_attribute_name(:label) %></th>
           <th><%= DatumTemplate.human_attribute_name(:handle) %></th>
           <th><%= DatumTemplate.human_attribute_name(:_type) %></th>
@@ -44,7 +44,7 @@
       <tbody id="datum_templates" data-sort-uri="<%= sort_admin_template_datum_templates_path(@content_template) %>">
         <% @content_template.datum_templates.each do |datum_template| -%>
         <tr class="datum_template" id="datum_template_<%= datum_template.id %>">
-          <td class="handle"><span class="drag_handle"></span></td>
+          <td class="sort"><span class="drag_handle"></span></td>
           <td class="label"><%= datum_template.label %></td>
           <td><%= datum_template.handle %></td>
           <td><%= datum_template.class.model_name.human %></td>

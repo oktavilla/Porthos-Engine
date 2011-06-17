@@ -19,10 +19,11 @@ class PageTemplateTest < ActiveSupport::TestCase
   end
 
   test "instantiating a template from the template_name" do
+    assert_nil @page_template.template_name
     assert_equal PageFileTemplate.default, @page_template.template, "Should get the default template if no handle specified"
 
     @page_template.send :remove_instance_variable, :@template
-    @page_template.template_name = 'blog'
-    assert_equal PageFileTemplate.new('blog'), @page_template.template, "Should have instantiated a page file template from the handle"
+    @page_template.template_name = 'default'
+    assert_equal PageFileTemplate.new('default'), @page_template.template, "Should have instantiated a page file template from the handle"
   end
 end

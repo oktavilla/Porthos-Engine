@@ -110,8 +110,8 @@ protected
     self.mime_type = MIME::Types.type_for(file.original_filename).first.to_s
     self.extension = File.extname(file.original_filename).gsub(/\./,'').gsub(/\?.*/,'').downcase
     file.original_filename.gsub(".#{read_attribute(:extension)}",'').tap do |original_filename|
-      self.name    = original_filename.parameterize.to_s
-      self.title   = original_filename
+      self.name    = original_filename.parameterize.to_s unless self.name.present?
+      self.title   = original_filename unless self.title.present?
     end
     self.filetype = Asset.filetype_for_extension(extension)
   end

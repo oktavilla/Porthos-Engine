@@ -3,20 +3,18 @@
 <%= render :partial => 'admin/pages/sub_nav' %>
 <div id="workspace">
   <div class="header">
-    <h1>Sidor</h1>
-    <% if @page_template.present? && @page_template.pages_sortable? %>
-    <span class="away">
-      <%= link_to "Sortera sidor", pages_admin_page_template_path(@page_template) %>
-    </span>
+    <% if @page_template %>
+    <h1><%= @page_template.label %></h1>
+    <% else %>
+    <h1><%= t('.all_pages') %></h1>
     <% end %>
   </div>
   <div class="tools">
+    <% if @page_template %>
     <div class="add">
-      <span class="label">Lägg till:</span>
-      <% @page_templates.each do |page_template| -%>
-        <%= link_to page_template.label, new_admin_page_path(:page_template_id => page_template.id), :class => 'new' %>
-      <% end if @page_templates.any? %>
+      <%= link_to t('.create_new', :template => @page_template.label.downcase), new_admin_page_path(:page_template_id => @page_template.id), :class => 'new' %>
     </div>
+    <% end %>
     <%= form_tag admin_pages_path, :method => :get do |f| %>
     <div class="sort">
       <label for="filters_order_by">Sortering:</label>
@@ -28,13 +26,48 @@
     <% end %>
   </div>
   <div id="content">
-    <ul class="items">
-    <% @pages.each do |page| %>
-      <li>
-        <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
-      </li>
-    <% end %>
-    </ul>
+    <div class="tablewrap">
+      <table id="pages">
+        <thead>
+          <tr>
+            <th><%= Page.human_attribute_name(:title) %></th>
+            <th><%= t(:updated_at) %></th>
+            <th><%= t(:status) %></th>
+          </tr>
+        </thead>
+        <tbody>
+      <% @pages.each do |page| %>
+        <tr>
+          <td class="content">
+            <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
+            <% if page.published? -%>
+              <% page_path(:id => page.uri, :page_template_id => page.page_template_id).tap do |uri| %>
+                <%= link_to uri, uri %>
+              <% end %>
+            <% end -%>
+            <% if page.tags && page.tags.any? -%>
+            <div class="tags"><%= page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => [tag.name]))}.join(', ').html_safe %></div>
+            <% end -%>
+          </td>
+          <td class="updated_at">
+            <% if page.updated_at && page.updated_at != page.created_at -%>
+            <%= page.updated_at.strftime("%d %b") %>
+              <% if page.updated_by.present? %>
+               <%= t(:by) %> <%= page.updated_by.first_name %>
+              <% end %>
+            <% end -%>
+          </td>
+          <td class="status">
+            <% if page.published? %>
+            <span class="status published"><%= t(:published) %></span>
+            <% else %>
+            <span class="status unpublished"><%= t(:unpublished) %></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </table>
+    </div>
     <%= paginate @pages if @pages.any? %>
   </div>
 </div>

@@ -165,7 +165,7 @@
           image: Bild
           sound: Ljud
           video: Video
-          document: Dokument 
+          document: Dokument
       content_template:
         label: Namn
         description: Beskrivning
@@ -199,7 +199,7 @@
       page_templates:
         label: Namn
       page:
-        title: Namn
+        title: Titel
         description: Beskrivning
         published_on: Publiceringsdatum
         parent_id: Sidtyp
@@ -475,13 +475,13 @@
             table:
               name: Namn
               value: Värde
-            no_data: Det finns inta inställningar inlagda än.
+            no_data: Det finns inga inställningar inlagda än.
           new:
             title: Ny inställning
         redirects:
           index:
             title: Vidarebefordring
-            add_redirect: Skapa ny Vidarebefordring
+            add_redirect: Skapa ny vidarebefordring
             table:
               from: Från
               to: Till
@@ -553,7 +553,14 @@
         blank_slate: Det finns inga fält definerade än
         edit: Ändra
         destroy: Radera
+        add_datum_template: Lägg till
+        string: Text
+        date: Datum
+        boolean: Ja/Nej
     pages:
+      index:
+        all_pages: "Alla sidor"
+        create_new: "Skapa ny %{template}sida"
       show:
         edit_category: Ändra kategori
         choose_category: Välj kategori

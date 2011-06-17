@@ -5,10 +5,9 @@ class Admin::SessionsController < ApplicationController
   layout 'admin/sessions'
 
   def index
-    redirect_to admin_dashboard_path
+    redirect_to admin_root_path
   end
 
-  # render new.html.erb
   def new
   end
 

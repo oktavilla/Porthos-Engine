@@ -1,5 +1,5 @@
 module Porthos
-  class Routing
+  module Routing
     # A rule is a hash with three keys
     # :test => Regexp to match the path
     # :matches => Array of names (param keys) for each match for the path regexp.
@@ -11,7 +11,7 @@ module Porthos
     #     :matches => ['url', 'year', 'month', 'day'],
     #     :controller => 'test_posts'
     #   }
-    cattr_accessor :rules
+    mattr_accessor :rules
     class Rule
       attr_reader :path,
                   :constraints,
@@ -34,7 +34,10 @@ module Porthos
         [node.url, translated_path].join('/').tap do |computed_path|
           template = computed_path
           constraints.each do |key, value|
-            template.gsub!(":#{key.to_s}", params[key].to_s) if params[key]
+            if params[key]
+              value_for_key = params[key].respond_to?(:to_param) ? params[key].to_param : params[key].to_s
+              template.gsub!(":#{key.to_s}", value_for_key)
+            end
           end
           template = "/#{template}" unless template[0...1] == '/'
           computed_path.replace(template)
@@ -72,14 +75,24 @@ module Porthos
         @rules.each { |r| yield r }
       end
 
+      def <<(rule)
+        @rules << Rule.new(rule)
+      end
+
+      def push(args)
+        @rules += args.collect { |r| Rule.new(r) }
+      end
+
       def sorted
-       sort_by { |r| r.constraints ? r.constraints.keys.size : 0 }.reverse
+       sort_by { |r| (r.constraints ? r.constraints.keys.size : 0)+r.path.size }.reverse
       end
 
       def find_matching_params(params)
         param_keys = params.keys
         sorted.detect do |rule|
-          (rule.action.blank? || rule.action == params[:action]) && rule.constraints.keys.all? { |key| param_keys.include?(key) }
+          (rule.action.blank? || rule.action == params[:action]) and
+          (rule.controller.blank? || rule.controller == params[:controller]) and
+          rule.constraints.keys.all? { |key| param_keys.include?(key) }
         end
       end
     end
@@ -155,6 +168,7 @@ module Porthos
             params[key] = matches[i]
           end
           params[:action] = rule.action if rule.action.present?
+          params[:controller] = rule.controller if rule.controller.present?
           break
         end
       end

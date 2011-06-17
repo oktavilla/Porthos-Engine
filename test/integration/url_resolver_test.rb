@@ -11,7 +11,7 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
   context 'Porthos urls' do
 
     setup do
-      Porthos::Routing.rules = Porthos::Routing::Rules.new([
+      Porthos::Routing.rules = Porthos::Routing::Rules.new([{
         :path => ":year/:month/:day",
         :constraints => {
           :year => '(\d{4})',
@@ -19,11 +19,19 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
           :day => '(\d{2})'
         },
         :controller => 'posts'
-      ])
+      },{
+        :path => ":post_id/author/:id",
+        :constraints => {
+          :id => '([a-z0-9\-\_]+)',
+          :post_id => '([a-z0-9\-\_]+)'
+        },
+        :controller => 'authors',
+        :action => 'show'
+      }])
     end
 
 
-    context 'when generated for models with a connected node' do
+    context 'when generated for models' do
 
       context 'for a path with parameters' do
         setup do
@@ -31,7 +39,7 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
         end
 
         should 'result in a url with the parameters in the correct places' do
-          assert_equal "/#{@node.url}/2001/01/01", posts_path(:year => '2001', :month => '01', :day => '01', :host => 'test.com')
+          assert_equal "/#{@node.url}/2001/01/01", posts_path(:year => '2001', :month => '01', :day => '01', :host => 'test.com', :handle => 'blog')
         end
       end
 
@@ -43,6 +51,18 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
 
         should 'rewrite the path to match the nodes url' do
           assert_equal "/#{@node.url}", post_path(:id => @post.id, :mongo => true)
+        end
+      end
+
+      context 'for a path with parameters to a child resource of different type' do
+        setup do
+          @node = Factory(:test_blog_node)
+          @post = Factory(:post)
+          @author = Factory(:author)
+        end
+
+        should 'result in a url with the parameters in the correct places' do
+          assert_equal "/#{@node.url}/#{@post.id}/author/#{@author.id}", author_path(:post_id => @post.id, :id => @author.id, :host => 'test.com', :handle => 'blog')
         end
       end
     end
@@ -92,6 +112,19 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
           assert_equal "posts", params[:controller]
           assert_equal "show", params[:action]
           assert_equal @post.id, params[:id]
+        end
+      end
+
+      context 'for a child resource of different type' do
+        setup do
+          @node = Factory(:test_blog_node)
+          @post = Factory(:post)
+          @author = Factory(:author)
+        end
+
+        should 'result in a url with the parameters in the correct places' do
+          visit "/#{@node.url}/#{@post.id}/author/#{@author.id}"
+          assert_equal 200, response.status.to_i
         end
       end
     end

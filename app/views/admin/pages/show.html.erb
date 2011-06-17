@@ -91,12 +91,16 @@
       </div>
       <div class="slug">
         <span class="key">Adress:</span>
-        <span class="value"><%= page_url(@page).tap { |url| url.replace(link_to(url, url)) }.html_safe %></span>
+        <% page_url(@page).tap do |url| %>
+        <span class="value"><%= link_to(url, url) %></span>
+        <% end %>
       </div>
     <% elsif @page.index_node %>
       <div class="slug">
         <span class="key">Adress:</span>
-        <span class="value"><%= page_url(:page_template_id => @page.page_template_id, :id => @page.uri).tap { |url| url.replace(link_to(url, url)) }.html_safe %></span>
+        <% page_url(@page.uri, :page_template_id => @page.page_template_id).tap do |url| %>
+        <span class="value"><%= link_to(url, url) %></span>
+        <% end %>
       </div>
     <% end %>
   </div>

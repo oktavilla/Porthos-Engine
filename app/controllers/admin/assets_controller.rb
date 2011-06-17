@@ -48,14 +48,6 @@ class Admin::AssetsController < ApplicationController
     end
   end
 
-  def show
-    @asset = Asset.find(params[:id])
-    respond_to do |format|
-      format.html { redirect_to edit_admin_asset_path(@asset) }
-      format.js { render :json => @asset.to_json(:methods => [:type, :thumbnail]) }
-    end
-  end
-
   def new
     @tags = []
     @asset = Asset.new

@@ -16,4 +16,24 @@ class DatumTest < ActiveSupport::TestCase
     end
   end
 
+  test "knowing it's parent datum that is a direct child to page" do
+    page = Factory.build(:page, :data => [Factory.build(:content_block, :handle => 'article')])
+    decendant = Factory.build(:string_field)
+    page.data['article'].data << decendant
+
+    assert_equal page.data['article'], decendant.root_embedded_document
+  end
+
+  test "knowing if it's a direct child to page" do
+    page = Factory.build(:page, :data => [Factory.build(:content_block, :handle => 'article')])
+    child = Factory.build(:string_field)
+    decendant = Factory.build(:string_field)
+
+    page.data << child
+    page.data['article'].data << decendant
+
+    assert child.is_root?
+    assert !decendant.is_root?
+  end
+
 end

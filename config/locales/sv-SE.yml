@@ -599,6 +599,12 @@
         sort: Sortera
         blank_slate: Det finns inga fält skapade än
         add_field: Lägg till fält
+    users:
+      index:
+        add: Lägg till ny redaktör
+      new:
+        save: Spara
+  admins: Redaktörer
   save: Spara
   or: eller
   cancel: Avbryt

@@ -118,6 +118,18 @@ class PagesTest < ActiveSupport::IntegrationCase
     end
   end
 
+  test 'deleting a page' do
+    a_page = create_page
+    visit admin_page_path(a_page)
+
+    within 'div.header' do
+      click_link I18n.t(:destroy)
+    end
+
+    assert_equal admin_pages_path, current_path
+    assert has_flash_message?(I18n.t(:'app.admin_general.deleted'))
+  end
+
 protected
 
   def create_page

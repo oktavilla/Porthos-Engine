@@ -211,7 +211,7 @@
         <li id="datum_<%= d.id %>" class="datum <%= d.class.to_s.underscore %><%= ' inactive' unless d.active? %>">
           <div class="controls">
             <%= link_to d.active? ? 'Dölj' : 'Visa', toggle_admin_page_datum_path(@page, d, :parent_id => datum), :method => :put, :class => 'visibility' %>
-            <%= link_to "Ta bort", admin_page_datum_path(@page, d, :parent_id => datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+            <%= link_to t(:destroy), admin_page_datum_path(@page, d, :parent_id => datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
           </div>
           <div class="content">
             <div class="viewable">

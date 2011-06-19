@@ -10,7 +10,7 @@
   <div class="label"><%= t(:pages) %></div>
   <ul class="nav">
     <li<%= ' class="current"'.html_safe if current_scopes[:with_page_template].blank? %>><%= link_to "Alla", admin_pages_path(current_scopes.except(:with_page_template)) %></li>
-    <% PageTemplate.all.each do |page_template| -%>
+    <% @page_templates.each do |page_template| -%>
     <li<%= ' class="current"'.html_safe if current_scopes[:with_page_template] == page_template.id.to_s %>><%= link_to page_template.label, admin_pages_path(current_scopes.merge(:with_page_template => page_template.id)) %></li>
     <% end -%>
   </ul>

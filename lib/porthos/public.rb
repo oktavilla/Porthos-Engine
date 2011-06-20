@@ -15,10 +15,6 @@ module Porthos
         raise ActiveRecord::RecordNotFound if trail.detect { |n| n.inactive? }
       end
 
-      def porthos_session_id
-        session[:porthos_id] ||= CGI::Session.generate_unique_id
-      end
-
     protected
 
       def root_node
@@ -42,10 +38,6 @@ module Porthos
         end
       end
 
-      def porthos_session_id
-        session[:porthos_id] ||= ActiveSupport::SecureRandom.hex
-      end
-
       def node_ancestors
         unless defined?(@node_ancestors)
           @node_ancestors = node.ancestors.reverse
@@ -67,7 +59,7 @@ module Porthos
       end
 
       def breadcrumbs
-        @breadcrumbs ||= trail.collect { |n| ["/#{n.uri}", n.name] }
+        @breadcrumbs ||= trail.collect { |n| ["/#{n.url}", n.name] }
       end
 
     end

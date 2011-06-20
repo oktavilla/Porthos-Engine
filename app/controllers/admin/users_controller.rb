@@ -1,11 +1,10 @@
 class Admin::UsersController < ApplicationController
+  respond_to :html
   include Porthos::Admin
 
   def index
     @users = apply_scopes(User).page(params[:page])
-    respond_to do |format|
-      format.html
-      end
+    respond_with @users
   end
 
   def search
@@ -28,15 +27,10 @@ class Admin::UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
-    @user.save!
-    flash[:notice] = "#{@user.name} #{t(:saved, :scope => [:app, :admin_general])}"
-    respond_to do |format|
-      format.html { redirect_to params[:return_to] || admin_users_path }
+    if @user.save
+      flash[:notice] = "#{@user.name} #{t(:saved, :scope => [:app, :admin_general])}"
     end
-  rescue ActiveRecord::RecordInvalid
-    respond_to do |format|
-      format.html { render :action => 'new' }
-    end
+    respond_with @user, :location => (params[:return_to] || admin_users_path)
   end
 
   def edit
@@ -45,23 +39,17 @@ class Admin::UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    respond_to do |format|
-      if @user.update_attributes(params[:user])
-        flash[:notice] = "#{@user.name} #{t(:saved, :scope => [:app, :admin_general])}"
-        format.html { redirect_to params[:return_to] || admin_users_path }
-      else
-        format.html { render :action => 'edit' }
-      end
+    if @user.update_attributes(params[:user])
+      flash[:notice] = "#{@user.name} #{t(:saved, :scope => [:app, :admin_general])}"
     end
+    respond_with @user, :location => (params[:return_to] || admin_users_path)
   end
 
   def destroy
     @user = User.find(params[:id])
     @user.destroy
     flash[:notice] = "#{@user.name} #{t(:deleted, :scope => [:app, :admin_general])}"
-    respond_to do |format|
-      format.html { redirect_to admin_users_path }
-    end
+    respond_with @user, :location => (params[:return_to] || admin_users_path)
   end
 
 end

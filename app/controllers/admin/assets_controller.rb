@@ -48,14 +48,6 @@ class Admin::AssetsController < ApplicationController
     end
   end
 
-  def show
-    @asset = Asset.find(params[:id])
-    respond_to do |format|
-      format.html { redirect_to edit_admin_asset_path(@asset) }
-      format.js { render :json => @asset.to_json(:methods => [:type, :thumbnail]) }
-    end
-  end
-
   def new
     @tags = []
     @asset = Asset.new
@@ -85,7 +77,7 @@ class Admin::AssetsController < ApplicationController
         flash[:notice] = t(:saved, :scope => [:app, :admin_assets])
         format.html { redirect_to incomplete_admin_assets_url(:assets => @assets.collect {|asset| asset.id }) }
         format.json do
-          render :text => @assets.collect{ |asset| asset.attributes_for_js }.to_json, :layout => false, :status => 200
+          render :text => @assets.to_json, :layout => false, :status => 200
         end
       else
         @asset = @assets.first

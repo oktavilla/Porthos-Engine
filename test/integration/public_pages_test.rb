@@ -1,7 +1,9 @@
 require_relative '../test_helper'
 require 'launchy'
-class PagesTest < ActiveSupport::IntegrationCase
+class PublicPagesTest < ActiveSupport::IntegrationCase
   setup do
+    WebMock.allow_net_connect!
+
     stub_index_tank_put
     @page_template = Factory(:hero_page_template)
     @root_node = Factory(:root_node)
@@ -11,9 +13,9 @@ class PagesTest < ActiveSupport::IntegrationCase
     page1 = create_page(:data => [ Factory.build(:string_field, :handle => 'description', :value => 'Lorem ipsum')])
     page2 = create_page(:title => 'Spiderman', :data => [ Factory.build(:string_field, :handle => 'description', :value => 'Some other text')])
 
-    node = Factory(:node, :url => 'posts', :page_template => @page_template)
+    node = Factory(:node, :url => 'heroes', :handle => @page_template.handle)
 
-    visit '/posts'
+    visit '/heroes'
 
     assert page.find('body').has_content?('Batman'), 'Should see page1 title'
     assert page.find('body').has_content?('Spiderman'), 'Should see page2 title'

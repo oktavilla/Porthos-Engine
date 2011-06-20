@@ -17,7 +17,7 @@ class PagesTest < ActiveSupport::IntegrationCase
 
     assert page.find("table#pages").has_content?(page1.title), 'Should display page1 in the pages list'
     assert page.find("table#pages").has_content?(page3.title), 'Should display page2 the pages list'
-    assert !page.find("table#pages").has_content?(page2.title), 'Should not display page2 in the pages list'
+    refute page.find("table#pages").has_content?(page2.title), 'Should not display page2 in the pages list'
   end
 
   test 'creating a page' do
@@ -42,10 +42,36 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'publishing a page without all required data' do
-    batman = create_page
-    visit admin_page_path(batman.id)
-    publish
-    assert !published?, "Should not get published"
+    Capybara.using_driver(:selenium) do
+      # Need to reset env/session for selenium
+      User.delete_all
+      login!
+      batman = create_page
+      batman.data.each { |d| d.required = true }
+
+      visit admin_page_path(batman.id)
+
+      publish
+      flunk 'Not implemented'
+      refute published?
+    end
+  end
+
+  test 'publishing a page' do
+    Capybara.using_driver(:selenium) do
+      # Need to reset env/session for selenium
+      User.delete_all
+      login!
+      batman = create_page
+      batman.data.each { |d| d.required = false } && batman.save
+
+      assert batman.valid?
+
+      visit admin_page_path(batman.id)
+      publish
+
+      assert published?, "Should get published"
+    end
   end
 
   test 'editing page datum attributes' do
@@ -74,7 +100,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       fill_in "page_#{@page_template.handle}_tag_names", :with => 'Beverages'
       click_button I18n.t(:save)
       assert page.find('#page_category').has_content?('Beverages'), 'Category should be added'
-      assert !page.find('#page_tags p').has_content?('Beverages'), 'category should not be listed as a tag'
+      refute page.find('#page_tags p').has_content?('Beverages'), 'category should not be listed as a tag'
     end
   end
 
@@ -93,19 +119,31 @@ class PagesTest < ActiveSupport::IntegrationCase
     end
   end
 
+  test 'deleting a page' do
+    a_page = create_page
+    visit admin_page_path(a_page)
+
+    within 'div.header' do
+      click_link I18n.t(:destroy)
+    end
+
+    assert_equal admin_pages_path, current_path
+    assert has_flash_message?(I18n.t(:'app.admin_general.deleted'))
+  end
+
 protected
 
   def create_page
-    Page.create_from_template(@page_template, :title => 'Batman', :uri => 'batman')
+    Page.create_from_template(@page_template, :title => 'Batman')
   end
 
   def publish
-    within "#page_publish_on_date" do
+    within "#page_current_publish_on_date" do
       click_link I18n.t(:'admin.pages.show.publish_now')
     end
   end
 
   def published?
-    page.find('#page_current_publish_on_date').has_content? I18n.t(:'admin.pages.show.not_published')
+    !page.has_content? I18n.t(:'admin.pages.show.not_published')
   end
 end

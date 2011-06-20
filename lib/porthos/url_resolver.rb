@@ -6,30 +6,34 @@ module RoutingFilter
       if env["REQUEST_URI"] =~ excluded_path_prefixes or path =~ excluded_path_prefixes
         yield
       else
-        path.replace(CGI::unescape(path))
-        custom_params = {}
-        node_url = path.gsub(/^\//,'')
-        node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
-        unless node
-          matches = Porthos::Routing.recognize(path)
-          node_url = matches.delete(:url)
-          custom_params.merge!(matches)
-          node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
-        end
-
-        if node
-          mapping_params = { :controller => node.controller, :action => node.action }
-          mapping_params[:page_template_id] = node.page_template_id if node.page_template_id.present?
-          mapping_params[:id] = node.resource_id if node.resource_id.present?
-          path.replace('/' + mapping_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
-          custom_params[:node] = {
-            :id => node.id,
-            :url => node.url
-          }
-        end
         yield.tap do |params|
-          params.merge!(mapping_params) if node
-          params.merge!(custom_params)
+          unless params.any?
+            path.replace(CGI::unescape(path))
+            custom_params = {}
+            node_url = path.gsub(/^\//,'')
+            node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
+            unless node
+              matches = Porthos::Routing.recognize(path)
+              node_url = matches.delete(:url)
+              custom_params.merge!(matches)
+              node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
+            end
+
+            if node
+              mapping_params = { :controller => node.controller, :action => node.action }
+              mapping_params[:handle] = node.handle if node.handle.present?
+              mapping_params[:id] = node.resource_id if node.resource_id.present?
+              path.replace('/' + mapping_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
+              custom_params[:node] = {
+                :id => node.id,
+                :url => node.url
+              }
+            end
+            params.replace(yield.tap { |_params|
+              _params.merge!(mapping_params) if node
+              _params.merge!(custom_params)
+            })
+          end
         end
       end
     end
@@ -43,21 +47,17 @@ module RoutingFilter
         index_conditions = conditions.dup.merge(:action => 'index')
         if params[:id].present?
           resource = params[:id]
-          if resource.class.include?(MongoMapper::Document)
+          if resource.kind_of?(MongoMapper::Document) or resource.kind_of?(ActiveRecord::Base)
             params[:id] = resource.to_param
             conditions.merge!(:resource_type => resource.class.to_s, :resource_id => resource.id)
-            if resource.respond_to?(:page_template_id)
-              index_conditions.merge!(:page_template_id => resource.page_template_id)
-            else
-              index_conditions.merge!(:page_template_id => params[:page_template_id])
-            end
           else
             conditions.merge!(:resource_type => params[:controller].classify, :resource_id => resource)
-            index_conditions.merge!(:page_template_id => params[:page_template_id])
           end
-          node = Node.where(conditions).first || Node.where(index_conditions).first
-        else
-          node = Node.where(conditions.merge(:page_template_id => params[:page_template_id])).first
+          index_conditions.merge!(:handle => params[:handle])
+          node = Node.first(conditions) || Node.first(index_conditions)
+        end
+        if !node and params[:handle].present?
+          node = Node.first(:handle => params[:handle])
         end
         yield.tap do |path|
           if node

@@ -1,4 +1,4 @@
-<div class="vcard main">
+<div class="vcard main" id="user_<%= user.id %>">
   <span class="fn"><%= user.name %></span>
   <a class="email" title="Skicka e-post till <%= user.name %>" href="mailto:<%= user.email %>"><%= user.email %></a>
   <% unless user.phone.blank? and user.cell_phone.blank? -%>

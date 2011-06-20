@@ -21,7 +21,7 @@ class Admin::ContentTemplatesController < ApplicationController
     if @content_template.save
       flash[:notice] = "#{@content_template.label}  #{t(:saved, :scope => [:app, :admin_general])}"
     end
-    respond_with(@content_template, :location => admin_content_template_path(@content_template))
+    respond_with(@content_template, :location => admin_content_template_path(@content_template.id))
   end
 
   def edit

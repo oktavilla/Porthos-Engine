@@ -7,7 +7,7 @@ module RoutingFilter
         yield
       else
         yield.tap do |params|
-          unless yield.any?
+          unless params.any?
             path.replace(CGI::unescape(path))
             custom_params = {}
             node_url = path.gsub(/^\//,'')

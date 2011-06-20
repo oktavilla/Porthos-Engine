@@ -6,30 +6,34 @@ module RoutingFilter
       if env["REQUEST_URI"] =~ excluded_path_prefixes or path =~ excluded_path_prefixes
         yield
       else
-        path.replace(CGI::unescape(path))
-        custom_params = {}
-        node_url = path.gsub(/^\//,'')
-        node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
-        unless node
-          matches = Porthos::Routing.recognize(path)
-          node_url = matches.delete(:url)
-          custom_params.merge!(matches)
-          node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
-        end
-
-        if node
-          mapping_params = { :controller => node.controller, :action => node.action }
-          mapping_params[:handle] = node.handle if node.handle.present?
-          mapping_params[:id] = node.resource_id if node.resource_id.present?
-          path.replace('/' + mapping_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
-          custom_params[:node] = {
-            :id => node.id,
-            :url => node.url
-          }
-        end
         yield.tap do |params|
-          params.merge!(mapping_params) if node
-          params.merge!(custom_params)
+          unless yield.any?
+            path.replace(CGI::unescape(path))
+            custom_params = {}
+            node_url = path.gsub(/^\//,'')
+            node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
+            unless node
+              matches = Porthos::Routing.recognize(path)
+              node_url = matches.delete(:url)
+              custom_params.merge!(matches)
+              node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
+            end
+
+            if node
+              mapping_params = { :controller => node.controller, :action => node.action }
+              mapping_params[:handle] = node.handle if node.handle.present?
+              mapping_params[:id] = node.resource_id if node.resource_id.present?
+              path.replace('/' + mapping_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
+              custom_params[:node] = {
+                :id => node.id,
+                :url => node.url
+              }
+            end
+            params.replace(yield.tap { |_params|
+              _params.merge!(mapping_params) if node
+              _params.merge!(custom_params)
+            })
+          end
         end
       end
     end

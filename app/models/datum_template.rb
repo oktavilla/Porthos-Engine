@@ -54,10 +54,8 @@ class DatumTemplate
   end
 
   def shared_attributes
-    attributes.clone.except(:_id, :_type).inject({}) do |hash, entry|
-      key, value = entry
-      hash[key] = value.duplicable? ? value.clone : value
-      hash
+    attributes.clone.except(:_id, :_type).each_with_object({}) do |(k, v), hash|
+      hash[k] = v.duplicable? ? v.clone : v
     end
   end
 

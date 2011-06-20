@@ -89,12 +89,12 @@
         <span class="key">Namn i navigationen:</span>
         <span class="value"><%= @page.node.name %></span>
       </div>
-      <div class="slug">
+      <div class="uri">
         <span class="key">Adress:</span>
         <span class="value"><%= page_url(@page).tap { |url| url.replace(link_to(url, url)) }.html_safe %></span>
       </div>
     <% elsif @page.index_node %>
-      <div class="slug">
+      <div class="uri">
         <span class="key">Adress:</span>
         <span class="value"><%= page_url(:page_template_id => @page.page_template_id, :id => @page.uri).tap { |url| url.replace(link_to(url, url)) }.html_safe %></span>
       </div>

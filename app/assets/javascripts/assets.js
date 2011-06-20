@@ -4,7 +4,7 @@
     var Ready = function(container) {
       $('#asset_tag_names').smartAutoComplete({
         minCharLimit: 3,
-        source: '/admin/tags?taggable=Asset'
+        source: '/admin/tags/autocomplete.json?taggable=ImageAsset'
       });
       $('#asset_tag_names').bind({
         keyIn: function(ev) {
@@ -23,9 +23,10 @@
           ev.preventDefault();
         }
       });
+
       $('#search_query').smartAutoComplete({
         minCharLimit: 3,
-        source: '/admin/tags?taggable=Asset'
+        source: '/admin/tags/autocomplete.json?taggable=Asset'
       });
 
       $('#content').delegate('ul.items img', 'click', function(event) {

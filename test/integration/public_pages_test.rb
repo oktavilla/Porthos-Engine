@@ -13,9 +13,9 @@ class PublicPagesTest < ActiveSupport::IntegrationCase
     page1 = create_page(:data => [ Factory.build(:string_field, :handle => 'description', :value => 'Lorem ipsum')])
     page2 = create_page(:title => 'Spiderman', :data => [ Factory.build(:string_field, :handle => 'description', :value => 'Some other text')])
 
-    node = Factory(:node, :url => 'posts', :handle => @page_template.handle)
+    node = Factory(:node, :url => 'heroes', :handle => @page_template.handle)
 
-    visit '/posts'
+    visit '/heroes'
 
     assert page.find('body').has_content?('Batman'), 'Should see page1 title'
     assert page.find('body').has_content?('Spiderman'), 'Should see page2 title'

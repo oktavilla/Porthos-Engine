@@ -70,10 +70,6 @@ class Asset
     @remote_url ||= Porthos.s3_storage.details(full_name).url
   end
 
-  def attributes_for_js
-    self.attributes
-  end
-
   class << self
     def uploaders
       User.find(self.fields(:created_by_id).distinct(:created_by_id))

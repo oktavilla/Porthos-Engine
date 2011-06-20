@@ -52,7 +52,8 @@ class PagesTest < ActiveSupport::IntegrationCase
       visit admin_page_path(batman.id)
 
       publish
-      refute published?, "Should not get published (NOT IMPLEMENTED)"
+      flunk 'Not implemented'
+      refute published?
     end
   end
 

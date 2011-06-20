@@ -11,7 +11,7 @@ class PageAssociation < Datum
     end
     scope = Page.where(:_id.nin => exclude_ids)
     scope = scope.where(:page_template_id => page_template_id) if page_template_id.present?
-    scope
+    scope.published
   end
 
 end

@@ -16,12 +16,6 @@ class Asset
 
   belongs_to :created_by,
              :class_name => 'User'
-  #has_many :usages,
-  #         :class_name => 'AssetUsage',
-  #         :dependent => :destroy
-  #has_many :custom_associations,
-  #         :as => :target,
-  #         :dependent => :destroy
 
   scope :is_hidden,  lambda { |hidden|
     where(:hidden => hidden)
@@ -130,4 +124,3 @@ protected
     Porthos.s3_storage.destroy(full_name)
   end
 end
-

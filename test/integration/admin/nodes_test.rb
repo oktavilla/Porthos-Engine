@@ -47,7 +47,7 @@ class NodesTest < ActiveSupport::IntegrationCase
     within("#node_#{new_node.id}") do
       click_link I18n.t(:destroy)
     end
-    assert !page.find("#content").has_content?(new_node.name), "Should not see delete row name"
+    refute page.find("#content").has_content?(new_node.name), "Should not see delete row name"
   end
 
 protected

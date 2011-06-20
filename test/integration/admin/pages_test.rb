@@ -17,7 +17,7 @@ class PagesTest < ActiveSupport::IntegrationCase
 
     assert page.find("table#pages").has_content?(page1.title), 'Should display page1 in the pages list'
     assert page.find("table#pages").has_content?(page3.title), 'Should display page2 the pages list'
-    assert !page.find("table#pages").has_content?(page2.title), 'Should not display page2 in the pages list'
+    refute page.find("table#pages").has_content?(page2.title), 'Should not display page2 in the pages list'
   end
 
   test 'creating a page' do
@@ -52,7 +52,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       visit admin_page_path(batman.id)
 
       publish
-      assert !published?, "Should not get published (NOT IMPLEMENTED)"
+      refute published?, "Should not get published (NOT IMPLEMENTED)"
     end
   end
 
@@ -99,7 +99,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       fill_in "page_#{@page_template.handle}_tag_names", :with => 'Beverages'
       click_button I18n.t(:save)
       assert page.find('#page_category').has_content?('Beverages'), 'Category should be added'
-      assert !page.find('#page_tags p').has_content?('Beverages'), 'category should not be listed as a tag'
+      refute page.find('#page_tags p').has_content?('Beverages'), 'category should not be listed as a tag'
     end
   end
 

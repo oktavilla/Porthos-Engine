@@ -56,7 +56,7 @@ class ContentTemplatesTest < ActiveSupport::IntegrationCase
 
     assert_equal admin_content_templates_path, current_path
     assert has_flash_message?(content_template.label), 'Should have a flash notice with the new title'
-    assert !page.has_css?("#content_templates #content_template_#{content_template.id}"), 'content template removed'
+    refute page.has_css?("#content_templates #content_template_#{content_template.id}"), 'content template removed'
   end
 
 end

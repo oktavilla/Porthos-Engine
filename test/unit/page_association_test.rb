@@ -11,7 +11,7 @@ class PageAssociationTest < ActiveSupport::TestCase
     page.data << page_association
 
     assert_equal 1, page_association.targets.size
-    assert !page_association.targets.include?(page)
+    refute page_association.targets.include?(page)
   end
 
   test 'gets all pages except the root and siblings as targets when child to a content block' do

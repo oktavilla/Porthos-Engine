@@ -36,7 +36,7 @@ class UsersTest < ActiveSupport::IntegrationCase
     end
 
     assert has_flash_message?("Dorkey Bork #{I18n.t(:'app.admin_general.deleted')}")
-    assert !page.find('#userslist').has_content?(user.name), 'Should have removed the user'
+    refute page.find('#userslist').has_content?(user.name), 'Should have removed the user'
   end
 
 private

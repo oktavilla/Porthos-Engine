@@ -30,9 +30,11 @@ class PageTest < ActiveSupport::TestCase
 
   test 'published_on should be less than now to be published' do
     @page.published_on = nil
-    assert !@page.published?
+    refute @page.published?
+
     @page.published_on = Date.today + 1.day
-    assert !@page.published?
+    refute @page.published?
+
     @page.published_on = Time.now - 1.minute
     assert @page.published?
   end

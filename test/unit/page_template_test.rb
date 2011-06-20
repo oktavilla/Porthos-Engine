@@ -7,14 +7,14 @@ class PageTemplateTest < ActiveSupport::TestCase
 
   test 'presence of label' do
     @page_template.label = nil
-    assert !@page_template.valid?, 'should not be valid'
+    refute @page_template.valid?, 'should not be valid'
     assert_not_nil @page_template.errors[:label], 'should have errors on label'
   end
 
   test 'uniqueness of label' do
     @page_template.save
     page_template2 = Factory.build(:page_template, :label => @page_template.label)
-    assert !page_template2.valid?, 'should not be valid'
+    refute page_template2.valid?, 'should not be valid'
     assert_not_nil page_template2.errors[:label], 'should have errors on label'
   end
 

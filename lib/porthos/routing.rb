@@ -84,8 +84,12 @@ module Porthos
     class Rules
       include Enumerable
 
-      def initialize(rules)
+      def initialize(rules = [])
         @rules = rules.map { |r| Rule.from_hash(r) }
+      end
+
+      def reset!
+        @rules = []
       end
 
       def size

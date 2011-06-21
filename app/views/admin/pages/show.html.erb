@@ -85,16 +85,19 @@
       <h1><%= @page.title %></h1>
     </div>
     <% if @page.node -%>
-    <div class="navigation">
-      <span class="key">Namn i navigationen:</span>
-      <span class="value"><%= @page.node.name %></span>
-    </div>
+      <div class="navigation">
+        <span class="key">Namn i navigationen:</span>
+        <span class="value"><%= @page.node.name %></span>
+      </div>
     <% end %>
-    <div class="slug">
-      <span class="key">Adress:</span>
-      <% page_url(@page).tap do |url| %>
-      <span class="value"><%= link_to(url, url) %></span>
-      <% end %>
+    <% if @page.published? -%>
+      <div class="slug">
+        <span class="key">Adress:</span>
+        <% page_url(@page).tap do |url| %>
+        <span class="value"><%= link_to(url, url) %></span>
+        <% end %>
+      </div>
+    <% end %>
     </div>
   </div>
   <div class="header" style="display:none;">

@@ -3,7 +3,7 @@ require_relative '../test_helper'
 class PageTest < ActiveSupport::TestCase
 
   setup do
-    @page_template = Factory.build(:page_template, :pages_sortable => false)
+    @page_template = Factory.build(:page_template, :pages_sortable => false, :handle => 'super-awesome')
     @page = Page.from_template(@page_template, :title => 'A page')
   end
 
@@ -25,6 +25,11 @@ class PageTest < ActiveSupport::TestCase
   should 'return nil for previous and next' do
     assert_nil @page.previous
     assert_nil @page.next
+  end
+
+  test 'should get handle' do
+    @page.save
+    assert_equal 'super-awesome', @page.handle
   end
 
   context 'when sortable' do

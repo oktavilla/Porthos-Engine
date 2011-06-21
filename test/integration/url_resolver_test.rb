@@ -11,7 +11,14 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
   context 'Porthos urls' do
 
     setup do
+      Porthos::Routing.rules.reset!
       Porthos::Routing.rules.draw do
+        match ':id',
+          :to => {
+            :controller => 'posts',
+            :action => 'show' },
+          :constraints => {
+            :id => '([a-z0-9\-\_]+)' }
         match ':year/:month/:day',
           :to => {
             :controller => 'posts' },
@@ -38,7 +45,19 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
         end
 
         should 'result in a url with the parameters in the correct places' do
+          post = Factory(:post, :handle => 'blog')
+          assert_equal "/#{@node.url}/#{post.id}", post_path(post)
           assert_equal "/#{@node.url}/2001/01/01", posts_path(:year => '2001', :month => '01', :day => '01', :host => 'test.com', :handle => 'blog')
+        end
+
+        should 'use #uri if defined on resource' do
+          post = Factory(:post, :handle => 'blog')
+          post.class_eval do
+            def uri
+              'my-super-duper-page'
+            end
+          end
+          assert_equal "/#{@node.url}/my-super-duper-page", post_path(post)
         end
       end
 
@@ -49,19 +68,20 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
         end
 
         should 'rewrite the path to match the nodes url' do
-          assert_equal "/#{@node.url}", post_path(:id => @post.id, :mongo => true)
+          assert_equal "/#{@node.url}", post_path(:id => @post, :mongo => true)
         end
       end
 
-      context 'for a path with parameters to a child resource of different type' do
+      context 'that is a child resource of a resource' do
         setup do
           @node = Factory(:test_blog_node)
           @post = Factory(:post)
-          @author = Factory(:author)
+          @author = Factory(:author, :handle => 'blog')
         end
 
         should 'result in a url with the parameters in the correct places' do
-          assert_equal "/#{@node.url}/#{@post.id}/author/#{@author.id}", author_path(:post_id => @post.id, :id => @author.id, :host => 'test.com', :handle => 'blog')
+          assert_equal "/#{@node.url}/#{@post.id}/author/#{@author.id}",
+            author_path(:post_id => @post.id, :id => @author, :host => 'test.com')
         end
       end
     end

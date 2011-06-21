@@ -1,6 +1,5 @@
 class Page < Item
 
-  taggable
   key :uri, String
   key :position, Integer
   key :restricted, Boolean

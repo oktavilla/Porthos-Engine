@@ -9,6 +9,8 @@ class Item
   key :active, Boolean
   key :published_on, Time
 
+  taggable
+
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
   belongs_to :page_template

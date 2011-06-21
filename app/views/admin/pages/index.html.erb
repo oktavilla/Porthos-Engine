@@ -41,44 +41,22 @@
             <th><%= t(:status) %></th>
           </tr>
         </thead>
+        <% if @page_template && @page_template.section %>
+        <% @page_template.section.tap do |section| %>
+        <tbody class="section">
+          <%= render partial: 'row', locals: { page: section, sortable: sortable } %>
+        </tbody>
+        <% end %>
+        <% end %>
         <% if sortable %>
         <%= tag 'tbody', :'data-sort-uri' => sort_admin_pages_path, :id => 'pages' %>
         <% else %>
         <tbody>
         <% end %>
-      <% @pages.each do |page| %>
-        <tr id="page_<%= page.id %>">
-          <% if sortable %>
-          <td class="sort"><span class="drag_handle"></span></td>
-          <% end %>
-          <td class="content">
-            <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
-            <% if page.published? -%>
-              <% page_path(:id => page.uri, :page_template_id => page.page_template_id).tap do |uri| %>
-                <%= link_to uri, uri %>
-              <% end %>
-            <% end -%>
-            <% if page.tags && page.tags.any? -%>
-            <div class="tags"><%= page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => [tag.name]))}.join(', ').html_safe %></div>
-            <% end -%>
-          </td>
-          <td class="updated_at">
-            <% if page.updated_at && page.updated_at != page.created_at -%>
-            <%= page.updated_at.strftime("%d %b") %>
-              <% if page.updated_by.present? %>
-               <%= t(:by) %> <%= page.updated_by.first_name %>
-              <% end %>
-            <% end -%>
-          </td>
-          <td class="status">
-            <% if page.published? %>
-            <span class="status published"><%= t(:published) %></span>
-            <% else %>
-            <span class="status unpublished"><%= t(:unpublished) %></span>
-            <% end %>
-          </td>
-        </tr>
+        <% @pages.each do |page| %>
+          <%= render partial: 'row', locals: { page: page, sortable: sortable } %>
         <% end %>
+        </tbody>
       </table>
     </div>
     <%= paginate @pages if @pages.any? %>

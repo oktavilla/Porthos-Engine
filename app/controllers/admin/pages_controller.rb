@@ -5,7 +5,7 @@ class Admin::PagesController < ApplicationController
   has_scope :with_page_template
   has_scope :created_by
   has_scope :updated_by
-  has_scope :order_by, :default => 'updated_at desc'
+  has_scope :order_by, :default => 'position asc, updated_at desc'
   has_scope :is_published
 
   def index
@@ -32,7 +32,7 @@ class Admin::PagesController < ApplicationController
   end
 
   def show
-    @page = Page.find(params[:id])
+    @page = Item.find(params[:id])
     respond_with(@page)
   end
 
@@ -51,7 +51,7 @@ class Admin::PagesController < ApplicationController
   end
 
   def update
-    @page = Page.find(params[:id])
+    @page = Item.find(params[:id])
     if @page.update_attributes(params[:page])
       flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
     end
@@ -59,14 +59,14 @@ class Admin::PagesController < ApplicationController
   end
 
   def destroy
-    @page = Page.find(params[:id])
+    @page = Item.find(params[:id])
     @page.destroy
     flash[:notice] = "#{@page.title} #{t(:deleted, :scope => [:app, :admin_general])}"
     respond_with @page, :location => admin_pages_path(:with_page_template => @page.page_template_id)
   end
 
   def publish
-    @page = Page.find(params[:id])
+    @page = Item.find(params[:id])
     @page.update_attributes(:published_on => Time.now)
     respond_to do |format|
       format.html do

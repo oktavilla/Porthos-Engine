@@ -1,16 +1,8 @@
 class Page < Item
 
-  key :uri, String
   key :position, Integer
-  key :restricted, Boolean
-  timestamps!
 
   before_create :move_to_list_bottom
-
-  acts_as_uri :title,
-              :target => :uri,
-              :only_when_blank => true,
-              :scope => :page_template_id
 
   scope :is_published, lambda { |is_published|
     published = Boolean.to_mongo(is_published)
@@ -47,18 +39,6 @@ class Page < Item
 
   def index_node
     @index_node ||= Node.where(controller: 'pages', action: 'index', page_template_id: self.page_template_id)
-  end
-
-  def category
-    @category ||= page_template.allow_categories? ? Page.tags_by_count(:namespace => page_template.handle).first : nil
-  end
-
-  def category_name
-    @category_name ||= category ? category.name : ''
-  end
-
-  def category_method_name
-    @category_method_name ||= "#{page_template.handle}_tag_names"
   end
 
   def in_restricted_context?

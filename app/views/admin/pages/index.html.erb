@@ -30,6 +30,11 @@
   </div>
   <div id="content">
     <div class="tablewrap">
+      <% if @page_template && !@page_template.allow_node_placements? && !@page_template.section %>
+      <div class="section">
+        <%= link_to t('.add_section'), new_admin_page_path(type: 'Section', page_template_id: @page_template.id) %>
+      </div>
+      <% end %>
       <table class="pages <%= ' sortable' if sortable %>">
         <thead>
           <tr>

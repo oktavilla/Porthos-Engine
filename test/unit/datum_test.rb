@@ -11,7 +11,7 @@ class DatumTest < ActiveSupport::TestCase
 
     Factory.build(:string_field, :handle => 'le_handle').tap do |datum|
       parent.data << datum
-      assert !datum.valid?, "datum should not be valid"
+      refute datum.valid?, "datum should not be valid"
       assert_not_nil datum.errors[:handle], "should have error on handle"
     end
   end
@@ -43,7 +43,7 @@ class DatumTest < ActiveSupport::TestCase
     page.data['article'].data << decendant
 
     assert child.is_root?
-    assert !decendant.is_root?
+    refute decendant.is_root?
   end
 
 end

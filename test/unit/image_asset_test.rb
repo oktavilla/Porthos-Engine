@@ -26,7 +26,7 @@ class ImageAssetTest < ActiveSupport::TestCase
 
     should 'know if is in portrait or landscape format' do
       assert @image_asset.portrait?
-      assert !@image_asset.landscape?
+      refute @image_asset.landscape?
     end
 
     context 'on create' do

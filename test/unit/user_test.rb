@@ -21,8 +21,8 @@ class UserTest < ActiveSupport::TestCase
   test 'find and authenticate' do
     @user.save
     assert_equal @user, User.authenticate('foxie', 'chunky!bacon'), 'should find the user and authenticate'
-    assert !User.authenticate('foxie', 'stale-bacon'), 'should find user but not authenticate'
-    assert !User.authenticate('rat', 'chunky!baloney')
+    refute User.authenticate('foxie', 'stale-bacon'), 'should find user but not authenticate'
+    refute User.authenticate('rat', 'chunky!baloney')
   end
 
 end

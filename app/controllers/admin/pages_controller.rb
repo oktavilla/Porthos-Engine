@@ -82,7 +82,7 @@ class Admin::PagesController < ApplicationController
   def sort
     timestamp = Time.now
     params[:page].each_with_index do |id, i|
-      Page.update(id, :position => i+1)
+      Page.set(id, :position => i+1)
     end
     respond_to do |format|
       format.js { render :nothing => true }

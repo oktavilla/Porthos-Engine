@@ -1,6 +1,7 @@
 <% @page_title = 'Sidor' -%>
 <% @page_class = 'layout3' -%>
 <%= render :partial => 'admin/pages/sub_nav' %>
+<% (@page_template && @page_template.pages_sortable?).tap do |sortable| %>
 <div id="workspace">
   <div class="header">
     <% if @page_template %>
@@ -15,6 +16,7 @@
       <%= link_to t('.create_new', :template => @page_template.label.downcase), new_admin_page_path(:page_template_id => @page_template.id), :class => 'new' %>
     </div>
     <% end %>
+  <% unless sortable %>
     <%= form_tag admin_pages_path, :method => :get do |f| %>
     <div class="sort">
       <label for="filters_order_by">Sortering:</label>
@@ -24,20 +26,31 @@
         <%= select_tag 'order_by', options_for_select({ 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, current_scopes[:order_by]) %>
     </div>
     <% end %>
+  <% end %>
   </div>
   <div id="content">
     <div class="tablewrap">
-      <table id="pages">
+      <table class="pages <%= ' sortable' if sortable %>">
         <thead>
           <tr>
+            <% if sortable %>
+            <th class="sort"></th>
+            <% end %>
             <th><%= Page.human_attribute_name(:title) %></th>
             <th><%= t(:updated_at) %></th>
             <th><%= t(:status) %></th>
           </tr>
         </thead>
+        <% if sortable %>
+        <%= tag 'tbody', :'data-sort-uri' => sort_admin_pages_path, :id => 'pages' %>
+        <% else %>
         <tbody>
+        <% end %>
       <% @pages.each do |page| %>
-        <tr>
+        <tr id="page_<%= page.id %>">
+          <% if sortable %>
+          <td class="sort"><span class="drag_handle"></span></td>
+          <% end %>
           <td class="content">
             <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
             <% if page.published? -%>
@@ -65,9 +78,10 @@
             <% end %>
           </td>
         </tr>
-      <% end %>
+        <% end %>
       </table>
     </div>
     <%= paginate @pages if @pages.any? %>
   </div>
 </div>
+<% end %>

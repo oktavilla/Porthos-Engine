@@ -1,0 +1,31 @@
+<tr id="page_<%= page.id %>">
+  <% if sortable %>
+  <td class="sort"><% unless page.is_a?(Section) %><span class="drag_handle"></span><% end %></td>
+  <% end %>
+  <td class="content">
+    <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
+    <% if page.published? -%>
+      <% page_path(:id => page.uri, :page_template_id => page.page_template_id).tap do |uri| %>
+        <%= link_to uri, uri %>
+      <% end %>
+    <% end -%>
+    <% if page.tags && page.tags.any? -%>
+    <div class="tags"><%= page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => [tag.name]))}.join(', ').html_safe %></div>
+    <% end -%>
+  </td>
+  <td class="updated_at">
+    <% if page.updated_at && page.updated_at != page.created_at -%>
+    <%= page.updated_at.strftime("%d %b") %>
+      <% if page.updated_by.present? %>
+       <%= t(:by) %> <%= page.updated_by.first_name %>
+      <% end %>
+    <% end -%>
+  </td>
+  <td class="status">
+    <% if page.published? %>
+    <span class="status published"><%= t(:published) %></span>
+    <% else %>
+    <span class="status unpublished"><%= t(:unpublished) %></span>
+    <% end %>
+  </td>
+</tr>

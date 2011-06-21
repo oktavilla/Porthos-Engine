@@ -100,9 +100,7 @@ class Admin::NodesController < ApplicationController
 
   def sort
     params[:node].each_with_index do |id, i|
-      if node = Node.find(id)
-        node.update_attributes(:position => i+1)
-      end
+      Node.set(id, :position => i+1)
     end
     render :nothing => true
   end

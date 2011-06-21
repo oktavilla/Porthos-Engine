@@ -172,16 +172,14 @@ Factory.define :hero_page_template, :parent => :page_template, :class => PageTem
   }
 end
 
-Factory.define :page do |f|
+Factory.define :item do |f|
   f.title { Factory.next(:title) }
 end
 
-Factory.define :custom_association do |f|
-  f.association :context, :factory => :page
-  f.association :target, :factory => :page
-  f.association :field
-  f.handle { Factory.next(:handle) }
-  f.relationship 'one_to_one'
+Factory.define :section, :parent => :item, :class => Section do |f|
+end
+
+Factory.define :page, :parent => :item, :class => Page do |f|
 end
 
 Factory.define :asset do |f|

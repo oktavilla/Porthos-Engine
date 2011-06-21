@@ -46,7 +46,7 @@ class Admin::ContentTemplatesController < ApplicationController
 
   def sort
     params[:content_template].each_with_index do |id, i|
-      ContentTemplate.update(id, :position => i+1)
+      ContentTemplate.set(id, :position => i+1)
     end if params[:content_template]
     respond_to do |format|
       format.js { render :nothing => true }

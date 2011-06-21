@@ -200,7 +200,6 @@ class CreatePorthosTables < ActiveRecord::Migration
       t.integer    "position"
       t.string     "uri"
       t.string     "title"
-      t.string     "layout_class"
       t.integer    "column_count"
       t.boolean    "active",          :default => true
       t.boolean    "restricted",      :default => false

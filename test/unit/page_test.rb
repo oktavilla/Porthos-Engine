@@ -7,6 +7,12 @@ class PageTest < ActiveSupport::TestCase
     @page = Page.from_template(@page_template, :title => 'A page')
   end
 
+  should "created data from datum_templates" do
+    @page_template.datum_templates.each do |datum_template|
+      assert @page.data.one? { |datum| datum.handle == datum_template.handle }, "should have had a datum with handle #{datum_template.handle}"
+    end
+  end
+
   should 'not be in list' do
     refute @page.in_list?
   end
@@ -19,34 +25,6 @@ class PageTest < ActiveSupport::TestCase
   should 'return nil for previous and next' do
     assert_nil @page.previous
     assert_nil @page.next
-  end
-
-  should "created data from datum_templates" do
-    @page_template.datum_templates.each do |datum_template|
-      assert @page.data.one? { |datum| datum.handle == datum_template.handle }, "should have had a datum with handle #{datum_template.handle}"
-    end
-  end
-
-  should "have access to data values by their handles" do
-    @page.data = [Factory.build(:string_field, :handle => 'short_description')]
-    assert_equal @page.data.first, @page.data['short_description'], "Should return the datum by it's handle"
-  end
-
-  should 'require published_on to be less than now to be published' do
-    @page.published_on = nil
-    refute @page.published?
-
-    @page.published_on = Date.today + 1.day
-    refute @page.published?
-
-    @page.published_on = Time.now - 1.minute
-    assert @page.published?
-  end
-
-  should 'trim its title before validation' do
-    @page.title = ' A title with spaces '
-    @page.valid?
-    assert_equal 'A title with spaces', @page.title
   end
 
   context 'when sortable' do

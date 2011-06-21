@@ -57,7 +57,7 @@ module DefaultRenderer
     self.required_objects = [:page_template, :page]
 
     def layout_class
-      @page.layout_class
+      "#{@page_template.handle}-show"
     end
 
     def title

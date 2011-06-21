@@ -9,7 +9,6 @@ class Page
   key :position, Integer
   key :title, String
   key :uri, String
-  key :layout_class, String
   key :active, Boolean
   key :restricted, Boolean
   key :published_on, Time

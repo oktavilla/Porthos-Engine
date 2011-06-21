@@ -89,16 +89,11 @@
         <span class="key">Namn i navigationen:</span>
         <span class="value"><%= @page.node.name %></span>
       </div>
+    <% end %>
+    <% if @page.published? -%>
       <div class="slug">
         <span class="key">Adress:</span>
         <% page_url(@page).tap do |url| %>
-        <span class="value"><%= link_to(url, url) %></span>
-        <% end %>
-      </div>
-    <% elsif @page.index_node %>
-      <div class="slug">
-        <span class="key">Adress:</span>
-        <% page_url(@page.uri, :page_template_id => @page.page_template_id).tap do |url| %>
         <span class="value"><%= link_to(url, url) %></span>
         <% end %>
       </div>

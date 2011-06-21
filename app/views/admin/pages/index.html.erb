@@ -41,7 +41,7 @@
           <td class="content">
             <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
             <% if page.published? -%>
-              <% page_path(:id => page.uri, :page_template_id => page.page_template_id).tap do |uri| %>
+              <% page_path(page).tap do |uri| %>
                 <%= link_to uri, uri %>
               <% end %>
             <% end -%>

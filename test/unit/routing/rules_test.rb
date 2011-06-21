@@ -27,7 +27,7 @@ class RulesTest < ActiveSupport::TestCase
     @rules = Rules.new(@rules_attributes)
   end
 
-  should "initialize with array of rules as a hash and convert to Rule instances" do
+  should 'initialize with array of rules as a hash and convert to Rule instances' do
     assert_equal 2, @rules.size
     assert @rules.all? { |r| r.is_a?(Rule) }
   end
@@ -37,7 +37,7 @@ class RulesTest < ActiveSupport::TestCase
       @size = @rules.size
     end
 
-    should "work with push" do
+    should 'work with push' do
       @rules.push [
         { path: ':id', controller:  'authors', action:   'show' },
         { path: 'by/:genre', controller:  'authors', action:  'index', constraints:  { genre: '([a-z0-9\-\_\s\p{Word}]+)' } }
@@ -46,19 +46,31 @@ class RulesTest < ActiveSupport::TestCase
       assert @rules.all? { |r| r.is_a?(Rule) }
     end
 
-    should "work with append (<<)" do
+    should 'work with append (<<)' do
       @rules << { path: ':id', controller:  'authors', action: 'show' }
       assert_equal @size + 1, @rules.size
       assert @rules.all? { |r| r.is_a?(Rule) }
     end
+
+    should 'work with block (draw)' do
+      @rules.draw do
+        match ':id',
+          to: { controller: 'authors', action: 'show'}
+        match 'by/:genre',
+          to: { controller: 'authors', action: 'index' },
+          constraints: { genre: '([a-z]+)' }
+      end
+      assert_equal @size + 2, @rules.size
+      assert @rules.all? { |r| r.is_a?(Rule) }
+    end
   end
 
-  should "sort rules by constraints" do
+  should 'sort rules by constraints' do
     assert_equal ['%{authors}/:genre/:id', "%{authors}/:genre/:year/:id"], @rules.collect { |r| r.path }
     assert_equal ["%{authors}/:genre/:year/:id", '%{authors}/:genre/:id'], @rules.sorted.collect { |r| r.path }
   end
 
-  should "find rules by params" do
+  should 'find rules by params' do
     assert_equal @rules.first, @rules.find_matching_params({
       controller: 'authors',
       action: 'show',

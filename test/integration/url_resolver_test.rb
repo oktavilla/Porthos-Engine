@@ -11,23 +11,22 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
   context 'Porthos urls' do
 
     setup do
-      Porthos::Routing.rules = Porthos::Routing::Rules.new([{
-        :path => ":year/:month/:day",
-        :constraints => {
-          :year => '(\d{4})',
-          :month => '(\d{2})',
-          :day => '(\d{2})'
-        },
-        :controller => 'posts'
-      },{
-        :path => ":post_id/author/:id",
-        :constraints => {
-          :id => '([a-z0-9\-\_]+)',
-          :post_id => '([a-z0-9\-\_]+)'
-        },
-        :controller => 'authors',
-        :action => 'show'
-      }])
+      Porthos::Routing.rules.draw do
+        match ':year/:month/:day',
+          :to => {
+            :controller => 'posts' },
+          :constraints => {
+            :year => '(\d{4})',
+            :month => '(\d{2})',
+            :day => '(\d{2})' }
+        match ':post_id/author/:id',
+          :to => {
+            :controller => 'authors',
+            :action => 'show' },
+          :constraints => {
+            :id => '([a-z0-9\-\_]+)',
+            :post_id => '([a-z0-9\-\_]+)' }
+      end
     end
 
 

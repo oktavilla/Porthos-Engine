@@ -64,6 +64,7 @@ module Porthos
         end
       end
     end
+
     class Rules
       include Enumerable
 
@@ -81,6 +82,17 @@ module Porthos
 
       def push(args)
         @rules += args.collect { |r| Rule.new(r) }
+      end
+
+      def match(path, options)
+        self << { :path => path }.tap do |new_rule|
+          new_rule.merge!(options.delete(:to))
+          new_rule.merge!(options)
+        end
+      end
+
+      def draw(&block)
+        instance_exec(&block)
       end
 
       def sorted

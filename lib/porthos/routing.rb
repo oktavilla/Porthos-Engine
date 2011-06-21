@@ -61,7 +61,7 @@ module Porthos
         path.dup.tap do |translated_path|
           template = translated_path
           path.scan(/\%{(\w+)}/).flatten.each do |string|
-            template.gsub!("%{#{string}}", I18n.t(string))
+            template.gsub!("%{#{string}}", I18n.t("routes.#{string}"))
           end
           translated_path.replace(template)
         end

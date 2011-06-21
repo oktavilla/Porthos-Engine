@@ -28,19 +28,19 @@ class RuleTest < ActiveSupport::TestCase
     end
 
     should "be translated" do
-      assert_equal "#{I18n.t(:authors)}/:genre/:id", @rule.translated_path
+      assert_equal "#{I18n.t('routes.authors')}/:genre/:id", @rule.translated_path
     end
 
     should 'be compiled to regexp with constraints' do
       constraints = @attrs[:constraints]
-      assert_equal "^(.*|)/#{I18n.t(:authors)}/#{constraints[:genre]}/#{constraints[:id]}", @rule.regexp_template
+      assert_equal "^(.*|)/#{I18n.t('routes.authors')}/#{constraints[:genre]}/#{constraints[:id]}", @rule.regexp_template
     end
 
     should 'get computed' do
       node = Node.new(controller: 'authors', action: 'index')
       computed_path = @rule.computed_path(node, genre: 'sci-fi', id: '78-robert-a-heinlein')
 
-      assert_equal "/#{I18n.t(:authors)}/sci-fi/78-robert-a-heinlein", computed_path
+      assert_equal "/#{I18n.t('routes.authors')}/sci-fi/78-robert-a-heinlein", computed_path
     end
   end
 end

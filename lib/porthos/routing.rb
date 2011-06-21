@@ -13,10 +13,15 @@ module Porthos
     #   }
     mattr_accessor :rules
     class Rule
+      include Comparable
       attr_reader :path,
                   :constraints,
                   :controller,
                   :action
+
+      def <=>(other_rule)
+        self.compare_string <=> other_rule.compare_string
+      end
 
       def initialize(attrs = {})
         attrs.symbolize_keys.reverse_merge(:constraints => {}).each do |key, value|
@@ -25,7 +30,7 @@ module Porthos
       end
 
       def param_keys
-        path.scan(/:(\w+)/).flatten.collect(&:to_sym)
+        path.scan(/:(\w+)/).flatten.map(&:to_sym)
       end
 
       def computed_path(node, params)
@@ -61,12 +66,34 @@ module Porthos
           translated_path.replace(template)
         end
       end
+
+    private
+
+      def compare_string
+        @compare_string ||= "#{path}-#{controller}-#{action}"
+      end
+
+      class << self
+        def from_hash(attrs)
+          attrs.kind_of?(Hash) ? new(attrs) : attrs
+        end
+      end
+
     end
+
     class Rules
       include Enumerable
 
       def initialize(rules)
-        @rules = rules.collect { |r| Rule.new(r) }
+        @rules = rules.map { |r| Rule.from_hash(r) }
+      end
+
+      def size
+        @rules.size
+      end
+
+      def last
+        @rules[size-1]
       end
 
       def each
@@ -74,11 +101,15 @@ module Porthos
       end
 
       def <<(rule)
-        @rules << Rule.new(rule)
+        @rules << Rule.from_hash(rule)
       end
 
       def push(args)
-        @rules += args.collect { |r| Rule.new(r) }
+        if args.respond_to?(:map)
+          @rules += args.map { |r| Rule.from_hash(r) }
+        else
+          self.push [args]
+        end
       end
 
       def sorted
@@ -93,6 +124,7 @@ module Porthos
           rule.constraints.keys.all? { |key| param_keys.include?(key) }
         end
       end
+
     end
 
     self.rules = Rules.new([

@@ -1,15 +1,5 @@
 require_relative '../test_helper'
 
-# Page (Built form PageTemple) has data ([Datum]) which can be
-#   Field (built from FieldTemplate)
-#   FieldSet (content?, built from FieldSetTemplate which has many field_templates)
-#   ContentBlock (built from ContentBlockTemplate ||? DatumTemplate)
-#
-#   FieldSets have fields
-#
-#   ContentBlock has data which can be
-#     Field
-#     FieldSet
 class PageTest < ActiveSupport::TestCase
 
   setup do

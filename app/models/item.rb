@@ -8,6 +8,14 @@ class Item
   key :title, String
   key :active, Boolean
   key :published_on, Time
+  key :restricted, Boolean
+  key :uri, String
+
+  acts_as_uri :title,
+              :target => :uri,
+              :only_when_blank => true,
+              :scope => :page_template_id
+  timestamps!
 
   taggable
 
@@ -79,6 +87,18 @@ class Item
 
   def node=(node_attributes)
     node ? node.attributes.merge(node_attributes) : Node.new(node_attributes).first
+  end
+
+  def category
+    @category ||= page_template.allow_categories? ? Page.tags_by_count(:namespace => page_template.handle).first : nil
+  end
+
+  def category_name
+    @category_name ||= category ? category.name : ''
+  end
+
+  def category_method_name
+    @category_method_name ||= "#{page_template.handle}_tag_names"
   end
 
 private

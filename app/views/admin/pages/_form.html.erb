@@ -3,11 +3,12 @@
 <div class="fullwidth">
   <%= f.text_field :title, :class => "title" %>
 </div>
+<% unless f.object.is_a?(Section) %>
 <%= f.label :uri %>
 <div class="fullwidth">
   <%= f.text_field :uri, :class => "uri" %>
 </div>
-
+<% end %>
 <label for="page_tag_names">
   Nyckelord (ej obligatoriskt)
   <span class="form_help">separera nyckelord med mellanslag</span>

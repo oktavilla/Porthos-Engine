@@ -56,7 +56,9 @@ module RoutingFilter
             conditions.merge!(:resource_type => params[:controller].classify, :resource_id => resource)
           end
           index_conditions.merge!(:handle => handle)
-          node = Node.first(conditions) || Node.first(index_conditions)
+          if node = (Node.first(conditions) || Node.first(index_conditions))
+            params[:id] = resource.uri if resource.respond_to?(:uri) and resource.uri.present?
+          end
         end
         if !node and handle.present?
           node = Node.first(:handle => handle)

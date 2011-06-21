@@ -42,36 +42,26 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'publishing a page without all required data' do
-    Capybara.using_driver(:selenium) do
-      # Need to reset env/session for selenium
-      User.delete_all
-      login!
-      batman = create_page
-      batman.data.each { |d| d.required = true }
+    batman = create_page
+    batman.data.each { |d| d.required = true }
 
-      visit admin_page_path(batman.id)
+    visit admin_page_path(batman.id)
 
-      publish
-      flunk 'Not implemented'
-      refute published?
-    end
+    publish
+    flunk 'Not implemented'
+    refute published?
   end
 
   test 'publishing a page' do
-    Capybara.using_driver(:selenium) do
-      # Need to reset env/session for selenium
-      User.delete_all
-      login!
-      batman = create_page
-      batman.data.each { |d| d.required = false } && batman.save
+    batman = create_page
+    batman.data.each { |d| d.required = false } && batman.save
 
-      assert batman.valid?
+    assert batman.valid?
 
-      visit admin_page_path(batman.id)
-      publish
+    visit admin_page_path(batman.id)
+    publish
 
-      assert published?, "Should get published"
-    end
+    assert published?, "Should get published"
   end
 
   test 'editing page datum attributes' do

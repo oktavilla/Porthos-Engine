@@ -18,10 +18,8 @@ module Porthos
                   :controller,
                   :action
 
-      def initialize(attrs)
-        {
-          :constraints => {}
-        }.merge(attrs.to_options).each do |key, value|
+      def initialize(attrs = {})
+        attrs.symbolize_keys.reverse_merge(:constraints => {}).each do |key, value|
           instance_variable_set("@#{key.to_s}".to_sym, value)
         end
       end

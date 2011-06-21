@@ -55,8 +55,8 @@ module Porthos
       def translated_path
         path.dup.tap do |translated_path|
           template = translated_path
-          path.scan(/{{(\w+)}}/).flatten.each do |string|
-            template.gsub!("{{#{string}}}", I18n.t(string))
+          path.scan(/\%{(\w+)}/).flatten.each do |string|
+            template.gsub!("%{#{string}}", I18n.t(string))
           end
           translated_path.replace(template)
         end
@@ -140,12 +140,12 @@ module Porthos
         :controller => 'pages'
       },
       {
-        :path => '{{categories}}',
+        :path => '%{categories}',
         :controller => 'pages',
         :action => 'categories'
       },
       {
-        :path => "{{categories}}/:id",
+        :path => "%{categories}/:id",
         :constraints => {
           :id => '([a-z0-9\-\_\s\p{Word}]+)'
         },

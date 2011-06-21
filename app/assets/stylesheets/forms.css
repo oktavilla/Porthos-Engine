@@ -36,12 +36,13 @@ fieldset.compact {
   fieldset.compact .submit {
     padding-left:115px; }
 
-form .uri_field {margin-top:.5em;}
+form .uri_field {margin-top:.8em;}
   form .uri_field label {
     display:inline;
-    font-weight:normal; }
+    font-weight:normal;
+    color:#999; }
   form .uri_field input {
-      margin-left:.3em;
+      margin-left:0;
       padding:.1em;
       font-size:.8571em; }
 

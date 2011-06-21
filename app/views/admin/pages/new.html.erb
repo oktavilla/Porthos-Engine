@@ -11,10 +11,13 @@
       <%= hidden_field_tag 'page_template_id', @template.id %>
 
       <label for="page_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>
-      <%= f.text_field :title, :class => "title" %>
+      <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>
 
-      <%= f.label :uri %>
-      <%= f.text_field :uri, :class => "uri" %>
+      <div class="uri_field">
+        <%# Print out correct URL instead of localhost %>
+        <%= f.label :uri, "http://localhost/" %>
+        <%= f.text_field :uri, :class => "uri" %>
+      </div>
 
       <div class="submit">
         <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), previous_view_path(admin_pages_path) %>

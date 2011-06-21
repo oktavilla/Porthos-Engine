@@ -13,7 +13,7 @@ require_relative '../test_helper'
 class PageTest < ActiveSupport::TestCase
 
   setup do
-    @page_template = Factory.build(:page_template)
+    @page_template = Factory.build(:page_template, :handle => 'super-awesome')
     @page = Page.from_template(@page_template)
   end
 
@@ -43,6 +43,12 @@ class PageTest < ActiveSupport::TestCase
     @page.title = ' A title with spaces '
     @page.valid?
     assert_equal 'A title with spaces', @page.title
+  end
+
+  test 'should get handle' do
+    @page.title = 'Greetings'
+    @page.save
+    assert_equal 'super-awesome', @page.handle
   end
 
 end

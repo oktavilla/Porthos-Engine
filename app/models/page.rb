@@ -13,6 +13,7 @@ class Page
   key :active, Boolean
   key :restricted, Boolean
   key :published_on, Time
+  key :handle, String
   timestamps!
 
   belongs_to :created_by, :class_name => 'User'
@@ -47,7 +48,7 @@ class Page
     end
 
     def from_template(template, attributes = {})
-      self.new(attributes.merge(:page_template_id => template.id)).tap do |page|
+      self.new(attributes.merge(:page_template_id => template.id, :handle => template.handle)).tap do |page|
         page.data = template.datum_templates.map do |datum_template|
           datum_template.datum_class.constantize.from_template(datum_template)
         end
@@ -182,5 +183,4 @@ private
   def set_updated_by
     self.updated_by = User.current
   end
-
 end

@@ -6,12 +6,21 @@ class PageTemplate < Template
   key :allow_categories, Boolean, :default => lambda { false }
   key :allow_node_placements, Boolean, :default => lambda { false }
 
-  validates_presence_of :handle
   has_one :section
 
+  validates_presence_of :handle
   validates_uniqueness_of :handle,
                           :case_sensitive => false,
                           :allow_blank => true
+
+  attr_accessor :handle_was_changed
+
+  before_validation proc { self.handle_was_changed = true if changes.key?('handle') }
+  after_save proc {
+      Rails.env.production? ? delay.propagate_handle : propagate_handle
+      self.handle_was_changed = false
+    },
+    :if => proc { handle_was_changed }
 
   def template
     @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default
@@ -20,5 +29,9 @@ class PageTemplate < Template
   # Instantiates a new page renderer
   def renderer(action, controller, objects = {})
     "#{template.name.camelize}Renderer::#{action.to_s.camelize}".constantize.new(controller, objects.to_options.merge({ :field_set => self }))
+  end
+
+  def propagate_handle
+    Page.set({ 'page_template_id' => self._root_document.id }, { :handle => handle})
   end
 end

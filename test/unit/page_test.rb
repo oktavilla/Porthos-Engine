@@ -51,10 +51,8 @@ class PageTest < ActiveSupport::TestCase
 
   context 'when sortable' do
     setup do
-      @page_template.pages_sortable = true
-      @page_template.save!
-      @page.save!
-
+      @page_template.update_attribute :pages_sortable, true
+      @page.save
     end
 
     should 'be in list' do

@@ -28,6 +28,7 @@ class Page
   validates_presence_of :title
 
   before_create :set_created_by
+  before_create :move_to_list_bottom
   before_save :set_updated_by
   before_save :sort_data
 
@@ -154,7 +155,32 @@ class Page
     @in_restricted_context ||= restricted? || node_restricted? || index_node_restricted?
   end
 
-protected
+  # Sortable methods
+
+  def in_list?
+    @in_list ||= page_template && page_template.pages_sortable?
+  end
+
+
+  def previous
+    Page.with_page_template(self.page_template_id).where(:position.lt => self.position).first if in_list?
+  end
+
+  def next
+    Page.with_page_template(self.page_template_id).where(:position.gt => self.position).first if in_list?
+  end
+
+private
+
+  def move_to_list_bottom
+    if position.blank? && in_list?
+      last_in_list = Page.where(:page_template_id => self.page_template_id).
+                       sort(:position.desc).
+                       fields(:position).limit(1).
+                       first
+      self.position = last_in_list ? last_in_list.position + 1 : 1
+    end
+  end
 
   def create_reader_for_datum(datum)
     self.class.send :attr_reader, datum.handle

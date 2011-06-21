@@ -49,19 +49,20 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
         end
 
         should 'rewrite the path to match the nodes url' do
-          assert_equal "/#{@node.url}", post_path(:id => @post.id, :mongo => true)
+          assert_equal "/#{@node.url}", post_path(:id => @post, :mongo => true)
         end
       end
 
-      context 'for a path with parameters to a child resource of different type' do
+      context 'that is a child resource of a resource' do
         setup do
           @node = Factory(:test_blog_node)
           @post = Factory(:post)
-          @author = Factory(:author)
+          @author = Factory(:author, :handle => 'blog')
         end
 
         should 'result in a url with the parameters in the correct places' do
-          assert_equal "/#{@node.url}/#{@post.id}/author/#{@author.id}", author_path(:post_id => @post.id, :id => @author.id, :host => 'test.com', :handle => 'blog')
+          assert_equal "/#{@node.url}/#{@post.id}/author/#{@author.id}",
+            author_path(:post_id => @post.id, :id => @author, :host => 'test.com')
         end
       end
     end

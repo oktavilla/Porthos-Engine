@@ -15,9 +15,9 @@ class PagesTest < ActiveSupport::IntegrationCase
 
     visit admin_pages_path(:tags => ['tag1'])
 
-    assert page.find("table#pages").has_content?(page1.title), 'Should display page1 in the pages list'
-    assert page.find("table#pages").has_content?(page3.title), 'Should display page2 the pages list'
-    refute page.find("table#pages").has_content?(page2.title), 'Should not display page2 in the pages list'
+    assert page.find("table.pages").has_content?(page1.title), 'Should display page1 in the pages list'
+    assert page.find("table.pages").has_content?(page3.title), 'Should display page2 the pages list'
+    refute page.find("table.pages").has_content?(page2.title), 'Should not display page2 in the pages list'
   end
 
   test 'creating a page' do

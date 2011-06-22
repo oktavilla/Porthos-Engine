@@ -561,6 +561,7 @@
       index:
         all_pages: "Alla sidor"
         create_new: "Skapa ny %{template}sida"
+        add_section: Lägg till indexsida
       show:
         edit_category: Ändra kategori
         choose_category: Välj kategori
@@ -569,7 +570,7 @@
         not_published: Sidan är inte publicerad
         publish_now: Publicera
         add_content: Lägg till innehåll
-        add_datum: Lägg till %{label}
+        add_datum: "Lägg till %{label}"
     content_templates:
       index:
         title: Innehållstyper

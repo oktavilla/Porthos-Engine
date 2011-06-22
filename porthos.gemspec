@@ -9,13 +9,14 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = '>= 1.3.6'
 
-  s.add_dependency 'rails', '3.1.0.rc3'
+  s.add_dependency 'rails', '3.1.0.rc4'
 
   # Asset pipeline
   s.add_dependency 'sass'
-  s.add_dependency 'coffee-script'
-  s.add_dependency 'uglifier'
+  s.add_dependency 'coffee-script', '2.2.0'
+  s.add_dependency 'uglifier', '0.5.4'
   s.add_dependency 'jquery-rails'
+  s.add_dependency 'sprockets', '2.0.0.beta.10'
 
   # Mongo
   s.add_dependency 'bson_ext'

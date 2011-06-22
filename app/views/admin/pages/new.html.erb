@@ -15,6 +15,7 @@
 
       <% unless f.object.is_a?(Section) %>
         <%= f.label :uri %>
+        <%= page_url_parent(@page) if @page.index_node.present? %>
         <%= f.text_field :uri, :class => "uri" %>
       <% end %>
 

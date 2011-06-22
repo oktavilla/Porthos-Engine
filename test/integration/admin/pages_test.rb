@@ -1,5 +1,4 @@
 require_relative '../../test_helper'
-require 'launchy'
 class PagesTest < ActiveSupport::IntegrationCase
   setup do
     WebMock.allow_net_connect!

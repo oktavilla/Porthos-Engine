@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   # Asset pipeline
   s.add_dependency 'sass'
   s.add_dependency 'coffee-script', '2.2.0'
-  s.add_dependency 'uglifier', '0.5.4'
+  s.add_dependency 'uglifier'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'sprockets', '2.0.0.beta.10'
 

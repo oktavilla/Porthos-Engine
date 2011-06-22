@@ -10,6 +10,7 @@ class Item
   key :published_on, Time
   key :restricted, Boolean
   key :uri, String
+  key :handle, String
 
   acts_as_uri :title,
               :target => :uri,

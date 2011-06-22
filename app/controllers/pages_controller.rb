@@ -26,12 +26,12 @@ class PagesController < ApplicationController
     template = @page.template
     @page_renderer = page_renderer(template, :page_template => @page.page_template, :page => @page)
 
-    if !@page.restricted? || logged_in?
+    if !@page.restricted? || signed_in?
       respond_to do |format|
         format.html { render :template => template.views.show }
       end
     else
-      return login_required
+      return authenticate!
     end
   end
 

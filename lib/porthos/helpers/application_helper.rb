@@ -136,5 +136,11 @@ module Porthos
       end
       html+"\n"
     end
+
+    def page_url_parent(page)
+      pages_url(:handle => page.handle).tap do |url|
+        url << '/' unless url.end_with?('/')
+      end
+    end
   end
 end

@@ -13,11 +13,12 @@
       <label for="page_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>
       <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>
 
+      <% unless f.object.is_a?(Section) %>
       <div class="uri_field">
-        <%# Print out correct URL instead of localhost %>
-        <%= f.label :uri, "http://localhost/" %>
+        <%= f.label :uri %>
+        <%= page_url_parent(@page) if @page.index_node.present? %>
         <%= f.text_field :uri, :class => "uri" %>
-      </div>
+      <% end %>
 
       <div class="submit">
         <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), previous_view_path(admin_pages_path) %>

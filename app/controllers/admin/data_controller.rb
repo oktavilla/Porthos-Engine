@@ -67,7 +67,7 @@ class Admin::DataController < ApplicationController
 protected
 
   def find_page
-    @page = Page.find(params[:page_id])
+    @page = Item.find(params[:page_id])
     if params[:parent_id]
       @parent = @page.data.find(params[:parent_id])
     else

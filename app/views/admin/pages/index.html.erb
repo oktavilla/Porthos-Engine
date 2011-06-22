@@ -1,6 +1,7 @@
 <% @page_title = 'Sidor' -%>
 <% @page_class = 'layout3' -%>
 <%= render :partial => 'admin/pages/sub_nav' %>
+<% (@page_template && @page_template.pages_sortable?).tap do |sortable| %>
 <div id="workspace">
   <div class="header">
     <% if @page_template %>
@@ -15,6 +16,7 @@
       <%= link_to t('.create_new', :template => @page_template.label.downcase), new_admin_page_path(:page_template_id => @page_template.id), :class => 'new' %>
     </div>
     <% end %>
+  <% unless sortable %>
     <%= form_tag admin_pages_path, :method => :get do |f| %>
     <div class="sort">
       <label for="filters_order_by">Sortering:</label>
@@ -24,50 +26,45 @@
         <%= select_tag 'order_by', options_for_select({ 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, current_scopes[:order_by]) %>
     </div>
     <% end %>
+  <% end %>
   </div>
   <div id="content">
     <div class="tablewrap">
-      <table id="pages">
+      <% if @page_template && !@page_template.allow_node_placements? && !@page_template.section %>
+      <div class="section">
+        <%= link_to t('.add_section'), new_admin_page_path(type: 'Section', page_template_id: @page_template.id) %>
+      </div>
+      <% end %>
+      <table class="pages <%= ' sortable' if sortable %>">
         <thead>
           <tr>
+            <% if sortable %>
+            <th class="sort"></th>
+            <% end %>
             <th><%= Page.human_attribute_name(:title) %></th>
             <th><%= t(:updated_at) %></th>
             <th><%= t(:status) %></th>
           </tr>
         </thead>
+        <% if @page_template && @page_template.section %>
+        <% @page_template.section.tap do |section| %>
+        <tbody class="section">
+          <%= render partial: 'row', locals: { page: section, sortable: sortable } %>
+        </tbody>
+        <% end %>
+        <% end %>
+        <% if sortable %>
+        <%= tag 'tbody', :'data-sort-uri' => sort_admin_pages_path, :id => 'pages' %>
+        <% else %>
         <tbody>
-      <% @pages.each do |page| %>
-        <tr>
-          <td class="content">
-            <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
-            <% if page.published? -%>
-              <% page_path(:id => page.uri, :page_template_id => page.page_template_id).tap do |uri| %>
-                <%= link_to uri, uri %>
-              <% end %>
-            <% end -%>
-            <% if page.tags && page.tags.any? -%>
-            <div class="tags"><%= page.tags.collect { |tag| link_to(tag.name, admin_pages_path(:tags => [tag.name]))}.join(', ').html_safe %></div>
-            <% end -%>
-          </td>
-          <td class="updated_at">
-            <% if page.updated_at && page.updated_at != page.created_at -%>
-            <%= page.updated_at.strftime("%d %b") %>
-              <% if page.updated_by.present? %>
-               <%= t(:by) %> <%= page.updated_by.first_name %>
-              <% end %>
-            <% end -%>
-          </td>
-          <td class="status">
-            <% if page.published? %>
-            <span class="status published"><%= t(:published) %></span>
-            <% else %>
-            <span class="status unpublished"><%= t(:unpublished) %></span>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
+        <% end %>
+        <% @pages.each do |page| %>
+          <%= render partial: 'row', locals: { page: page, sortable: sortable } %>
+        <% end %>
+        </tbody>
       </table>
     </div>
     <%= paginate @pages if @pages.any? %>
   </div>
 </div>
+<% end %>

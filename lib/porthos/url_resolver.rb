@@ -43,21 +43,25 @@ module RoutingFilter
         yield
       else
         node = nil
+        handle = params[:handle]
         conditions = { :controller => params[:controller], :action => params[:action] }
         index_conditions = conditions.dup.merge(:action => 'index')
         if params[:id].present?
           resource = params[:id]
+          handle = resource.handle if resource.respond_to?(:handle)
           if resource.kind_of?(MongoMapper::Document) or resource.kind_of?(ActiveRecord::Base)
             params[:id] = resource.to_param
             conditions.merge!(:resource_type => resource.class.to_s, :resource_id => resource.id)
           else
             conditions.merge!(:resource_type => params[:controller].classify, :resource_id => resource)
           end
-          index_conditions.merge!(:handle => params[:handle])
-          node = Node.first(conditions) || Node.first(index_conditions)
+          index_conditions.merge!(:handle => handle)
+          if node = (Node.first(conditions) || Node.first(index_conditions))
+            params[:id] = resource.uri if resource.respond_to?(:uri) and resource.uri.present?
+          end
         end
-        if !node and params[:handle].present?
-          node = Node.first(:handle => params[:handle])
+        if !node and handle.present?
+          node = Node.first(:handle => handle)
         end
         yield.tap do |path|
           if node

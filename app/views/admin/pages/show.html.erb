@@ -85,23 +85,18 @@
       <h1><%= @page.title %></h1>
     </div>
     <% if @page.node -%>
-      <div class="navigation">
-        <span class="key">Namn i navigationen:</span>
-        <span class="value"><%= @page.node.name %></span>
-      </div>
-      <div class="uri">
-        <span class="key">Adress:</span>
-        <% page_url(@page).tap do |url| %>
-        <span class="value"><%= link_to(url, url) %></span>
-        <% end %>
-      </div>
-    <% elsif @page.index_node %>
-      <div class="uri">
-        <span class="key">Adress:</span>
-        <% page_url(@page.uri, :page_template_id => @page.page_template_id).tap do |url| %>
-        <span class="value"><%= link_to(url, url) %></span>
-        <% end %>
-      </div>
+    <div class="navigation">
+      <span class="key">Namn i navigationen:</span>
+      <span class="value"><%= @page.node.name %></span>
+    </div>
+    <% end %>
+    <% if @page.published? -%>
+    <div class="slug">
+      <span class="key">Adress:</span>
+      <% page_url(@page).tap do |url| %>
+      <span class="value"><%= link_to(url, url) %></span>
+      <% end %>
+    </div>
     <% end %>
   </div>
   <div class="header" style="display:none;">
@@ -113,6 +108,7 @@
       </div>
       <div class="uri_field">
         <label for="page_uri">Adress:</label>
+        <%= page_url_parent(@page) %>
         <%= f.text_field :uri %>
       </div>
       <div class="restricted_field">

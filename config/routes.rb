@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount TagsAutocompleteApp.instance => '/admin/tags'
+  mount TagsAutocompleteApp.instance => '/admin/tags/autocomplete'
 
   filter :url_resolver
 

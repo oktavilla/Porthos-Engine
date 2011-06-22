@@ -22,16 +22,16 @@ class PagesController < ApplicationController
   end
 
   def show
-    @page = Page.published.find(params[:id]) || Page.published.where(:uri => params[:id], :page_template_id => params[:page_template_id]).first || (raise ActiveRecord::RecordNotFound)
+    @page = Page.published.find(params[:id]) || Page.published.where(:uri => params[:id], :handle => params[:handle]).first || (raise ActiveRecord::RecordNotFound)
     template = @page.template
     @page_renderer = page_renderer(template, :page_template => @page.page_template, :page => @page)
 
-    if !@page.restricted? || logged_in?
+    if !@page.restricted? || signed_in?
       respond_to do |format|
         format.html { render :template => template.views.show }
       end
     else
-      return login_required
+      return authenticate!
     end
   end
 

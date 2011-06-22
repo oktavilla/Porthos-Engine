@@ -32,4 +32,9 @@ protected
 
     click_button I18n.t(:'admin.sessions.new.login')
   end
+
+  def logout!
+    visit admin_logout_path
+  end
+
 end

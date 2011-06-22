@@ -9,7 +9,7 @@ class SessionsTest < ActiveSupport::IntegrationCase
 
   test 'signing out' do
     login!
-    visit admin_logout_path
+    logout!
     assert_equal '/admin/login', current_path
     assert has_content?(I18n.t(:'admin.sessions.signed_out')), "Expected to show flash message"
   end

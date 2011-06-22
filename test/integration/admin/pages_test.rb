@@ -37,8 +37,47 @@ class PagesTest < ActiveSupport::IntegrationCase
     fill_in 'page_uri', :with => 'batman'
     click_button I18n.t(:save)
 
-    assert has_flash_message? I18n.t(:saved, :scope => [:app, :admin_pages])
+    assert page_was_saved?
     assert_equal 'Batman', page.find('h1').text
+  end
+
+  test 'updating page details' do
+    batman = create_page
+    visit admin_page_path(batman)
+
+    within '.header form.edit_page' do
+      fill_in 'page_title', :with => 'Robin'
+      fill_in 'page_uri', :with => 'robins-awesome-page'
+      click_button I18n.t(:save)
+    end
+
+    assert page_was_saved?
+    assert page.find('.header .page_title h1').has_content?('Robin')
+  end
+
+  test 'marking a page as restricted' do
+    batman = create_page
+    node = Node.create(:controller => 'pages', :action => 'show', :resource => batman, :url => 'the-dark-knight')
+    visit admin_page_path(batman)
+    publish
+
+    visit page_path(batman)
+
+    assert_equal "/#{node.url}", current_path
+    assert page.has_content?(batman.title)
+
+    visit admin_page_path(batman)
+
+    within '.header form.edit_page' do
+      check 'page_restricted'
+      click_button I18n.t(:save)
+    end
+    assert page_was_saved?
+
+    logout!
+    visit page_path(batman)
+
+    assert_equal admin_login_path, current_path
   end
 
   test 'publishing a page without all required data' do
@@ -73,7 +112,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       click_button I18n.t(:save)
     end
 
-    assert has_flash_message?(I18n.t(:saved, :scope => [:app, :admin_pages]))
+    assert page_was_saved?
     assert page.has_content?('Evil Fears The Knight'), "Should find the tagline within content"
   end
 
@@ -85,10 +124,12 @@ class PagesTest < ActiveSupport::IntegrationCase
       @page_template.update_attribute(:allow_categories, true)
       new_page = Page.create_from_template(@page_template, :title => 'Category page')
       visit admin_page_path(new_page)
+
       click_link I18n.t(:'admin.pages.show.choose_category')
       click_link I18n.t(:'admin.pages.show.add_new_category')
       fill_in "page_#{@page_template.handle}_tag_names", :with => 'Beverages'
       click_button I18n.t(:save)
+
       assert page.find('#page_category').has_content?('Beverages'), 'Category should be added'
       refute page.find('#page_tags p').has_content?('Beverages'), 'category should not be listed as a tag'
     end
@@ -123,8 +164,12 @@ class PagesTest < ActiveSupport::IntegrationCase
 
 protected
 
-  def create_page
-    Page.create_from_template(@page_template, :title => 'Batman')
+  def create_page(attrs = {})
+    Page.create_from_template(@page_template, { title: 'Batman' }.merge(attrs))
+  end
+
+  def page_was_saved?
+    has_flash_message? I18n.t(:'app.admin_pages.saved')
   end
 
   def publish

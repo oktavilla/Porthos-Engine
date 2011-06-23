@@ -41,4 +41,14 @@ class ContentBlockTest < ActiveSupport::TestCase
     @content_block.send :remove_instance_variable, :@pages
     assert_equal 2, @content_block.pages.size, 'should not include inactive data'
   end
+
+  test 'doesnt return page associations without a page' do
+    @content_block.data << PageAssociation.new()
+    assert_empty @content_block.pages
+
+    @content_block.send :remove_instance_variable, :@pages
+    @content_block.data << PageAssociation.new(:page => Factory.build(:page))
+    assert_equal 1, @content_block.pages.size
+  end
+
 end

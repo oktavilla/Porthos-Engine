@@ -18,7 +18,7 @@ class ContentBlock < Datum
   end
 
   def pages
-    @pages ||= data.active.find_all { |d| d.is_a?(PageAssociation) }.collect { |d| d.page }
+    @pages ||= data.active.find_all { |d| d.is_a?(PageAssociation) && d.page }.collect { |d| d.page }
   end
 
   def texts

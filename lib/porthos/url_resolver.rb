@@ -5,6 +5,7 @@ module RoutingFilter
       if env["REQUEST_URI"] =~ /^\/(admin|javascripts|stylesheets|images|graphics)/
         yield
       else
+        original_path = path.dup
         path.replace(CGI::unescape(path))
         custom_params = {}
         node_url = path.gsub(/^\//,'')
@@ -26,6 +27,7 @@ module RoutingFilter
           }
         end
         yield.tap do |params|
+          params.merge!(:_original_path => original_path)
           params.merge!(mapping_params) if node
           params.merge!(custom_params)
         end

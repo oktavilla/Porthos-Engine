@@ -1,3 +1,4 @@
+require "singleton"
 module Porthos
   class Routing
     # A rule is a hash with three keys
@@ -24,10 +25,12 @@ module Porthos
         end
       end
 
+      # Returns all keys defined in the path rule
       def param_keys
         path.scan(/:(\w+)/).flatten.collect(&:to_sym)
       end
 
+      # Returns the path with the defined keys replaced with values from the params
       def computed_path(node, params)
         [node.url, translated_path].join('/').tap do |computed_path|
           template = computed_path
@@ -39,6 +42,8 @@ module Porthos
         end
       end
 
+      # Returns a regexp string for matching the incoming path to the rule
+      # The keys defined in the rule's path is replaced by their constraints
       def regexp_template
         "^(.*|)/#{translated_path}".tap do |regexp_template|
           template = regexp_template
@@ -49,6 +54,8 @@ module Porthos
         end.mb_chars
       end
 
+      # Run translations on the path
+      # Used in regexp_template to be able to match paths in the current locale context
       def translated_path
         path.dup.tap do |translated_path|
           template = translated_path
@@ -59,11 +66,21 @@ module Porthos
         end
       end
     end
+
     class Rules
+      include Singleton
       include Enumerable
 
-      def initialize(rules)
-        @rules = rules.collect { |r| Rule.new(r) }
+      def initialize
+        @rules = []
+      end
+
+      def <<(obj)
+        @rules << new_rule(obj)
+      end
+
+      def +(rules = [])
+        @rules += rules.collect { |obj| new_rule(obj) }
       end
 
       def each
@@ -80,9 +97,17 @@ module Porthos
           (rule.action.blank? || rule.action == params[:action]) && rule.constraints.keys.all? { |key| param_keys.include?(key) }
         end
       end
+
+    protected
+
+      def new_rule(obj)
+        obj.is_a?(Rule) ? obj : Rule.new(obj)
+      end
+
     end
 
-    self.rules = Rules.new([
+    self.rules = Rules.instance
+    self.rules + [
       {
         :path => ":id",
         :constraints => {
@@ -139,7 +164,7 @@ module Porthos
         :controller => 'pages',
         :action => 'category'
       }
-    ])
+    ]
 
     # Find a rule definition that matches the path
     # Returns a hash of params

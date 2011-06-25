@@ -136,7 +136,7 @@
         asset:
           file: 
             unable_to_store: kunde inte sparas
-            unable_to_replace_different_filetype: måste vara samma filtyp som original
+            unable_to_replace_different_filetype: måste vara samma filtyp som orginal
     models:
       asset: Fil
       content_module: Innehållsmodul

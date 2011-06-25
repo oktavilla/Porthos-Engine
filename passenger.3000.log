@@ -1,1 +1,0 @@
-2011/04/12 14:09:05 [error] 68822#0: *4 directory index of "/Users/alexis/Sites/porthos/public/" is forbidden, client: 127.0.0.1, server: _, request: "GET / HTTP/1.1", host: "localhost:3000"

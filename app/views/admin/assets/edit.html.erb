@@ -43,7 +43,7 @@
           <li><span>Uppladdad</span> <%= @asset.created_at.strftime("%d %B %Y") %></li>
           <li><span>Filnamn</span> <%= "#{@asset.name}.#{@asset.extension}" %></li>
           <li><span>Storlek</span> <%= number_to_human_size(@asset.size) %></li>
-          <li><%= link_to "Ladda ned original", @asset.remote_url %></li>
+          <li><%= link_to "Ladda ned orginal", @asset.remote_url %></li>
         </ul>
       </div>
     </div></div>

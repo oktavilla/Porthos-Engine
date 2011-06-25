@@ -17,7 +17,7 @@
         <label for="content_image_format">Format</label>
         <%= f.select :style, ContentImage.styles.collect { |s, klass| [s[:name], s[:class]] } %>
         <% end -%>
-        <label for="content_image_downloadable"><%= f.check_box :downloadable %> Länka till original</label>
+        <label for="content_image_downloadable"><%= f.check_box :downloadable %> Länka till orginal</label>
         <div class="submit">
           <input type="submit" value="Spara bild"> eller <a href="<%= previous_view_path %>" class="back">avbryt</a>
         </div>

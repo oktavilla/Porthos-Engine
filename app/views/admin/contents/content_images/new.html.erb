@@ -29,7 +29,7 @@
           <label for="content_image_format">Format</label>
           <%= resource.select :style, ContentImage.styles.collect { |s, klass| [s[:name], s[:class]] } %>
           <% end %>
-          <label for="resource_downloadable"><%= resource.check_box :downloadable %> Länka till orginal</label>
+          <label for="resource_downloadable"><%= resource.check_box :downloadable %> Länka till original</label>
         <% end %>
         <div class="submit">
           <input type="submit" value="Lägg till bild"> eller <a href="<%= previous_view_path %>" class="back">avbryt</a>

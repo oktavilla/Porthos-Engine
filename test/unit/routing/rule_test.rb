@@ -10,7 +10,8 @@ class RuleTest < ActiveSupport::TestCase
         id: '([a-z0-9\-\_]+)'
       },
       controller: 'authors',
-      action: 'show'
+      action: 'show',
+      namespace: 'authors'
     }
     @rule = Rule.new(@attrs)
   end
@@ -20,6 +21,12 @@ class RuleTest < ActiveSupport::TestCase
     assert_equal @attrs[:constraints], @rule.constraints
     assert_equal @attrs[:controller], @rule.controller
     assert_equal @attrs[:action], @rule.action
+    assert_equal @attrs[:namespace], @rule.namespace
+  end
+
+  should 'know if it matches a certain criteria' do
+    refute @rule.match?({bananas: 9}), 'should not match bananas = 9'
+    assert @rule.match?({ controller: 'authors', namespace: 'authors' }), 'should match controller and namespace'
   end
 
   context "path" do

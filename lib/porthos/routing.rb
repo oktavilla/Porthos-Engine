@@ -17,7 +17,8 @@ module Porthos
       attr_reader :path,
                   :constraints,
                   :controller,
-                  :action
+                  :action,
+                  :namespace
 
       def <=>(other_rule)
         self.compare_string <=> other_rule.compare_string
@@ -29,6 +30,16 @@ module Porthos
         end
       end
 
+      def match?(attrs)
+        attrs.each do |key, value|
+          "@#{key.to_s}".to_sym.tap do |variable_name|
+            return false if !instance_variables.include?(variable_name) or
+              instance_variable_get(variable_name) != value
+          end
+        end
+        true
+      end
+
       def param_keys
         path.scan(/:(\w+)/).flatten.map(&:to_sym)
       end
@@ -38,7 +49,11 @@ module Porthos
           template = computed_path
           constraints.each do |key, value|
             if params[key]
-              value_for_key = params[key].respond_to?(:to_param) ? params[key].to_param : params[key].to_s
+              value_for_key = if params[key].respond_to?(:to_param)
+                params[key].to_param
+              else
+                params[key].to_s
+              end
               template.gsub!(":#{key.to_s}", value_for_key)
             end
           end
@@ -143,6 +158,7 @@ module Porthos
     end
 
     self.rules = Rules.new([
+
       {
         :path => ":id",
         :constraints => {
@@ -203,20 +219,20 @@ module Porthos
 
     # Find a rule definition that matches the path
     # Returns a hash of params
-    def self.recognize(path)
-      return {}.tap do |params|
-        self.rules.sorted.each do |rule|
-          matches = path.scan(Regexp.new(rule.regexp_template)).flatten
-          next unless matches.any?
+    def self.recognize(path, restrictions = {})
+      return self.rules.sorted.collect do |rule|
+        matches = path.scan(Regexp.new(rule.regexp_template)).flatten
+        next unless (matches.any? and rule.match?(restrictions))
+        {}.tap do |params|
           params[:url] = matches.shift.gsub(/^\//,'')
           rule.param_keys.each_with_index do |key, i|
             params[key] = matches[i]
           end
           params[:action] = rule.action if rule.action.present?
           params[:controller] = rule.controller if rule.controller.present?
-          break
+          params[:namespace] = rule.namespace if rule.namespace.present?
         end
-      end
+      end.compact
     end
   end
 end

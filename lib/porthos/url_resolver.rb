@@ -10,13 +10,23 @@ module RoutingFilter
           unless params.any?
             path.replace(CGI::unescape(path))
             custom_params = {}
-            node_url = path.gsub(/^\//,'')
-            node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
+            matched_rule = nil
+            url = path.gsub(/^\//,'')
+            node = Node.where(:url => (!url.blank? ? url : nil)).first
             unless node
-              matches = Porthos::Routing.recognize(path)
-              node_url = matches.delete(:url)
-              custom_params.merge!(matches)
-              node = Node.where(:url => (!node_url.blank? ? node_url : nil)).first
+              Porthos::Routing.recognize(path).each do |match|
+                next unless url.start_with?(match[:url])
+                matched_rule = match
+                matched_url = match.delete(:url)
+                if node = Node.where(:url => matched_url).first
+                  break
+                end
+              end
+              if node and node.handle and namespaced_match = Porthos::Routing.recognize(path, :namespace => node.handle).first
+                custom_params.merge!(namespaced_match)
+              else
+                custom_params.merge!(matched_rule)
+              end
             end
 
             if node
@@ -48,7 +58,7 @@ module RoutingFilter
         index_conditions = conditions.dup.merge(:action => 'index')
         if params[:id].present?
           resource = params[:id]
-          handle = resource.handle if resource.respond_to?(:handle)
+          handle = resource.handle if handle.blank? and resource.respond_to?(:handle)
           if resource.kind_of?(MongoMapper::Document) or resource.kind_of?(ActiveRecord::Base)
             params[:id] = resource.to_param
             conditions.merge!(:resource_type => resource.class.to_s, :resource_id => resource.id)

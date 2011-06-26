@@ -194,16 +194,5 @@ Factory.define :post do |f|
 end
 
 Factory.define :author do |f|
-end
-
-Factory.define :test_blog_node, :parent => :node do |f|
-  f.controller 'posts'
-  f.action 'index'
-  f.handle 'blog'
-end
-
-Factory.define :test_blog_post_node, :parent => :node do |f|
-  f.controller 'posts'
-  f.action 'show'
-  f.resource { Factory(:post) }
+  f.handle { Factory.next(:handle) }
 end

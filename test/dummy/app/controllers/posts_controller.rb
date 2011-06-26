@@ -8,4 +8,8 @@ class PostsController < ActionController::Base
      url = post_path(params)
      render :text => params.merge(:url => url).inspect
    end
+
+   def contact
+     render :text => params.inspect
+   end
 end

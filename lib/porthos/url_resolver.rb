@@ -2,7 +2,7 @@ require 'routing_filter'
 module RoutingFilter
   class UrlResolver < Filter
     def around_recognize(path, env, &block)
-      excluded_path_prefixes = /^\/(assets\/admin|admin|javascripts|stylesheets|images|graphics)/
+      excluded_path_prefixes = /(assets|admin|javascripts|stylesheets|images|graphics)/
       if env["REQUEST_URI"] =~ excluded_path_prefixes or path =~ excluded_path_prefixes
         yield
       else

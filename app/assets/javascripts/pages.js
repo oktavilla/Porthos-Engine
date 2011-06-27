@@ -18,6 +18,21 @@
         });
       }
 
+      $content.find('form.datum_edit').submit(function(event) {
+        event.preventDefault();
+        var $form = $(this);
+        $.ajax($form.attr('action'), {
+          context: $form.parents('.datum'),
+          dataType: 'json',
+          data: $form.serialize(),
+          type: 'PUT',
+          success: function(response, status) {
+            console.log(this);
+            console.log(response);
+          }
+        });
+      });
+
       if ($.fn.hasOwnProperty('ckeditor')) {
         $('textarea.editor').ckeditor();
       }

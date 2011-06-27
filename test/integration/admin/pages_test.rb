@@ -80,13 +80,13 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'publishing a page without all required data' do
+    skip 'Not implemented'
     batman = create_page
     batman.data.each { |d| d.required = true }
 
     visit admin_page_path(batman.id)
 
     publish
-    flunk 'Not implemented'
     refute published?
   end
 
@@ -116,7 +116,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'categorizing a page' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       # Need to reset env/session for selenium
       User.delete_all
       login!
@@ -135,7 +135,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'changing category for a page' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       User.delete_all
       login!
       @page_template.update_attribute(:allow_categories, true)

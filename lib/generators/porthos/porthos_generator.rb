@@ -19,5 +19,6 @@ class PorthosGenerator < Rails::Generators::Base
     migration_template 'porthos_migration.rb', 'db/migrate/create_porthos_tables.rb'
     copy_file 'seeds.rb', 'db/porthos_seeds.rb'
     copy_file 'porthos.rb', 'config/initializers/porthos.rb'
+    copy_file 'mongo.yml', 'config/mongo.yml'
   end
 end

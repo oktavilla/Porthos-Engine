@@ -5,10 +5,15 @@ namespace :porthos do
       Asset.ensure_index [[:created_at, -1]]
       Asset.ensure_index [[:updated_at, -1]]
 
-      Page.ensure_index [['page_template_id', 1], ['data.handle', 1]]
-      Page.ensure_index :updated_by_id
-      Page.ensure_index [[:created_at, -1]]
-      Page.ensure_index [[:updated_at, -1]]
+      Item.ensure_index [['page_template_id', 1], ['data.handle', 1]]
+      Item.ensure_index :updated_by_id
+      Item.ensure_index [[:created_at, -1]]
+      Item.ensure_index [[:updated_at, -1]]
+
+      Template.ensure_index [['_type', 1], ['position', 1]]
+
+      Node.ensure_index :resource_id
+      Node.ensure_index [['handle', 1], ['action', 1], ['controller', 1]]
     end
 
     namespace :migrate do

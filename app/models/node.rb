@@ -9,7 +9,8 @@ class Node
   key :controller, String
   key :action, String
   key :status, Integer
-  key :restricted, Boolean, :default => lambda{false}
+  key :restricted, Boolean, :default => lambda{ false }
+  key :position, Integer
 
   key :resource_id, ObjectId
   key :resource_type, String
@@ -30,7 +31,8 @@ class Node
   validates :controller, :presence => true
   validates :action, :presence => true
 
-  after_save  :generate_url_for_children
+  after_save :generate_url_for_children
+  before_save :ensure_position
   before_validation :generate_url
 
   def resource_type=(r_type)
@@ -82,16 +84,24 @@ class Node
 
 private
 
-  # before save
   def generate_url
     if parent
       self.url = !parent.parent_id.blank? ? [parent.url, name.to_s.to_url].join('/') : name.to_s.to_url
     end
   end
 
-  # after save
   def generate_url_for_children
     children.each(&:save) if changes.keys.include?('url') && children.any?
+  end
+
+  def ensure_position
+    if self.position.blank?
+      self.position = if siblings.any?
+        siblings.collect { |s| s.position.to_i }.sort.last+1
+      else
+        0
+      end
+    end
   end
 
 end

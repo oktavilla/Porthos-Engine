@@ -1,27 +1,47 @@
 (function() {
   $(document).ready(function() {
     var $navigation = $('#navigation');
-    $navigation.find('ul').each(function() {
-      var $list = $(this);
-      $list.sortable({
-        axis: 'y',
-        stop: function() {
-          $.ajax({
-            type: 'PUT',
-            url: $navigation.data('sort-uri'),
-            data: $list.sortable('serialize'),
-            dataType: 'json'
-          });
-        }
+
+    $navigation.sortables = function() {
+      if($navigation.hasClass('sortable')){
+        return $navigation.find('ul');
+      } else {
+        return $([]);
+      }
+    }
+
+    $navigation.setupSortables = function() { 
+      this.sortables().each(function() {
+        var $list = $(this);
+        $list.sortable({
+          items: 'li',
+          axis: 'y',
+          stop: function() {
+            $.ajax({
+              type: 'PUT',
+              url: $navigation.data('sort-uri'),
+              data: $list.sortable('serialize'),
+              dataType: 'json'
+            });
+          }
+        });
       });
-    });
+    }
+    
+    $navigation.teardownSortables = function() {
+      this.sortables().each(function() {
+        $(this).sortable('destroy');
+      });
+    }
+
+    $navigation.setupSortables();
 
     $('a.toggle_handle').click(function(event) {
       event.preventDefault();
 
       $handle = $(this);
-      $parent = $($handle.parents('li'));
-      $children = $($parent.children('ul'));
+      $parent = $($handle.parents('li')[0]);
+      $children = $($parent.children('ul')[0]);
 
       switch($handle.text()){
         case '+':
@@ -35,6 +55,8 @@
               dataType: 'html',
               success: function(response){
                 $parent.append(response);
+                $navigation.teardownSortables();
+                $navigation.setupSortables();
               }
             });
           }

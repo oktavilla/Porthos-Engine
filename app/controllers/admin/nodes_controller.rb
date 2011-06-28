@@ -1,18 +1,19 @@
 class Admin::NodesController < ApplicationController
   include Porthos::Admin
 
-
   def index
     respond_to do |format|
       format.html do
         @root  = Node.root
-        @nodes = @root ? @root.children : []
-        @open_nodes = params[:nodes] ? Node.find_all_by_id(params[:nodes]) : Node.find_all_by_id(cookies[:last_opened_node])
-        @trail = @open_nodes ? @open_nodes.collect { |node| (node.ancestors || []) << node }.flatten : []
-      end
-      format.js do
-        @node = params[:nodes] ? Node.find(params[:nodes].first, :include => :children) : Node.root
-        render :partial => 'admin/nodes/list_of_nodes.html.erb', :locals => { :nodes => @node.children.all, :trail => [], :place => (params[:place] || false) }
+        if params[:partial]
+          @node = params[:nodes] ? Node.find(params[:nodes].first) : @root
+          render :partial => 'list_of_nodes.html.erb',
+            :locals => { :nodes => @node.children, :trail => [], :place => (params[:place] || false) }
+        else
+          @nodes = @root ? @root.children : []
+          @open_nodes = Node.find(params[:nodes])
+          @trail = @open_nodes.collect { |node| (node.ancestors || []) << node }.flatten
+        end
       end
     end
   end
@@ -38,7 +39,7 @@ class Admin::NodesController < ApplicationController
     @node = Node.new(params[:node])
     respond_to do |format|
       if @node.save
-        format.html { redirect_to admin_nodes_path(:nodes => @node) }
+        format.html { redirect_to admin_nodes_path(:nodes => [@node]) }
       else
         @resource = @node.resource
         @nodes = [Node.root]

@@ -22,6 +22,7 @@
       var $source = $(source),
           $target = $(target);
       if ($source.size() === 0 || $target.size() === 0) { return; }
+      if($source.val().length > 0 && $target.val().length == 0) { $target.val(Porthos.Helpers.parameterize($source.val())); }
       $target.data('clone_from_title', $target.val() === '' || $target.val() === Porthos.Helpers.parameterize($source.val()));
       $source.bind('keyup', function(event) {
         if ($target.data('clone_from_title')) {

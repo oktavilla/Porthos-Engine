@@ -59,12 +59,17 @@ class Node
 
   class << self
 
-    def for_page(page)
+    def for_item(item)
       self.new.tap do |node|
-        node.name = page.title
-        node.controller = page.class.to_s.tableize
-        node.action = 'show'
-        node.resource = page
+        node.name = item.title
+        node.controller = 'pages'
+        if item.is_a?(Page)
+          node.action = 'show'
+        elsif item.is_a?(Section)
+          node.action = 'index'
+          node.handle = item.page_template.handle
+        end
+        node.resource = item
         node.parent = Node.root if node.parent_id.blank?
       end
     end

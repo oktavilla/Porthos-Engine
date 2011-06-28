@@ -4,4 +4,8 @@ class Section < Item
       self.new(attributes.merge(:page_template_id => template.id))
     end
   end
+
+  def can_have_a_node?
+    true
+  end
 end

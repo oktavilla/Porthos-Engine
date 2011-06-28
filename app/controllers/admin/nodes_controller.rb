@@ -26,8 +26,8 @@ class Admin::NodesController < ApplicationController
   end
 
   def new
-    @resource = Page.find(params[:resource_id]) if params[:resource_id]
-    @node = @resource ? Node.for_page(@resource) : Node.new
+    @resource = Item.find(params[:resource_id]) if params[:resource_id]
+    @node = @resource ? Node.for_item(@resource) : Node.new
     @nodes = [Node.root]
     respond_to do |format|
       format.html

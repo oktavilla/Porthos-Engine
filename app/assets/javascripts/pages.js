@@ -19,7 +19,6 @@
       $content.find('form.datum_edit').submit(function(event) {
 
         var updateView = function(datum) {
-          console.log(datum);
           var $datum = $('#datum_'+datum.id+' div.viewable');
           switch(datum['_type']) {
             case 'StringField':

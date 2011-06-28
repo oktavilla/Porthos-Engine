@@ -17,8 +17,21 @@ class NodesTest < ActiveSupport::IntegrationCase
     choose('not_shown_in_nav')
     choose("node_parent_id_#{@root_node.id}")
     click_button I18n.t(:save)
-
     assert page.find("#nodes li").has_content?('My page'), 'Should see node whitin nodes list'
+  end
+
+  test 'adding a node pointing to a section' do
+    page_template = Factory(:page_template, :allow_node_placements => false)
+    new_section = Factory(:section, :page_template_id => page_template.id)
+    visit admin_page_path(new_section)
+    click_link I18n.t(:'admin.pages.show.publish_now')
+    assert_equal new_admin_node_path, current_path
+    fill_in 'node_name', :with => 'My section'
+    fill_in 'node_url', :with => 'my-section'
+    choose('not_shown_in_nav')
+    choose("node_parent_id_#{@root_node.id}")
+    click_button I18n.t(:save)
+    assert page.find("#nodes li").has_content?('My section'), 'Should see node whitin nodes list'
   end
 
   test 'listing nodes' do
@@ -53,7 +66,9 @@ class NodesTest < ActiveSupport::IntegrationCase
 protected
 
   def create_page_node
-    Factory(:node, :name => 'Node', :parent => @root_node, :resource => Factory(:page, :page_template_id => @page_template.id))
+    Factory(:node, :name => 'Node',
+      :parent => @root_node,
+      :resource => Factory(:page, :page_template_id => @page_template.id))
   end
 
 end

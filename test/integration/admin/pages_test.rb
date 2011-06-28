@@ -116,7 +116,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'categorizing a page' do
-    Capybara.using_driver(:webkit) do
+    Capybara.using_driver(:selenium) do
       # Need to reset env/session for selenium
       User.delete_all
       login!
@@ -135,7 +135,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'changing category for a page' do
-    Capybara.using_driver(:webkit) do
+    Capybara.using_driver(:selenium) do
       User.delete_all
       login!
       @page_template.update_attribute(:allow_categories, true)

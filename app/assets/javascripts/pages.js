@@ -10,15 +10,57 @@
       $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
       $content.delegate('a.change, a.cancel', 'click', function(event) {
         event.preventDefault();
-        $(this).parents('.datum, div.asset_association').find('div.editable, div.viewable, div.edit').toggle();
+        $(this).parents('.datum, div.asset_association').find('.content > div.editable, .content > div.viewable, div.edit').toggle();
       });
       if (window.location.hash.match(/\_edit/)) {
-        $(window.location.hash.replace(/\_edit/, '')).each(function() {
-          $(this).find('a.change').click();
-        });
+        $(window.location.hash.replace(/\_edit/, '') + ' a.change').click();
       }
 
       $content.find('form.datum_edit').submit(function(event) {
+
+        var updateView = function(datum) {
+          console.log(datum);
+          var $datum = $('#datum_'+datum.id+' div.viewable');
+          switch(datum['_type']) {
+            case 'StringField':
+              if (datum.multiline && !datum.allow_rich_text) {
+                $datum.html(Porthos.Helpers.simpleFormat(datum.value));
+              } else {
+                $datum.html(datum.value);
+              }
+              break;
+            case 'Field':
+              switch(datum.input_type) {
+                case 'date':
+                  var date = new Date(Date.parse(datum.value));
+                  $datum.html(Porthos.Helpers.strftime(date, "%Y-%m-%d"));
+                  break;
+                case 'boolean':
+                  $datum.html(!!datum.value ? 'Ja' : 'Nej');
+                  break;
+              }
+              break;
+            case 'PageAssociation':
+              $('#datum_'+datum.id+' div.title').html($form.find('option[value="'+datum.page_id+'"]').text());
+              break;
+            case 'FieldSet':
+              var i = 0,
+                  j = datum.data.length;
+              for (i=0; i<j; i++) {
+                updateView(datum.data[i]);
+              }
+              break;
+          }
+        };
+
+        var disableForm = function(form) {
+          form.find('input, textarea, select, checkbox, radio').attr('disabled', 'disabled');
+        };
+
+        var enableForm = function(form) {
+          form.find('input, textarea, select, checkbox, radio').removeAttr('disabled');
+        };
+
         event.preventDefault();
         var $form = $(this);
         $.ajax($form.attr('action'), {
@@ -26,11 +68,13 @@
           dataType: 'json',
           data: $form.serialize(),
           type: 'PUT',
-          success: function(response, status) {
-            console.log(this);
-            console.log(response);
+          success: function(datum, status) {
+            updateView(datum);
+            $(this).find('a.cancel').trigger('click');
+            enableForm($form);
           }
         });
+        disableForm($form);
       });
 
       if ($.fn.hasOwnProperty('ckeditor')) {

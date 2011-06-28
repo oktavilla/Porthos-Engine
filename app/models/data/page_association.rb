@@ -9,7 +9,7 @@ class PageAssociation < Datum
     if _parent_document.is_a?(ContentBlock)
       exclude_ids += _parent_document.data.find_all { |d| d.is_a?(PageAssociation) }.map { |d| d.page_id }
     end
-    scope = Page.where(:_id.nin => exclude_ids)
+    scope = Page.fields(:_id, :title).where(:_id.nin => exclude_ids)
     scope = scope.where(:page_template_id => page_template_id) if page_template_id.present?
     scope.published
   end

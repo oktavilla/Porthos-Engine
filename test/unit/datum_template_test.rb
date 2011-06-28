@@ -23,13 +23,6 @@ class DatumTemplateTest < ActiveSupport::TestCase
   end
 
   context 'when child to a page template' do
-    setup do
-      DatabaseCleaner.start
-    end
-    teardown do
-      DatabaseCleaner.clean
-    end
-
     should 'propagate created to pages data' do
       page_template = Factory.create(:page_template, :datum_templates => [])
       page = Page.create_from_template(page_template, :title => 'A story')
@@ -79,7 +72,6 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
   context 'when child to a content template' do
     setup do
-      DatabaseCleaner.start
       @content_template = Factory.create(:content_template, {
         datum_templates: [
           Factory.build(:string_field_template, {
@@ -90,13 +82,9 @@ class DatumTemplateTest < ActiveSupport::TestCase
       })
       @datum_template = @content_template.datum_templates.first
     end
-    teardown do
-      DatabaseCleaner.clean
-    end
 
     context 'when created' do
       setup do
-        DatabaseCleaner.start
         @page_template = Factory.create(:page_template, :datum_templates => [
           Factory.build(:field_set_template, {
             handle: 'a_field_set',
@@ -105,9 +93,7 @@ class DatumTemplateTest < ActiveSupport::TestCase
         ])
         @page = Page.create_from_template(@page_template, title: 'A page')
       end
-      teardown do
-        DatabaseCleaner.clean
-      end
+
       should 'propagate to field sets directly under a page' do
         some_string = Factory.build(:string_field_template, {
           label: 'Just an ordinary string',
@@ -122,13 +108,6 @@ class DatumTemplateTest < ActiveSupport::TestCase
     end
 
     context 'when updating' do
-      setup do
-        DatabaseCleaner.start
-      end
-      teardown do
-        DatabaseCleaner.clean
-      end
-
       should 'propagate to field sets directly under a page' do
         page_template = Factory.create(:page_template, :datum_templates => [
           Factory.build(:field_set_template, {
@@ -138,7 +117,7 @@ class DatumTemplateTest < ActiveSupport::TestCase
         ])
         page = Page.create_from_template(page_template, title: 'A page')
 
-        assert_equal @datum_template.label, page.data['a_field_set'].data['the_string'].label, 'sanity'
+        assert_equal 'The string to rule them all', page.data['a_field_set'].data['the_string'].label, 'sanity'
 
         @datum_template.update_attribute :label, 'The string'
         @datum_template.send :propagate_updates
@@ -156,11 +135,50 @@ class DatumTemplateTest < ActiveSupport::TestCase
         page = Page.create_from_template(page_template, title: 'A page')
 
         page.data['a_content_block'].data << @content_template.to_datum
+        page.save
+
+        assert_equal 'The string to rule them all', page.data['a_content_block'].data[0].data['the_string'].label, 'should have been updated'
 
         @datum_template.update_attribute :label, 'The string'
         @datum_template.send :propagate_updates
 
         assert_equal 'The string', page.reload.data['a_content_block'].data[0].data['the_string'].label, 'should have been updated'
+      end
+    end
+
+    context 'when removing' do
+      should 'propagate to field sets directly under a page' do
+        page_template = Factory.create(:page_template, :datum_templates => [
+          Factory.build(:field_set_template, {
+            handle: 'a_field_set',
+            content_template: @content_template
+          })
+        ])
+        page = Page.create_from_template(page_template, title: 'A page')
+
+        assert_equal 1, page.data['a_field_set'].data.size
+        @datum_template.destroy
+
+        assert_equal 0, page.data['a_field_set'].data.size
+      end
+
+      should 'propagate to field sets under a content block' do
+        page_template = Factory.create(:page_template, :datum_templates => [
+          Factory.build(:content_block_template, {
+            handle: 'a_content_block',
+            content_templates_ids: [@content_template.id]
+          })
+        ])
+        page = Page.create_from_template(page_template, title: 'A page')
+
+        page.data['a_content_block'].data << @content_template.to_datum
+        page.save
+
+        refute_nil page.data['a_content_block'].data[0].data['the_string'], 'should have the string datum'
+
+        @datum_template.destroy
+
+        assert_nil page.reload.data['a_content_block'].data[0].data['the_string'], 'should not have the string datum'
       end
     end
   end

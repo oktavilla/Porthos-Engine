@@ -65,12 +65,7 @@ private
         updates: { 'data'=> self.to_datum.to_mongo }
       })
     elsif _root_document.is_a?(ContentTemplate)
-      concerned_pages.each do |page|
-        find_matching_field_sets_in_page(page).each do |field_set|
-          field_set.data << self.to_datum
-        end
-        page.save
-      end
+      propagate_self_to_field_sets
     end
   end
 
@@ -86,6 +81,27 @@ private
     end
   end
 
+  def propagate_removal
+    if _root_document.is_a?(PageTemplate)
+      DatumTemplate.propagate_change(:pull, {
+        critera: { 'page_template_id' => self._root_document.id },
+        updates: { 'data' => { 'handle' => self.handle } }
+      })
+    elsif _root_document.is_a?(ContentTemplate)
+      propagate_removal_to_field_sets
+    end
+  end
+
+  # TODO: Add delayed job
+  def propagate_self_to_field_sets
+    concerned_pages.each do |page|
+      find_matching_field_sets_in_page(page).each do |field_set|
+        field_set.data << self.to_datum
+      end
+      page.save
+    end
+  end
+
   # TODO: Add delayed job
   def propagate_updates_to_field_sets
     query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
@@ -98,17 +114,6 @@ private
         end
       end
       page.save
-    end
-  end
-
-  def propagate_removal
-    if _root_document.is_a?(PageTemplate)
-      DatumTemplate.propagate_change(:pull, {
-        critera: { 'page_template_id' => self._root_document.id },
-        updates: { 'data' => { 'handle' => self.handle } }
-      })
-    elsif _root_document.is_a?(ContentTemplate)
-      propagate_removal_to_field_sets
     end
   end
 

@@ -23,7 +23,9 @@ class FieldSet < Datum
       content_template = template.is_a?(FieldSetTemplate) ? template.content_template : template
       content_template.to_datum.tap do |field_set|
         unless template == content_template
-          field_set.attributes = field_set.attributes.stringify_keys.merge!(template.shared_attributes.stringify_keys)
+          template.shared_attributes.each do |k, v|
+            field_set[k] = v
+          end
         end
       end
     end

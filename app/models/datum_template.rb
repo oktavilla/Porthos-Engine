@@ -28,12 +28,9 @@ class DatumTemplate
       end
     end
 
-    def propagate_change(change_method, critera, updates)
-      if ::Rails.env.production?
-        Page.delay.send(change_method, critera, updates)
-      else
-        Page.send(change_method, critera, updates)
-      end
+    # TODO: Add delayed job
+    def propagate_change(change_method, options = {})
+      Page.send(change_method, options[:critera], options[:updates])
     end
   end
 
@@ -62,25 +59,98 @@ class DatumTemplate
 private
 
   def propagate_self
-    DatumTemplate.propagate_change(:add_to_set,
-      { 'page_template_id' => self._root_document.id },
-      { 'data'=> self.to_datum.to_mongo})
+    if _root_document.is_a?(PageTemplate)
+      DatumTemplate.propagate_change(:add_to_set, {
+        critera: { 'page_template_id' => self._root_document.id },
+        updates: { 'data'=> self.to_datum.to_mongo }
+      })
+    elsif _root_document.is_a?(ContentTemplate)
+      propagate_self_to_field_sets
+    end
   end
 
   def propagate_updates
-    query_handle = respond_to?(:handle_changed?) ?
-      (handle_changed? ? handle_was : handle) :
-      handle
-    DatumTemplate.propagate_change(:set,
-      { 'page_template_id' => self._root_document.id,
-        'data.handle' => query_handle },
-      shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) })
+    query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
+    if _root_document.is_a?(PageTemplate)
+      DatumTemplate.propagate_change(:set, {
+        critera: { 'page_template_id' => self._root_document.id, 'data.handle' => query_handle },
+        updates: shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) }
+      })
+    elsif _root_document.is_a?(ContentTemplate)
+      propagate_updates_to_field_sets
+    end
   end
 
   def propagate_removal
-    DatumTemplate.propagate_change(:pull,
-      { 'page_template_id' => self._root_document.id },
-      { 'data' => { 'handle' => self.handle }})
+    if _root_document.is_a?(PageTemplate)
+      DatumTemplate.propagate_change(:pull, {
+        critera: { 'page_template_id' => self._root_document.id },
+        updates: { 'data' => { 'handle' => self.handle } }
+      })
+    elsif _root_document.is_a?(ContentTemplate)
+      propagate_removal_to_field_sets
+    end
   end
 
+  # TODO: Add delayed job
+  def propagate_self_to_field_sets
+    concerned_pages.each do |page|
+      find_matching_field_sets_in_page(page).each do |field_set|
+        field_set.data << self.to_datum
+      end
+      page.save
+    end
+  end
+
+  # TODO: Add delayed job
+  def propagate_updates_to_field_sets
+    query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
+    concerned_pages.each do |page|
+      find_matching_field_sets_in_page(page).each do |field_set|
+        field_set.data.detect { |datum| datum.handle == query_handle }.tap do |datum|
+          self.shared_attributes.each do |k, v|
+            datum[k.to_sym] = v
+          end
+        end
+      end
+      page.save
+    end
+  end
+
+  # TODO: Add delayed job
+  def propagate_removal_to_field_sets
+    query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
+    concerned_pages.each do |page|
+      find_matching_field_sets_in_page(page).each do |field_set|
+        field_set.data.delete_if do |datum|
+          datum.handle == query_handle
+        end
+      end
+      page.save
+    end
+  end
+
+  def concerned_pages
+    Page.where('$or' => [
+      { 'data.content_template_id' => _root_document.id },
+      { 'data.data.content_template_id' => _root_document.id }
+    ])
+  end
+
+  # Finds and returns all datums matching self in field sets connected to the content template
+  def find_matching_field_sets_in_page(page)
+    root_field_sets = page.data.find_all do |d|
+      d.respond_to?(:content_template_id) && d.content_template_id == _root_document.id
+    end
+
+    content_block_field_sets = page.data.find_all do |d|
+      d.respond_to?(:content_templates_ids) && d.content_templates_ids.include?(_root_document.id)
+    end.map do |content_block|
+      content_block.data.find_all do |d|
+        d.respond_to?(:content_template_id) && d.content_template_id == _root_document.id
+      end
+    end.flatten.compact
+
+    root_field_sets + content_block_field_sets
+  end
 end

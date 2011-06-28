@@ -22,7 +22,7 @@ class Page < Item
       end
     end
 
-    def create_from_template(template, attributes)
+    def create_from_template(template, attributes = {})
       self.from_template(template, attributes).tap do |page|
         page.save
       end

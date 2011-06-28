@@ -29,10 +29,18 @@ class Admin::DataController < ApplicationController
 
   def update
     @datum = @parent.data.find(params[:id])
-    if @datum.update_attributes(params[:datum])
-      flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
+    respond_to do |format|
+      if @datum.update_attributes(params[:datum])
+        format.html do
+          flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
+          redirect_to admin_page_path(@page, :anchor => "datum_#{@datum.id}")
+        end
+        format.json { render :json => @datum.to_json, :status => :ok }
+      else
+        format.html { render :action => 'edit' }
+        format.json { render :json => @datum.errors.to_json, :status => :not_acceptable }
+      end
     end
-    respond_with(@datum, :location => admin_page_path(@page, :anchor => "datum_#{@datum.id}"))
   end
 
   def toggle

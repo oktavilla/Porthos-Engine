@@ -38,14 +38,83 @@
           $target.data('clone_from_title', true);
         }
       });
+    },
+
+    simpleFormat: function(str) {
+        fstr = str.replace(/\r\n?/g, "\n")
+                  .replace(/\n\n+/g, "</p>\n\n<p>")
+                  .replace(/([^\n]\n)(?=[^\n])/g, "$1<br/>");
+        return '<p>' + fstr + '</p>';
     }
   };
 
-  $(document).ready(function() {
-    if ($.fn.hasOwnProperty('ckeditor')) {
-      $('textarea.editor').ckeditor();
+  Porthos.Helpers.strftime = function(date, format) {
+    var options = {
+      "day_names": ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+      "abbr_day_names": ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+      "month_names": [null,"January","February","March","April","May","June","July","August","September","October","November","December"],
+      "abbr_month_names": [null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
     }
 
+    if (!options) {
+      return date.toString();
+    }
+
+    options.meridian = options.meridian || ["AM", "PM"];
+
+    var weekDay = date.getDay(),
+        day = date.getDate(),
+        year = date.getFullYear(),
+        month = date.getMonth() + 1,
+        hour = date.getHours(),
+        hour12 = hour,
+        meridian = hour > 11 ? 1 : 0,
+        secs = date.getSeconds(),
+        mins = date.getMinutes(),
+        offset = date.getTimezoneOffset(),
+        absOffsetHours = Math.floor(Math.abs(offset / 60)),
+        absOffsetMinutes = Math.abs(offset) - (absOffsetHours * 60),
+        timezoneoffset = (offset > 0 ? "-" : "+") + (absOffsetHours.toString().length < 2 ? "0" + absOffsetHours : absOffsetHours) + (absOffsetMinutes.toString().length < 2 ? "0" + absOffsetMinutes : absOffsetMinutes);
+
+    if (hour12 > 12) {
+      hour12 = hour12 - 12;
+    } else if (hour12 === 0) {
+      hour12 = 12;
+    }
+
+    var padding = function(n) {
+      var s = "0" + n.toString();
+      return s.substr(s.length - 2);
+    };
+
+    var f = format;
+    f = f.replace("%a", options.abbr_day_names[weekDay]);
+    f = f.replace("%A", options.day_names[weekDay]);
+    f = f.replace("%b", options.abbr_month_names[month]);
+    f = f.replace("%B", options.month_names[month]);
+    f = f.replace("%d", padding(day));
+    f = f.replace("%-d", day);
+    f = f.replace("%H", padding(hour));
+    f = f.replace("%-H", hour);
+    f = f.replace("%I", padding(hour12));
+    f = f.replace("%-I", hour12);
+    f = f.replace("%m", padding(month));
+    f = f.replace("%-m", month);
+    f = f.replace("%M", padding(mins));
+    f = f.replace("%-M", mins);
+    f = f.replace("%p", options.meridian[meridian]);
+    f = f.replace("%S", padding(secs));
+    f = f.replace("%-S", secs);
+    f = f.replace("%w", weekDay);
+    f = f.replace("%y", padding(year));
+    f = f.replace("%-y", padding(year).replace(/^0+/, ""));
+    f = f.replace("%Y", year);
+    f = f.replace("%z", timezoneoffset);
+
+    return f;
+  };
+
+  $(document).ready(function() {
     Porthos.Helpers.cloneAsUrl('#node_name', '#node_url');
     if ($.fn.hasOwnProperty('sortable')) {
       $('table.sortable tbody').sortable({

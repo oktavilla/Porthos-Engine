@@ -12,7 +12,11 @@ class Admin::NodesController < ApplicationController
         else
           @nodes = @root ? @root.children : []
           @open_nodes = Node.find(params[:nodes])
-          @trail = @open_nodes.collect { |node| (node.ancestors || []) << node }.flatten
+          @trail = if @open_nodes.is_a?(Array)
+            @open_nodes.collect { |node| (node.ancestors || []) << node }.flatten
+          else
+            []
+          end
         end
       end
     end

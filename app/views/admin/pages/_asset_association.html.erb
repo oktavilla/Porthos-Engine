@@ -1,5 +1,5 @@
 <%= form_for datum, :as => :datum, :url => admin_page_datum_path(@page, datum), :html => { :class => 'datum_edit image_form', :id => "datum_#{datum.id}_edit" } do |f| %>
-  <% if datum._parent_document.is_a?(ContentBlock) %>
+  <% if datum._parent_document.is_a?(DatumCollection) %>
   <%= hidden_field_tag 'parent_id', datum._parent_document.id %>
   <% end %>
   <%= render :partial => 'admin/data/asset_association_form', :locals => { :f => f, :datum => datum } %>

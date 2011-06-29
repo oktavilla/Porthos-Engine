@@ -1,4 +1,4 @@
-<% if datum._parent_document.is_a?(ContentBlock) %>
+<% if datum._parent_document.is_a?(DatumCollection) %>
 <%= hidden_field_tag 'parent_id', datum._parent_document.id %>
 <% end %>
 <% if datum.instruction_body %>

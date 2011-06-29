@@ -29,7 +29,7 @@ module Porthos
       end
 
       def require_handle?
-        @require_handle ||= _parent_document && !(_parent_document.class.to_s.match(/ContentBlock/))
+        @require_handle ||= _parent_document && !(_parent_document.class.to_s.match(/DatumCollection/))
       end
 
       def uniqueness_of_handle

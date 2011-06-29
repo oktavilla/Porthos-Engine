@@ -127,22 +127,22 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
       should 'propagate to field sets under a content block' do
         page_template = Factory.create(:page_template, :datum_templates => [
-          Factory.build(:content_block_template, {
-            handle: 'a_content_block',
+          Factory.build(:datum_collection_template, {
+            handle: 'a_datum_collection',
             content_templates_ids: [@content_template.id]
           })
         ])
         page = Page.create_from_template(page_template, title: 'A page')
 
-        page.data['a_content_block'].data << @content_template.to_datum
+        page.data['a_datum_collection'].data << @content_template.to_datum
         page.save
 
-        assert_equal 'The string to rule them all', page.data['a_content_block'].data[0].data['the_string'].label, 'should have been updated'
+        assert_equal 'The string to rule them all', page.data['a_datum_collection'].data[0].data['the_string'].label, 'should have been updated'
 
         @datum_template.update_attribute :label, 'The string'
         @datum_template.send :propagate_updates
 
-        assert_equal 'The string', page.reload.data['a_content_block'].data[0].data['the_string'].label, 'should have been updated'
+        assert_equal 'The string', page.reload.data['a_datum_collection'].data[0].data['the_string'].label, 'should have been updated'
       end
     end
 
@@ -164,21 +164,21 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
       should 'propagate to field sets under a content block' do
         page_template = Factory.create(:page_template, :datum_templates => [
-          Factory.build(:content_block_template, {
-            handle: 'a_content_block',
+          Factory.build(:datum_collection_template, {
+            handle: 'a_datum_collection',
             content_templates_ids: [@content_template.id]
           })
         ])
         page = Page.create_from_template(page_template, title: 'A page')
 
-        page.data['a_content_block'].data << @content_template.to_datum
+        page.data['a_datum_collection'].data << @content_template.to_datum
         page.save
 
-        refute_nil page.data['a_content_block'].data[0].data['the_string'], 'should have the string datum'
+        refute_nil page.data['a_datum_collection'].data[0].data['the_string'], 'should have the string datum'
 
         @datum_template.destroy
 
-        assert_nil page.reload.data['a_content_block'].data[0].data['the_string'], 'should not have the string datum'
+        assert_nil page.reload.data['a_datum_collection'].data[0].data['the_string'], 'should not have the string datum'
       end
     end
   end

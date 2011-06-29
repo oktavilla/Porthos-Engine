@@ -143,14 +143,14 @@ private
       d.respond_to?(:content_template_id) && d.content_template_id == _root_document.id
     end
 
-    content_block_field_sets = page.data.find_all do |d|
+    datum_collection_field_sets = page.data.find_all do |d|
       d.respond_to?(:content_templates_ids) && d.content_templates_ids.include?(_root_document.id)
-    end.map do |content_block|
-      content_block.data.find_all do |d|
+    end.map do |datum_collection|
+      datum_collection.data.find_all do |d|
         d.respond_to?(:content_template_id) && d.content_template_id == _root_document.id
       end
     end.flatten.compact
 
-    root_field_sets + content_block_field_sets
+    root_field_sets + datum_collection_field_sets
   end
 end

@@ -107,7 +107,7 @@
       redirect: Vidarebefordring
       field_set: Innehållstyp
       field: Fält
-      content_block: Innehållsblock
+      datum_collection: Innehållsblock
       date_time_field: Datum
       string_field: Sträng
       text_field: Text
@@ -548,7 +548,7 @@
         title: Sidtyper > %{title}
         add_field_template: Lägg till fält
         add_field_set_template: Lägg till fördefinerat innehåll
-        add_content_block_template: Lägg till ett innehållsblock
+        add_datum_collection_template: Lägg till ett innehållsblock
         all_page_templates: Alla sidtyper
         blank_slate: Det finns inga fält definerade än
         edit: Ändra

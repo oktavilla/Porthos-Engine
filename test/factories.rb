@@ -91,7 +91,7 @@ Factory.define :date_field_template, :parent => :field_template do |f|
   f.input_type 'date'
 end
 
-Factory.define :content_block_template, :class => ContentBlockTemplate, :parent => :datum_template do |f|
+Factory.define :datum_collection_template, :class => DatumCollectionTemplate, :parent => :datum_template do |f|
 end
 
 Factory.define :field_set_template do |f|
@@ -142,7 +142,7 @@ Factory.define :field_set do |f|
   }
 end
 
-Factory.define :content_block, :class => ContentBlock, :parent => :datum do |f|
+Factory.define :datum_collection, :class => DatumCollection, :parent => :datum do |f|
 end
 
 Factory.define :page_template do |f|
@@ -153,7 +153,7 @@ Factory.define :page_template do |f|
       Factory.build(:string_field_template, :label => 'Tagline'),
       Factory.build(:string_field_template),
       Factory.build(:field_set_template),
-      Factory.build(:content_block_template)
+      Factory.build(:datum_collection_template)
     ]
   }
 end
@@ -167,7 +167,7 @@ Factory.define :hero_page_template, :parent => :page_template, :class => PageTem
       Factory.build(:rich_text_field_template, :label => 'Biography', :handle => 'biography'),
       Factory.build(:boolean_field_template, :label => 'Has superpowers', :handle => 'superpowers'),
       Factory.build(:date_field_template, :label => 'Became publicly known at', :handle => 'debuted_at'),
-      Factory.build(:content_block_template, :label => 'Main content', :handle => 'main_content')
+      Factory.build(:datum_collection_template, :label => 'Main content', :handle => 'main_content')
     ]
   }
 end

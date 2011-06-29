@@ -23,7 +23,7 @@
     </div>
     <div class="add">
       <form action="<%= new_admin_template_datum_template_path(@page_template) %>">
-        <%= select_tag 'template_type', options_for_select(%w(AssetAssociationTemplate PageAssociationTemplate FieldSetTemplate ContentBlockTemplate).collect { |type| [type.constantize.model_name.human, type] }) %>
+        <%= select_tag 'template_type', options_for_select(%w(AssetAssociationTemplate PageAssociationTemplate FieldSetTemplate DatumCollectionTemplate).collect { |type| [type.constantize.model_name.human, type] }) %>
         <button type="submit" class="new"><%=t '.add_datum_template' %></button>
       </form>
     </div>

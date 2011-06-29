@@ -1,4 +1,4 @@
-class ContentBlock < Datum
+class DatumCollection < Datum
   key :allowed_asset_filetypes, Array, :default => lambda { [] }
   key :allowed_page_template_ids, Array, :default => lambda { [] }
   key :allow_texts, Boolean, :default => lambda { false }

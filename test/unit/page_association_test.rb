@@ -21,11 +21,11 @@ class PageAssociationTest < ActiveSupport::TestCase
       pages << Factory(:page, :published_on => 1.day.ago)
     end
 
-    content_block = Factory(:content_block)
-    pages[0].data << content_block
+    datum_collection = Factory(:datum_collection)
+    pages[0].data << datum_collection
     page_association = PageAssociation.new(:page_id => pages[1].id)
-    content_block.data << page_association
-    content_block.data << PageAssociation.new(:page_id => pages[2].id)
+    datum_collection.data << page_association
+    datum_collection.data << PageAssociation.new(:page_id => pages[2].id)
 
     assert_equal 1, page_association.targets.size
     assert_equal pages[3], page_association.targets.first

@@ -6,7 +6,7 @@ class PageAssociation < Datum
   def targets
     return @targets if @targets
     exclude_ids = [self._root_document.id]
-    if _parent_document.is_a?(ContentBlock)
+    if _parent_document.is_a?(DatumCollection)
       exclude_ids += _parent_document.data.find_all { |d| d.is_a?(PageAssociation) }.map { |d| d.page_id }
     end
     scope = Page.fields(:_id, :title).where(:_id.nin => exclude_ids)

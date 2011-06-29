@@ -27,7 +27,7 @@ class DatumTest < ActiveSupport::TestCase
   end
 
   test "knowing it's parent datum that is a direct child to page" do
-    page = Factory.build(:page, :data => [Factory.build(:content_block, :handle => 'article')])
+    page = Factory.build(:page, :data => [Factory.build(:datum_collection, :handle => 'article')])
     decendant = Factory.build(:string_field)
     page.data['article'].data << decendant
 
@@ -35,7 +35,7 @@ class DatumTest < ActiveSupport::TestCase
   end
 
   test "knowing if it's a direct child to page" do
-    page = Factory.build(:page, :data => [Factory.build(:content_block, :handle => 'article')])
+    page = Factory.build(:page, :data => [Factory.build(:datum_collection, :handle => 'article')])
     child = Factory.build(:string_field)
     decendant = Factory.build(:string_field)
 

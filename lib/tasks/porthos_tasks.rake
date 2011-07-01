@@ -29,7 +29,7 @@ namespace :porthos do
 
       desc 'Rename content blocks to datum collections'
       task :rename_content_blocks => :environment do
-        def rename
+        def rename_datums
           MongoMapper.database.collection('items').update({
             'data._type' => 'ContentBlock'
           }, {
@@ -38,14 +38,35 @@ namespace :porthos do
             }
           }, multi: true, safe: true)
         end
+
+        def rename_templates
+          MongoMapper.database.collection('templates').update({
+            'datum_templates._type' => 'ContentBlockTemplate'
+          }, {
+            '$set' => {
+              'datum_templates.$._type' => 'DatumCollectionTemplate'
+            }
+          }, multi: true, safe: true)
+        end
+
         content_blocks_exists = true
         num_changed = 0
         while content_blocks_exists
-          result = rename
+          result = rename_datums
           num_changed += result['n']
           content_blocks_exists = result['updatedExisting']
         end
         puts "Renamed #{num_changed} content blocks"
+
+        templates_exists = true
+        num_changed = 0
+        while templates_exists
+          result = rename_templates
+          num_changed += result['n']
+          templates_exists = result['updatedExisting']
+        end
+        puts "Renamed #{num_changed} content block templates"
+
       end
     end
   end

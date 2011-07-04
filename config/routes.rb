@@ -38,6 +38,14 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :link_lists do
+      resources :links do
+        collection do
+          put 'sort'
+        end
+      end
+    end
+
     resources :templates do
       resources :datum_templates do
         collection do

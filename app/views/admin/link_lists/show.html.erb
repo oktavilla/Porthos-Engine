@@ -1,0 +1,45 @@
+<% @page_title = t('.title', :title => @link_list.title) %>
+<% @page_class = 'layout3' -%>
+<% @page_id = 'site-settings' -%>
+<%= render 'admin/nodes/sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1><%= @link_list.title %></h1>
+    <span class="away">
+      <%= link_to t(:edit), edit_admin_link_list_path(@link_list), :class => 'edit_settings action' %>
+      <%= link_to t(:destroy), admin_link_list_path(@link_list), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @link_list.title), :class => 'destroy action' %>
+    </span>
+  </div>
+  <div class="tools">
+    <div class="add">
+      <%= link_to t('.new'), new_admin_link_list_link_path(@link_list), :class => 'new' %>
+    </div>
+  </div>
+  <div id="content">
+    <% if @link_list.links.any? -%>
+    <table id="links_for_link_list_<%= @link_list.id %>" class="sortable links">
+      <thead>
+        <tr>
+          <th class="sort"></th>
+          <th><%= Link.human_attribute_name(:title) %></th>
+          <th><%= Link.human_attribute_name(:url) %></th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody id="links" data-sort-uri="<%= sort_admin_link_list_links_path(@link_list) %>">
+        <% @link_list.links.each do |link| -%>
+        <tr class="link" id="link_<%= link.id %>">
+          <td class="sort"><span class="drag_handle"></span></td>
+          <td class="title"><%= link.title %></td>
+          <td><%= link.url %></td>
+          <td><%= link_to t(:edit), edit_admin_link_list_link_path(@link_list, link) %></td>
+          <td><%= link_to t(:destroy), admin_link_list_link_path(@link_list, link), :method => :delete, :confirm => "Vill du verkligen ta bort #{link.title}? Fältet och dess infomation kommer tas bort från alla #{@link_list.title} sidor." %>
+        </tr>
+        <% end -%>
+      </tbody>
+    </table>
+    <% else -%>
+    <p class="notice"><%= t('.blank_slate') %></p>
+    <% end -%>
+  </div>
+</div>

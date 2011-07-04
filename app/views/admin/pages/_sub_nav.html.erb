@@ -7,7 +7,7 @@
   </div>
   <% end %>
 <% end %>
-  <div class="label"><%= t(:pages) %></div>
+  <div class="label"><%= PageTemplate.model_name.human %></div>
   <ul class="nav">
     <li<%= ' class="current"'.html_safe if current_scopes[:with_page_template].blank? %>><%= link_to "Alla", admin_pages_path(current_scopes.except(:with_page_template)) %></li>
     <% @page_templates.each do |page_template| -%>

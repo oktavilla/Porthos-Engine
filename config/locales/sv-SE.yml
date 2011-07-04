@@ -532,6 +532,9 @@
       image_form:
         edit_asset: Ändra bildtext
         choose_image: Välj bild
+    link_lists:
+      show:
+        new: Lägg till länk
     sessions:
       signed_in: Du är nu inloggad
       signed_out: Du är nu utloggad

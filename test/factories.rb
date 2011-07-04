@@ -49,6 +49,21 @@ Factory.define :root_node, :parent => :node do |f|
   f.name 'Start'
 end
 
+Factory.define :link_list do |f|
+  f.title { Factory.next(:title) }
+  f.handle { Factory.next(:handle) }
+end
+
+Factory.define :link do |f|
+  f.title { Factory.next(:title) }
+  f.url { Factory.next(:url) }
+end
+
+Factory.define :node_link do |f|
+  f.title { Factory.next(:title) }
+  f.association :node, { factory: :node }
+end
+
 Factory.define :content_template do |f|
   f.label { Factory.next(:title) }
   f.datum_templates {

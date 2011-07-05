@@ -1,6 +1,6 @@
 module Porthos
   class Engine < Rails::Engine
-    config.autoload_paths += Dir[Porthos.root.join('app', 'models', '{**}')]
+    config.autoload_paths += Dir[config.root.join('app', 'models', '{**}')]
     config.i18n.default_locale = "sv-SE"
     config.i18n.fallbacks = true
     config.use_fulltext_search = false

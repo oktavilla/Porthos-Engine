@@ -7,7 +7,7 @@ module Porthos
       key :label, String
       key :handle, String
       key :required, Boolean, :default => lambda { false }
-      key :position, Integer
+      key :position, Integer, :default => lambda { 0 }
 
       before_validation :parameterize_handle
       before_validation :move_to_list_bottom

@@ -12,13 +12,13 @@ module RoutingFilter
             custom_params = {}
             matched_rule = nil
             url = path.gsub(/^\//,'')
-            node = Node.where(:url => (!url.blank? ? url : nil)).first
+            node = Node.where(url: (!url.blank? ? url : nil)).first
             unless node
               Porthos::Routing.recognize(path).each do |match|
                 next unless url.start_with?(match[:url])
                 matched_rule = match
                 matched_url = match.delete(:url)
-                if node = Node.where(:url => matched_url).first
+                if node = Node.where(url: matched_url).first
                   break
                 end
               end
@@ -30,19 +30,16 @@ module RoutingFilter
             end
 
             if node
-              mapping_params = { :controller => node.controller, :action => node.action }
-              mapping_params[:handle] = node.handle if node.handle.present?
+              custom_params[:handle] = node.handle if node.handle.present?
+              custom_params[:node] = { id: node.id, url: node.url }
+              mapping_params = { controller: node.controller, action: node.action }
               mapping_params[:id] = node.resource_id if node.resource_id.present?
-              path.replace('/' + mapping_params.values.find_all { |part| !%w(index show).include?(part) }.join('/'))
-              custom_params[:node] = {
-                :id => node.id,
-                :url => node.url
-              }
+              path.replace('/' + mapping_params.values.reject { |part| %w(index show).include?(part) }.join('/'))
             end
-            params.replace(yield.tap { |_params|
+            yield.tap do |_params|
               _params.merge!(mapping_params) if node
               _params.merge!(custom_params)
-            })
+            end
           end
         end
       end
@@ -54,24 +51,24 @@ module RoutingFilter
       else
         node = nil
         handle = params[:handle]
-        conditions = { :controller => params[:controller], :action => params[:action] }
-        index_conditions = conditions.dup.merge(:action => 'index')
+        conditions = { controller: params[:controller], action: params[:action] }
+        index_conditions = conditions.dup.merge(action: 'index')
         if params[:id].present?
           resource = params[:id]
           handle = resource.handle if handle.blank? and resource.respond_to?(:handle)
           if resource.kind_of?(MongoMapper::Document) or resource.kind_of?(ActiveRecord::Base)
             params[:id] = resource.to_param
-            conditions.merge!(:resource_type => resource.class.to_s, :resource_id => resource.id)
+            conditions.merge!(resource_type: resource.class.to_s, resource_id: resource.id)
           else
-            conditions.merge!(:resource_type => params[:controller].classify, :resource_id => resource)
+            conditions.merge!(resource_type: params[:controller].classify, resource_id: resource)
           end
-          index_conditions.merge!(:handle => handle)
+          index_conditions.merge!(handle: handle)
           if node = (Node.first(conditions) || Node.first(index_conditions))
             params[:id] = resource.uri if resource.respond_to?(:uri) and resource.uri.present?
           end
         end
         if !node and handle.present?
-          node = Node.first(:handle => handle)
+          node = Node.first(handle: handle)
         end
         yield.tap do |path|
           if node

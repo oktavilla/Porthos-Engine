@@ -27,16 +27,11 @@ class UsersTest < ActiveSupport::IntegrationCase
     assert page.find('#userslist').has_content?('Jean-Luc Picard'), 'Should display the user'
   end
 
-  test 'deleting a user' do
+  test 'deleting a user should not be possible' do
     user = Factory.create(:user, :first_name => 'Dorkey', :last_name => 'Bork')
     visit admin_users_path
 
-    within "#userslist #user_#{user.id}" do
-      click_link I18n.t(:destroy)
-    end
-
-    assert has_flash_message?("Dorkey Bork #{I18n.t(:'app.admin_general.deleted')}")
-    refute page.find('#userslist').has_content?(user.name), 'Should have removed the user'
+    refute page.find("#userslist #user_#{user.id}").has_content?(I18n.t(:destroy))
   end
 
 private

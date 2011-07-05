@@ -19,6 +19,5 @@
   <% end %>
   <span class="edit">
     <%= link_to t(:edit), edit_admin_user_path(user) %>
-    <%= link_to(t(:destroy), admin_user_path(user), :method => :delete, :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => user.name)) %>
   </span>
 </div>

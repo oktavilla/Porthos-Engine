@@ -15,23 +15,18 @@
   </div>
   <div class="tools">
     <div class="add">
-      <form action="<%= new_admin_template_datum_template_path(@page_template) %>">
-        <input type="hidden" name="template_type" value="FieldTemplate" />
-        <%= select_tag 'datum_template[input_type]', options_for_select(%w(string boolean date).collect { |type| [t(".#{type}"), type] }) %>
-        <button type="submit" class="new"><%=t '.add_datum_template' %></button>
-      </form>
-    </div>
-    <div class="add">
-      <form action="<%= new_admin_template_datum_template_path(@page_template) %>">
-        <%= select_tag 'template_type', options_for_select(%w(AssetAssociationTemplate PageAssociationTemplate FieldSetTemplate DatumCollectionTemplate).collect { |type| [type.constantize.model_name.human, type] }) %>
-        <button type="submit" class="new"><%=t '.add_datum_template' %></button>
-      </form>
+      <a href="#" class="new" onclick="$('#datum_template_classes').toggle(); return false;"><%= t('.new') %></a>
     </div>
     <% unless @page_template.section %>
     <div class="add">
-      <%= link_to t('.add_section'), new_admin_page_path(:type => 'Section', :page_template_id => @page_template) %>
+      <%= link_to t('.add_section'), new_admin_page_path(:type => 'Section', :page_template_id => @page_template), :class => 'new' %>
     </div>
     <% end %>
+    <ul style="display:none;" id="datum_template_classes">
+    <% PageTemplate.datum_template_classes.each do |klass| %>
+      <li><%= link_to (klass[:type] != 'FieldTemplate' ? klass[:type].constantize.model_name.human : t(".#{klass[:attrs][:input_type]}")), new_admin_template_datum_template_path(@page_template, template_type: klass[:type], datum_template: (klass[:attrs] || {})) %></li>
+    <% end %>
+    </ul>
   </div>
   <div id="content">
     <% if @page_template.datum_templates.any? -%>

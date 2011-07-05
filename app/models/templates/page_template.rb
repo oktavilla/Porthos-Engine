@@ -15,6 +15,17 @@ class PageTemplate < Template
 
   attr_accessor :handle_was_changed
 
+  class_attribute :datum_template_classes
+  self.datum_template_classes = [
+    { type: 'FieldTemplate', attrs: { input_type: 'string' }},
+    { type: 'FieldTemplate', attrs: { input_type: 'boolean' }},
+    { type: 'FieldTemplate', attrs: { input_type: 'date' }},
+    { type: 'AssetAssociationTemplate' },
+    { type: 'PageAssociationTemplate' },
+    { type: 'FieldSetTemplate' },
+    { type: 'DatumCollectionTemplate' }
+  ]
+
   before_validation proc { self.handle_was_changed = true if changes.key?('handle') }
   after_save proc {
       Rails.env.production? ? delay.propagate_handle : propagate_handle

@@ -20,35 +20,37 @@
 
         var updateView = function(datum) {
           var $datum = $('#datum_'+datum.id+' div.viewable');
-          switch(datum['_type']) {
-            case 'StringField':
-              if (datum.multiline && !datum.allow_rich_text) {
-                $datum.html(Porthos.Helpers.simpleFormat(datum.value));
-              } else {
-                $datum.html(datum.value);
-              }
-              break;
-            case 'Field':
-              switch(datum.input_type) {
-                case 'date':
-                  var date = new Date(Date.parse(datum.value));
-                  $datum.html(Porthos.Helpers.strftime(date, "%Y-%m-%d"));
-                  break;
-                case 'boolean':
-                  $datum.html(!!datum.value ? 'Ja' : 'Nej');
-                  break;
-              }
-              break;
-            case 'PageAssociation':
-              $('#datum_'+datum.id+' div.title').html($form.find('option[value="'+datum.page_id+'"]').text());
-              break;
-            case 'FieldSet':
-              var i = 0,
-                  j = datum.data.length;
-              for (i=0; i<j; i++) {
-                updateView(datum.data[i]);
-              }
-              break;
+
+          if (datum['_type'].match(/Association/)) {
+            $('#datum_'+datum.id+' div.title').html($form.find('select option:selected').text());
+          } else {
+            switch(datum['_type']) {
+              case 'StringField':
+                if (datum.multiline && !datum.allow_rich_text) {
+                  $datum.html(Porthos.Helpers.simpleFormat(datum.value));
+                } else {
+                  $datum.html(datum.value);
+                }
+                break;
+              case 'Field':
+                switch(datum.input_type) {
+                  case 'date':
+                    var date = new Date(Date.parse(datum.value));
+                    $datum.html(Porthos.Helpers.strftime(date, "%Y-%m-%d"));
+                    break;
+                  case 'boolean':
+                    $datum.html(!!datum.value ? 'Ja' : 'Nej');
+                    break;
+                }
+                break;
+              case 'FieldSet':
+                var i = 0,
+                    j = datum.data.length;
+                for (i=0; i<j; i++) {
+                  updateView(datum.data[i]);
+                }
+                break;
+            }
           }
         };
 

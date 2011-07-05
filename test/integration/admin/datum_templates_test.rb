@@ -9,8 +9,7 @@ class DatumTemplatesTest < ActiveSupport::IntegrationCase
   # TODO: Add tests for the different kinds of datum_templates and their forms
   test 'creating a string datum_template' do
     visit admin_page_template_path(@page_template)
-    select I18n.t(:"admin.page_templates.show.#{FieldTemplate.input_types.first}"), :from => "datum_template_input_type"
-    click_button I18n.t(:'admin.page_templates.show.add_datum_template')
+    click_link I18n.t(:"admin.page_templates.show.string")
 
     within("form.datum_template_new") do
       assert_equal StringFieldTemplate.model_name, page.find('#template_type').value

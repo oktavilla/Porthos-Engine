@@ -11,8 +11,8 @@ module Porthos
     module ClassMethods
       # we should overwrite login_required to render a public login view
       def require_node
-        login_required if trail.detect { |n| n.restricted? } and not logged_in?
-        raise ActiveRecord::RecordNotFound if trail.detect { |n| n.inactive? }
+        login_required if trail and trail.detect { |n| n.restricted? } and not logged_in?
+        raise ActiveRecord::RecordNotFound if trail and trail.detect { |n| n.inactive? }
       end
 
     protected
@@ -26,7 +26,7 @@ module Porthos
       end
 
       def node
-        @node ||= Node.find_by_url(params[:node][:url]) or raise ActiveRecord::RecordNotFound
+        @node ||= params[:node] ? Node.find_by_id(params[:node][:id]) : nil
       end
 
       def nodes
@@ -39,7 +39,7 @@ module Porthos
       end
 
       def node_ancestors
-        unless defined?(@node_ancestors)
+        if !defined?(@node_ancestors) and node.present?
           @node_ancestors = node.ancestors.reverse
           @node_ancestors.shift
         end
@@ -52,7 +52,7 @@ module Porthos
           @trail = if node_ancestors and node_ancestors.any?
             node_ancestors.dup << node
           else
-            [node]
+            [node].compact
           end
         end
         @trail

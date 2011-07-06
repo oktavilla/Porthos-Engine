@@ -50,6 +50,7 @@ module RoutingFilter
         yield
       else
         node = nil
+        node_uri = nil
         handle = params[:handle]
         conditions = { controller: params[:controller], action: params[:action] }
         index_conditions = conditions.dup.merge(action: 'index')
@@ -65,6 +66,7 @@ module RoutingFilter
           index_conditions.merge!(handle: handle)
           if node = (Node.first(conditions) || Node.first(index_conditions))
             params[:id] = resource.uri if resource.respond_to?(:uri) and resource.uri.present?
+            node_uri = "/#{node.url}" if node.resource_id.present?
           end
         end
         if !node and handle.present?
@@ -72,8 +74,8 @@ module RoutingFilter
         end
         yield.tap do |path|
           if node
-            if node.resource_id.present?
-              path.replace(["/#{node.url}"])
+            if node_uri
+              path.replace([node_uri])
             else
               rule = Porthos::Routing.rules.find_matching_params(params)
               path.replace([rule ? rule.computed_path(node, params) : "/#{node.url}"])

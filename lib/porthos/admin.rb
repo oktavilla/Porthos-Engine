@@ -1,39 +1,24 @@
 module Porthos
   module Admin
+    extend ActiveSupport::Concern
 
-    # Set remember_uri as an after_filter
-    def self.included(base)
-      base.send :before_filter, :authenticate!
-      base.send :skip_before_filter, :remember_uri, :only => [:edit, :create, :update, :destroy, :sort]
-      base.send :before_filter, :clear_callback
-      base.send :around_filter, :set_current_user
-      base.send :layout, 'admin/application'
-    end
+    module InstanceMethods
+      def clear_callback
+        session.delete(:create_callback) if !params[:create_callback] && session[:create_callback]
+      end
 
-  protected
-
-    def clear_callback
-      unless params[:create_callback]
-        session[:create_callback] = nil
+      def set_current_user
+        User.current = current_user if signed_in?
+        yield
+        User.current = nil
       end
     end
 
-    def restfull_path_for(object, options = {})
-      action = options.delete(:action)
-      unless object.respond_to?(:superclass)
-        base = "#{object.class.to_s.underscore}_path"
-        options[:id] ||= object.id
-      else
-        base = "#{object.class.to_s.underscore.pluralize}_path"
-      end
-      url = ['admin', action, base].compact.join('_').to_sym
-      self.send url, options
-    end
-
-    def set_current_user
-      User.current = current_user if signed_in?
-      yield
-      User.current = nil
+    included do
+      before_filter :authenticate!
+      before_filter :clear_callback
+      around_filter :set_current_user
+      layout 'admin/application'
     end
 
   end

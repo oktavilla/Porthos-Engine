@@ -1,21 +1,13 @@
 module Porthos
   module Public
+    extend ActiveSupport::Concern
 
-    def self.included(controller)
-      controller.send :include, ClassMethods
-      controller.send :helper_method, :root_node, :root_nodes, :node, :nodes
-      controller.send :helper_method, :trail, :breadcrumbs
-      controller.send :layout, 'public'
-    end
-
-    module ClassMethods
+    module InstanceMethods
       # we should overwrite login_required to render a public login view
       def require_node
         login_required if trail and trail.detect { |n| n.restricted? } and not logged_in?
         raise ActiveRecord::RecordNotFound if trail and trail.detect { |n| n.inactive? }
       end
-
-    protected
 
       def root_node
         @root_node ||= Node.root
@@ -59,9 +51,16 @@ module Porthos
       end
 
       def breadcrumbs
-        @breadcrumbs ||= trail.collect { |n| ["/#{n.url}", n.name] }
+        @breadcrumbs ||= trail.map { |n| ["/#{n.url}", n.name] }
       end
 
     end
+
+    included do
+      helper_method :root_node, :root_nodes, :nodes, :node
+      helper_method :trail, :breadcrumbs
+      layout 'public'
+    end
+
   end
 end

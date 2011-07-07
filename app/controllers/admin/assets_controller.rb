@@ -1,12 +1,11 @@
 class Admin::AssetsController < ApplicationController
+  respond_to :html
   include Porthos::Admin
   before_filter :set_callback,
                 :only => [:index, :search]
   before_filter :find_tags,
                 :only => [:index, :new]
   skip_before_filter :clear_callback
-  skip_before_filter :remember_uri,
-                     :only => [:index, :show, :create, :search]
 
   protect_from_forgery :only => :create
 
@@ -23,9 +22,7 @@ class Admin::AssetsController < ApplicationController
     else
       Asset.tagged_with(params[:tags]).where(:hidden => false).sort(:created_at.desc)
     end
-    respond_to do |format|
-      format.html
-    end
+    respond_with(@assets)
   end
 
   def search
@@ -49,18 +46,11 @@ class Admin::AssetsController < ApplicationController
   end
 
   def new
-    @tags = []
     @asset = Asset.new
-    respond_to do |format|
-      format.html
-    end
   end
 
   def edit
-    @asset = Asset.find_by_name(params[:id]) || Asset.find(params[:id])
-    respond_to do |format|
-      format.html
-    end
+    @asset = Asset.find(params[:id])
   end
 
   def create
@@ -103,24 +93,17 @@ class Admin::AssetsController < ApplicationController
 
   def update
     @asset = Asset.find(params[:id])
-
-    respond_to do |format|
-      if @asset.update_attributes(params[:asset])
-        flash[:notice] = "#{@asset.full_name} #{t(:saved, :scope => [:app, :admin_general])}"
-        format.html { redirect_to (params[:return_to] || edit_admin_asset_url(@asset)) }
-      else
-        format.html { render :action => "edit" }
-      end
+    if @asset.update_attributes(params[:asset])
+      flash[:notice] = "#{@asset.full_name} #{t(:saved, :scope => [:app, :admin_general])}"
     end
+    respond_with @asset, :location => (params[:return_to] || edit_admin_asset_url(@asset))
   end
 
   def destroy
     @asset = Asset.find_by_name(params[:id]) || Asset.find(params[:id])
     @asset.destroy
     flash[:notice] = "#{@asset.full_name} #{t(:deleted, :scope => [:app, :admin_general])}"
-    respond_to do |format|
-      format.html { redirect_to admin_assets_path }
-    end
+    respond_with @asset, :location => (params[:return_to] || admin_assets_path)
   end
 
 protected

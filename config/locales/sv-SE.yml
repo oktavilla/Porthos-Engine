@@ -534,7 +534,11 @@
         choose_image: Välj bild
     link_lists:
       show:
+        title: "Navigationslistor > %{title}"
         new: Lägg till länk
+    links:
+      edit:
+        title: "Navigationslistor > %{list_title} > %{title}"
     sessions:
       signed_in: Du är nu inloggad
       signed_out: Du är nu utloggad

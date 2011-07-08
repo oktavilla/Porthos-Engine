@@ -9,6 +9,6 @@
   <%= f.label :node_id %>
   <%= f.select :node_id, Node.all.map { |n| [n.name, n.id ] }, :include_blank => t('.choose') %>
   <div class="submit">
-    <%= f.submit t(:save) %>
+    <%= f.submit t(:save) %> <%=t 'or' %> <%= link_to t('cancel'), admin_link_list_path(@link_list) %>
   </div>
 <% end %>

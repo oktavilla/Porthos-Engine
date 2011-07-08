@@ -106,6 +106,16 @@ class Admin::AssetsController < ApplicationController
     respond_with @asset, :location => (params[:return_to] || admin_assets_path)
   end
 
+  def edit_cropping_offset
+    @asset = Asset.find_by_name(params[:id]) || Asset.find(params[:id])
+    @cropping = (@asset.versions[params[:cropping]] || {}).tap do |_cropping|
+      _cropping[:width], _cropping[:height] = params[:cropping].gsub('c','').split('x')
+    end
+    respond_to do |format|
+      format.html
+    end
+  end
+
 protected
 
   def find_tags

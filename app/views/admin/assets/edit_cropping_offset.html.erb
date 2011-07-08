@@ -1,0 +1,24 @@
+<% @page_title = "Ändra beskärning: #{@asset.title}" %>
+<div id="workspace">
+  <div class="header">
+    <h1><span class="pre">Ändra beskärning</span> <%= @asset.title %></h1>
+  </div>
+  <div id="content">
+    <div id="c_1"><div class="inner">
+      <%= image_tag @asset.version_url(:size => 'w500'), :id => 'cropped_image',
+        'data-original-width' => @asset.width, 'data-original-height' => @asset.height,
+        'data-cropped-width' => @cropping[:width], 'data-cropped-height' => @cropping[:height],
+        'data-cutout-x' => @cropping[:cutout_x], 'data-cutout-y' => @cropping[:cutout_y],
+        'data-cutout-width' => @cropping[:cutout_width], 'data-cutout-height' => @cropping[:cutout_height] %>
+      <%= form_for [:admin, @asset], :as => :asset, :url => admin_asset_url(@asset) do |f| %>
+        <% "c#{@cropping[:width]}x#{@cropping[:height]}".tap do |cropping_name| %>
+          <%= hidden_field_tag "asset[versions][#{cropping_name}][cutout_width]", nil, :id => 'cutout_width' %>
+          <%= hidden_field_tag "asset[versions][#{cropping_name}][cutout_height]", nil, :id => 'cutout_height' %>
+          <%= hidden_field_tag "asset[versions][#{cropping_name}][cutout_x]", nil, :id => 'cutout_x' %>
+          <%= hidden_field_tag "asset[versions][#{cropping_name}][cutout_y]", nil, :id => 'cutout_y' %>
+          <%= f.submit t(:save) %>
+        <% end %>
+      <% end %>
+    </div></div>
+  </div>
+</div>

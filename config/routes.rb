@@ -89,6 +89,9 @@ Rails.application.routes.draw do
         get 'incomplete'
         put 'update_multiple'
       end
+      member do
+        get 'edit_cropping_offset'
+      end
     end
   end
 end

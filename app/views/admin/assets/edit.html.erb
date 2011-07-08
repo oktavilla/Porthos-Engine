@@ -43,6 +43,14 @@
           <li><%= link_to "Ladda ned orginal", @asset.remote_url %></li>
         </ul>
       </div>
+      <% if @asset.respond_to?(:versions) and @asset.versions.any? %>
+        <h2>Beskärningar</h2>
+        <ul>
+        <% @asset.versions.keys.each do |cropping| %>
+          <li><%= link_to cropping, edit_cropping_offset_admin_asset_path(@asset, :cropping => cropping) %></li>
+        <% end %>
+        </ul>
+      <% end %>
     </div></div>
   </div>
 </div>

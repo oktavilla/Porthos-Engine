@@ -24,6 +24,17 @@ class ImageAssetTest < ActiveSupport::TestCase
       assert @image_asset.version_url(:size => 'w200').include?("assets/1.jpg?size=w200&token=")
     end
 
+    should 'save cropping settings if present when genrating version url' do
+      @image_asset.version_url(:size => 'c200x100')
+      @image_asset.reload
+      assert @image_asset.versions.has_key?('c200x100'), 'should save cropping info in versions array'
+    end
+
+    should 'append cutout settings if present when generating version url' do
+      @image_asset.versions['c200x100'] = { :cutout_width => '500', :cutout_height => '400', :cutout_x => '10', :cutout_y => '20' }
+      assert @image_asset.version_url(:size => 'c200x100').include?("assets/1.jpg?size=c200x100&cutout=500x400-10x20&token="), 'should include cutout settings in url'
+    end
+
     should 'know if is in portrait or landscape format' do
       assert @image_asset.portrait?
       refute @image_asset.landscape?

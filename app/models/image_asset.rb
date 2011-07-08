@@ -2,6 +2,7 @@ class ImageAsset < Asset
   key :width, Integer
   key :height, Integer
   key :resizor_id, Integer
+  key :versions, Hash
 
   validates_presence_of :resizor_id,
                         :on => :create,
@@ -11,7 +12,22 @@ class ImageAsset < Asset
     resizor_asset.url(:size => 'original', :format => extension)
   end
 
+
+  def versions=(new_version)
+    super(versions.is_a?(Hash) ? versions.merge(new_version) : new_version)
+  end
+
   def version_url(options = {})
+    if options[:size].start_with?('c')
+      if versions and versions.has_key?(options[:size])
+        if versions[options[:size]].keys.any?
+          options[:cutout] = "#{versions[options[:size]][:cutout_width]}x#{versions[options[:size]][:cutout_height]}-#{versions[options[:size]][:cutout_x]}x#{versions[options[:size]][:cutout_y]}"
+        end
+      else
+        versions[options[:size]] = {}
+        save
+      end
+    end
     resizor_asset.url(options)
   end
 

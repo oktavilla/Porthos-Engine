@@ -90,7 +90,7 @@ Rails.application.routes.draw do
         put 'update_multiple'
       end
       member do
-        get 'edit_cropping_offset'
+        get 'edit_cropping'
       end
     end
   end

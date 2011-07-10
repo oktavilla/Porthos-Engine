@@ -21,7 +21,9 @@ class ImageAsset < Asset
     if options[:size].start_with?('c')
       if versions and versions.has_key?(options[:size])
         if versions[options[:size]].keys.any?
-          options[:cutout] = "#{versions[options[:size]][:cutout_width]}x#{versions[options[:size]][:cutout_height]}-#{versions[options[:size]][:cutout_x]}x#{versions[options[:size]][:cutout_y]}"
+          versions[options[:size]].tap do |cut|
+            options[:cutout] = "#{cut[:cutout_width]}x#{cut[:cutout_height]}-#{cut[:cutout_x]}x#{cut[:cutout_y]}"
+          end
         end
       else
         versions[options[:size]] = {}

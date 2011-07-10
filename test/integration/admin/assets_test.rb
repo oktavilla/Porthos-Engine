@@ -55,6 +55,23 @@ class AssetsTest < ActiveSupport::IntegrationCase
     assert page.find("#asset_#{asset.id}").has_content?('My updated file'), 'Should show the new asset name'
   end
 
+  test 'set cropping settings for image asset' do
+    stub_resizor_post
+    asset = Factory.create(:image_asset, :file => new_tempfile('image'), :versions => {'c100x100' => {}})
+    visit admin_assets_path
+    within("#asset_#{asset.id}") do
+      click_link I18n.t(:edit)
+    end
+    click_link 'c100x100'
+    fill_in 'cutout_width', :with => '140'
+    fill_in 'cutout_height', :with => '140'
+    fill_in 'cutout_x', :with => '40'
+    fill_in 'cutout_y', :with => '50'
+    click_button I18n.t(:save)
+    visit admin_assets_path
+    assert page.find("#asset_#{asset.id} img")[:src].include?("#{asset.resizor_id}.jpg?size=c100x100&cutout=140x140-40x50"), 'should use new cutout for cropping'
+  end
+
   test 'deleting an asset' do
     stub_s3_delete
     asset = Factory.create(:asset, :file => new_tempfile('text'))

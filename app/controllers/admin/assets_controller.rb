@@ -20,7 +20,7 @@ class Admin::AssetsController < ApplicationController
     @assets = unless @current_tags.any?
       apply_scopes(Asset).page(params[:page])
     else
-      Asset.tagged_with(params[:tags]).where(:hidden => false).sort(:created_at.desc)
+      Asset.tagged_with(params[:tags]).where(:hidden => false).sort(:created_at.desc).page(params[:page])
     end
     respond_with(@assets)
   end

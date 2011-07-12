@@ -45,8 +45,8 @@ class Admin::LinksController < ApplicationController
   def sort
     if params[:link]
       params[:link].each_with_index do |id, i|
-        @link_list.links.detect { |l| l.id.to_s == id }.tap do |link|
-          link.position = i+1 if link
+        if link = @link_list.links.detect { |l| l.id.to_s == id }
+          link.position = i+1
         end
       end
       @link_list.save

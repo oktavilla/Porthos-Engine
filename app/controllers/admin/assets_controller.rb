@@ -108,11 +108,8 @@ class Admin::AssetsController < ApplicationController
 
   def edit_cropping
     @asset = Asset.find_by_name(params[:id]) || Asset.find(params[:id])
-    @cropping = (@asset.versions[params[:cropping]] || {}).tap do |_cropping|
-      _cropping[:width], _cropping[:height] = params[:cropping].gsub('c','').split('x')
-    end
-    respond_to do |format|
-      format.html
+    @cropping = (@asset.versions[params[:cropping]] || {}).tap do |c|
+      c[:width], c[:height] = params[:cropping].gsub('c','').split('x')
     end
   end
 

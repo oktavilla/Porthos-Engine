@@ -68,8 +68,8 @@ class AssetsTest < ActiveSupport::IntegrationCase
     fill_in 'cutout_x', :with => '40'
     fill_in 'cutout_y', :with => '50'
     click_button I18n.t(:save)
-    visit admin_assets_path
-    assert page.find("#asset_#{asset.id} img")[:src].include?("#{asset.resizor_id}.jpg?size=c100x100&cutout=140x140-40x50"), 'should use new cutout for cropping'
+
+    assert has_flash_message?(I18n.t(:'app.admin_general.saved'))
   end
 
   test 'deleting an asset' do

@@ -2,7 +2,7 @@ class ImageAsset < Asset
   key :width, Integer
   key :height, Integer
   key :resizor_id, Integer
-  key :versions, Hash
+  key :versions, Hash, :default => lambda { Hash.new }
 
   validates_presence_of :resizor_id,
                         :on => :create,
@@ -18,17 +18,7 @@ class ImageAsset < Asset
   end
 
   def version_url(options = {})
-    if options[:size].start_with?('c')
-      if versions and versions.has_key?(options[:size])
-        if versions[options[:size]].keys.any?
-          versions[options[:size]].tap do |cut|
-            options[:cutout] = "#{cut[:cutout_width]}x#{cut[:cutout_height]}-#{cut[:cutout_x]}x#{cut[:cutout_y]}"
-          end
-        end
-      else
-        set("versions.#{options[:size]}" => {})
-      end
-    end
+    options = extract_cropping_options(options) if options[:size].start_with?('c')
     resizor_asset.url(options)
   end
 
@@ -77,4 +67,26 @@ protected
   def resizor_asset
     @resizor_asset ||= Resizor::ResizorAsset.new(:id => self.resizor_id)
   end
+
+private
+
+  def extract_cropping_options(options)
+    options.tap do |opts|
+      size = opts[:size]
+      unless versions.has_key?(size)
+        add_version size
+      else
+        version = versions[size]
+        if version.keys.any?
+          opts[:cutout] = "#{version[:cutout_width]}x#{version[:cutout_height]}-#{version[:cutout_x]}x#{version[:cutout_y]}"
+        end
+      end
+    end
+  end
+
+  def add_version(size)
+    self.versions[size] = {}
+    set("versions.#{size}" => self.versions[size])
+  end
+
 end

@@ -2,6 +2,96 @@
 #= require "lib/jquery.jcrop.min"
 (function() {
   Porthos.Asset = (function() {
+    var Cropper = function(image) {
+      var $image = $(image);
+
+      var preview = function(coords) {
+        var rx = cropped.w / coords.w,
+            ry = cropped.h / coords.h;
+        $('#preview').css({
+          width: Math.ceil(rx * original.w * factor) + 'px',
+          height: Math.ceil(ry * original.h * factor) + 'px',
+          marginLeft: '-' + Math.ceil(rx * coords.x) + 'px',
+          marginTop: '-' + Math.ceil(ry * coords.y) + 'px'
+        });
+      };
+
+      var computedCoords = function(coords) {
+        return {
+          w: Math.ceil(coords.w / factor),
+          h: Math.ceil(coords.h / factor),
+          x: Math.ceil(coords.x / factor),
+          y: Math.ceil(coords.y / factor)
+        };
+      };
+
+      var rendered = {
+            w: $image.width(),
+            h: $image.height()
+          },
+          original = {
+            w: $image.data('original-width'),
+            h: $image.data('original-height')
+          },
+          cropped = {
+            w: $image.data('cropped-width'),
+            h: $image.data('cropped-height')
+          },
+          cutout = {
+            w: $image.data('cutout-width'),
+            h: $image.data('cutout-height'),
+            x: $image.data('cutout-x'),
+            y: $image.data('cutout-y')
+          };
+      var ratio = (cropped.w / cropped.h),
+          factor = (rendered.w / original.w),
+          max_width, max_height, select_area;
+
+      if (cropped.w > cropped.h) {
+        max_width  = rendered.w;
+        max_height = (max_width / cropped.w) * cropped.h;
+      } else {
+        max_width  = (cropped.w / cropped.h) * rendered.h;
+        max_height = rendered.h;
+      }
+
+      if (cutout.x > 0) {
+        select_area = [
+          cutout.x * factor,
+          cutout.y * factor,
+          (cutout.x + cutout.w) * factor,
+          (cutout.y + cutout.h) * factor
+        ];
+      } else {
+        var x1 = (rendered.w/2) - (max_width/2),
+            y1 = (rendered.h/2) - (max_height/2);
+        select_area = [
+          x1,
+          y1,
+          x1 + max_width,
+          y1 + max_height
+        ];
+      }
+
+      $image.Jcrop({
+        aspectRatio: ratio,
+        minSize: [Math.ceil(cropped.w * factor), Math.ceil(cropped.h * factor)],
+        maxSize: [Math.ceil(max_width), Math.ceil(max_height)],
+        setSelect: select_area,
+        onSelect: function(coords) {
+          preview(coords);
+        },
+        onChange: function(coords) {
+          var c = computedCoords(coords)
+          $('#cutout_width').val(c.w);
+          $('#cutout_height').val(c.h);
+          $('#cutout_x').val(c.x);
+          $('#cutout_y').val(c.y);
+          preview(coords);
+        }
+      });
+    };
+
     var Ready = function(container) {
       $('#asset_tag_names').smartAutoComplete({
         minCharLimit: 3,
@@ -38,55 +128,17 @@
         $(event.currentTarget).parents('li').toggleClass('over');
       });
 
-      $('#cropped_image').load(function(){
-        var image = $(this);
-
-        var rendered_width = image.width();
-        var rendered_height = image.height();
-        var cropped_width = image.data('cropped-width');
-        var cropped_height = image.data('cropped-height');
-        var cutout_width = image.data('cutout-width');
-        var cutout_height = image.data('cutout-height');
-        var cutout_x = image.data('cutout-x');
-        var cutout_y = image.data('cutout-y');
-
-        var factor = (rendered_width/image.data('original-width'));
-
-        if(cropped_width > cropped_height){
-          var max_width = rendered_width;
-          var max_height  = (max_width/cropped_width)*cropped_height;
-        }else{
-          var max_width  = (cropped_width/cropped_height)*rendered_height;
-          var max_height = rendered_height;
+      $('#cropped_image').each(function() {
+        if (this.complete === true) {
+          Cropper(this);
+        } else {
+          $(this).bind('load', function() {
+            Cropper(this);
+          });
         }
-
-        var select_area;
-        if(cutout_x > 0){
-          select_area = [
-            cutout_x*factor, cutout_y*factor,
-            (cutout_x+cutout_width)*factor, (cutout_y+cutout_height)*factor ]
-        }else{
-          var x1 = (rendered_width/2)-(max_width/2);
-          var y1 = (rendered_height/2)-(max_height/2);
-          select_area = [
-            x1, y1,
-            x1+max_width, y1+max_height ];
-        }
-
-        image.Jcrop({
-          'aspectRatio': cropped_width/cropped_height,
-          'minSize' : [Math.ceil(cropped_width*factor),Math.ceil(cropped_height*factor)],
-          'maxSize' : [Math.ceil(max_width),Math.ceil(max_height)],
-          'setSelect' : select_area,
-          'onChange' : function(c){
-            $('#cutout_width').val(Math.ceil(c['w']/factor));
-            $('#cutout_height').val(Math.ceil(c['h']/factor));
-            $('#cutout_x').val(Math.ceil(c['x']/factor));
-            $('#cutout_y').val(Math.ceil(c['y']/factor));
-          }
-        });
       });
     };
+
     return {
       init: function() {
         $(document).ready(function() {

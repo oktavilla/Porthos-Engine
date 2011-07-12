@@ -1,11 +1,13 @@
 <% @page_title = "Ändra fil: #{@asset.title}" %>
+<% @page_class = 'layout3' %>
+<%= render :partial => 'admin/assets/sub_nav' %>
 <div id="workspace">
   <div class="header">
     <h1><span class="pre">Ändra filen</span> <%= @asset.title %></h1>
   </div>
   <div id="content">
     <div id="c_1"><div class="inner">
-      <%= form_for [:admin, @asset], :as => :asset, :url => admin_asset_url(@asset) do |f| %>
+      <%= form_for [:admin, @asset], :as => :asset, :url => admin_asset_path(@asset) do |f| %>
         <% if params[:return_to] %>
         <%= hidden_field_tag :return_to, params[:return_to] %>
         <% end %>
@@ -35,14 +37,31 @@
           <span class="icon"></span>
         <% end %>
       </div>
-      <div class="meta">
-        <ul>
-          <li><span>Uppladdad</span> <%= @asset.created_at.strftime("%d %B %Y") %></li>
-          <li><span>Filnamn</span> <%= "#{@asset.name}.#{@asset.extension}" %></li>
-          <li><span>Storlek</span> <%= number_to_human_size(@asset.size) %></li>
-          <li><%= link_to "Ladda ned orginal", @asset.remote_url %></li>
-        </ul>
-      </div>
+      <table class="meta">
+        <tbody>
+          <tr>
+            <th scope="row">Uppladdad</th>
+            <td><%= @asset.created_at.strftime("%d %B %Y") %></td>
+          </tr>
+          <tr>
+            <th scope="row">Filnamn</th>
+            <td><%= "#{@asset.name}.#{@asset.extension}" %></td>
+          </tr>
+          <% if @asset.is_a?(ImageAsset) %>
+          <tr>
+            <th>Format</th>
+            <td><%= [@asset.width, @asset.height].join('x') %></td>
+          </tr>
+          <% end %>
+          <tr>
+            <th scope="row">Storlek</th>
+            <td><%= number_to_human_size(@asset.size) %></td>
+          </tr>
+          <tr>
+            <td colspan="2"><%= link_to "Ladda ned orginal", @asset.remote_url %></td>
+          </tr>
+        </tbody>
+      </table>
       <% if @asset.respond_to?(:versions) and @asset.versions.any? %>
       <div class="versions">
         <h2>Beskärningar</h2>

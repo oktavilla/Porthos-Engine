@@ -1,7 +1,7 @@
 <% if datum.asset %>
 <div class="asset <%= datum.asset.filetype %>">
   <% if datum.asset.is_a?(ImageAsset) %>
-  <%= image_tag datum.asset.version_url(:size => 'c80x80') %>
+  <%= image_tag datum.asset.version_url(:size => '80') %>
   <% end %>
   <% if datum.title.present? %>
     <div class="title"><%= datum.title %></div>

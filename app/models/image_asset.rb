@@ -26,8 +26,7 @@ class ImageAsset < Asset
           end
         end
       else
-        versions[options[:size]] = {}
-        save
+        set("versions.#{options[:size]}" => {})
       end
     end
     resizor_asset.url(options)

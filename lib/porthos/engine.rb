@@ -7,6 +7,8 @@ module Porthos
 
     config.active_record.identity_map = true
 
+    config.porthos = ::Porthos::Config
+
     rake_tasks do
       load Porthos.root.join("lib/tasks/porthos_tasks.rake")
     end
@@ -30,8 +32,14 @@ module Porthos
 
     initializer 'porthos.mongo_mapper' do |app|
       ActiveSupport.on_load :mongo_mapper do
+        ::MongoMapper::Document.plugin ActiveModel::Observing
         ::MongoMapper::Document.plugin Porthos::MongoMapper::Plugins::ActsAsUri
-        ::MongoMapper::Document.send :include, ActiveModel::Observing
+      end
+      config.after_initialize do
+        ::Porthos.config.instantiate_observers
+        ActionDispatch::Callbacks.to_prepare do
+          ::Porthos.config.instantiate_observers
+        end
       end
     end
 

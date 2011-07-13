@@ -10,19 +10,21 @@ require 'kaminari'
 
 require 'porthos/config'
 module Porthos
-  def self.root
+  extend self
+
+  def root
     Pathname.new(File.expand_path(File.dirname(__FILE__)+'../..'))
   end
 
-  def self.app_name
+  def app_name
     Rails.application.class.to_s.split("::").first
   end
 
-  def self.configure
+  def configure
     yield Porthos::Config
   end
 
-  def self.config
+  def config
     Porthos::Config
   end
 

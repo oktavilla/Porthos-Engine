@@ -14,6 +14,9 @@ namespace :porthos do
 
       Node.ensure_index :resource_id
       Node.ensure_index [['handle', 1], ['action', 1], ['controller', 1]]
+
+      LinkList.ensure_index :handle
+      LinkList.ensure_index 'links.node_id'
     end
 
     namespace :migrate do

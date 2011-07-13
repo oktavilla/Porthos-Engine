@@ -86,7 +86,8 @@ private
 
   def generate_url
     if parent
-      self.url = !parent.parent_id.blank? ? [parent.url, name.to_s.to_url].join('/') : name.to_s.to_url
+      new_url = url.blank? ? name.to_s.to_url : url
+      self.url = !parent.parent_id.blank? ? [parent.url, new_url].join('/') : new_url
     end
   end
 

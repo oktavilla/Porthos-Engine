@@ -6,6 +6,9 @@ Porthos.s3_storage = Porthos::S3Storage.new({
 })
 
 Porthos.configure do |config|
+
+  config.observers = :node_observer
+
   config.resizor do |resizor|
     resizor.api_key = ''
   end

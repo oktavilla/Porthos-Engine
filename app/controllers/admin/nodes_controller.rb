@@ -76,19 +76,15 @@ class Admin::NodesController < ApplicationController
 
   def update
     @node = Node.find(params[:id])
+    if @node.update_attributes(params[:node])
+      flash[:notice] = t(:'app.admin_general.saved')
+    end
     respond_to do |format|
-      if @node.update_attributes(params[:node])
-        format.html do
-          redirect_to (params[:return_to] || admin_nodes_path(:nodes => @node))
-        end
-      else
-        format.html do
-          unless params[:place]
-            render :action => 'edit'
-          else
-            @nodes = Node.roots
-            render :action => 'place'
-          end
+      format.html do
+        if @node.valid?
+          redirect_to params[:return_to] || admin_nodes_path(:nodes => @node)
+        else
+          render action: (params[:place] ? 'place' : 'edit')
         end
       end
     end

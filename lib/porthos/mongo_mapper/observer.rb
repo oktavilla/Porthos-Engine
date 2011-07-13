@@ -4,6 +4,12 @@ module Porthos
 
     protected
 
+      def observed_classes
+        super.tap do |klasses|
+          klasses += klasses.map { |klass| klass.descendants }.flatten
+        end
+      end
+
       def add_observer!(klass)
         super and define_callbacks klass
       end

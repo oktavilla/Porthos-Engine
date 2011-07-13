@@ -31,6 +31,7 @@ module Porthos
     initializer 'porthos.mongo_mapper' do |app|
       ActiveSupport.on_load :mongo_mapper do
         ::MongoMapper::Document.plugin Porthos::MongoMapper::Plugins::ActsAsUri
+        ::MongoMapper::Document.send :include, ActiveModel::Observing
       end
     end
 

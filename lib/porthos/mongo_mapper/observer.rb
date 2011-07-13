@@ -1,20 +1,11 @@
 module Porthos
   module MongoMapper
-    class Observing
-      include ActiveModel::Observing
-    end
-
     class Observer < ActiveModel::Observer
 
-      def observed_classes
-        super.tap do |klasses|
-          klasses += klasses.map { |klass| klass.descendants }.flatten
-        end
-      end
+    protected
 
       def add_observer!(klass)
-        super
-        define_callbacks klass
+        super and define_callbacks klass
       end
 
       def define_callbacks(klass)

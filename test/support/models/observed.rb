@@ -1,12 +1,12 @@
 class Animal
   include MongoMapper::Document
-  field :name
+  key :name, String
 end
 
-class Human < Animal
+class Biped < Animal
 end
 
-class HumanObserver < Porthos::MongoMapper::Observer
+class AnimalObserver < Porthos::MongoMapper::Observer
   attr_reader :last_after_create_record
 
   def after_create(record)
@@ -15,7 +15,7 @@ class HumanObserver < Porthos::MongoMapper::Observer
 end
 
 class CallbackRecorder < Porthos::MongoMapper::Observer
-  observe :actor
+  observe :animal
 
   attr_reader :last_callback, :call_count, :last_record
 

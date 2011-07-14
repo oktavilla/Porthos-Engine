@@ -24,5 +24,6 @@
 <%= javascript_include_tag "//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" %>
 <script>window.jQuery.hasOwnProperty('ui') || document.write('<script src="<%= asset_path 'lib/jquery-ui-1.8.13.min.js' %>"><\/script>')</script>
 <%= javascript_include_tag 'admin' %>
+<%= content_for(:admin_scripts) if content_for?(:admin_scripts) %>
 </body>
 </html>

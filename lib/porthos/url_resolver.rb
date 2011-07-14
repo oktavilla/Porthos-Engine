@@ -12,7 +12,7 @@ module RoutingFilter
             custom_params = {}
             matched_rule = nil
             url = path.gsub(/^\//,'')
-            node = Node.where(url: (!url.blank? ? url : nil)).first
+            node = Node.where(url: (url.present? ? url : '/')).first
             unless node
               Porthos::Routing.recognize(path).each do |match|
                 next unless url.start_with?(match[:url])

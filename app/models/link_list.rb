@@ -9,7 +9,7 @@ class LinkList
   validates :handle, presence: true
 
   before_validation :create_title
-  before_validation :sort_links
+  before_save :sort_links
 
   class << self
     def [](handle)

@@ -44,7 +44,7 @@ module Porthos
     end
 
     initializer 'porthos.tanking' do |app|
-      app.config.to_prepare do
+      config.after_initialize do
         Porthos::Tanking::Indexes.setup
       end
     end

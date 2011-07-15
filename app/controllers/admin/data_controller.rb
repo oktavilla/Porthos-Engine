@@ -16,8 +16,8 @@ class Admin::DataController < ApplicationController
     unless params[:template_id]
       @datum = params[:type].constantize.new(params[:datum])
     else
-      template = Template.find(params[:template_id])
-      @datum = template.to_datum(params[:datum])
+      @template = Template.find(params[:template_id])
+      @datum = @template.to_datum(params[:datum])
     end
     @parent.data << @datum
     if @page.save

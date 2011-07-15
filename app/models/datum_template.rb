@@ -94,8 +94,8 @@ private
 
   # TODO: Add delayed job
   def propagate_self_to_field_sets
-    concerned_pages.each do |page|
-      find_matching_field_sets_in_page(page).each do |field_set|
+    _root_document.concerned_pages.each do |page|
+      _root_document.find_matching_field_sets_in_page(page).each do |field_set|
         field_set.data << self.to_datum
       end
       page.save
@@ -105,8 +105,8 @@ private
   # TODO: Add delayed job
   def propagate_updates_to_field_sets
     query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
-    concerned_pages.each do |page|
-      find_matching_field_sets_in_page(page).each do |field_set|
+    _root_document.concerned_pages.each do |page|
+      _root_document.find_matching_field_sets_in_page(page).each do |field_set|
         field_set.data.detect { |datum| datum.handle == query_handle }.tap do |datum|
           self.shared_attributes.each do |k, v|
             datum[k.to_sym] = v
@@ -120,8 +120,8 @@ private
   # TODO: Add delayed job
   def propagate_removal_to_field_sets
     query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
-    concerned_pages.each do |page|
-      find_matching_field_sets_in_page(page).each do |field_set|
+    _root_document.concerned_pages.each do |page|
+      _root_document.find_matching_field_sets_in_page(page).each do |field_set|
         field_set.data.delete_if do |datum|
           datum.handle == query_handle
         end
@@ -130,27 +130,4 @@ private
     end
   end
 
-  def concerned_pages
-    Page.where('$or' => [
-      { 'data.content_template_id' => _root_document.id },
-      { 'data.data.content_template_id' => _root_document.id }
-    ])
-  end
-
-  # Finds and returns all datums matching self in field sets connected to the content template
-  def find_matching_field_sets_in_page(page)
-    root_field_sets = page.data.find_all do |d|
-      d.respond_to?(:content_template_id) && d.content_template_id == _root_document.id
-    end
-
-    datum_collection_field_sets = page.data.find_all do |d|
-      d.respond_to?(:content_templates_ids) && d.content_templates_ids.include?(_root_document.id)
-    end.map do |datum_collection|
-      datum_collection.data.find_all do |d|
-        d.respond_to?(:content_template_id) && d.content_template_id == _root_document.id
-      end
-    end.flatten.compact
-
-    root_field_sets + datum_collection_field_sets
-  end
 end

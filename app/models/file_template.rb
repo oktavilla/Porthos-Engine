@@ -1,6 +1,5 @@
-require 'yaml'
 require 'enumerator'
-class PageFileTemplate
+class FileTemplate
   include Comparable
 
   attr_reader :name,
@@ -13,7 +12,6 @@ class PageFileTemplate
     @path = @full_path.gsub(/(.*)app\/views\//,'')
     @handle = name
     @name = @handle.capitalize
-    require File.join(@full_path, "#{@handle}_renderer")
   end
 
   def views
@@ -48,20 +46,20 @@ class PageFileTemplate
       available_template_paths
     end
 
-    def root_directories
-      [File.join(Rails.root, 'app', 'views', root_path), File.join(Porthos.root, 'app', 'views', root_path)]
-    end
-
-    def root_path
-      File.join('pages', 'templates')
-    end
-
     def default
       self.new('default')
     end
 
     def find(template_handle)
-      self.all.detect{|template| template.handle == template_handle }
+      self.all.detect { |template| template.handle == template_handle }
+    end
+
+    def root_path
+      raise "Needs to be implemented in subclass"
+    end
+
+    def root_directories
+      [File.join(Rails.root, 'app', 'views', root_path), File.join(Porthos.root, 'app', 'views', root_path)]
     end
 
   end
@@ -91,7 +89,7 @@ class PageFileTemplate
       if names.include?(_method)
         File.join(@template.path, _method)
       else
-        default_template = PageFileTemplate.default
+        default_template = @template.class.default
         if @template != default_template and default_template.views.respond_to?(method)
           default_template.views.send(method, *args)
         else
@@ -101,5 +99,4 @@ class PageFileTemplate
     end
     alias_method_chain :method_missing, :check_default
   end
-
 end

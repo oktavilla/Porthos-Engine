@@ -1,6 +1,6 @@
 class FieldSet < Datum
-  key :template, String
-
+  key :template_name, String
+  key :content_template_id, ObjectId
   many :data do
     def [](handle)
       detect { |d| d.handle == handle.to_s }
@@ -16,6 +16,10 @@ class FieldSet < Datum
         datum.assign(attrs) if datum && attrs.keys.any?
       end if datum_id
     end
+  end
+
+  def template
+    @template ||= template_name.present? ? FieldSetFileTemplate.new(template_name) : FieldSetFileTemplate.default
   end
 
   class << self

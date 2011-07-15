@@ -7,6 +7,11 @@
   <%= f.label :description %>
   <%= f.text_area :description, :rows => 3 %>
 
+  <div class="contans_input">
+    <%= f.label :template_name %>
+    <%= f.select :template_name, FieldSetFileTemplate.all.collect { |t| [t.name.titlecase, t.handle] } %>
+  </div>
+
   <div class="submit">
     <%= f.submit t(:save) %>
   </div>

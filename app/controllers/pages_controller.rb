@@ -19,11 +19,13 @@ class PagesController < ApplicationController
   end
 
   def show
-    @page = if BSON::ObjectId.legal?(params[:id])
+    @page = if params[:id].is_a?(BSON::ObjectId) || BSON::ObjectId.legal?(params[:id])
       Page.published.find(params[:id])
     else
       Page.published.where(uri: params[:id], handle: params[:handle]).first
     end
+    raise ActiveRecord::RecordNotFound unless @page
+
     template = @page.template
     @page_renderer = page_renderer(template, page_template: @page.page_template, page: @page)
 

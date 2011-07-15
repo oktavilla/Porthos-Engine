@@ -1,2 +1,6 @@
+<p>
+  <strong><%= f.object.class.human_attribute_name(:template_name) %>:</strong>
+  <%= f.object.template_name %>
+</p>
 <%= f.label :content_template %>
 <%= f.select :content_template_id, ContentTemplate.all.collect { |c| [c.label, c.id.to_s ]}, :selected => f.object.content_template_id.to_s %>

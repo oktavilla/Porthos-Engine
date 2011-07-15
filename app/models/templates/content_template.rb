@@ -1,6 +1,6 @@
 class ContentTemplate < Template
   key :template_name, String
-  after_destroy :propagate_removal_to_pages
+  after_destroy :propagate_removal_to_items
   after_update :propagate_updates
 
   def template
@@ -18,20 +18,20 @@ class ContentTemplate < Template
     { label: self.label, content_template_id: self.id, template_name: self.template_name }
   end
 
-  def concerned_pages
-    Page.where('$or' => [
+  def concerned_items
+    Item.where('$or' => [
       { 'data.content_template_id' => self.id },
       { 'data.data.content_template_id' => self.id }
     ])
   end
 
   # Finds and returns all datums matching self in field sets connected to the content template
-  def find_matching_field_sets_in_page(page)
-    root_field_sets = page.data.find_all do |d|
+  def find_matching_field_sets_in_item(item)
+    root_field_sets = item.data.find_all do |d|
       d.respond_to?(:content_template_id) && d.content_template_id == self.id
     end
 
-    datum_collection_field_sets = page.data.find_all do |d|
+    datum_collection_field_sets = item.data.find_all do |d|
       d.respond_to?(:content_templates_ids) && d.content_templates_ids.include?(self.id)
     end.map do |datum_collection|
       datum_collection.data.find_all do |d|
@@ -56,22 +56,22 @@ private
       }
     }, safe: true, multiple: true)
 
-    concerned_pages.each do |page|
-      find_matching_field_sets_in_page(page).each do |field_set|
+    concerned_items.each do |item|
+      find_matching_field_sets_in_item(item).each do |field_set|
         field_set.label = self.label
         field_set.template_name = self.template_name
       end
-      page.save
+      item.save
     end
   end
 
   # TODO: Add delayed job
-  def propagate_removal_to_pages
+  def propagate_removal_to_items
     # Pull all field sets in pages connected to this
-    Page.pull({}, data: { 'content_template_id' => self.id })
+    Item.pull({}, data: { 'content_template_id' => self.id })
 
     # Pull all field sets in content blocks connected to this
-    Page.collection.update({
+    Item.collection.update({
       'data' => {
         '$elemMatch' => { 'data.content_template_id' => self.id }
       }

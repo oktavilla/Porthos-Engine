@@ -94,39 +94,39 @@ private
 
   # TODO: Add delayed job
   def propagate_self_to_field_sets
-    _root_document.concerned_pages.each do |page|
-      _root_document.find_matching_field_sets_in_page(page).each do |field_set|
+    _root_document.concerned_items.each do |item|
+      _root_document.find_matching_field_sets_in_item(item).each do |field_set|
         field_set.data << self.to_datum
       end
-      page.save
+      item.save
     end
   end
 
   # TODO: Add delayed job
   def propagate_updates_to_field_sets
     query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
-    _root_document.concerned_pages.each do |page|
-      _root_document.find_matching_field_sets_in_page(page).each do |field_set|
+    _root_document.concerned_items.each do |item|
+      _root_document.find_matching_field_sets_in_item(item).each do |field_set|
         field_set.data.detect { |datum| datum.handle == query_handle }.tap do |datum|
           self.shared_attributes.each do |k, v|
             datum[k.to_sym] = v
           end
         end
       end
-      page.save
+      item.save
     end
   end
 
   # TODO: Add delayed job
   def propagate_removal_to_field_sets
     query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
-    _root_document.concerned_pages.each do |page|
-      _root_document.find_matching_field_sets_in_page(page).each do |field_set|
+    _root_document.concerned_items.each do |item|
+      _root_document.find_matching_field_sets_in_item(item).each do |field_set|
         field_set.data.delete_if do |datum|
           datum.handle == query_handle
         end
       end
-      page.save
+      item.save
     end
   end
 

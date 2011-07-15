@@ -1,0 +1,12 @@
+<%= f.hidden_field :input_type %>
+<% if f.object.input_type == 'string' %>
+<div class="contains_input">
+  <%= f.check_box :multiline %>
+  <%= f.label :multiline %>
+</div>
+
+<div class="contains_input">
+  <%= f.check_box :allow_rich_text %>
+  <%= f.label :allow_rich_text %>
+</div>
+<% end %>

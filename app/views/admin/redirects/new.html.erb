@@ -1,0 +1,25 @@
+<% @page_title = 'Ny vidarebefordring' -%>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1><%= t(:title, :scope => [:app, :views, :admin, :redirects, :new]) %></h1>
+    </div>
+    <div id="content">
+      <%= form_for :redirect, :url => admin_redirects_path, :html => { :class => "tiny" } do |f| %>
+        <%= render 'admin/shared/error_messages', :object => f.object %>
+        <%= f.label :path %>
+        <%= f.text_field :path %>
+        <p class="form_help after"><%= t(:path, :scope => [:app, :views, :admin, :redirects, :shared, :form_help]) %></p>
+        <%= f.label :target %>
+        <%= f.text_field :target %>
+        <p class="form_help after"><%= t(:target, :scope => [:app, :views, :admin, :redirects, :shared, :form_help]) %></p>
+        <div class="submit">
+          <%= submit_tag t(:save) %> eller <%= link_to t(:cancel), admin_redirects_path %>
+        </div>
+      <% end %>
+    </div>
+  </div>

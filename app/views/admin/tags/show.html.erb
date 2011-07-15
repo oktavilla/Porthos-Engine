@@ -1,0 +1,29 @@
+<% @page_class = 'layout2' %>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1><%= t(:title, :scope => [:app, :views, :admin, :tags, :show], :name => @tag.name) %></h1>
+  </div>
+  <div class="tools">
+    <div class="edit">
+      <%= link_to t(:edit_tag, :scope => [:app, :views, :admin, :tags, :show]), edit_admin_tag_path(@tag) %>
+    </div>
+  </div>
+  <div id="content">
+  <% @tag.tagged_models.each do |model| -%>
+    <h2><%= model.to_s.pluralize %></h2>
+    <ul class="taggables">
+      <% @tag.taggings.with_taggable_type(model.to_s).each do |tagging| -%>
+        <li>
+          <div class="taggable <%= model.to_s.underscore %>">
+            <%= render :partial => "admin/taggables/#{model.to_s.underscore}", :locals => { :taggable => tagging.taggable } %>
+            <span class="tags"><%= Tag.model_name.human %>: <%= tagging.taggable.tags.collect { |tag| link_to(tag.name, admin_tag_path(tag)) }.join(', ') %></span>
+          </div>
+        </li>
+      <% end -%>
+    </ul>
+  <% end -%>
+  </div>
+</div>

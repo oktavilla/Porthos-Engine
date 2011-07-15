@@ -1,0 +1,26 @@
+<% @page_class = "layout3" -%>
+<% @page_id = 'site-structure' -%>
+<% @page_title = t(:title, :scope => [:app, :views, :admin, :nodes, :index])  -%>
+<%= render 'sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1><%= t(:title, :scope => [:app, :views, :admin, :nodes, :index])  %></h1>
+  </div>
+  <div id="content">
+    <div class="inner">
+      <% if @root -%>
+      <div id="root">
+        <span class="name"><%= @root.name %></span>
+        <span class="edit">
+          <%= link_to t(:edit), edit_admin_node_path(@root), :class => 'settings' %>
+        </span>
+      </div>
+      <div id="navigation" class="sortable" data-sort-uri="<%= sort_admin_nodes_path %>">
+        <%= render :partial => 'nodes_tree', :locals => { :nodes => @nodes, :open_nodes => @open_nodes, :trail => @trail, :place => false} %>
+      </div>
+      <% else -%>
+      <p class="blank-slate"><%= t(:no_data, :scope => [:app, :views, :admin, :nodes, :index]) %> <%= link_to t(:add_root_node, :scope => [:app, :views, :admin, :nodes, :index]), new_admin_page_path, :onclick => "$('new_page_form').toggle(); return false;" %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<% @page_title = "Användare - sökresultat" -%>
+<% @page_class = 'layout3' %>
+<%= render :partial => 'sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1>Sökresultat för "<%= @query %>" (<%= @search.total %> träffar)</h1></h1>
+  </div>
+  <div id="content">
+    <div class="inner">
+      <ul id="userslist">
+      <% @search.results.each do |user| -%>
+        <li>
+          <%= render :partial => 'user', :locals => {:user => user} %>
+        </li>
+      <% end -%>
+      </ul>
+    </div>
+  </div>
+</div>

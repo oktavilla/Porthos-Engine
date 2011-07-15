@@ -1,0 +1,2 @@
+class AssociationFieldTemplate < FieldTemplate
+end

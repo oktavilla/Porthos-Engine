@@ -1,0 +1,17 @@
+<%= form_tag admin_sessions_path do -%>
+  <fieldset class="compact">
+    <label for="username"><%= User.human_attribute_name('username') %></label>
+    <div class="fullwidth">
+      <%= text_field_tag 'username' %>
+    </div>
+    <label for="password"><%= User.human_attribute_name('password') %></label>
+    <div class="fullwidth">
+      <%= password_field_tag 'password' %>
+    </div>
+  </fieldset>
+  <label class="remember_me" for="remember_me">
+    <%= check_box_tag 'remember_me' %>
+    kom ihåg mig på den här datorn
+  </label>
+  <fieldset class="submit"><%= submit_tag t('.login'), :id => 'commit' %></fieldset>
+<% end -%>

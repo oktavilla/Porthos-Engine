@@ -1,0 +1,37 @@
+<% @page_class = "AB navigation" -%>
+<% @page_id = "contents" -%>
+<% @page_title = "Innehållsstruktur" -%>
+<div id="workspace">
+  <div class="header">
+    <h1>Välj vart i strukturen du vill placera sidan ...</h1>
+  </div>
+  <div id="content">
+    <%= form_for :node, :url => admin_node_path(:id => @node, :return_to => admin_nodes_path), :html => { :method => :put, :id => 'navigation' } do |f| %>
+      <%= render 'admin/shared/error_messages', :object => f.object %>
+      <% nested_list_of(@nodes, {
+          :end_points => @node,
+          :allow_inactive => true,
+          :except => @node
+        }, {
+          :id => 'nodes'
+      }) do |node| %>
+        <% unless @node == node -%>
+        <div>
+          <% if node != @nodes.first && node.children.any? -%>
+            <% if @trail.include?(node) -%>
+              <%= link_to "-", admin_nodes_path(:nodes => [node.parent_id]), :class => 'toggle_handle' %>
+            <% else -%>
+              <%= link_to "+", admin_nodes_path(:nodes => [node.id], :place => true), :class => 'toggle_handle' %>
+            <% end -%>
+          <% end -%>
+          <%= radio_button_tag('node[parent_id]', node.id, (node.id == @node.parent_id), :id => "node_parent_id_#{node.id}") unless node == @node %>
+          <span class="name"><%= node.name %></span>
+        </div>
+        <% end -%>
+      <% end %>
+      <div class="submit">
+        <%= submit_tag 'Spara placering', :name => 'place' %> eller <%= link_to "Avbryt", admin_nodes_path %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<%= f.hidden_field :page_template_id %>
+<label for="page_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>
+<div class="fullwidth">
+  <%= f.text_field :title, :class => "title" %>
+</div>
+<% unless f.object.is_a?(Section) %>
+<%= f.label :uri %>
+<div class="fullwidth">
+  <%= f.text_field :uri, :class => "uri" %>
+</div>
+<% end %>
+<label for="page_tag_names">
+  Nyckelord (ej obligatoriskt)
+  <span class="form_help">separera nyckelord med mellanslag</span>
+</label>
+<div class="fullwidth">
+<%= f.text_field :tag_names, :id => 'page_tag_names' %>
+</div>
+
+<% if not defined?(in_nodes_edit) %>
+<!--
+
+Not necessary in all installations, needs to be better communicated.
+
+<label for="page_restricted" class="contains-input">
+  <%= f.check_box :restricted %> Kräv inloggning
+</label>
+-->
+<% end %>
+<!--
+
+Removed until solved properly.
+
+<label for="page_title">Publiceringsdatum</label>
+<%= f.datetime_select :published_on, :order => [:day, :month, :year] %>
+-->

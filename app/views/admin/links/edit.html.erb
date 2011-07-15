@@ -1,0 +1,11 @@
+<% @page_title = t('.title', list_title: @link_list.title, title: @link.title) %>
+<% @page_class = 'layout3' -%>
+<%= render 'admin/nodes/sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1><%= @link.title %></h1>
+  </div>
+  <div id="content">
+    <%= render 'form' %>
+  </div>
+</div>

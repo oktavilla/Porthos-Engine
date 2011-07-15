@@ -1,0 +1,16 @@
+#userslist {}
+  #userslist li {
+    display:inline-block;
+    width:33%;
+    min-height:80px;
+    vertical-align:top;
+    margin:0 0 1em 0;
+    padding:0; }
+    #userslist .vcard { padding-left:60px; }
+    #userslist .vcard img.avatar {
+      float:left;
+      margin-left:-60px; }
+    #userslist .vcard .tel,
+    #userslist .vcard .email,
+    #userslist .vcard .edit {
+      font-size:12px; }

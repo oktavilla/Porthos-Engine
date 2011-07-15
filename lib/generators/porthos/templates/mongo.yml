@@ -1,0 +1,15 @@
+defaults: &defaults
+  host: 127.0.0.1
+  port: 27017
+
+development:
+  <<: *defaults
+  database: porthos-development
+
+test:
+  <<: *defaults
+  database: porthos-test
+
+# set these environment variables on your prod server
+production:
+  uri: <%= ENV['MONGOHQ_URL'] %>

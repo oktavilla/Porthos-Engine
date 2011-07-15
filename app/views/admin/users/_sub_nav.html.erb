@@ -1,0 +1,12 @@
+<div id="sub_nav">
+  <% if Rails.application.config.use_fulltext_search %>
+  <% form_tag search_admin_users_path, :method => 'get' do %>
+  <div class="search">
+    <div class="fullwidth">
+      <%= text_field_tag :query, (@query ? @query : 'Sök efter användare'), :class => "search_query", :id=> "ref_search_query" %>
+    </div>
+    <%= submit_tag "Sök", :style => "display:none" %>
+  </div>
+  <% end %>
+  <% end %>
+</div>

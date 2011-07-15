@@ -1,0 +1,70 @@
+<% @page_title = 'Sidor' -%>
+<% @page_class = 'layout3' -%>
+<%= render :partial => 'admin/pages/sub_nav' %>
+<% (@page_template && @page_template.pages_sortable?).tap do |sortable| %>
+<div id="workspace">
+  <div class="header">
+    <% if @page_template %>
+    <h1><%= @page_template.label %></h1>
+    <% else %>
+    <h1><%= t('.all_pages') %></h1>
+    <% end %>
+  </div>
+  <div class="tools">
+    <% if @page_template %>
+    <div class="add">
+      <%= link_to t('.create_new', :template => @page_template.label.downcase), new_admin_page_path(:page_template_id => @page_template.id), :class => 'new' %>
+    </div>
+    <% end %>
+  <% unless sortable %>
+    <%= form_tag admin_pages_path, :method => :get do |f| %>
+    <div class="sort">
+      <label for="filters_order_by">Sortering:</label>
+      <% current_scopes.except(:order_by).each do |filter, value| -%>
+        <%= hidden_field_tag filter, value %>
+      <% end -%>
+        <%= select_tag 'order_by', options_for_select({ 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, current_scopes[:order_by]) %>
+    </div>
+    <% end %>
+  <% end %>
+  </div>
+  <div id="content">
+    <div class="tablewrap">
+      <% if @page_template && !@page_template.allow_node_placements? && !@page_template.section %>
+      <div class="section">
+        <%= link_to t('.add_section'), new_admin_page_path(type: 'Section', page_template_id: @page_template.id) %>
+      </div>
+      <% end %>
+      <table class="pages <%= ' sortable' if sortable %>">
+        <thead>
+          <tr>
+            <% if sortable %>
+            <th class="sort"></th>
+            <% end %>
+            <th><%= Page.human_attribute_name(:title) %></th>
+            <th><%= Page.human_attribute_name(:updated_at) %></th>
+            <th><%= t(:status) %></th>
+          </tr>
+        </thead>
+        <% if @page_template && @page_template.section %>
+        <% @page_template.section.tap do |section| %>
+        <tbody class="section">
+          <%= render partial: 'row', locals: { page: section, sortable: sortable } %>
+        </tbody>
+        <% end %>
+        <% end %>
+        <% if sortable %>
+        <%= tag 'tbody', :'data-sort-uri' => sort_admin_pages_path, :id => 'pages' %>
+        <% else %>
+        <tbody>
+        <% end %>
+        <% @pages.each do |page| %>
+          <%= render partial: 'row', locals: { page: page, sortable: sortable } %>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%= paginate @pages if @pages.any? %>
+  </div>
+</div>
+<% end %>

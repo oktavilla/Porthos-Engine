@@ -1,0 +1,10 @@
+<% @page_title = "#{Node.model_name.human} > #{@node.name}" %>
+<% @page_class = "A content" -%>
+<div id="workspace">
+  <div class="header">
+    <h1><span class="pre"><%= t('.title')  %></span> <%= @node.name %></h1>
+  </div>
+  <div id="content">
+    <%= render 'form' %>
+  </div>
+</div>

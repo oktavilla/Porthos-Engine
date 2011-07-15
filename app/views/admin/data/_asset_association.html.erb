@@ -1,0 +1,60 @@
+<% if datum.asset %>
+<div class="asset <%= datum.asset.filetype %>">
+  <% if datum.asset.is_a?(ImageAsset) %>
+  <%= image_tag datum.asset.version_url(:size => '80') %>
+  <% end %>
+  <% if datum.title.present? %>
+    <div class="title"><%= datum.title %></div>
+  <% end %>
+  <% if datum.description.present? %>
+    <div class="caption"><%= datum.description %></div>
+  <% end %>
+  <div class="add">
+  <%= link_to t('.edit_asset'), edit_admin_asset_path(datum.asset, :return_to => admin_page_path(@page, :anchor => "datum_#{datum.id}")), :class => 'new' %>
+  <% unless datum._parent_document.is_a?(FieldSet) %>
+    <%= link_to t('.choose_asset'), admin_assets_path(
+      :by_filetype => datum.allowed_asset_filetypes,
+      :create_callback => {
+      :path => admin_page_datum_path(@page, datum, :parent_id => (datum.root_embedded_document unless datum.is_root?)),
+      :method => 'put',
+      :asset_field_name => 'datum[asset_id]' }
+    ), :class => 'new' %>
+  <% else %>
+    <%= link_to t('.change_asset'), admin_assets_path({
+      :by_filetype => datum.allowed_asset_filetypes,
+      :create_callback => {
+        :path => admin_page_datum_path(@page, datum._parent_document, :parent_id => (datum.root_embedded_document unless datum.is_root?)),
+        :method => 'put',
+        :asset_field_name => CGI::escape('datum[data_attributes][0][asset_id]'),
+        :params => { CGI::escape('datum[data_attributes][0][id]') => datum.id }
+      }}), :class => 'new' %>
+  <% end %>
+  </div>
+</div>
+<% else %>
+  <% if datum.instruction_body %>
+    <p class="instructions"><%= datum.instruction_body %></span>
+  <% end %>
+  <% unless datum._parent_document.is_a?(FieldSet) %>
+    <div class="add">
+      <%= link_to t('.choose_asset'), admin_assets_path(
+        :by_filetype => datum.allowed_asset_filetypes,
+        :create_callback => {
+        :path => admin_page_datum_path(@page, datum, :parent_id => (datum.root_embedded_document unless datum.is_root?)),
+        :method => 'put',
+        :asset_field_name => 'datum[asset_id]' }
+      ), :class => 'new' %>
+    </div>
+  <% else %>
+    <div class="add">
+    <%= link_to t('.choose_asset'), admin_assets_path({
+      :by_filetype => datum.allowed_asset_filetypes,
+      :create_callback => {
+        :path => admin_page_datum_path(@page, datum._parent_document, :parent_id => (datum.root_embedded_document unless datum.is_root?)),
+        :method => 'put',
+        :asset_field_name => CGI::escape('datum[data_attributes][0][asset_id]'),
+        :params => { CGI::escape('datum[data_attributes][0][id]') => datum.id }
+      }}), :class => 'new' %>
+    </div>
+  <% end %>
+<% end %>

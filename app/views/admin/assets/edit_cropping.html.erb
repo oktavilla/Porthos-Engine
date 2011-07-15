@@ -1,0 +1,43 @@
+<% @page_title = "Ändra beskärning: #{@asset.title}" %>
+<% @page_class = 'layout3' %>
+<%= render :partial => 'admin/assets/sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1><span class="pre">Ändra beskärning</span> <%= @asset.title %> - <%= "#{@cropping[:width]}x#{@cropping[:height]}px" %></h1>
+  </div>
+  <div id="content">
+    <div id="crop">
+      <%= image_tag @asset.version_url(:size => 'w500'), {
+        :id => 'cropped_image',
+        'data-original-width' => @asset.width,
+        'data-original-height' => @asset.height,
+        'data-cropped-width' => @cropping[:width],
+        'data-cropped-height' => @cropping[:height],
+        'data-cutout-x' => @cropping[:cutout_x],
+        'data-cutout-y' => @cropping[:cutout_y],
+        'data-cutout-width' => @cropping[:cutout_width],
+        'data-cutout-height' => @cropping[:cutout_height]
+      } %>
+      <div id="preview_container" style="width:<%= @cropping[:width] %>px; height:<%= @cropping[:height] %>px;overflow:hidden;">
+        <%= image_tag @asset.remote_url, :id => 'preview' %>
+      </div>
+    </div>
+    <%= form_for [:admin, @asset], :as => :asset, :url => admin_asset_url(@asset) do |f| %>
+      <% "c#{@cropping[:width]}x#{@cropping[:height]}".tap do |cropping_name| %>
+        <div style="display:none;">
+          <label for="cutout_width">Bredd</label>
+          <%= text_field_tag "asset[versions][#{cropping_name}][cutout_width]", nil, :id => 'cutout_width' %>
+          <label for="cutout_height">Höjd</label>
+          <%= text_field_tag "asset[versions][#{cropping_name}][cutout_height]", nil, :id => 'cutout_height' %>
+          <label for="cutout_x">X</label>
+          <%= text_field_tag "asset[versions][#{cropping_name}][cutout_x]", nil, :id => 'cutout_x' %>
+          <label for="cutout_y">Y</label>
+          <%= text_field_tag "asset[versions][#{cropping_name}][cutout_y]", nil, :id => 'cutout_y' %>
+        </div>
+        <div class="submit">
+          <%= f.submit t(:save) %> <%= t('or') %> <%= link_to t('cancel'), edit_admin_asset_path(@asset) %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

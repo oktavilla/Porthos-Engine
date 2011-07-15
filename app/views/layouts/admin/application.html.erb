@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="<%= request_forgery_protection_token %>" id="authenticity-token" content="<%= form_authenticity_token %>">
+  <meta name="csrf-token" content="<%= form_authenticity_token %>" />
+  <meta name="csrf-param" content="authenticity_token" />
+  <title><%= @page_title if @page_title %></title>
+  <%= stylesheet_link_tag 'admin' %>
+  <%= installation_specific_stylesheet_link_tag %>
+</head>
+<body<%= body_attributes.html_safe %>>
+<%= flash_messages %>
+<div id="nav">
+  <%= render :partial => 'layouts/admin/account_nav' %>
+  <%= render :partial => 'layouts/admin/main_nav' %>
+</div>
+<div id="wrap">
+<%= yield %>
+</div>
+
+<%= javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" %>
+<script>window.hasOwnProperty('jQuery') || document.write('<script src="<%= asset_path 'lib/jquery-1.6.1.min.js' %>"><\/script>')</script>
+<%= javascript_include_tag "//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" %>
+<script>window.jQuery.hasOwnProperty('ui') || document.write('<script src="<%= asset_path 'lib/jquery-ui-1.8.13.min.js' %>"><\/script>')</script>
+<%= javascript_include_tag 'admin' %>
+</body>
+</html>

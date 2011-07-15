@@ -1,0 +1,14 @@
+<%= form_for [:admin, @link_list, @link], :as => :link, :url => (@link.new_record? ? admin_link_list_links_path(@link_list) : admin_link_list_link_path(@link_list, @link)) do |f| %>
+  <%= render 'admin/shared/error_messages', :object => f.object %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+
+  <%= f.label :url %>
+  <%= f.text_field :url %>
+
+  <%= f.label :node_id %>
+  <%= f.select :node_id, Node.all.map { |n| [n.name, n.id ] }, :include_blank => t('.choose') %>
+  <div class="submit">
+    <%= f.submit t(:save) %> <%=t 'or' %> <%= link_to t('cancel'), admin_link_list_path(@link_list) %>
+  </div>
+<% end %>

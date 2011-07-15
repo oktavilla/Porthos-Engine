@@ -1,0 +1,6 @@
+<dl>
+<% datum.data.each do |data| %>
+  <dt><%= data.label %></dt>
+  <dd><%= data.value if data.respond_to?(:value) %></dd>
+<% end %>
+</dl>

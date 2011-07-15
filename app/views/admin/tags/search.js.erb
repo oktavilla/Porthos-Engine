@@ -1,0 +1,5 @@
+<ul>
+<% @tags.each do |tag| %>  
+  <li><span class="tag"><%= tag.name %></span> <span class="taggings"><%= tag.taggings.count %> filer</span></li>
+<% end %>
+</ul>

@@ -7,13 +7,8 @@ class ContentTemplate < Template
     @template ||= template_name.present? ? FieldSetFileTemplate.new(template_name) : FieldSetFileTemplate.default
   end
 
-<<<<<<< HEAD
   def to_datum(attrs = {})
     FieldSet.new(attrs).tap do |field_set|
-=======
-  def to_datum
-    FieldSet.new.tap do |field_set|
->>>>>>> d8afaf751d88145347e19af44eaa84d9996d2212
       field_set.attributes = self.shared_attributes
       field_set.data = self.datum_templates.map { |t| t.to_datum }
     end

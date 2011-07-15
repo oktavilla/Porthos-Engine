@@ -3,11 +3,6 @@ module Porthos
     extend ActiveSupport::Concern
 
     module InstanceMethods
-      # we should overwrite login_required to render a public login view
-      def require_node
-        login_required if trail and trail.detect { |n| n.restricted? } and not logged_in?
-        raise ActiveRecord::RecordNotFound if trail and trail.detect { |n| n.inactive? }
-      end
 
       def root_node
         @root_node ||= Node.root

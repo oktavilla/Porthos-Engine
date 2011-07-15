@@ -43,10 +43,6 @@ module Porthos
       'pages-index'
     end
 
-    def logged_in?
-      controller.send(:logged_in?)
-    end
-
     def create_instance_variables_for_objects
       objects.each do |key, object|
         self.class.send(:attr_reader, key)

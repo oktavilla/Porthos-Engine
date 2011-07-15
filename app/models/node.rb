@@ -1,5 +1,6 @@
 class Node
   include MongoMapper::Document
+  plugin MongoMapper::Plugins::IdentityMap
   include MongoMapper::Acts::Tree
 
   acts_as_tree :order => "position asc"
@@ -77,7 +78,7 @@ class Node
     end
 
     def root
-      roots.first
+      roots.any? ? roots.first : nil
     end
 
   end

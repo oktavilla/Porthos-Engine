@@ -1,30 +1,31 @@
-# require "#{Rails.root}/app/views/pages/templates/default/default_page_renderer"
 class PagesController < ApplicationController
   include Porthos::Public
-  before_filter :require_node
 
   before_filter :only => :preview do |c|
-    user = c.send :current_user
-    raise ActiveRecord::RecordNotFound if user == :false or !user.admin?
+    c.send :authenticate!
   end
 
   def index
-    @page_template = PageTemplate.first(:handle => @node.handle)
+    @page_template = PageTemplate.first(handle: node.handle)
     template = @page_template ? @page_template.template : PageFileTemplate.default
     @page_renderer = page_renderer(template, {
       :page_template => @page_template
     })
 
     respond_to do |format|
-      format.html { render :template => template.views.index }
-      format.rss  { render :template => template.views.index, :layout => false }
+      format.html { render template: template.views.index }
+      format.rss  { render template: template.views.index, layout: false }
     end
   end
 
   def show
-    @page = Page.published.find(params[:id]) || Page.published.where(:uri => params[:id], :handle => params[:handle]).first || (raise ActiveRecord::RecordNotFound)
+    @page = if BSON::ObjectId.legal?(params[:id])
+      Page.published.find(params[:id])
+    else
+      Page.published.where(uri: params[:id], handle: params[:handle]).first
+    end
     template = @page.template
-    @page_renderer = page_renderer(template, :page_template => @page.page_template, :page => @page)
+    @page_renderer = page_renderer(template, page_template: @page.page_template, page: @page)
 
     if !@page.restricted? || signed_in?
       respond_to do |format|
@@ -38,7 +39,7 @@ class PagesController < ApplicationController
   def preview
     @page = Page.find(params[:id])
     template = @page.page_template.template
-    @page_renderer = page_renderer(template, :page_template => @page.page_template, :page => @page)
+    @page_renderer = page_renderer(template, page_template: @page.page_template, page: @page)
     respond_to do |format|
       format.html { render :template => template.views.show }
     end
@@ -46,7 +47,7 @@ class PagesController < ApplicationController
 
   def search
     filters = params[:filters] || {}
-    @page_template = PageTemplate.first(:handle => @node.handle)
+    @page_template = PageTemplate.first(handle: @node.handle)
 
     template = @page_template ? @page_template.template : PageTemplate.default
 
@@ -75,32 +76,32 @@ class PagesController < ApplicationController
   end
 
   def categories
-    @page_template = PageTemplate.first(:handle => @node.handle)
+    @page_template = PageTemplate.first(handle: @node.handle)
     template = @page_template ? @page_template.template : PageTemplate.default
-    @page_renderer = page_renderer(template, :page_template => @page_template)
+    @page_renderer = page_renderer(template, page_template: @page_template)
 
     respond_to do |format|
-      format.html { render :template => template.views.categories }
+      format.html { render template: template.views.categories }
     end
   end
 
   def category
-    @page_template = PageTemplate.first(:handle => @node.handle)
+    @page_template = PageTemplate.first(handle: @node.handle)
     template = @page_template ? @page_template.template : PageTemplate.default
-    @page_renderer = page_renderer(template, :page_template => @page_template)
+    @page_renderer = page_renderer(template, page_template: @page_template)
 
     respond_to do |format|
-      format.html { render :template => template.views.category }
+      format.html { render template: template.views.category }
     end
   end
 
   def tagged_with
-    @page_template = PageTemplate.first(:handle => @node.handle)
+    @page_template = PageTemplate.first(handle: @node.handle)
     template = @page_template ? @page_template.template : PageTemplate.default
-    @page_renderer = page_renderer(template, :page_template => @page_template)
+    @page_renderer = page_renderer(template, page_template: @page_template)
 
     respond_to do |format|
-      format.html { render :template => template.views.tagged_with }
+      format.html { render template: template.views.tagged_with }
     end
   end
 

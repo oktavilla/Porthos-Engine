@@ -20,12 +20,12 @@ class LinkListTest < ActiveSupport::TestCase
       refute @link_list.valid?
     end
 
-    should 'have sorted links' do
+    should 'sort links' do
       link1 = Factory(:link, :position => 2)
       link2 = Factory(:link, :position => 1)
 
       @link_list.links = [link1, link2]
-      @link_list.valid? # trigger sort callback
+      @link_list.save # trigger sort callback
 
       assert_equal [link2, link1], @link_list.links
     end

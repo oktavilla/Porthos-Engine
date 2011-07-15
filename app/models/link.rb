@@ -37,7 +37,7 @@ private
   end
 
   def move_to_list_bottom
-    if position.blank?
+    if position.blank? && _parent_document
       siblings = _parent_document.links.find_all { |l| l.position.present? && l.id != self.id }
       self.position = siblings.any? ? siblings.sort_by(&:position).last.position + 1 : 1
     end

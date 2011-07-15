@@ -27,7 +27,7 @@ class FieldSet < Datum
       content_template = datum_template.is_a?(FieldSetTemplate) ? datum_template.content_template : datum_template
       content_template.to_datum.tap do |field_set|
         unless datum_template == content_template
-          template.shared_attributes.each do |k, v|
+          datum_template.shared_attributes.each do |k, v|
             field_set[k] = v
           end
         end

@@ -28,7 +28,7 @@ module Porthos
                     self.send(_match[2]+'=', value, _match[1])
                     attrs.delete(key)
                   end
-                end
+                end if attrs
                 assign_without_read_write_tag_names(attrs)
               end
               alias_method_chain :assign, :read_write_tag_names

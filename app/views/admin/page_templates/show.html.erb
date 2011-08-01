@@ -19,7 +19,7 @@
     </div>
     <% unless @page_template.section %>
     <div class="add">
-      <%= link_to t('.add_section'), new_admin_page_path(:type => 'Section', :page_template_id => @page_template), :class => 'new' %>
+      <%= link_to t('.add_section'), new_admin_item_path(:type => 'Section', :page_template_id => @page_template), :class => 'new' %>
     </div>
     <% end %>
     <ul style="display:none;" id="datum_template_classes">

@@ -20,10 +20,10 @@ class Admin::DataController < ApplicationController
       @datum = @template.to_datum(params[:datum])
     end
     @parent.data << @datum
-    if @page.save
+    if @item.save
       flash[:notice] = t(:saved, :scope => [:app, :admin_general])
     end
-    respond_with(@datum, :location => admin_page_path(@page, :anchor => "datum_#{@datum.id}_edit"))
+    respond_with(@datum, :location => admin_item_path(@item, :anchor => "datum_#{@datum.id}_edit"))
   end
 
   def edit
@@ -36,8 +36,8 @@ class Admin::DataController < ApplicationController
     respond_to do |format|
       if @datum.update_attributes(params[:datum])
         format.html do
-          flash[:notice] = t(:saved, :scope => [:app, :admin_pages])
-          redirect_to admin_page_path(@page, :anchor => "datum_#{@datum.id}")
+          flash[:notice] = t(:saved, :scope => [:app, :admin_items])
+          redirect_to admin_item_path(@item, :anchor => "datum_#{@datum.id}")
         end
         format.json { render :json => @datum.to_json, :status => :ok }
       else
@@ -50,16 +50,16 @@ class Admin::DataController < ApplicationController
   def toggle
     @datum = @parent.data.find(params[:id])
     @datum.update_attributes(:active => !@datum.active)
-    respond_with(@datum, :location => admin_page_path(@page, :anchor => "datum_#{@datum.id}"))
+    respond_with(@datum, :location => admin_item_path(@item, :anchor => "datum_#{@datum.id}"))
   end
 
   def destroy
     @datum = @parent.data.find(params[:id])
     @parent.data.delete_if { |d| d._id == @datum.id }
-    if @page.save
+    if @item.save
       flash[:notice] = t(:deleted, :scope => [:app, :admin_general])
     end
-    respond_with @datum, :location => admin_page_path(@page, :location => "datum_#{@datum.id}")
+    respond_with @datum, :location => admin_item_path(@item, :location => "datum_#{@datum.id}")
   end
 
   def sort
@@ -69,7 +69,7 @@ class Admin::DataController < ApplicationController
           datum.position = i+1 if datum
         end
       end
-      @page.save
+      @item.save
     end
     respond_to do |format|
       format.js { render :nothing => true }
@@ -79,11 +79,11 @@ class Admin::DataController < ApplicationController
 protected
 
   def find_page
-    @page = Item.find(params[:page_id])
+    @item = Item.find(params[:item_id])
     if params[:parent_id]
-      @parent = @page.data.find(params[:parent_id])
+      @parent = @item.data.find(params[:parent_id])
     else
-      @parent = @page
+      @parent = @item
     end
   end
 

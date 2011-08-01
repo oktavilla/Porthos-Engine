@@ -1,6 +1,6 @@
 #= require "lib/jquery.smart_autocomplete"
 (function() {
-  Porthos.Page = (function() {
+  Porthos.Item = (function() {
     var Ready = function(container) {
       var $container = $(container),
           $content = $('#content'),
@@ -122,11 +122,12 @@
       });
 
       $('#page_tags_form').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
-      $('#page_tags').delegate('a.edit, a.cancel', 'click', function() {
+      $('#page_tags').delegate('a.edit, a.cancel', 'click', function(event) {
+        event.preventDefault();
         $('#page_tags_list, #page_tags_form').toggle();
       }).find('#page_tags_list').append('<p><a href="#" class="edit">Ändra</a></p>');
-      $('#page_tag_names').smartAutoComplete({minCharLimit: 3, source: '/admin/tags/autocomplete.json?taggable=Page'});
-      $('#page_tag_names').bind({
+      $('#item_tag_names').smartAutoComplete({minCharLimit: 3, source: '/admin/tags/autocomplete.json?taggable=Page'});
+      $('#item_tag_names').bind({
         keyIn: function(ev) {
           var tag_list = ev.smartAutocompleteData.query.split(" ");
           ev.smartAutocompleteData.query = $.trim(tag_list[tag_list.length - 1]);
@@ -163,14 +164,14 @@
     return {
       init: function() {
         $(document).ready(function() {
-          $('#pages_view.show #workspace').each(function() {
+          $('#items_view.show #workspace').each(function() {
             Ready(this);
           });
-          Porthos.Helpers.cloneAsUrl('#page_title', '#page_uri');
+          Porthos.Helpers.cloneAsUrl('#item_title', '#item_uri');
         });
       }
     };
   })();
 
-  Porthos.Page.init();
+  Porthos.Item.init();
 }).call(this);

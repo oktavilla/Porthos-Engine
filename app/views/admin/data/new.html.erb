@@ -1,11 +1,11 @@
-<% @page_title = "Sidtyper > #{@page.title} > Lägg till fält" %>
+<% @page_title = "Sidtyper > #{@item.title} > Lägg till fält" %>
 <% @page_class = 'layout1' -%>
 <div id="workspace">
   <div class="header">
-    <h1>Nytt <%= @datum.class.model_name.human %> i <%= @page.title %></h1>
+    <h1>Nytt <%= @datum.class.model_name.human %> i <%= @item.title %></h1>
   </div>
   <div id="content">
-    <%= form_for [:admin, @page, @datum], as: :datum, url: admin_page_data_path(@page) do |f| %>
+    <%= form_for [:admin, @item, @datum], as: :datum, url: admin_item_data_path(@item) do |f| %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
       <%= hidden_field_tag 'type', f.object.class %>
       <%= f.label :label %>
@@ -27,7 +27,7 @@
       <% rescue ActionView::MissingTemplate %>
       <% end %>
       <div class="submit">
-        <%= f.submit t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), admin_page_path(@page) %>
+        <%= f.submit t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), admin_item_path(@item) %>
       </div>
     <% end %>
   </div>

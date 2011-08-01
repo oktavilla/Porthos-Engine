@@ -37,12 +37,7 @@ class PageTemplate < Template
     @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default
   end
 
-  # Instantiates a new page renderer
-  def renderer(action, controller, objects = {})
-    "#{template.name.camelize}Renderer::#{action.to_s.camelize}".constantize.new(controller, objects.to_options.merge({ :field_set => self }))
-  end
-
   def propagate_handle
-    Page.set({ 'page_template_id' => self._root_document.id }, { :handle => handle})
+    Page.set({ 'page_template_id' => self._root_document.id }, { :handle => handle })
   end
 end

@@ -1,0 +1,5 @@
+<% @page_title = "Skapa en ny sida" %>
+<% @page_class = "AB content" -%>
+<div id="workspace">
+  <%= render(@item.is_a?(Page) ? 'page_form' : 'form') %>
+</div>

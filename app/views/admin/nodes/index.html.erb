@@ -19,7 +19,7 @@
         <%= render :partial => 'nodes_tree', :locals => { :nodes => @nodes, :open_nodes => @open_nodes, :trail => @trail, :place => false} %>
       </div>
       <% else -%>
-      <p class="blank-slate"><%= t(:no_data, :scope => [:app, :views, :admin, :nodes, :index]) %> <%= link_to t(:add_root_node, :scope => [:app, :views, :admin, :nodes, :index]), new_admin_page_path, :onclick => "$('new_page_form').toggle(); return false;" %>
+      <p class="blank-slate"><%= t(:no_data, :scope => [:app, :views, :admin, :nodes, :index]) %> <%= link_to t(:add_root_node, :scope => [:app, :views, :admin, :nodes, :index]), new_admin_item_path, :onclick => "$('new_page_form').toggle(); return false;" %>
       <% end %>
     </div>
   </div>

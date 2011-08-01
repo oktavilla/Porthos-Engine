@@ -1,0 +1,232 @@
+<% @page_title = "Sidor > #{@item.title}" -%>
+<% @page_class = "layout3" -%>
+<div id="sub_nav">
+  <h2 class="label">Publicering</h2>
+  <div id="page_publish_on_date">
+    <div id="page_current_publish_on_date">
+    <% if @item.published_on %>
+      <p>Publiceringsdatum: <%= @item.published_on.in_time_zone.strftime("%d %B %Y") %></p>
+      <p><a href="#" class="toggle_publish_date">Ändra</a></p>
+    <% else %>
+      <p><strong><%=t '.not_published' %></strong></p>
+      <p><a href="#" class="toggle_publish_date">Välj ett publiceringsdatum</a> eller
+      <%= link_to t('.publish_now'), publish_admin_item_path(@item.id), :method => :put, :class => 'new' %></p>
+    <% end %>
+    </div>
+    <%= form_for [:admin, @item], :as => :item, :url => admin_item_path(@item), :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
+      <div>
+        <%= f.text_field :published_on, :value => (@item.published_on.present? ? @item.published_on.in_time_zone.to_date : nil), :class => 'date', :placeholder => 'År-Månad-Dag' %>
+        <div class="submit">
+          <input type="submit" value="Spara publiceringsdatum"> eller <a href="#">avbryt</a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <h2 class="label">Skapad och ändrad</h2>
+  <% if @item.created_by -%>
+  <p>Skapad av: <%= @item.created_by.name %>.</p>
+  <% end -%>
+  <p>Senast ändrad: <%= @item.updated_at.strftime("%d %B %Y") %><%= " av #{@item.updated_by.name}" if @item.updated_by %>.</p>
+
+  <% if @item.page_template.allow_categories? -%>
+  <h2 class="label">Kategori</h2>
+  <div id="page_category">
+    <div id="category_view">
+      <% if @item.category.present? -%>
+      <p><%= @item.category.name %></p>
+      <% end -%>
+      <p><a href="#" class="change"><%= @item.category.present? ? t('.edit_category') : t('.choose_category') %></a></p>
+    </div>
+    <%= form_for [:admin, @item], :as => :item, :url => admin_item_path(@item), :html => { :id => 'choose_page_category_form', :style => 'display:none;' } do |f| -%>
+      <div>
+        <%= f.select @item.category_method_name, Page.tags_by_count(:namespace => @item.page_template.handle).collect { |t| [t.name.titlecase, "\"#{t.name}\""] }, :include_blank => 'Ingen kategori' %>
+        <a href="#" id="new_category"><%= t('.add_new_category') %></a><br>
+        <input type="submit" value="<%= t('choose') %>"> <%= t(:or) %> <a href="#" class="cancel"><%= t(:cancel) %></a>
+      </div>
+    <% end -%>
+    <%= form_for [:admin, @item], :as => :item, :url => admin_item_path(@item), :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
+      <div>
+        <%= f.text_field @item.category_method_name, :value => '' %>
+        <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <a href="#"><%= t(:cancel) %></a>
+      </div>
+    <% end -%>
+  </div>
+  <% end -%>
+  <h2 class="label">Nyckelord</h2>
+  <div id="page_tags">
+    <div id="page_tags_list">
+      <p class="tags">
+      <%= @item.tags.collect { |tag| link_to(tag.name, admin_items_path(:tags => (params[:tags] || []).dup.push(tag.name)), :class => 'tag') }.join(', ').html_safe -%>
+      </p>
+    </div>
+    <%= form_for [:admin, @item], :as => :item, :url => admin_item_path(@item), :html => { :id => 'page_tags_form' } do |f| -%>
+      <div>
+        <%= f.text_field :tag_names, :autocomplete => 'off' %>
+        <div class="submit">
+          <input type="submit" value="<%=t :save %>">
+        </div>
+      </div>
+    <% end -%>
+  </div>
+</div>
+<div id="workspace">
+  <div class="header" id="item_attributes">
+    <span class="away">
+      <a href="#" class="edit_settings toggler action"><span><%=t 'edit' %></span></a>
+      <%= link_to t(:destroy), admin_item_path(@item.id), { :method => :delete, :confirm => "Är du säker att du vill ta bort sidan. Det går inte att ångra.", :class => 'action delete' } %>
+    </span>
+    <div class="parents"><%= link_to @item.page_template.label, admin_items_path(with_page_template: @item.page_template) %></div>
+    <div class="page_title">
+      <h1><%= @item.title %></h1>
+    </div>
+    <% if @item.node -%>
+    <div class="navigation">
+      <span class="key">Namn i navigationen:</span>
+      <span class="value"><%= @item.node.name %></span>
+    </div>
+    <% end %>
+    <% if @item.published? -%>
+    <div class="slug">
+      <span class="key">Adress:</span>
+      <% page_url(@item).tap do |url| %>
+      <span class="value"><%= link_to(url, url) %></span>
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+  <div class="header" style="display:none;">
+    <%= form_for [:admin, @item], as: :item, url: admin_item_path(@item.id) do |f| %>
+      <%= render partial: 'admin/shared/error_messages', locals: { object: @item } %>
+      <label for="item_title" class="first_label"><%= @item.page_template.page_label.present? ? @item.page_template.page_label : "Titel" %></label>
+      <div class="fullwidth">
+        <%= f.text_field :title, :class => 'title' %>
+      </div>
+      <div class="uri_field">
+        <label for="item_uri">Adress:</label>
+        <%= page_url_parent(@item) %>
+        <%= f.text_field :uri %>
+      </div>
+      <div class="restricted_field">
+        <label for="item_restricted">
+          <%= f.check_box :restricted %>
+          Kräv inlogging för att se denna sida
+        </label>
+      </div>
+      <div class="submit">
+        <input type="submit" value="<%=t :save %>">
+        <%=t :or %>
+        <a href="#" class="toggler"><%=t :cancel %></a>
+      </div>
+    <% end %>
+  </div>
+  <% unless @item.is_a?(Page) %>
+  <div class="tools">
+    Lägg till:
+    <%= link_to StringField.model_name.human, new_admin_item_datum_path(@item, datum: { input_type: 'string' }, type: 'StringField') %>
+    <%= link_to t('.date_field'), new_admin_item_datum_path(@item, datum: { input_type: 'date' }, type: 'Field') %>
+    <%= link_to t('.boolean_field'), new_admin_item_datum_path(@item, datum: { input_type: 'boolean' }, type: 'Field') %>
+    <%= link_to PageAssociation.model_name.human, new_admin_item_datum_path(@item, type: 'PageAssociation') %>
+    <%= link_to AssetAssociation.model_name.human, admin_assets_path(create_callback: { path: admin_item_data_path(@item, type: 'AssetAssociation'), method: 'post', asset_field_name: 'datum[asset_id]' }) %>
+    <%= link_to DatumCollection.model_name.human, new_admin_item_datum_path(@item, type: 'DatumCollection') %>
+    <% ContentTemplate.all.each do |content_template| %>
+      <%= link_to content_template.label, new_admin_item_datum_path(@item, :type => 'FieldSet', :template_id => content_template) %>
+    <% end %>
+  </div>
+  <% end %>
+  <div id="content" class="datums">
+  <% (!@item.is_a?(Page) ? @item.data : @item.data.sort_by { |d| @item.page_template.datum_templates[d.handle].position }).each_with_index do |datum, index| %>
+    <div id="datum_<%= datum.id %>" class="<%= "datum " unless datum.is_a?(DatumCollection) %><%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
+    <% unless datum.is_a?(DatumCollection) %>
+      <div class="controls">
+        <div class="label"><%= datum.label %></div>
+      </div>
+      <div class="content">
+        <div class="viewable">
+          <%= render partial: "admin/data/#{(datum.is_a?(StringField) ? 'field' : datum.class.to_s.underscore)}", locals: { datum: datum } %>
+        </div>
+        <% unless datum.is_a?(AssetAssociation) %>
+        <div class="editable">
+          <%= form_for [:admin, @item, datum], :as => :datum, :url => admin_item_datum_path(@item, datum), :html => { :id => "datum_#{datum.id}_edit" } do |f| %>
+            <%= render partial: "admin/data/#{(datum.is_a?(StringField) ? 'field' : datum.class.to_s.underscore)}_form", locals: { datum: datum, f: f }%>
+            <div class="submit">
+              <%= f.submit t(:save) %>
+            </div>
+          <% end %>
+        </div>
+        <% end -%>
+      </div>
+    <% else %>
+      <div class="datums_header"><%= datum.label %></div>
+      <div class="add controls">
+        <h3 class="new"><%= t('.add_content') %></h3>
+        <ul>
+          <% if datum.allow_texts? %>
+          <li>
+            <%= form_for [:admin, @item, StringField.new(input_type: 'string', multiline: true, allow_rich_text: true)], :as => :datum,  :url => admin_item_data_path(@item, parent_id: datum, type: 'StringField') do |f| %>
+              <%= f.hidden_field :input_type %>
+              <%= f.hidden_field :multiline %>
+              <%= f.hidden_field :allow_rich_text %>
+              <button type="submit"><%= StringField.model_name.human %></button>
+            <% end %>
+          </li>
+          <% end %>
+          <% if datum.allowed_page_template_ids? %>
+            <% datum.allowed_page_templates.each do |page_template| %>
+              <li>
+              <%= form_for [:admin, @item, PageAssociation.new(page_template_id: page_template.id)], :as => :datum,  :url => admin_item_data_path(@item, parent_id: datum, type: 'PageAssociation') do |f| %>
+                <%= f.hidden_field :page_template_id %>
+                <button type="submit"><%= t('.add_datum', :label => page_template.label) %></button>
+              <% end %>
+              </li>
+            <% end %>
+          <% end %>
+          <% if datum.allowed_asset_filetypes.any? %>
+            <% datum.allowed_asset_filetypes.each do |filetype| %>
+              <li>
+              <%= link_to t('.add_datum', label: t(:"mongo_mapper.attributes.asset.filetypes.#{filetype}")), admin_assets_path(by_filetype: [filetype], create_callback: { path: admin_item_data_path(@item, parent_id: datum, type: 'AssetAssociation'), method: 'post', asset_field_name: 'datum[asset_id]' }) %>
+              </li>
+            <% end %>
+          <% end %>
+        <% datum.content_templates.each do |content_template| %>
+          <li>
+            <%= button_to content_template.label, admin_item_data_path(@item, :parent_id => datum, :type => 'FieldSet', :template_id => content_template) %>
+          </li>
+        <% end %>
+        </ul>
+      </div>
+      <ul class="sortable" data-sort-uri="<%= sort_admin_item_data_path(@item, :parent_id => datum) %>">
+        <% datum.data.each do |d, i| %>
+        <li id="datum_<%= d.id %>" class="datum <%= d.class.to_s.underscore %><%= ' inactive' unless d.active? %>">
+          <div class="controls">
+            <%= link_to d.active? ? 'Dölj' : 'Visa', toggle_admin_item_datum_path(@item, d, :parent_id => datum), :method => :put, :class => 'visibility' %>
+            <%= link_to t(:destroy), admin_item_datum_path(@item, d, :parent_id => datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+          </div>
+          <div class="content">
+            <div class="viewable">
+              <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}", :locals => { :datum => d }%>
+            </div>
+            <% unless d.is_a?(AssetAssociation) %>
+            <div class="editable">
+              <%= form_for [:admin, @item, d], :as => :datum, :url => admin_item_datum_path(@item, d, :parent_id => datum), :html => { :id => "datum_#{d.id}_edit" } do |f| %>
+                <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}_form", :locals => { :datum => d, :f => f }%>
+                <div class="submit">
+                  <%= f.submit t(:save) %>
+                </div>
+              <% end %>
+            </div>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+      </ul>
+    <% end %>
+    <% unless @item.is_a?(Page) %>
+      <span class="edit">
+        <%= link_to datum.active? ? 'Dölj' : 'Visa', toggle_admin_item_datum_path(@item, datum), :method => :put, :class => 'visibility' %>
+        <%= link_to "Ta bort", admin_item_datum_path(@item, datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+      </span>
+    <% end %>
+    </div>
+  <% end %>
+  </div>
+</div>

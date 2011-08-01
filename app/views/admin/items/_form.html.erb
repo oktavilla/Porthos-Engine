@@ -1,0 +1,17 @@
+<div class="header">
+  <h1>Lägg till sida</h1>
+</div>
+<div id="content">
+  <%= form_for [:admin, @item], :as => :item, :url => admin_items_path do |f| %>
+    <%= render 'admin/shared/error_messages', :object => f.object %>
+    <%= hidden_field_tag 'type', params[:type] if params[:type] %>
+    <%= hidden_field_tag('page_template_id', @template.id) if @template %>
+
+    <label for="item_title"><%= Item.human_attribute_name(:title) %></label>
+    <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>
+
+    <div class="submit">
+      <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), previous_view_path(admin_items_path) %>
+    </div>
+  <% end %>
+</div>

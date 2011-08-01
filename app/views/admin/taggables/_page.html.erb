@@ -1,4 +1,4 @@
-<span class="title"><%= link_to taggable.title, admin_page_path(taggable) %></span>
+<span class="title"><%= link_to taggable.title, admin_item_path(taggable) %></span>
 <span class="meta">
   <% if taggable.updated_at && taggable.updated_at != taggable.published_on -%>
   Senast ändrad <%= taggable.updated_at.strftime("%d %b %Y %H:%M") %>.

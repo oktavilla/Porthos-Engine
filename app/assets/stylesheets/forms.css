@@ -59,6 +59,8 @@ input.title {font-size:18px;font-weight:bold;}
 input[type="text"], input[type="password"], textarea, select { margin:0; }
 input[type="text"], input[type="password"], textarea { padding:4px; }
 
+select.choose_me {min-width:400px}
+
 .errorExplanation {
   color:#d00; }
   .errorExplanation ul {margin:0 0 1em 0;}

@@ -11,7 +11,7 @@
     <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>
 
     <div class="submit">
-      <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), previous_view_path(admin_items_path) %>
+      <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), admin_items_path(type: @item.class.model_name) %>
     </div>
   <% end %>
 </div>

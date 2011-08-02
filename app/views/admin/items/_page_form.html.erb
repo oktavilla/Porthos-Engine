@@ -18,7 +18,7 @@
     <% end %>
 
     <div class="submit">
-      <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), previous_view_path(admin_items_path) %>
+      <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), admin_items_path(with_page_template: @item.page_template.id) %>
     </div>
   <% end %>
 </div>

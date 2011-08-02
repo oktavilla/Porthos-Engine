@@ -81,6 +81,12 @@
         <%= page_url_parent(@item) %>
         <%= f.text_field :uri %>
       </div>
+      <% if @item.is_a?(CustomPage) %>
+      <label for="item_template_name">
+        <%= @item.class.human_attribute_name(:template_name) %>
+        <%= f.select :template_name, PageFileTemplate.all.collect { |t| [t.name.titlecase, t.handle] } %>
+      </label>
+      <% end %>
       <div class="restricted_field">
         <label for="item_restricted">
           <%= f.check_box :restricted %>
@@ -94,7 +100,6 @@
       </div>
     <% end %>
   </div>
-  <% unless @item.is_a?(Page) %>
   <div class="tools">
     Lägg till:
     <%= link_to StringField.model_name.human, new_admin_item_datum_path(@item, datum: { input_type: 'string' }, type: 'StringField') %>
@@ -107,7 +112,6 @@
       <%= link_to content_template.label, new_admin_item_datum_path(@item, :type => 'FieldSet', :template_id => content_template) %>
     <% end %>
   </div>
-  <% end %>
   <div id="content" class="datums">
   <% @item.data.each_with_index do |datum, index| %>
     <div id="datum_<%= datum.id %>" class="<%= "datum " unless datum.is_a?(DatumCollection) %><%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
@@ -195,12 +199,10 @@
       <% end %>
       </ul>
     <% end %>
-    <% unless @item.is_a?(Page) %>
       <span class="edit">
         <%= link_to datum.active? ? 'Dölj' : 'Visa', toggle_admin_item_datum_path(@item, datum), :method => :put, :class => 'visibility' %>
         <%= link_to "Ta bort", admin_item_datum_path(@item, datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
       </span>
-    <% end %>
     </div>
   <% end %>
   </div>

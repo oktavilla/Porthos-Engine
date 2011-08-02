@@ -5,10 +5,12 @@
   <%= form_for [:admin, @item], :as => :item, :url => admin_items_path do |f| %>
     <%= render 'admin/shared/error_messages', :object => f.object %>
     <%= hidden_field_tag 'type', params[:type] if params[:type] %>
-    <%= hidden_field_tag('page_template_id', @template.id) if @template %>
 
-    <label for="item_title"><%= Item.human_attribute_name(:title) %></label>
+    <%= f.label :title %>
     <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>
+
+    <%= f.label :template_name %>
+    <%= f.select :template_name, PageFileTemplate.all.collect { |t| [t.name.titlecase, t.handle] } %>
 
     <div class="submit">
       <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), admin_items_path(type: @item.class.model_name) %>

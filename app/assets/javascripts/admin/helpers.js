@@ -117,6 +117,7 @@
 
   $(document).ready(function() {
     Porthos.Helpers.cloneAsUrl('#node_name', '#node_url');
+
     if ($.fn.hasOwnProperty('sortable')) {
       $('table.sortable tbody').sortable({
         handle: 'span.drag_handle',
@@ -143,9 +144,15 @@
         }
       }).disableSelection();
     }
+
+    if ($.fn.hasOwnProperty('chosen')) {
+      $('select.choose_me').chosen();
+    }
+
     $('select#order_by').bind('change', function(event) {
       this.form.submit();
     });
+
     $('#flash').each(function() {
       var $flash = $(this);
       window.setTimeout(function() {

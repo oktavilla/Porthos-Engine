@@ -1,4 +1,5 @@
 #= require rails
+#= require chosen
 #= require admin/settings
 #= require admin/editor
 #= require admin/helpers

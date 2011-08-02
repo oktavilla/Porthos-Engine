@@ -1,0 +1,31 @@
+<tr id="item_<%= item.id %>">
+  <% if sortable %>
+  <td class="sort"><% if item.is_a?(Page) %><span class="drag_handle"></span><% end %></td>
+  <% end %>
+  <td class="content">
+    <%= render :partial => item.template.views.admin_in_list, :locals => { :item => item } %>
+    <% if item.published? -%>
+      <% page_path(item).tap do |uri| %>
+        <%= link_to uri, uri %>
+      <% end %>
+    <% end -%>
+    <% if item.tags && item.tags.any? -%>
+    <div class="tags"><%= item.tags.collect { |tag| link_to(tag.name, admin_items_path(:tags => [tag.name]))}.join(', ').html_safe %></div>
+    <% end -%>
+  </td>
+  <td class="updated_at">
+    <% if item.updated_at && item.updated_at != item.created_at -%>
+    <%= item.updated_at.strftime("%d %b") %>
+      <% if item.updated_by.present? %>
+       <%= t(:by) %> <%= item.updated_by.first_name %>
+      <% end %>
+    <% end -%>
+  </td>
+  <td class="status">
+    <% if item.published? %>
+    <span class="status published"><%= t(:published) %></span>
+    <% else %>
+    <span class="status unpublished"><%= t(:unpublished) %></span>
+    <% end %>
+  </td>
+</tr>

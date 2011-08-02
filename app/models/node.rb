@@ -68,7 +68,7 @@ class Node
         node.controller = 'pages'
         if item.is_a?(Page)
           node.action = 'show'
-        elsif item.is_a?(Section)
+        elsif item.kind_of?(Item)
           node.action = 'index'
           node.handle = item.page_template.handle
         end

@@ -31,10 +31,10 @@
     margin-bottom:-3px;
     padding-bottom:10px;
     padding-top:42px; }
-    #main_nav .pages_index a  { background:transparent url(<%= asset_path 'ui_new.png' %>) 50% -200px no-repeat; }
-    #main_nav .nodes_index a  { background:transparent url(<%= asset_path 'ui_new.png' %>) 50% -280px no-repeat; }
-    #main_nav .assets_index a { background:transparent url(<%= asset_path 'ui_new.png' %>) 50% -130px no-repeat; }
-    #main_nav .users_index a  { background:transparent url(<%= asset_path 'ui_new.png' %>) 50% -358px no-repeat; }
+    #main_nav .pages_index a  { background:transparent url(<%= asset_path("ui_new.png") %>) 50% -200px no-repeat; }
+    #main_nav .nodes_index a  { background:transparent url(<%= asset_path("ui_new.png") %>) 50% -280px no-repeat; }
+    #main_nav .assets_index a { background:transparent url(<%= asset_path("ui_new.png") %>) 50% -130px no-repeat; }
+    #main_nav .users_index a  { background:transparent url(<%= asset_path("ui_new.png") %>) 50% -358px no-repeat; }
     #main_nav a:hover,
     #account_nav a:hover,
     #site-structure_view .nodes_index a,
@@ -56,7 +56,7 @@
 #wrap {}
 
 body.layout2 {
-  background:rgb(214,221,229) url(<%= asset_path 'layout2_bg_shadow.png' %>) 0 0 repeat-y; }
+  background:rgb(214,221,229) url(<%= asset_path("layout2_bg_shadow.png") %>) 0 0 repeat-y; }
 
 body.layout2 #wrap {
   padding-left:180px; }
@@ -71,7 +71,7 @@ body.layout2 #workspace {
   width:100%; }
 
 body.layout3 {
-  background:rgb(214,221,229) url(<%= asset_path 'layout3_bg_shadow.png' %>) 100% 0 repeat-y; }
+  background:rgb(214,221,229) url(<%= asset_path("layout3_bg_shadow.png") %>) 100% 0 repeat-y; }
 
 body.layout3 #wrap {
   padding-right:300px; }
@@ -113,7 +113,7 @@ body.layout3 #workspace {
       cursor:move;
       height:25px;
       width:20px;
-      background:transparent url(<%= asset_path 'ui_new.png ' %>) 0 -790px no-repeat; }
+      background:transparent url(<%= asset_path("ui_new.png") %>) 0 -790px no-repeat; }
   #sub_nav .label {
     margin:1em 0 1em 0;
     font-size:12px;
@@ -121,6 +121,9 @@ body.layout3 #workspace {
     border-bottom:1px dashed #ccc;
     color:#8598a4; }
 
+  #sub_nav .section {
+    border-top: 1px dashed #CCC; }
+  #sub_nav .section.current {border-top:none;}
   #sub_nav #publish_now {padding:10px 20px;}
 
 #workspace {
@@ -148,9 +151,9 @@ body.layout3 #workspace {
     #workspace .header .private {
       color:#c41134; }
     #workspace .header .edit_settings {
-      background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -680px no-repeat; }
+      background:transparent url(<%= asset_path("ui_new.png") %>) 0 -680px no-repeat; }
     #workspace .header .public_link {
-      background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -630px no-repeat; }
+      background:transparent url(<%= asset_path("ui_new.png") %>) 0 -630px no-repeat; }
     #workspace .header .away { float:right; }
     /* Page header */
     #workspace .header {}
@@ -214,18 +217,18 @@ body.layout3 #workspace {
       #workspace .tools .actions a.inactive {
         cursor:default;
         color:#ccc; }
-      #workspace .tools .actions #edit_selected {background:transparent url(<%= asset_path 'ui_new.png' %>) -900px -400px no-repeat;}
-      #workspace .tools .actions #remove_selected {background:transparent url(<%= asset_path 'ui_new.png' %>) -900px -520px no-repeat;}
-      #workspace .tools .actions #make_selected_cover {background:transparent url(<%= asset_path 'ui_new.png' %>) -900px -460px no-repeat;}
+      #workspace .tools .actions #edit_selected {background:transparent url(<%= asset_path("ui_new.png") %>) -900px -400px no-repeat;}
+      #workspace .tools .actions #remove_selected {background:transparent url(<%= asset_path("ui_new.png") %>) -900px -520px no-repeat;}
+      #workspace .tools .actions #make_selected_cover {background:transparent url(<%= asset_path("ui_new.png") %>) -900px -460px no-repeat;}
       #workspace .tools .actions #edit_selected:active,
-      #workspace .tools .actions #edit_selected.inactive {background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -400px no-repeat;}
+      #workspace .tools .actions #edit_selected.inactive {background:transparent url(<%= asset_path("ui_new.png") %>) 0 -400px no-repeat;}
       #workspace .tools .actions #remove_selected:active,
-      #workspace .tools .actions #remove_selected.inactive {background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -520px no-repeat;}
+      #workspace .tools .actions #remove_selected.inactive {background:transparent url(<%= asset_path("ui_new.png") %>) 0 -520px no-repeat;}
       #workspace .tools .actions #make_selected_cover:active,
-      #workspace .tools .actions #make_selected_cover.inactive {background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -460px no-repeat;}
-      #workspace .tools .actions #add_selected_to_set {background:transparent url(<%= asset_path 'ui_new.png' %>) -900px -1000px no-repeat;}
+      #workspace .tools .actions #make_selected_cover.inactive {background:transparent url(<%= asset_path("ui_new.png") %>) 0 -460px no-repeat;}
+      #workspace .tools .actions #add_selected_to_set {background:transparent url(<%= asset_path("ui_new.png") %>) -900px -1000px no-repeat;}
       #workspace .tools .actions #add_selected_to_set:active,
-      #workspace .tools .actions #add_selected_to_set.inactive {background:transparent url(<%= asset_path 'ui_new.png' %>) 0 -1000px no-repeat;}
+      #workspace .tools .actions #add_selected_to_set.inactive {background:transparent url(<%= asset_path("ui_new.png") %>) 0 -1000px no-repeat;}
 
       #workspace .tools #create_placements,
       #workspace .tools #create_placements div {display:inline;}

@@ -8,7 +8,7 @@ class SectionsTest < ActiveSupport::IntegrationCase
 
   test 'adding a section' do
     create_section
-    assert has_flash_message?(I18n.t(:'app.admin_pages.saved'))
+    assert has_flash_message?(I18n.t(:'app.admin_items.saved'))
     assert page.has_content?('A title for the section page')
   end
 
@@ -35,10 +35,10 @@ class SectionsTest < ActiveSupport::IntegrationCase
 protected
 
   def create_section
-    visit admin_pages_path(:with_page_template => @page_template.id)
-    click_link I18n.t(:'admin.pages.index.add_section')
+    visit admin_items_path(:with_page_template => @page_template.id)
+    click_link I18n.t(:'admin.items.index.add_section')
 
-    fill_in 'page_title', :with => 'A title for the section page'
+    fill_in 'item_title', :with => 'A title for the section page'
     click_button I18n.t(:save)
   end
 

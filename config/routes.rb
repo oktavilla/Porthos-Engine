@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   match 'pages/categories/:id' => 'pages#category', :as => 'pages_category'
 
   namespace :admin do
-    root :to => 'pages#index'
+    root :to => 'items#index'
     match 'login' => 'sessions#new', :as => 'login'
     match '/logout' => 'sessions#destroy', :as => 'logout'
     resources :sessions
@@ -64,7 +64,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :pages do
+    resources :items do
       collection do
         get 'search'
         put 'sort'

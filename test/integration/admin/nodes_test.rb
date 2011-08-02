@@ -9,8 +9,8 @@ class NodesTest < ActiveSupport::IntegrationCase
 
   test 'adding a node pointing to a page' do
     new_page = Factory(:page, :page_template => @page_template)
-    visit admin_page_path(new_page)
-    click_link I18n.t(:'admin.pages.show.publish_now')
+    visit admin_item_path(new_page)
+    click_link I18n.t(:'admin.items.page.publish_now')
     assert_equal new_admin_node_path, current_path
     fill_in 'node_name', :with => 'My page'
     fill_in 'node_url', :with => 'my-page'
@@ -23,8 +23,8 @@ class NodesTest < ActiveSupport::IntegrationCase
   test 'adding a node pointing to a section' do
     page_template = Factory(:page_template, :allow_node_placements => false)
     new_section = Factory(:section, :page_template_id => page_template.id)
-    visit admin_page_path(new_section)
-    click_link I18n.t(:'admin.pages.show.publish_now')
+    visit admin_item_path(new_section)
+    click_link I18n.t(:'admin.items.page.publish_now')
     assert_equal new_admin_node_path, current_path
     fill_in 'node_name', :with => 'My section'
     fill_in 'node_url', :with => 'my-section'

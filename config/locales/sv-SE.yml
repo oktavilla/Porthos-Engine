@@ -101,7 +101,12 @@
       content_module: Innehållsmodul
       content_template: Innehållstyp
       node: Navigationsnode
-      page: Sida
+      page:
+        one: Sida
+        other: Sidor
+      custom_page:
+        one: Anpassad sida
+        other: Anpassade sidor
       content_teaser: Teaser
       user: Användare
       redirect: Vidarebefordring
@@ -435,7 +440,7 @@
       logged_in: Du är inloggad
       logged_out: Du är nu utloggad och lugnt surfa vidare
       login_failed: Användarnamnet och lösenordet stämde inte överens
-    admin_pages:
+    admin_items:
       unable_to_find: Kunde inte hitta sidtypen
       saved: Dina ändringar är sparade
       active: "är nu publicerad och syns på webbplatsen"
@@ -564,16 +569,22 @@
         string: Text
         date: Datum
         boolean: Ja/Nej
-    pages:
+    items:
       index:
         all_pages: "Alla sidor"
         create_new: "Skapa ny %{template}sida"
         add_section: Lägg till indexsida
-      show:
+        add_custom_page: Lägg till
+      page:
         edit_category: Ändra kategori
         choose_category: Välj kategori
         add_new_category: Lägg till
         choose: Välj
+        not_published: Sidan är inte publicerad
+        publish_now: Publicera
+        add_content: Lägg till innehåll
+        add_datum: "Lägg till %{label}"
+      section:
         not_published: Sidan är inte publicerad
         publish_now: Publicera
         add_content: Lägg till innehåll

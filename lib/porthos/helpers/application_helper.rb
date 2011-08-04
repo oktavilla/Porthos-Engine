@@ -2,13 +2,7 @@ module Porthos
   module ApplicationHelper
 
     def previous_view_path(default_path = '/')
-      if params[:return_to]
-        params[:return_to]
-      elsif session[:last_viewed] and session[:last_viewed] != request.fullpath
-        session[:last_viewed]
-      else
-        default_path
-      end
+      params[:return_to] || default_path
     end
 
     def admin_assets_path_with_session_key(arguments = {})

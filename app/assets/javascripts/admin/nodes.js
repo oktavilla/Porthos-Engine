@@ -10,7 +10,7 @@
       }
     }
 
-    $navigation.setupSortables = function() { 
+    $navigation.setupSortables = function() {
       this.sortables().each(function() {
         var $list = $(this);
         $list.sortable({
@@ -27,7 +27,7 @@
         });
       });
     }
-    
+
     $navigation.teardownSortables = function() {
       this.sortables().each(function() {
         $(this).sortable('destroy');
@@ -36,7 +36,7 @@
 
     $navigation.setupSortables();
 
-    $('a.toggle_handle').click(function(event) {
+    $navigation.find('a.toggle_handle').live('click', function(event) {
       event.preventDefault();
 
       $handle = $(this);

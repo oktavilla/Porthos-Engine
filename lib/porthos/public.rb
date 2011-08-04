@@ -35,7 +35,7 @@ module Porthos
             end
           else
             [node]
-          end
+          end.compact
         end
         @trail
       end

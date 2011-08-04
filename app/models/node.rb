@@ -6,6 +6,7 @@ class Node
   acts_as_tree :order => "position asc"
 
   key :name, String
+  key :slug, String
   key :url, String
   key :controller, String
   key :action, String
@@ -87,7 +88,7 @@ private
 
   def generate_url
     if parent
-      new_url = url.blank? ? name.to_s.to_url : url
+      new_url = slug.blank? ? name.to_s.to_url : slug
       self.url = !parent.parent_id.blank? ? [parent.url, new_url].join('/') : new_url
     end
   end

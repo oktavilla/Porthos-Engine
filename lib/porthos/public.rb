@@ -25,21 +25,16 @@ module Porthos
         end
       end
 
-      def node_ancestors
-        if !defined?(@node_ancestors) and node.present?
-          @node_ancestors = node.ancestors.reverse
-          @node_ancestors.shift
-        end
-        @node_ancestors
-      end
-
       def trail
         unless defined?(@trail)
           # fetch an ordered trail (top to bottom) of nodes
-          @trail = if node_ancestors and node_ancestors.any?
-            node_ancestors.dup << node
+          @trail = if node && node.ancestors.any?
+            node.ancestors.dup.tap do |ancestors|
+              ancestors.shift
+              ancestors << node
+            end
           else
-            [node].compact
+            [node]
           end
         end
         @trail

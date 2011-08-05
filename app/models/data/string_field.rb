@@ -6,4 +6,8 @@ class StringField < Field
     self.value.strip! if value.present?
   end
 
+  def to_s
+    value
+  end
+
 end

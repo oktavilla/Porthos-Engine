@@ -13,7 +13,7 @@ class NodesTest < ActiveSupport::IntegrationCase
     click_link I18n.t(:'admin.items.page.publish_now')
     assert_equal new_admin_node_path, current_path
     fill_in 'node_name', :with => 'My page'
-    fill_in 'node_url', :with => 'my-page'
+    fill_in 'node_slug', :with => 'my-page'
     choose('not_shown_in_nav')
     choose("node_parent_id_#{@root_node.id}")
     click_button I18n.t(:save)
@@ -27,7 +27,7 @@ class NodesTest < ActiveSupport::IntegrationCase
     click_link I18n.t(:'admin.items.page.publish_now')
     assert_equal new_admin_node_path, current_path
     fill_in 'node_name', :with => 'My section'
-    fill_in 'node_url', :with => 'my-section'
+    fill_in 'node_slug', :with => 'my-section'
     choose('not_shown_in_nav')
     choose("node_parent_id_#{@root_node.id}")
     click_button I18n.t(:save)

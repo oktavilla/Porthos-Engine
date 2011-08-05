@@ -3,6 +3,15 @@ class ContentTemplate < Template
   after_destroy :propagate_removal_to_items
   after_update :propagate_updates
 
+  class_attribute :datum_template_classes
+  self.datum_template_classes = [
+    { type: 'FieldTemplate', attrs: { input_type: 'string' }},
+    { type: 'FieldTemplate', attrs: { input_type: 'boolean' }},
+    { type: 'FieldTemplate', attrs: { input_type: 'date' }},
+    { type: 'AssetAssociationTemplate' },
+    { type: 'PageAssociationTemplate' },
+  ]
+
   def template
     @template ||= template_name.present? ? FieldSetFileTemplate.new(template_name) : FieldSetFileTemplate.default
   end

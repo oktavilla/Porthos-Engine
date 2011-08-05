@@ -15,18 +15,13 @@
   </div>
   <div class="tools">
     <div class="add">
-      <form action="<%= new_admin_template_datum_template_path(@content_template) %>">
-        <input type="hidden" name="template_type" value="FieldTemplate" />
-        <%= select_tag 'datum_template[input_type]', options_for_select(FieldTemplate.input_types.collect { |type| [t(".#{type}"), type] }) %>
-        <button type="submit"><%=t '.add_field_template' %></button>
-      </form>
+      <a href="#" class="new" onclick="$('#datum_template_classes').toggle(); return false;"><%= t('.new') %></a>
     </div>
-    <div class="add">
-      <form action="<%= new_admin_template_datum_template_path(@content_template) %>">
-        <input type="hidden" name="template_type" value="AssetAssociationTemplate">
-        <button type="submit" class="new"><%=t '.add_asset_field' %></button>
-      </form>
-    </div>
+    <ul style="display:none;" id="datum_template_classes">
+    <% ContentTemplate.datum_template_classes.each do |klass| %>
+      <li><%= link_to (klass[:type] != 'FieldTemplate' ? klass[:type].constantize.model_name.human : t(".#{klass[:attrs][:input_type]}")), new_admin_template_datum_template_path(@content_template, template_type: klass[:type], datum_template: (klass[:attrs] || {})) %></li>
+    <% end %>
+    </ul>
   </div>
   <div id="content">
     <% if @content_template.datum_templates.any? -%>

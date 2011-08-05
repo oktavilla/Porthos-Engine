@@ -1,9 +1,9 @@
 class Node
   include MongoMapper::Document
   plugin MongoMapper::Plugins::IdentityMap
-  include MongoMapper::Acts::Tree
+  plugin MongoMapper::Plugins::Tree
 
-  acts_as_tree :order => "position asc"
+  self.tree_order = :position.asc
 
   key :name, String
   key :slug, String

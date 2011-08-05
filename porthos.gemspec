@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   # Mongo
   s.add_dependency 'bson_ext'
   s.add_dependency 'mongo_mapper'
-  s.add_dependency 'ramdiv-mongo_mapper_acts_as_tree'
+  s.add_dependency 'mongo_mapper_tree'
   s.add_dependency 'mm-multi-parameter-attributes'
 
   # Authentication

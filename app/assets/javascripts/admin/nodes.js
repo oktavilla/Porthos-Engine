@@ -1,6 +1,7 @@
 (function() {
   $(document).ready(function() {
     var $navigation = $('#navigation');
+    Porthos.Helpers.cloneAsUrl('#node_name', '#node_slug');
 
     $navigation.sortables = function() {
       if($navigation.hasClass('sortable')){

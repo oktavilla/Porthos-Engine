@@ -116,8 +116,6 @@
   };
 
   $(document).ready(function() {
-    Porthos.Helpers.cloneAsUrl('#node_name', '#node_url');
-
     if ($.fn.hasOwnProperty('sortable')) {
       $('table.sortable tbody').sortable({
         handle: 'span.drag_handle',

@@ -32,7 +32,7 @@ class Page < Section
   end
 
   def category
-    @category ||= page_template.allow_categories? ? Page.tags_by_count(:namespace => page_template.handle).first : nil
+    @category ||= page_template.allow_categories? ? tags(page_template.handle).first : nil
   end
 
   def category_name

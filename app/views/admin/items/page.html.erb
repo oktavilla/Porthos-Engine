@@ -7,6 +7,9 @@
     <% if @item.published_on %>
       <p>Publiceringsdatum: <%= @item.published_on.in_time_zone.strftime("%d %B %Y") %></p>
       <p><a href="#" class="toggle_publish_date">Ändra</a></p>
+      <% if @item.can_have_a_node? %>
+        <p><%= link_to 'Placera i navigationen', new_admin_node_path(:resource_id => @item.id) %></p>
+      <% end %>
     <% else %>
       <p><strong><%=t '.not_published' %></strong></p>
       <p><a href="#" class="toggle_publish_date">Välj ett publiceringsdatum</a> eller
@@ -73,6 +76,9 @@
   <div class="header" id="item_attributes">
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span><%=t 'edit' %></span></a>
+      <% if @item.node %>
+        <%= link_to 'Ändra i navigationen', edit_admin_node_path(@item.node), :class => 'edit_settings action' %>
+      <% end %>
       <%= link_to t(:destroy), admin_item_path(@item.id), { :method => :delete, :confirm => "Är du säker att du vill ta bort sidan. Det går inte att ångra.", :class => 'action delete' } %>
     </span>
     <div class="parents"><%= link_to @item.page_template.label, admin_items_path(with_page_template: @item.page_template) %></div>
@@ -86,7 +92,7 @@
     </div>
     <% end %>
     <% if @item.has_url? -%>
-    <div class="slug">
+    <div class="uri">
       <span class="key">Adress:</span>
       <% page_url(@item).tap do |url| %>
       <span class="value"><%= link_to(url, url) %></span>
@@ -101,11 +107,13 @@
       <div class="fullwidth">
         <%= f.text_field :title, :class => 'title' %>
       </div>
+      <% if @item.is_a?(Page) and @item.index_node.present? %>
       <div class="uri_field">
         <label for="item_uri">Adress:</label>
         <%= page_url_parent(@item) %>
         <%= f.text_field :uri %>
       </div>
+      <% end %>
       <div class="restricted_field">
         <label for="item_restricted">
           <%= f.check_box :restricted %>

@@ -6,6 +6,8 @@ class PageTemplate < Template
   key :allow_categories, Boolean, :default => lambda { false }
   key :allow_node_placements, Boolean, :default => lambda { false }
 
+  one :section
+
   validates_presence_of :handle
   validates_uniqueness_of :handle,
                           :case_sensitive => false,
@@ -30,10 +32,6 @@ class PageTemplate < Template
       self.handle_was_changed = false
     },
     :if => proc { handle_was_changed }
-
-  def section
-    @section ||= Section.published.where(page_template_id: self.id).first
-  end
 
   def template
     @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default

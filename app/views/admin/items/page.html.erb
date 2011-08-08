@@ -107,7 +107,7 @@
       <div class="fullwidth">
         <%= f.text_field :title, :class => 'title' %>
       </div>
-      <% if @item.is_a?(Page) and @item.index_node.present? %>
+      <% if @item.index_node.present? %>
       <div class="uri_field">
         <label for="item_uri">Adress:</label>
         <%= page_url_parent(@item) %>

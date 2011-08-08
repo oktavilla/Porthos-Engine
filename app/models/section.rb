@@ -18,6 +18,6 @@ class Section < Item
   end
 
   def can_have_a_node?
-    true
+    false
   end
 end

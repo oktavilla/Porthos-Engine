@@ -67,11 +67,11 @@ class Node
       self.new.tap do |node|
         node.name = item.title
         node.controller = 'pages'
-        if item.is_a?(Page)
-          node.action = 'show'
-        elsif item.kind_of?(Item)
+        if item.is_a?(Section)
           node.action = 'index'
           node.handle = item.page_template.handle
+        elsif item.kind_of?(Item)
+          node.action = 'show'
         end
         node.resource = item
         node.parent = Node.root if node.parent_id.blank?

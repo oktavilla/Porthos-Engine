@@ -81,6 +81,10 @@ class Item
     node ? node.attributes.merge(node_attributes) : Node.new(node_attributes).first
   end
 
+  def has_url?
+    published? and node.present?
+  end
+
 private
 
   def sort_data

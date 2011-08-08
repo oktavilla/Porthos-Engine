@@ -23,8 +23,12 @@ class Page < Section
     published_on.present? && page_template.allow_node_placements? && node.blank?
   end
 
+  def has_url?
+    published? and (node.present? or index_node.present?)
+  end
+
   def index_node
-    @index_node ||= Node.where(controller: 'pages', action: 'index', page_template_id: self.page_template_id)
+    @index_node ||= Node.where(controller: 'pages', action: 'index', handle: self.page_template.handle)
   end
 
   def in_restricted_context?

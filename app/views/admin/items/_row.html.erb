@@ -4,7 +4,7 @@
   <% end %>
   <td class="content">
     <%= render :partial => item.template.views.admin_in_list, :locals => { :item => item } %>
-    <% if item.published? -%>
+    <% if item.has_url? %>
       <% page_path(item).tap do |uri| %>
         <%= link_to uri, uri %>
       <% end %>

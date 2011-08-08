@@ -85,7 +85,7 @@
       <span class="value"><%= @item.node.name %></span>
     </div>
     <% end %>
-    <% if @item.published? -%>
+    <% if @item.has_url? -%>
     <div class="slug">
       <span class="key">Adress:</span>
       <% page_url(@item).tap do |url| %>

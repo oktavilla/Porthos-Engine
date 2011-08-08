@@ -15,6 +15,11 @@ module DefaultRenderer
       @page_template.handle
     end
 
+    def section
+      @section ||= @page_template.section
+    end
+    register_methods :section
+
     def pages
       return @pages if @pages
       scope = Page.where(:page_template_id => @page_template.id).published

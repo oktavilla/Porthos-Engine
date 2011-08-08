@@ -198,6 +198,7 @@
       </ul>
     <% end %>
       <span class="edit">
+        <%= link_to t(:edit), edit_admin_item_datum_path(@item, datum), :class => 'edit' %>
         <%= link_to datum.active? ? 'Dölj' : 'Visa', toggle_admin_item_datum_path(@item, datum), :method => :put, :class => 'visibility' %>
         <%= link_to "Ta bort", admin_item_datum_path(@item, datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
       </span>

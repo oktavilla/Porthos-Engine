@@ -27,8 +27,7 @@ class Admin::DataController < ApplicationController
   end
 
   def edit
-    @datum = @parent.data.find(params[:id])
-    render :template => "admin/data/#{@datum.class.to_s.tableize}/edit"
+    respond_with @datum = @parent.data.find(params[:id])
   end
 
   def update

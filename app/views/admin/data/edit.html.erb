@@ -1,11 +1,11 @@
-<% @page_title = "Sidtyper > #{@item.title} > Lägg till fält" %>
+<% @page_title = "Sidtyper > #{@item.title} > Ändra fält" %>
 <% @page_class = 'layout1' -%>
 <div id="workspace">
   <div class="header">
-    <h1>Nytt <%= @datum.class.model_name.human %> i <%= @item.title %></h1>
+    <h1>Ändra <%= @datum.class.model_name.human %> i <%= @item.title %></h1>
   </div>
   <div id="content">
-    <%= form_for [:admin, @item, @datum], as: :datum, url: admin_item_data_path(@item) do |f| %>
+    <%= form_for [:admin, @item, @datum], as: :datum, url: admin_item_datum_path(@datum, item_id: @item) do |f| %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
       <%= render 'form', :f => f %>
       <% begin %>

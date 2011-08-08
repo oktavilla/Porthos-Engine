@@ -7,6 +7,9 @@
     <% if @item.published_on %>
       <p>Publiceringsdatum: <%= @item.published_on.in_time_zone.strftime("%d %B %Y") %></p>
       <p><a href="#" class="toggle_publish_date">Ändra</a></p>
+      <% if @item.can_have_a_node? %>
+        <p><%= link_to 'Placera i navigationen', new_admin_node_path(:resource_id => @item.id) %></p>
+      <% end %>
     <% else %>
       <p><strong><%=t '.not_published' %></strong></p>
       <p><a href="#" class="toggle_publish_date">Välj ett publiceringsdatum</a> eller
@@ -60,8 +63,8 @@
       <span class="value"><%= @item.node.name %></span>
     </div>
     <% end %>
-    <% if @item.published? -%>
-    <div class="slug">
+    <% if @item.has_url? -%>
+    <div class="uri">
       <span class="key">Adress:</span>
       <% page_url(@item).tap do |url| %>
       <span class="value"><%= link_to(url, url) %></span>
@@ -75,11 +78,6 @@
       <label for="item_title" class="first_label"><%= Item.human_attribute_name(:title) %></label>
       <div class="fullwidth">
         <%= f.text_field :title, :class => 'title' %>
-      </div>
-      <div class="uri_field">
-        <label for="item_uri">Adress:</label>
-        <%= page_url_parent(@item) %>
-        <%= f.text_field :uri %>
       </div>
       <% if @item.is_a?(CustomPage) %>
       <label for="item_template_name">

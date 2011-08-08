@@ -15,6 +15,10 @@ class CustomPage < Item
     true
   end
 
+  def page_template
+    nil
+  end
+
   def template
     @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default
   end

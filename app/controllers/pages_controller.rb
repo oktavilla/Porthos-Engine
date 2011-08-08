@@ -20,9 +20,9 @@ class PagesController < ApplicationController
 
   def show
     @page = if params[:id].is_a?(BSON::ObjectId) || BSON::ObjectId.legal?(params[:id])
-      Page.published.find(params[:id])
+      Item.published.find(params[:id])
     else
-      Page.published.where(uri: params[:id], handle: params[:handle]).first
+      Item.published.where(uri: params[:id], handle: params[:handle]).first
     end
     raise ActiveRecord::RecordNotFound unless @page
 

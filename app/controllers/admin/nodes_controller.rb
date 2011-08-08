@@ -68,6 +68,7 @@ class Admin::NodesController < ApplicationController
 
   def edit
     @node = Node.find(params[:id])
+    @nodes = [Node.root]
     respond_to do |format|
       format.html
       format.js { render :layout => false }

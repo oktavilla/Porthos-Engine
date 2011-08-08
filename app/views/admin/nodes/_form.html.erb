@@ -1,5 +1,6 @@
 <%= form_for [:admin, @node] do |f| %>
   <%= render 'admin/shared/error_messages', :object => f.object %>
+  <%= hidden_field_tag :return_to, params[:return_to] if params[:return_to]%>
   <fieldset>
     <%= f.label :name %>
     <%= f.text_field :name %>

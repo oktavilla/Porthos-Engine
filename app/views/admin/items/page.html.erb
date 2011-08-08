@@ -77,7 +77,7 @@
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span><%=t 'edit' %></span></a>
       <% if @item.node %>
-        <%= link_to 'Ändra i navigationen', edit_admin_node_path(@item.node), :class => 'edit_settings action' %>
+        <%= link_to 'Ändra i navigationen', edit_admin_node_path(@item.node, :return_to => request.path), :class => 'edit_settings action' %>
       <% end %>
       <%= link_to t(:destroy), admin_item_path(@item.id), { :method => :delete, :confirm => "Är du säker att du vill ta bort sidan. Det går inte att ångra.", :class => 'action delete' } %>
     </span>

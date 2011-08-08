@@ -12,7 +12,7 @@ class CustomPage < Item
   end
 
   def can_have_a_node?
-    true
+    published? && node.blank?
   end
 
   def page_template

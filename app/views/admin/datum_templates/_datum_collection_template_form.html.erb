@@ -1,6 +1,11 @@
 <label for="datum_template_allow_texts">
-  <%= f.check_box :allow_texts %>
+  <%= f.check_box :allow_texts, id: 'datum_template_allow_texts' %>
   <%= DatumCollection.human_attribute_name(:allow_texts) %>
+</label>
+
+<label for="datum_template_allow_links">
+  <%= f.check_box :allow_links, id: 'datum_template_allow_links' %>
+  <%= DatumCollection.human_attribute_name(:allow_links) %>
 </label>
 
 <%= f.label :allowed_asset_filetypes %>

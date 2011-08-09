@@ -163,7 +163,7 @@
       $link_fields = $content.find('div.link_field_form');
       if ($link_fields.size() > 0) {
         var selects = [],
-            $master_select = $('<select style="width:450px"></select>');
+            $master_select = $('<select data-placeholder="Välj var du vill länka ..." style="width:450px"><option data-resource-type="" value="">Välj var du vill länka ...</option></select>');
         $link_fields.each(function() {
           var $container = $(this),
               $resource_id = $container.find('input.resource_id'),
@@ -172,7 +172,7 @@
                 var $selected = $(this).find(':selected');
                 $resource_id.val($selected.val());
                 $resource_type.val($selected.data('resource-type'));
-              });
+              }).data('current-selected', $resource_id.val());
           $container.find('div.link_field_resource').hide();
           selects.push($select);
         });
@@ -186,7 +186,12 @@
           });
           options += '</optgroup>';
           $.each(selects, function(i, $select) {
-            $select.append(options).trigger('liszt:updated');
+            $select.append(options);
+            var current_selected = $select.data('current-selected');
+            if (current_selected !== '') {
+              $select.find('option[value="'+current_selected+'"]').attr('selected', 'selected');
+            }
+            $select.trigger('liszt:updated');
           });
         });
 

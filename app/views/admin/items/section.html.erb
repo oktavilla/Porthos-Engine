@@ -101,6 +101,7 @@
   <div class="tools">
     Lägg till:
     <%= link_to StringField.model_name.human, new_admin_item_datum_path(@item, datum: { input_type: 'string' }, type: 'StringField') %>
+    <%= link_to LinkField.model_name.human, new_admin_item_datum_path(@item, type: 'StringField') %>
     <%= link_to t('.date_field'), new_admin_item_datum_path(@item, datum: { input_type: 'date' }, type: 'Field') %>
     <%= link_to t('.boolean_field'), new_admin_item_datum_path(@item, datum: { input_type: 'boolean' }, type: 'Field') %>
     <%= link_to PageAssociation.model_name.human, new_admin_item_datum_path(@item, type: 'PageAssociation') %>
@@ -144,6 +145,13 @@
               <%= f.hidden_field :multiline %>
               <%= f.hidden_field :allow_rich_text %>
               <button type="submit"><%= StringField.model_name.human %></button>
+            <% end %>
+          </li>
+          <% end %>
+          <% if datum.allow_links? %>
+          <li>
+            <%= form_for [:admin, @item, LinkField.new], :as => :datum,  :url => admin_item_data_path(@item, parent_id: datum, type: 'LinkField') do |f| %>
+              <button type="submit"><%= LinkField.model_name.human %></button>
             <% end %>
           </li>
           <% end %>

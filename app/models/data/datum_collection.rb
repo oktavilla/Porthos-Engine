@@ -1,7 +1,8 @@
 class DatumCollection < Datum
-  key :allowed_asset_filetypes, Array, :default => lambda { [] }
-  key :allowed_page_template_ids, Array, :default => lambda { [] }
   key :allow_texts, Boolean, :default => lambda { false }
+  key :allow_links, Boolean
+  key :allowed_asset_filetypes, Array, :default => lambda { [] }
+  key :allowed_page_template_ids, Array, :typecast => 'ObjectId'
   key :content_templates_ids, Array, :typecast => 'ObjectId'
 
   many :content_templates, :in => :content_templates_ids
@@ -23,6 +24,10 @@ class DatumCollection < Datum
 
   def texts
     @texts ||= data.active.find_all { |d| d.is_a?(StringField) }
+  end
+
+  def links
+    @links ||= data.active.find_all { |d| d.is_a?(LinkField) }
   end
 
 protected

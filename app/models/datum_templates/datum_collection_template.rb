@@ -1,5 +1,6 @@
 class DatumCollectionTemplate < DatumTemplate
   key :allow_texts, Boolean, :default => lambda { false }
+  key :allow_links, Boolean
   key :allowed_asset_filetypes, Array, :default => lambda { [] }
   key :allowed_page_template_ids, Array, :typecast => 'ObjectId', :default => lambda { [] }
   key :content_templates_ids, Array, :typecast => 'ObjectId', :default => lambda { [] }

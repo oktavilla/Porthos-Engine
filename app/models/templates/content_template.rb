@@ -8,6 +8,7 @@ class ContentTemplate < Template
     { type: 'FieldTemplate', attrs: { input_type: 'string' }},
     { type: 'FieldTemplate', attrs: { input_type: 'boolean' }},
     { type: 'FieldTemplate', attrs: { input_type: 'date' }},
+    { type: 'LinkFieldTemplate' },
     { type: 'AssetAssociationTemplate' },
     { type: 'PageAssociationTemplate' },
   ]
@@ -41,10 +42,10 @@ class ContentTemplate < Template
     end
 
     datum_collection_field_sets = item.data.find_all do |d|
-      d.respond_to?(:content_templates_ids) && d.content_templates_ids.include?(self.id)
+      d['content_templates_ids'] && d.content_templates_ids.include?(self.id)
     end.map do |datum_collection|
       datum_collection.data.find_all do |d|
-        d.respond_to?(:content_template_id) && d.content_template_id == self.id
+        d['content_templates_id'] && d.content_template_id == self.id
       end
     end.flatten.compact
 

@@ -20,6 +20,7 @@ class PageTemplate < Template
     { type: 'FieldTemplate', attrs: { input_type: 'string' }},
     { type: 'FieldTemplate', attrs: { input_type: 'boolean' }},
     { type: 'FieldTemplate', attrs: { input_type: 'date' }},
+    { type: 'LinkFieldTemplate' },
     { type: 'AssetAssociationTemplate' },
     { type: 'PageAssociationTemplate' },
     { type: 'FieldSetTemplate' },

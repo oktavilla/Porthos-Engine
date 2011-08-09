@@ -110,7 +110,7 @@ private
         field_set.data.detect { |datum| datum.handle == query_handle }.tap do |datum|
           self.shared_attributes.each do |k, v|
             datum[k.to_sym] = v
-          end
+          end if datum
         end
       end
       item.save

@@ -1,6 +1,6 @@
 class Admin::ItemsController < ApplicationController
   include Porthos::Admin
-  respond_to :html
+  respond_to :html, :json
 
   has_scope :with_page_template
   has_scope :created_by
@@ -10,18 +10,25 @@ class Admin::ItemsController < ApplicationController
   has_scope :is_published
 
   def index
-    @page_templates = PageTemplate.sort(:position).all
-    @page_template = PageTemplate.find(params[:with_page_template]) if params[:with_page_template]
+    respond_to do |format|
+      format.html do
+        @page_templates = PageTemplate.sort(:position).all
+        @page_template = PageTemplate.find(params[:with_page_template]) if params[:with_page_template]
 
-    @tags = Page.tags_by_count(:limit => 30)
-    @current_tags = params[:tags] || []
-    @items = unless @current_tags.any?
-      klass = params[:type] ? params[:type].constantize : Page
-      apply_scopes(klass).page(params[:page])
-    else
-      Page.tagged_with(@current_tags).sort(:updated_at.desc).page(params[:page])
+        @tags = Page.tags_by_count(:limit => 30)
+        @current_tags = params[:tags] || []
+        @items = unless @current_tags.any?
+          klass = params[:type] ? params[:type].constantize : Page
+          apply_scopes(klass).page(params[:page])
+        else
+          Page.tagged_with(@current_tags).sort(:updated_at.desc).page(params[:page])
+        end
+      end
+
+      format.json do
+        render json: Item.published.fields(:id, :_type, :title, :page_template_id).sort(:title).all.to_json
+      end
     end
-    respond_with(@items)
   end
 
   def search

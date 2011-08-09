@@ -1,0 +1,22 @@
+<div class="link_field_form">
+  <% if datum.instruction_body %>
+    <p class="instructions"><%= datum.instruction_body %></p>
+  <% end %>
+  <% if datum._parent_document.is_a?(DatumCollection) %>
+  <%= hidden_field_tag 'parent_id', datum._parent_document.id %>
+  <% end %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+
+  <%= f.label :url %>
+  <%= f.text_field :url %>
+
+  <%= f.label :resource %>
+  <div class="link_field_resource">
+    <%= f.label :resource_id %>
+    <%= f.text_field :resource_id, :class => 'resource_id' %>
+
+    <%= f.label :resource_type %>
+    <%= f.text_field :resource_type, :class => 'resource_type' %>
+  </div>
+</div>

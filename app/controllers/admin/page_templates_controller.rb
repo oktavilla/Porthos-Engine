@@ -1,5 +1,5 @@
 class Admin::PageTemplatesController < ApplicationController
-  respond_to :html
+  respond_to :html, :json
   include Porthos::Admin
 
   def index

@@ -19,6 +19,10 @@ class Admin::NodesController < ApplicationController
           end
         end
       end
+      format.json do
+        @nodes = Node.all
+        render json: @nodes.to_json
+      end
     end
   end
 

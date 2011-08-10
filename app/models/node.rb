@@ -37,10 +37,6 @@ class Node
   before_save :ensure_position
   before_validation :generate_url
 
-  def resource_type=(r_type)
-     super(r_type.to_s.classify.constantize.to_s)
-  end
-
   def access_status
     @access_status ||= case status
     when -1 then 'inactive'

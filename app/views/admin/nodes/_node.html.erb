@@ -20,6 +20,6 @@
       <%= link_to t(:edit), edit_admin_node_path(node), :class => 'settings' %>
     <% end -%>
     <%= link_to t(:move, :scope => [:app, :views, :admin, :nodes, :shared]), place_admin_node_path(node) %>
-    <%= link_to t(:destroy), admin_node_path(node), :method => :delete, :class => "delete", :confirm => t(:'app.general.destroy_confirmation'), :target_name => node.name %>
+    <%= link_to t(:destroy), admin_node_path(node), :method => :delete, :class => "delete", :confirm => t(:'app.general.destroy_confirmation', :target_name => node.name) %>
   </span>
 </div>

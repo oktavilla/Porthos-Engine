@@ -29,10 +29,9 @@ class PageTemplate < Template
 
   before_validation proc { self.handle_was_changed = true if changes.key?('handle') }
   after_save proc {
-      Rails.env.production? ? delay.propagate_handle : propagate_handle
-      self.handle_was_changed = false
-    },
-    :if => proc { handle_was_changed }
+    Rails.env.production? ? delay.propagate_handle : propagate_handle
+    self.handle_was_changed = false
+  }, :if => proc { handle_was_changed }
 
   def template
     @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default

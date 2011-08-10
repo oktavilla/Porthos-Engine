@@ -72,6 +72,67 @@ namespace :porthos do
         puts "Renamed #{num_changed} content block templates"
 
       end
+
+      desc "Rename templates_id to template_ids for page associations"
+      task :rename_template_id_in_page_associations => :environment do
+        def find_association_templates(template_container)
+          associations = []
+          associations += template_container.datum_templates.find_all { |d| d.is_a?(PageAssociationTemplate) && d['page_template_id'].present? }
+          find_datum_container_templates(template_container).each do |template_container|
+            associations += find_association_templates(template_container)
+          end
+          associations
+        end
+
+        def find_datum_container_templates(template_container)
+          template_container.datum_templates.find_all { |d| d.respond_to?(:datum_templates) }
+        end
+
+        def find_associations(datum_container)
+          associations = []
+          associations += datum_container.data.find_all { |d| d.is_a?(PageAssociation) && d['page_template_id'].present? }
+          find_datum_containers(datum_container).each do |datum_container|
+            associations += find_associations(datum_container)
+          end
+          associations
+        end
+
+        def find_datum_containers(datum)
+          datum.data.find_all { |d| d.respond_to?(:data) }
+        end
+
+        Template.all.each do |template|
+          template.reload
+          puts "#{template.class}: #{template.label}"
+          associations = find_association_templates(template)
+          if associations.any?
+            associations.each do |association|
+              if association['page_template_id'].present?
+                puts "moving page_template_id #{association['page_template_id']} to page_template_ids"
+                association.page_template_ids = [association['page_template_id']]
+                association['page_template_id'] = nil
+              end
+            end
+            puts "Saved: #{template.save}"
+          end
+        end
+
+        Item.all.each do |item|
+          item.reload
+          puts "#{item.class}: #{item.title}"
+          associations = find_associations(item)
+          if associations.any?
+            associations.each do |association|
+              if association['page_template_id'].present?
+                puts "moving page_template_id #{association['page_template_id']} to page_template_ids"
+                association.page_template_ids = [association['page_template_id']]
+                association['page_template_id'] = nil
+              end
+            end
+            puts "Saved: #{item.save}"
+          end
+        end
+      end
     end
   end
 end

@@ -1,4 +1,4 @@
 class PageAssociationTemplate < DatumTemplate
-  key :page_template_id, ObjectId
-  belongs_to :page_template
+  key :page_template_ids, Array, typecast: 'ObjectId'
+  many :page_templates
 end

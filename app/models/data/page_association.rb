@@ -1,5 +1,5 @@
 class PageAssociation < Datum
-  key :page_template_id, ObjectId
+  key :page_template_ids, Array, typecast: 'ObjectId'
   key :page_id, ObjectId
   belongs_to :page
 
@@ -10,7 +10,7 @@ class PageAssociation < Datum
       exclude_ids += _parent_document.data.find_all { |d| d.is_a?(PageAssociation) }.map { |d| d.page_id }
     end
     scope = Page.fields(:_id, :title).where(:_id.nin => exclude_ids)
-    scope = scope.where(:page_template_id => page_template_id) if page_template_id.present?
+    scope = scope.where(:page_template_id.in => page_template_ids) if page_template_ids && page_template_ids.any?
     scope.published
   end
 

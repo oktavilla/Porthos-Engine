@@ -72,6 +72,16 @@
         </ul>
       </div>
       <% end %>
+      <% if @asset.usages.any? %>
+      <div class="usages">
+        <h2>Används på:</h2>
+        <ul>
+        <% @asset.usages.each do |usage| %>
+          <li><%= link_to usage.title, admin_item_path(usage) %></li>
+        <% end %>
+        </ul>
+      </div>
+      <% end %>
     </div></div>
   </div>
 </div>

@@ -14,6 +14,7 @@ class Asset
   key :description, String
   key :hidden, Boolean, :default => lambda { false }
   key :created_by_id, ObjectId
+  key :_usages, Array, default: lambda { [] }
   timestamps!
 
   tankit Porthos.config.tanking.index_name, :as => 'Asset' do
@@ -78,6 +79,25 @@ class Asset
     @remote_url ||= Porthos.s3_storage.details(full_name).url
   end
 
+  def usages
+    @usages ||= _usages.collect { |u| u['class'].constantize.find(u['id']) }
+  end
+
+  def remove_usage(usage)
+    _usages.reject! { |u| u['id'] == usage.id.to_s && u['class'] == usage.class.model_name }
+    save
+  end
+
+  def add_usage(usage)
+    unless _usages.one? { |u| u['id'] == usage.id.to_s && u['class'] == usage.class.model_name }
+      _usages << {
+        'class' => usage.class.model_name,
+        'id' => usage.id.to_s
+      }
+      save
+    end
+  end
+
   class << self
     def uploaders
       User.find(self.fields(:created_by_id).distinct(:created_by_id))
@@ -137,4 +157,5 @@ protected
   def cleanup
     Porthos.s3_storage.destroy(full_name)
   end
+
 end

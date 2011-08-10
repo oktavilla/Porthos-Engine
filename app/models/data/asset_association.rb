@@ -1,4 +1,6 @@
 class AssetAssociation < Datum
+  plugin MongoMapper::Plugins::Dirty
+
   key :title, String
   key :description
   key :asset_id, ObjectId
@@ -6,6 +8,7 @@ class AssetAssociation < Datum
   belongs_to :asset
 
   before_save :dup_asset_attributes
+  before_save :notify_asset
 
 private
 
@@ -13,6 +16,15 @@ private
     if asset
       self.title = asset.title
       self.description = asset.description
+    end
+  end
+
+  def notify_asset
+    if changes.include?(:asset_id)
+      unless asset_id_was.nil?
+       Asset.find(asset_id_was).remove_usage(self._root_document)
+      end
+      asset.add_usage(self._root_document)
     end
   end
 

@@ -23,7 +23,7 @@
     <%= link_to t('.change_asset'), admin_assets_path({
       :by_filetype => datum.allowed_asset_filetypes,
       :create_callback => {
-        :path => admin_item_datum_path(@item, datum._parent_document, :parent_id => (datum.root_embedded_document unless datum.is_root?)),
+        :path => admin_item_datum_path(@item, datum._parent_document, :parent_id => (datum.root_embedded_document unless datum._parent_document.is_root?)),
         :method => 'put',
         :asset_field_name => CGI::escape('datum[data_attributes][0][asset_id]'),
         :params => { CGI::escape('datum[data_attributes][0][id]') => datum.id }
@@ -50,7 +50,7 @@
     <%= link_to t('.choose_asset'), admin_assets_path({
       :by_filetype => datum.allowed_asset_filetypes,
       :create_callback => {
-        :path => admin_item_datum_path(@item, datum._parent_document, :parent_id => (datum.root_embedded_document unless datum.is_root?)),
+        :path => admin_item_datum_path(@item, datum._parent_document, :parent_id => (datum.root_embedded_document unless datum._parent_document.is_root?)),
         :method => 'put',
         :asset_field_name => CGI::escape('datum[data_attributes][0][asset_id]'),
         :params => { CGI::escape('datum[data_attributes][0][id]') => datum.id }

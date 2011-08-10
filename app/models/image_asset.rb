@@ -4,6 +4,15 @@ class ImageAsset < Asset
   key :resizor_id, Integer
   key :versions, Hash, :default => lambda { Hash.new }
 
+  tankit Porthos.config.tanking.index_name, :as => 'Asset' do
+    indexes :name
+    indexes :title
+    indexes :description
+    indexes :author
+    indexes :tag_names
+    indexes :hidden
+  end
+
   validates_presence_of :resizor_id,
                         :on => :create,
                         :message => I18n.t(:unable_to_store)

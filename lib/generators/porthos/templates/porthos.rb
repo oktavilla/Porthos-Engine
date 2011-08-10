@@ -14,7 +14,6 @@ Porthos.configure do |config|
   end
 
   config.tanking do |tanking|
-    tanking.models = %w(Page Section Asset ImageAsset)
     tanking.index_name = "#{Rails.env}_#{Porthos.app_name}".downcase
     tanking.private_url = ''
   end

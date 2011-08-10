@@ -43,12 +43,6 @@ module Porthos
       end
     end
 
-    initializer 'porthos.tanking' do |app|
-      config.after_initialize do
-        Porthos::Tanking::Indexes.setup
-      end
-    end
-
     initializer 'porthos.authentication' do |app|
       app.middleware.use ::Warden::Manager do |manager|
         manager.default_strategies :password

@@ -1,6 +1,14 @@
 class Item
   include MongoMapper::Document
   plugin MongoMapper::Plugins::IdentityMap
+  include Tanker
+
+  tankit Porthos.config.tanking.index_name do
+    indexes :title
+    indexes :uri
+    indexes :tag_names
+    indexes :data
+  end
 
   key :created_by_id, ObjectId
   key :updated_by_id, ObjectId
@@ -36,6 +44,9 @@ class Item
   before_create :set_created_by
   before_save :set_updated_by
   before_save :sort_data
+
+  after_save proc { |page| Rails.env.production? ? page.delay.update_tank_indexes : page.update_tank_indexes }
+  after_destroy proc { |page| Rails.env.production? ? page.delay.delete_tank_indexes : page.delete_tank_indexes }
 
   scope :by_class, lambda { |klass_name| where(type: klass_name) }
 

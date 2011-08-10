@@ -1,5 +1,7 @@
 class Asset
   include MongoMapper::Document
+  include Tanker
+
   taggable
 
   key :name, String
@@ -13,6 +15,15 @@ class Asset
   key :hidden, Boolean, :default => lambda { false }
   key :created_by_id, ObjectId
   timestamps!
+
+  tankit Porthos.config.tanking.index_name, :as => 'Asset' do
+    indexes :name
+    indexes :title
+    indexes :description
+    indexes :author
+    indexes :tag_names
+    indexes :hidden
+  end
 
   belongs_to :created_by,
              :class_name => 'User'
@@ -42,6 +53,9 @@ class Asset
 
   before_validation :process, :if => :new_record?
   after_destroy :cleanup
+
+  after_save proc { |asset| Rails.env.production? ? asset.delay.update_tank_indexes : asset.update_tank_indexes }
+  after_destroy proc { |asset| Rails.env.production? ? asset.delay.delete_tank_indexes : asset.delete_tank_indexes }
 
   @@filetypes = {
     :image => %w(jpg jpeg png gif tiff tif),

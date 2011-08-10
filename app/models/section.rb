@@ -1,6 +1,13 @@
 class Section < Item
   key :page_template_id, ObjectId
 
+  tankit Porthos.config.tanking.index_name do
+    indexes :title
+    indexes :uri
+    indexes :tag_names
+    indexes :data
+  end
+
   belongs_to :page_template
 
   acts_as_uri :title,

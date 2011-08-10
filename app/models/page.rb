@@ -1,4 +1,11 @@
 class Page < Section
+  tankit Porthos.config.tanking.index_name do
+    indexes :title
+    indexes :uri
+    indexes :tag_names
+    indexes :data
+  end
+
   key :position, Integer
 
   before_create :move_to_list_bottom

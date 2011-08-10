@@ -31,14 +31,14 @@ class PageAssociationTest < ActiveSupport::TestCase
     assert_equal pages[3], page_association.targets.first
   end
 
-  test 'targets gets scoped by page template' do
+  test 'targets gets scoped by page template ids' do
     published_date = 1.day.ago
     page_template = Factory(:page_template, :datum_templates => [])
     page1 = Page.create_from_template(page_template, :title => 'Page 1', :published_on => published_date)
     page2 = Page.create_from_template(Factory(:page_template), :title => 'Page 2', :published_on => published_date)
     page3 = Page.create_from_template(Factory(:page_template), :title => 'Page 3', :published_on => published_date)
 
-    page2.data << PageAssociation.new(:page_template_id => page_template.id, :handle => 'le_page')
+    page2.data << PageAssociation.new(:page_template_ids => [page_template.id], :handle => 'le_page')
 
     assert_equal [page1], page2.data['le_page'].targets.all
   end

@@ -3,6 +3,15 @@ class PageAssociation < Datum
   key :page_id, ObjectId
   belongs_to :page
 
+  def page_template_id=(page_template_id)
+    @page_template_id = page_template_id
+    page_template_ids << @page_template_id
+  end
+
+  def page_template_id
+    @page_template_id
+  end
+
   def targets
     return @targets if @targets
     exclude_ids = [self._root_document.id]

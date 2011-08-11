@@ -72,6 +72,7 @@
           success: function(datum, status) {
             updateView(datum);
             $(this).find('a.cancel').trigger('click');
+            window.location.hash = '#done';
             enableForm($form);
           }
         });

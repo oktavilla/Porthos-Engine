@@ -47,7 +47,7 @@ class Admin::ItemsController < ApplicationController
   def show
     @item = Item.find(params[:id])
     respond_to do |format|
-      format.html { render template: (@item.is_a?(Page) ? 'admin/items/page' : 'admin/items/section') }
+      format.html { render template: (@item.class == Page ? 'admin/items/page' : 'admin/items/section') }
     end
   end
 

@@ -9,9 +9,9 @@
 <% end %>
   <div class="label"><%= PageTemplate.model_name.human %></div>
   <ul class="nav">
-    <li<%= ' class="current"'.html_safe if params[:type] != 'CustomPage' && current_scopes[:with_page_template].blank? %>><%= link_to "Alla", admin_items_path(current_scopes.except(:with_page_template)) %></li>
+    <li<%= ' class="current"'.html_safe if params[:type] != 'CustomPage' && !@page_template %>><%= link_to "Alla", admin_items_path(current_scopes.except(:with_page_template)) %></li>
     <% @page_templates.each do |page_template| -%>
-    <li<%= ' class="current"'.html_safe if current_scopes[:with_page_template] == page_template.id.to_s %>><%= link_to page_template.label, admin_items_path(current_scopes.merge(:with_page_template => page_template.id)) %></li>
+    <li<%= ' class="current"'.html_safe if @page_template == page_template %>><%= link_to page_template.label, admin_items_path(current_scopes.merge(:with_page_template => page_template.id)) %></li>
     <% end -%>
     <li class="section <%= 'current' if params[:type] == 'CustomPage' %>">
       <%= link_to CustomPage.model_name.human(count: 2), admin_items_path(type: 'CustomPage') %>
@@ -26,6 +26,17 @@
       <%= link_to "Utkast", admin_items_path(current_scopes.merge(:is_published => 'false')) %>
     </li>
   </ul>
+
+  <% if @page_template && @categories %>
+  <div class="label">Kategorier</div>
+  <ul class="filter">
+    <li<%= ' class="current"'.html_safe unless @current_tags.any? %>><%= link_to 'Alla', admin_items_path(current_scopes.merge(:with_page_template => @page_template.id)) %></li>
+  <% @categories.each do |category| %>
+    <li<%= ' class="current"'.html_safe if @current_tags.include?(category.name) %>><%= link_to category.name, admin_items_path(current_scopes.merge(:with_page_template => @page_template.id, :tags => [category.name])) %></li>
+  <% end %>
+  </ul>
+  <% end %>
+
   <div class="label">Senast ändrad av</div>
   <ul class="filter">
     <li<%= ' class="current"'.html_safe if current_scopes[:updated_by].blank? %>><%= link_to "Alla", admin_items_path(current_scopes.except(:updated_by)) %></li>

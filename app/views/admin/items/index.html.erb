@@ -50,7 +50,7 @@
             <th><%= t(:status) %></th>
           </tr>
         </thead>
-        <% if @page_template && @page_template.section %>
+        <% if @page_template && !@current_tags.any? && @page_template.section %>
         <% @page_template.section.tap do |section| %>
         <tbody class="section">
           <%= render partial: 'row', locals: { item: section, sortable: sortable } %>

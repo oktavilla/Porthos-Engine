@@ -15,13 +15,17 @@ class Admin::ItemsController < ApplicationController
         @page_templates = PageTemplate.sort(:position).all
         @page_template = PageTemplate.find(params[:with_page_template]) if params[:with_page_template]
 
-        @tags = Page.tags_by_count(:limit => 30)
+        @tags = Page.tags_by_count
+        if @page_template
+          @categories = Page.tags_by_count(namespace: @page_template.handle)
+        end
         @current_tags = params[:tags] || []
         @items = unless @current_tags.any?
           klass = params[:type] ? params[:type].constantize : Page
           apply_scopes(klass).page(params[:page])
         else
-          Page.tagged_with(@current_tags).sort(:updated_at.desc).page(params[:page])
+          tagging_options = (@page_template ? { :namespace => @page_template.handle } : {}).merge(params[:taggings] || {}).to_options
+          Page.tagged_with(@current_tags, tagging_options).sort(:updated_at.desc).page(params[:page])
         end
       end
 

@@ -128,7 +128,7 @@
     <% end %>
   </div>
   <div id="content" class="datums">
-  <% @item.data.each_with_index do |datum, index| %>
+  <% @item.data.sort_by { |d| @item.page_template.datum_templates[d.handle].position }.each_with_index do |datum, index| %>
     <div id="datum_<%= datum.id %>" class="<%= "datum " unless datum.is_a?(DatumCollection) %><%= datum.class.to_s.underscore %><%= " #{datum.input_type}" if datum.respond_to?(:input_type) %>">
     <% unless datum.is_a?(DatumCollection) %>
       <div class="controls">

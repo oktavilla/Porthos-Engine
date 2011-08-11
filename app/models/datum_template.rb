@@ -1,9 +1,11 @@
 class DatumTemplate
   include MongoMapper::EmbeddedDocument
+  plugin MongoMapper::Plugins::Dirty
   include Porthos::DatumMethods
 
   validates_presence_of :label
 
+  before_save :propagate
   after_destroy :propagate_removal
 
   def destroy
@@ -58,6 +60,15 @@ class DatumTemplate
 
 private
 
+  def propagate
+    if new?
+      propagate_self
+    else
+      propagate_updates
+    end
+    true
+  end
+
   def propagate_self
     if _root_document.is_a?(PageTemplate)
       DatumTemplate.propagate_change(:add_to_set, {
@@ -70,7 +81,6 @@ private
   end
 
   def propagate_updates
-    query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
     if _root_document.is_a?(PageTemplate)
       DatumTemplate.propagate_change(:set, {
         critera: { 'page_template_id' => self._root_document.id, 'data.handle' => query_handle },
@@ -104,7 +114,6 @@ private
 
   # TODO: Add delayed job
   def propagate_updates_to_field_sets
-    query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
     _root_document.concerned_items.each do |item|
       _root_document.find_matching_field_sets_in_item(item).each do |field_set|
         field_set.data.detect { |datum| datum.handle == query_handle }.tap do |datum|
@@ -119,7 +128,6 @@ private
 
   # TODO: Add delayed job
   def propagate_removal_to_field_sets
-    query_handle = respond_to?(:handle_changed?) ? (handle_changed? ? handle_was : handle) : handle
     _root_document.concerned_items.each do |item|
       _root_document.find_matching_field_sets_in_item(item).each do |field_set|
         field_set.data.delete_if do |datum|
@@ -128,6 +136,10 @@ private
       end
       item.save
     end
+  end
+
+  def query_handle
+    changes.include?(:handle) ? handle_was : handle
   end
 
 end

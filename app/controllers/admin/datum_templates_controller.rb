@@ -11,7 +11,6 @@ class Admin::DatumTemplatesController < ApplicationController
     @datum_template = DatumTemplate.from_type(params[:template_type], params[:datum_template])
     @template.datum_templates << @datum_template
     if @datum_template.save
-      @datum_template.send :propagate_self
       flash[:notice] = "#{@datum_template.label}  #{t(:saved, :scope => [:app, :admin_general])}"
     end
     respond_with @datum_template, :location => url_for(:controller => @template.class.to_s.tableize, :action => 'show', :id => @template.id.to_s)
@@ -24,7 +23,6 @@ class Admin::DatumTemplatesController < ApplicationController
   def update
     @datum_template = @template.datum_templates.find(params[:id])
     if @datum_template.update_attributes(params[:datum_template])
-      @datum_template.send :propagate_updates
       flash[:notice] = "#{@datum_template.label} #{t(:saved, :scope => [:app, :admin_general])}"
     end
     respond_with @datum_template, :location => url_for(:controller => @template.class.to_s.tableize, :action => 'show', :id => @template.id.to_s)

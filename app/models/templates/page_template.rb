@@ -1,4 +1,5 @@
 class PageTemplate < Template
+  plugin MongoMapper::Plugins::IdentityMap
   key :handle, String
   key :page_label, String
   key :template_name, String

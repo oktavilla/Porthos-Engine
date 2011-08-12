@@ -2,9 +2,6 @@ require_relative '../test_helper'
 require 'launchy'
 class PublicPagesTest < ActiveSupport::IntegrationCase
   setup do
-    WebMock.allow_net_connect!
-
-    stub_index_tank_put
     @page_template = Factory(:hero_page_template)
     @root_node = Factory(:root_node)
   end

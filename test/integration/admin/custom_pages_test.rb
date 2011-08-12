@@ -1,8 +1,6 @@
 require_relative '../../test_helper'
 class CustomPagesTest < ActiveSupport::IntegrationCase
   setup do
-    WebMock.allow_net_connect!
-    stub_index_tank_put
     login!
   end
 

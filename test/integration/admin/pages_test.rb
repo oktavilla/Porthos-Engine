@@ -1,8 +1,6 @@
 require_relative '../../test_helper'
 class PagesTest < ActiveSupport::IntegrationCase
   setup do
-    WebMock.allow_net_connect!
-    stub_index_tank_put
     login!
     @page_template = Factory.create(:hero_page_template)
   end

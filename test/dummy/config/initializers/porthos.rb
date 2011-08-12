@@ -4,3 +4,4 @@ Porthos.s3_storage = Porthos::S3Storage.new({
   :access_key_id => '',
   :secret_access_key => ''
 })
+Porthos.config.tanking.index_name = "#{Rails.env}_#{Porthos.app_name}".downcase

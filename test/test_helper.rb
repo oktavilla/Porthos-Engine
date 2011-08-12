@@ -44,6 +44,9 @@ class ActiveSupport::TestCase
   include PorthosPageTestHelpers
 
   setup do
+    WebMock.allow_net_connect!
+    stub_index_tank_put
+    stub_index_tank_delete
     DatabaseCleaner.start
   end
 

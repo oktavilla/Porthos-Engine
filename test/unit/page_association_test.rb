@@ -27,8 +27,8 @@ class PageAssociationTest < ActiveSupport::TestCase
     datum_collection.data << page_association
     datum_collection.data << PageAssociation.new(:page_id => pages[2].id)
 
-    assert_equal 1, page_association.targets.size
-    assert_equal pages[3], page_association.targets.first
+    assert_equal 2, page_association.targets.size
+    assert_equal [pages[1], pages[3]].sort_by { |p| p.id.to_s }, page_association.targets.sort_by { |p| p.id.to_s }
   end
 
   test 'targets gets scoped by page template ids' do

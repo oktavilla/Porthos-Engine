@@ -3,6 +3,9 @@ class Admin::DataController < ApplicationController
   respond_to :html, :json
   before_filter :find_page
 
+  def index
+  end
+
   def new
     @datum = unless params[:template_id]
       params[:type].constantize.new(params[:datum])
@@ -58,7 +61,7 @@ class Admin::DataController < ApplicationController
     if @item.save
       flash[:notice] = t(:deleted, :scope => [:app, :admin_general])
     end
-    respond_with @datum, :location => admin_item_path(@item, :location => "datum_#{@datum.id}")
+    respond_with @datum, :location => (params[:return_to] || admin_item_path(@item, :anchor => "datum_#{@datum.id}"))
   end
 
   def sort

@@ -8,7 +8,7 @@
   <div id="content">
     <%= form_for :node, :url => admin_node_path(:id => @node, :return_to => admin_nodes_path), :html => { :method => :put, :id => 'navigation' } do |f| %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
-      <% nested_list_of(@nodes, {
+      <%= nested_list_of(@nodes, {
           :end_points => @node,
           :allow_inactive => true,
           :except => @node

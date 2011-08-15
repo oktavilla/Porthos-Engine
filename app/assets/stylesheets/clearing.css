@@ -17,7 +17,7 @@
 .page_content:after,
 .page_content .content:after,
 .contents li.content:after,
-.datum:after,
+#content.datums .datum:after,
 #crop:after {
   content:".";
   display:block;

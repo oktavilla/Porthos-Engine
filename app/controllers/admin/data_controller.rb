@@ -52,7 +52,7 @@ class Admin::DataController < ApplicationController
   def toggle
     @datum = @parent.data.find(params[:id])
     @datum.update_attributes(:active => !@datum.active)
-    respond_with(@datum, :location => admin_item_path(@item, :anchor => "datum_#{@datum.id}"))
+    respond_with @datum, :location => (params[:return_to] || admin_item_path(@item, :anchor => "datum_#{@datum.id}"))
   end
 
   def destroy

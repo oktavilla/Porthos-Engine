@@ -39,7 +39,7 @@
       </thead>
       <tbody id="data" data-sort-uri="<%= sort_admin_item_data_path(@item) %>">
         <% @item.data.each do |datum| -%>
-        <tr class="datum" id="datum_<%= datum.id %>">
+        <tr id="datum_<%= datum.id %>">
           <td class="sort"><span class="drag_handle"></span></td>
           <td class="label"><%= datum.label %></td>
           <td class="instructions"><%= datum.instruction_body %></td>
@@ -47,7 +47,9 @@
           <td><%= datum.class.model_name.human %></td>
           <td><%= t(datum.required? ? :yes : :no) %></td>
           <td><%= link_to t(:edit), edit_admin_item_datum_path(@item, datum) %></td>
-          <td><%= link_to t(:destroy), admin_item_datum_path(@item, datum, :return_to => admin_item_data_path(@item)), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum.label}? Fältet och dess information kommer tas bort från alla #{@item.title} sidor." %>
+          <td>
+            <%= link_to t(:destroy), admin_item_datum_path(@item, datum, :return_to => admin_item_data_path(@item)), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum.label}? Fältet och dess information kommer tas bort från alla #{@item.title} sidor." %>
+          </td>
         </tr>
         <% end -%>
       </tbody>

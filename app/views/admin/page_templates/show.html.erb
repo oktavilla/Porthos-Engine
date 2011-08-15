@@ -52,7 +52,7 @@
           <td><%= datum_template.class.model_name.human %></td>
           <td><%= t(datum_template.required? ? :yes : :no) %></td>
           <td><%= link_to t(:edit), edit_admin_template_datum_template_path(@page_template, datum_template) %></td>
-          <td><%= link_to t(:destroy), admin_template_datum_template_path(@page_template, datum_template), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess information kommer tas bort från alla #{@page_template.label} sidor." %>
+          <td><%= link_to t(:destroy), admin_template_datum_template_path(@page_template, datum_template), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess information kommer tas bort från alla #{@page_template.label} sidor." %></td>
         </tr>
         <% end -%>
       </tbody>

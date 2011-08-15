@@ -576,19 +576,18 @@
         add_section: Lägg till indexsida
         add_custom_page: Lägg till
       page:
-        edit_category: Ändra kategori
-        choose_category: Välj kategori
-        add_new_category: Lägg till
         choose: Välj
-        not_published: Sidan är inte publicerad
-        publish_now: Publicera
         add_content: Lägg till innehåll
         add_datum: "Lägg till %{label}"
       section:
-        not_published: Sidan är inte publicerad
-        publish_now: Publicera
         add_content: Lägg till innehåll
         add_datum: "Lägg till %{label}"
+      details:
+        edit_category: Ändra kategori
+        choose_category: Välj kategori
+        add_new_category: Lägg till
+        publish_now: Publicera
+        not_published: Sidan är inte publicerad
     content_templates:
       index:
         title: Innehållstyper

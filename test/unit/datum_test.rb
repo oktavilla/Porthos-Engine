@@ -16,13 +16,13 @@ class DatumTest < ActiveSupport::TestCase
     end
   end
 
-  test 'building from a DatumTemplate' do
+  test 'building from a datum template' do
     template = Factory.build(:rich_text_field_template)
     datum = Datum.from_template(template)
 
     assert datum.is_a?(StringField), 'Should be instantiated as the correct class'
-    template.shared_attributes.each do |attribute, value|
-      assert_equal template.send(attribute),  datum.send(attribute), "Should have copied the value for #{attribute}"
+    template.shared_attributes.each do |key, attribute|
+      assert_equal attribute,  datum[key], "Should have copied the value for #{key}"
     end
   end
 

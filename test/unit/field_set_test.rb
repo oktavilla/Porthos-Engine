@@ -21,7 +21,9 @@ class FieldSetTest < ActiveSupport::TestCase
     @field_set_template.content_template.datum_templates.each do |field_template|
       @field_set.data[field_template.handle].tap do |datum|
         assert datum.kind_of?(Field), "Should have created fields from the field templates"
-        assert_equal field_template.shared_attributes, datum.attributes.except(:_id, :_type, :value, :active), "Should have mirrored the field_template attributes to the field"
+        field_template.shared_attributes.each do |key, attribute|
+          assert_equal attribute, datum[key], "Should have mirrored the field_template attributes #{key} to the field"
+        end
       end
     end
   end

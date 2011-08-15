@@ -9,7 +9,9 @@ class DatumCollectionTest < ActiveSupport::TestCase
 
   test 'building a content block from a template' do
     assert @datum_collection.is_a?(DatumCollection), "#{@datum_collection.class} should be a DatumCollection"
-    assert_equal @template.shared_attributes, @datum_collection.attributes.except(:_id, :_type, :active, :data), "Shoul dhave copied the shared attributes to the datum"
+    @template.shared_attributes.each do |key, attribute|
+      assert_equal attribute, @datum_collection[key], "Should have copied the shared attribute #{key} to the datum"
+    end
   end
 
   test 'data is sorted by position' do

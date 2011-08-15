@@ -31,7 +31,6 @@ class DatumTemplateTest < ActiveSupport::TestCase
       page_template.datum_templates << template
       page_template.save
 
-      template.send :propagate_self
       page.reload
 
       assert_not_nil page.data['the_beginning']
@@ -46,7 +45,6 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
       page_template.datum_templates['the_beginning'].tap do |template|
         assert template.update_attribute(:label, '... in a galaxy somewhat close'), 'should save new beginning'
-        template.send :propagate_updates
       end
 
       page.reload
@@ -65,12 +63,12 @@ class DatumTemplateTest < ActiveSupport::TestCase
       assert template.destroy
       page.reload
 
-      assert_nil page.data[template.handle], 'should have removed the datum matching the datum template'
+      assert_nil page.data[template.handle], 'Should have removed the datum matching the datum template'
     end
   end
 
 
-  context 'when child to a content template' do
+  context 'When child to a content template' do
     setup do
       @content_template = Factory.create(:content_template, {
         datum_templates: [
@@ -83,7 +81,7 @@ class DatumTemplateTest < ActiveSupport::TestCase
       @datum_template = @content_template.datum_templates.first
     end
 
-    context 'when created' do
+    context 'and is created' do
       setup do
         @page_template = Factory.create(:page_template, :datum_templates => [
           Factory.build(:field_set_template, {
@@ -101,13 +99,12 @@ class DatumTemplateTest < ActiveSupport::TestCase
         })
         @content_template.datum_templates << some_string
         @content_template.save
-        some_string.send :propagate_self
 
         assert_equal 'Just an ordinary string', @page.reload.data['a_field_set'].data['some_string'].label
       end
     end
 
-    context 'when updating' do
+    context 'and is updated' do
       should 'propagate to field sets directly under a page' do
         page_template = Factory.create(:page_template, :datum_templates => [
           Factory.build(:field_set_template, {
@@ -120,7 +117,6 @@ class DatumTemplateTest < ActiveSupport::TestCase
         assert_equal 'The string to rule them all', page.data['a_field_set'].data['the_string'].label, 'sanity'
 
         @datum_template.update_attribute :label, 'The string'
-        @datum_template.send :propagate_updates
 
         assert_equal 'The string', page.reload.data['a_field_set'].data['the_string'].label, 'should have been updated'
       end
@@ -137,16 +133,18 @@ class DatumTemplateTest < ActiveSupport::TestCase
         page.data['a_datum_collection'].data << @content_template.to_datum
         page.save
 
-        assert_equal 'The string to rule them all', page.data['a_datum_collection'].data[0].data['the_string'].label, 'should have been updated'
+        assert_equal 'The string to rule them all', page.data['a_datum_collection'].data[0].data['the_string'].label, 'Should have been updated'
 
-        @datum_template.update_attribute :label, 'The string'
-        @datum_template.send :propagate_updates
+        @datum_template.label = 'The string'
+        @content_template.save
 
-        assert_equal 'The string', page.reload.data['a_datum_collection'].data[0].data['the_string'].label, 'should have been updated'
+        assert page.reload
+
+        assert_equal 'The string', Page.find(page.id).data['a_datum_collection'].data[0].data['the_string'].label, 'Should have been updated'
       end
     end
 
-    context 'when removing' do
+    context 'and is removed' do
       should 'propagate to field sets directly under a page' do
         page_template = Factory.create(:page_template, :datum_templates => [
           Factory.build(:field_set_template, {
@@ -174,11 +172,11 @@ class DatumTemplateTest < ActiveSupport::TestCase
         page.data['a_datum_collection'].data << @content_template.to_datum
         page.save
 
-        refute_nil page.data['a_datum_collection'].data[0].data['the_string'], 'should have the string datum'
+        refute_nil page.data['a_datum_collection'].data[0].data['the_string'], 'Should have the string datum'
 
         @datum_template.destroy
 
-        assert_nil page.reload.data['a_datum_collection'].data[0].data['the_string'], 'should not have the string datum'
+        assert_nil page.reload.data['a_datum_collection'].data[0].data['the_string'], 'Should not have the string datum'
       end
     end
   end

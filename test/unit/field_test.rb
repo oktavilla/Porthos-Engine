@@ -5,7 +5,10 @@ class FieldTest < ActiveSupport::TestCase
     field_template = Factory.build(:field_template)
     field = Field.from_template(field_template)
     assert field.kind_of?(Field)
-    assert_equal field_template.shared_attributes, field.attributes.except(:_id, :_type, :value, :active), "Should have mirrored the templates attributes"
+    field_template.shared_attributes.each do |key, attribute|
+      assert_equal attribute, field[key], "Should have mirrored the template attribute #{key}"
+    end
+    assert_equal field_template.id, field.datum_template_id
   end
 
   test 'type casting the value for a date' do

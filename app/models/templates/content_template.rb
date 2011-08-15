@@ -1,7 +1,7 @@
 class ContentTemplate < Template
   key :template_name, String
   after_destroy :propagate_removal_to_items
-  after_update :propagate_updates
+  before_save :propagate
 
   class_attribute :datum_template_classes
   self.datum_template_classes = [
@@ -36,23 +36,27 @@ class ContentTemplate < Template
   end
 
   # Finds and returns all datums matching self in field sets connected to the content template
+  # TODO: Move this to the item class
   def find_matching_field_sets_in_item(item)
     root_field_sets = item.data.find_all do |d|
-      d.respond_to?(:content_template_id) && d.content_template_id == self.id
+      d['content_template_id'] && d.content_template_id == self.id
     end
 
     datum_collection_field_sets = item.data.find_all do |d|
-      d['content_templates_ids'] && d.content_templates_ids.include?(self.id)
+      d.is_a?(DatumCollection) && d.content_templates_ids.include?(self.id)
     end.map do |datum_collection|
       datum_collection.data.find_all do |d|
-        d['content_templates_id'] && d.content_template_id == self.id
+        d['content_template_id'] && d.content_template_id == self.id
       end
     end.flatten.compact
-
     root_field_sets + datum_collection_field_sets
   end
 
 private
+
+  def propagate
+    propagate_updates unless new?
+  end
 
   # TODO: Add delayed job
   def propagate_updates
@@ -68,7 +72,7 @@ private
 
     concerned_items.each do |item|
       find_matching_field_sets_in_item(item).each do |field_set|
-        field_set.label = self.label
+        field_set.label  = self.label
         field_set.template_name = self.template_name
       end
       item.save
@@ -89,7 +93,7 @@ private
       '$pull' => {
         'data.$.data' => { 'content_template_id' => self.id }
       }
-    })
+    }, multiple: true)
 
     PageTemplate.pull({}, datum_templates: { 'content_template_id' => self.id })
   end

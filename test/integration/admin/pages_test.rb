@@ -133,8 +133,8 @@ class PagesTest < ActiveSupport::IntegrationCase
       new_page = Page.create_from_template(@page_template, :title => 'Category page')
       visit admin_item_path(new_page)
 
-      click_link I18n.t(:'admin.items.page.choose_category')
-      click_link I18n.t(:'admin.items.page.add_new_category')
+      click_link I18n.t(:'admin.items.details.choose_category')
+      click_link I18n.t(:'admin.items.details.add_new_category')
       fill_in "item_#{@page_template.handle}_tag_names", :with => 'Beverages'
       click_button I18n.t(:save)
 
@@ -151,7 +151,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       sausage_page = Factory.create(:page, :page_template => @page_template, :"#{@page_template.handle}_tag_names" => 'Sausages')
       new_page = Factory.create(:page, :page_template => @page_template, :"#{@page_template.handle}_tag_names" => 'Beverages')
       visit admin_item_path(new_page)
-      click_link I18n.t(:'admin.items.page.edit_category')
+      click_link I18n.t(:'admin.items.details.edit_category')
       select 'Sausages', :from => "item_#{@page_template.handle}_tag_names"
       click_button I18n.t(:choose)
       assert page.find('#page_category p').has_content?('Sausages'), "Category should be added"
@@ -182,11 +182,11 @@ protected
 
   def publish
     within "#page_current_publish_on_date" do
-      click_link I18n.t(:'admin.items.page.publish_now')
+      click_link I18n.t(:'admin.items.details.publish_now')
     end
   end
 
   def published?
-    !page.has_content? I18n.t(:'admin.items.page.not_published')
+    !page.has_content? I18n.t(:'admin.items.details.not_published')
   end
 end

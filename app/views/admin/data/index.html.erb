@@ -1,0 +1,61 @@
+<% @page_title = t('.title', :title => @item.title) %>
+<% @page_class = 'layout3 show' -%>
+<% @page_id = 'items' -%>
+<%= render 'admin/items/details' %>
+<div id="workspace">
+  <div class="header">
+    <h1><%= link_to @item.title, admin_item_path(@item) %></h1>
+  </div>
+  <div class="tools">
+    <div class="add">
+      <a href="#" class="new" onclick="$('#datum_classes').toggle(); return false;"><%= t('.new') %></a>
+    </div>
+    <ul style="display:none;" id="datum_classes">
+      <li><%= link_to StringField.model_name.human, new_admin_item_datum_path(@item, datum: { input_type: 'string' }, type: 'StringField') %></li>
+      <li><%= link_to LinkField.model_name.human, new_admin_item_datum_path(@item, type: 'StringField') %></li>
+      <li><%= link_to t('.date_field'), new_admin_item_datum_path(@item, datum: { input_type: 'date' }, type: 'Field') %></li>
+      <li><%= link_to t('.boolean_field'), new_admin_item_datum_path(@item, datum: { input_type: 'boolean' }, type: 'Field') %></li>
+      <li><%= link_to PageAssociation.model_name.human, new_admin_item_datum_path(@item, type: 'PageAssociation') %></li>
+      <li><%= link_to AssetAssociation.model_name.human, new_admin_item_datum_path(@item, type: 'AssetAssociation') %></li>
+      <li><%= link_to DatumCollection.model_name.human, new_admin_item_datum_path(@item, type: 'DatumCollection') %></li>
+      <% ContentTemplate.all.each do |content_template| %>
+        <li><%= link_to content_template.label, new_admin_item_datum_path(@item, :type => 'FieldSet', :template_id => content_template) %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div id="content">
+    <% if @item.data.any? -%>
+    <table id="fields_for_item_<%= @item.id %>" class="sortable">
+      <thead>
+        <tr>
+          <th class="sort"></th>
+          <th><%= Datum.human_attribute_name(:label) %></th>
+          <th><%= Datum.human_attribute_name(:instruction_body) %></th>
+          <th><%= Datum.human_attribute_name(:handle) %></th>
+          <th><%= Datum.human_attribute_name(:_type) %></th>
+          <th><%= Datum.human_attribute_name(:required) %></th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody id="data" data-sort-uri="<%= sort_admin_item_data_path(@item) %>">
+        <% @item.data.each do |datum| -%>
+        <tr id="datum_<%= datum.id %>">
+          <td class="sort"><span class="drag_handle"></span></td>
+          <td class="label"><%= datum.label %></td>
+          <td class="instructions"><%= datum.instruction_body %></td>
+          <td><%= datum.handle %></td>
+          <td><%= datum.class.model_name.human %></td>
+          <td><%= t(datum.required? ? :yes : :no) %></td>
+          <td><%= link_to t(:edit), edit_admin_item_datum_path(@item, datum) %></td>
+          <td>
+            <%= link_to t(:destroy), admin_item_datum_path(@item, datum, :return_to => admin_item_data_path(@item)), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum.label}? Fältet och dess information kommer tas bort från alla #{@item.title} sidor." %>
+          </td>
+        </tr>
+        <% end -%>
+      </tbody>
+    </table>
+    <% else -%>
+    <p class="notice"><%= t('.blank_slate') %></p>
+    <% end -%>
+  </div>
+</div>

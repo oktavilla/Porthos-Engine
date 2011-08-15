@@ -32,6 +32,14 @@ class PageTest < ActiveSupport::TestCase
     assert_equal 'super-awesome', @page.handle
   end
 
+  context 'with a page template with a section' do
+    should 'be access the section directly' do
+      section = Factory.create(:section, page_template_id: @page_template.id)
+      assert_equal section, @page.section
+      assert_equal @page_template.section, @page.section
+    end
+  end
+
   context 'when sortable' do
     setup do
       @page_template.update_attribute :pages_sortable, true

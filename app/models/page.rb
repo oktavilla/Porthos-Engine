@@ -26,6 +26,10 @@ class Page < Section
     where(:$or => [{:restricted => restricted}, { :restricted => false}])
   }
 
+  def section
+    @section ||= Section.where(page_template_id: self.page_template_id).first
+  end
+
   def can_have_a_node?
     published_on.present? && page_template.allow_node_placements? && node.blank?
   end

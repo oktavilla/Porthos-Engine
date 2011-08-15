@@ -13,9 +13,10 @@ class AssetAssociation < Datum
 private
 
   def dup_asset_attributes
-    if asset
-      self.title = asset.title
-      self.description = asset.description
+    if asset && new?
+      %w{title description author}.each do |field|
+        self[field] = asset[field]
+      end
     end
   end
 

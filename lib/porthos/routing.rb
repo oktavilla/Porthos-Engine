@@ -14,11 +14,12 @@ module Porthos
     mattr_accessor :rules
     class Rule
       include Comparable
-      attr_reader :path,
-                  :constraints,
-                  :controller,
-                  :action,
-                  :namespace
+      attr_accessor :path,
+                    :constraints,
+                    :controller,
+                    :action,
+                    :namespace,
+                    :prefix
 
       def <=>(other_rule)
         self.compare_string <=> other_rule.compare_string
@@ -63,7 +64,7 @@ module Porthos
       end
 
       def regexp_template
-        "^(.*|)/#{translated_path}".tap do |regexp_template|
+        "^(#{regexp_prefix})/#{translated_path}".tap do |regexp_template|
           template = regexp_template
           constraints.each do |key, value|
             template.gsub!(":#{key.to_s}", value)
@@ -72,20 +73,28 @@ module Porthos
         end.mb_chars
       end
 
+      def regexp_prefix
+        prefix ? translate(prefix) : '.*|'
+      end
+
       def translated_path
-        path.dup.tap do |translated_path|
-          template = translated_path
-          path.scan(/\%{([\w\.]+)}/).flatten.each do |string|
-            template.gsub!("%{#{string}}", I18n.t("routes.#{string}"))
-          end
-          translated_path.replace(template)
-        end
+        translate(path)
       end
 
     private
 
       def compare_string
         @compare_string ||= "#{path}-#{controller}-#{action}"
+      end
+
+      def translate(i18n_string)
+        i18n_string.dup.tap do |translated_string|
+          template = translated_string
+          i18n_string.scan(/\%{([\w\.]+)}/).flatten.each do |string|
+            template.gsub!("%{#{string}}", I18n.t("routes.#{string}"))
+          end
+          translated_string.replace(template)
+        end
       end
 
       class << self
@@ -100,6 +109,7 @@ module Porthos
       include Enumerable
 
       def initialize(rules = [])
+        @default_options = {}
         @rules = rules.map { |r| Rule.from_hash(r) }
       end
 
@@ -131,8 +141,15 @@ module Porthos
         end
       end
 
+      def with(options = {}, &block)
+        @default_options = options
+        instance_exec(&block)
+        @default_options = {}
+      end
+
       def match(path, options)
         self << { :path => path }.tap do |new_rule|
+          new_rule.merge!(@default_options)
           new_rule.merge!(options.delete(:to))
           new_rule.merge!(options)
         end

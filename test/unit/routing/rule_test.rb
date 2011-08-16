@@ -38,9 +38,15 @@ class RuleTest < ActiveSupport::TestCase
       assert_equal "#{I18n.t('routes.authors')}/:genre/:id", @rule.translated_path
     end
 
-    should 'be compiled to regexp with constraints' do
+    should 'be compiled to regexp with constraints (without prefix)' do
       constraints = @attrs[:constraints]
       assert_equal "^(.*|)/#{I18n.t('routes.authors')}/#{constraints[:genre]}/#{constraints[:id]}", @rule.regexp_template
+    end
+
+    should 'be compiled to regexp with constraints (with prefix)' do
+      constraints = @attrs[:constraints]
+      @rule.prefix = 'super-items'
+      assert_equal "^(super-items)/#{I18n.t('routes.authors')}/#{constraints[:genre]}/#{constraints[:id]}", @rule.regexp_template
     end
 
     should 'get computed' do

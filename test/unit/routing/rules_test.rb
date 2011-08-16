@@ -63,6 +63,23 @@ class RulesTest < ActiveSupport::TestCase
       assert_equal @size + 2, @rules.size
       assert @rules.all? { |r| r.is_a?(Rule) }
     end
+
+    should 'work with blocks (with, draw)' do
+      @rules.reset!
+      @rules.draw do
+        with :namespace => 'universe', :prefix => 'items' do
+          match ':id',
+            to: { controller: 'authors', action: 'show'}
+          match 'by/:genre',
+            to: { controller: 'authors', action: 'index' },
+            constraints: { genre: '([a-z]+)' }
+        end
+      end
+      assert_equal 2, @rules.size
+      assert @rules.all? { |r| r.is_a?(Rule) }
+      assert_equal 'universe', @rules.first.namespace
+      assert_equal 'items', @rules.first.prefix
+    end
   end
 
   should 'sort rules by constraints' do

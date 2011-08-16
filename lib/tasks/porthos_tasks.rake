@@ -133,6 +133,39 @@ namespace :porthos do
           end
         end
       end
+
+      desc "Add datum_template_id to data"
+      task :add_datum_template_id_to_data => :environment do
+        Template.all.each do |template|
+          puts "Updating #{template.class} #{template.label}"
+          template.datum_templates.each do |datum_template|
+            puts "in #{datum_template.class} #{datum_template.label}"
+            if template.is_a?(PageTemplate)
+              updates = datum_template.shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) }
+              puts Page.collection.update({
+                'page_template_id' => template.id,
+                'data.handle' => datum_template.handle
+              }, {
+                '$set' => updates
+              }, :multi => true, :safe => true).inspect
+            elsif template.is_a?(ContentTemplate)
+              template.concerned_items.each do |item|
+                puts "Updating #{item.class.model_name} #{item.title}"
+                template.find_matching_field_sets_in_item(item).each do |field_set|
+                  puts "found field set #{field_set.label}"
+                  field_set.data.detect { |datum| datum.handle == datum_template.handle }.tap do |datum|
+                    puts "found datum #{datum.id}"
+                    puts "updating with datum_template #{datum_template.id}"
+                    datum.assign(datum_template.shared_attributes) if datum
+                  end
+                end
+                puts "Saved #{item.save}"
+              end
+            end
+          end
+        end
+      end
+
     end
   end
 end

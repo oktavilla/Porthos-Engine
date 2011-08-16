@@ -534,6 +534,8 @@
       index:
         upload: Ladda upp filer
     data:
+      index:
+        new: Lägg till fält
       image_form:
         edit_asset: Ändra bildtext
         choose_image: Välj bild
@@ -580,6 +582,7 @@
         add_content: Lägg till innehåll
         add_datum: "Lägg till %{label}"
       section:
+        edit_data_definitions: Ändra fält
         add_content: Lägg till innehåll
         add_datum: "Lägg till %{label}"
       details:

@@ -161,74 +161,79 @@
         $('#choose_page_category_form, #page_categories_form').toggle();
       });
 
-      $link_fields = $content.find('div.link_field_form');
-      if ($link_fields.size() > 0) {
-        var selects = [],
-            $master_select = $('<select data-placeholder="Välj var du vill länka ..." style="width:450px"><option data-resource-type="" value="">Välj var du vill länka ...</option></select>');
-        $link_fields.each(function() {
-          var $container = $(this),
-              $resource_id = $container.find('input.resource_id'),
-              $resource_type = $container.find('input.resource_type'),
-              $select = $master_select.clone().appendTo($container).chosen().bind('change', function(event) {
-                var $selected = $(this).find(':selected');
-                $resource_id.val($selected.val());
-                $resource_type.val($selected.data('resource-type'));
-              }).data('current-selected', $resource_id.val());
-          $container.find('div.link_field_resource').hide();
-          selects.push($select);
-        });
-        $.getJSON('/admin/nodes', function(data) {
-          var options = '<optgroup label="Nodes">',
-              page_types = ['Page', 'Section', 'CustomPage'];
-          $.each(data, function(i, node) {
-            if ($.inArray(node['resource_type'], page_types) === -1) {
-              options += '<option data-resource-type="Node" value="'+node['id']+'">'+node['name']+'</option>';
-            }
-          });
-          options += '</optgroup>';
-          $.each(selects, function(i, $select) {
-            $select.append(options);
-            var current_selected = $select.data('current-selected');
-            if (current_selected !== '') {
-              $select.find('option[value="'+current_selected+'"]').attr('selected', 'selected');
-            }
-            $select.trigger('liszt:updated');
-          });
-        });
+      (function() {
+        $link_fields = $content.find('div.link_field_form');
+        if ($link_fields.size() > 0) {
+          var selects = [],
+              $master_select = $('<select data-placeholder="Välj var du vill länka ..." style="width:450px"><option data-resource-type="" value="">Välj var du vill länka ...</option></select>');
 
-        $.getJSON('/admin/page_templates', function(data) {
-          var types = {
-            'none': {
-              title: 'Anpassade sidor',
-              options: ''
-            }
+          var updateSelects = function (selects, options) {
+            $.each(selects, function(i, $select) {
+              $select.append(options);
+              var current_selected = $select.data('current-selected');
+              if (current_selected !== '') {
+                $select.find('option[value="'+current_selected+'"]').attr('selected', 'selected');
+              }
+              $select.trigger('liszt:updated');
+            });
           };
-          $.each(data, function(i, type) {
-            types[type.id] = {
-              title: type.label,
-              options: ''
-            };
+
+          $link_fields.each(function() {
+            var $container = $(this),
+                $resource_id = $container.find('input.resource_id'),
+                $resource_type = $container.find('input.resource_type'),
+                $select = $master_select.clone().appendTo($container).chosen().bind('change', function(event) {
+                  var $selected = $(this).find(':selected');
+                  $resource_id.val($selected.val());
+                  $resource_type.val($selected.data('resource-type'));
+                }).data('current-selected', $resource_id.val());
+            $container.find('div.link_field_resource').hide();
+            selects.push($select);
           });
-          $.getJSON('/admin/items', function(data) {
-            $.each(data, function(i, item) {
-              var option = '<option data-resource-type="'+item['_type']+'" value="'+item['id']+'">'+item['title']+'</option>';
-              if (item['_type'] === 'Page') {
-                types[item.page_template_id].options += option
-              } else if (item['_type'] === 'CustomPage') {
-                types['none'].options += option;
+          $.getJSON('/admin/nodes', function(data) {
+            var options = '<optgroup label="Nodes">',
+                page_types = ['Page', 'Section', 'CustomPage'];
+            $.each(data, function(i, node) {
+              if ($.inArray(node['resource_type'], page_types) === -1) {
+                options += '<option data-resource-type="Node" value="'+node['id']+'">'+node['name']+'</option>';
               }
             });
-            var optgroups = '';
-            $.each(types, function(i, type) {
-              optgroups += '<optgroup label="'+type.title+'">'+type.options+'</optgroup>';
-            });
+            options += '</optgroup>';
+            updateSelects(selects, options);
+          });
 
-            $.each(selects, function(i, $select) {
-              $select.append(optgroups).trigger('liszt:updated');
+          $.getJSON('/admin/page_templates', function(data) {
+            var types = {
+              'none': {
+                title: 'Anpassade sidor',
+                options: ''
+              }
+            };
+            $.each(data, function(i, type) {
+              types[type.id] = {
+                title: type.label,
+                options: ''
+              };
+            });
+            $.getJSON('/admin/items', function(data) {
+              $.each(data, function(i, item) {
+                var option = '<option data-resource-type="'+item['_type']+'" value="'+item['id']+'">'+item['title']+'</option>';
+                if (item['_type'] === 'Page') {
+                  types[item.page_template_id].options += option
+                } else if (item['_type'] === 'CustomPage') {
+                  types['none'].options += option;
+                }
+              });
+              var optgroups = '';
+              $.each(types, function(i, type) {
+                optgroups += '<optgroup label="'+type.title+'">'+type.options+'</optgroup>';
+              });
+
+              updateSelects(selects, optgroups)
             });
           });
-        });
-      }
+        }
+      }).call(this);
     };
 
     return {

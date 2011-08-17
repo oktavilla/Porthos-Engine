@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = '~> 1.3.6'
 
-  s.add_dependency 'rails', '3.1.0.rc5'
+  s.add_dependency 'rails', '~> 3.1.0.rc'
 
   # Asset pipeline
   s.add_dependency 'sass-rails', "~> 3.1.0.rc"

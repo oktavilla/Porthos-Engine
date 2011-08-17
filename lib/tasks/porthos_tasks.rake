@@ -154,9 +154,11 @@ namespace :porthos do
                 template.find_matching_field_sets_in_item(item).each do |field_set|
                   puts "found field set #{field_set.label}"
                   field_set.data.detect { |datum| datum.handle == datum_template.handle }.tap do |datum|
-                    puts "found datum #{datum.id}"
-                    puts "updating with datum_template #{datum_template.id}"
-                    datum.assign(datum_template.shared_attributes) if datum
+                    if datum
+                      puts "found datum #{datum.id}"
+                      puts "updating with datum_template #{datum_template.id}"
+                      datum.assign(datum_template.shared_attributes)
+                    end
                   end
                 end
                 puts "Saved #{item.save}"

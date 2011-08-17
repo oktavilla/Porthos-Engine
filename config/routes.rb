@@ -70,7 +70,7 @@ Rails.application.routes.draw do
         put 'sort'
       end
       member do
-        put 'publish'
+        put 'toggle'
       end
       resources :data do
         collection do

@@ -111,6 +111,16 @@ class PagesTest < ActiveSupport::IntegrationCase
     assert published?, "Should get published"
   end
 
+  test 'unpublishing a page' do
+    batman = create_page
+    batman.data.each { |d| d.required = false } && batman.save
+    visit admin_item_path(batman.id)
+    publish
+    assert published?, "Should get published"
+    unpublish
+    refute published?, "Should get unpublished"
+  end
+
   test 'editing page datum attributes' do
     batman = create_page
     visit admin_item_path(batman.id)
@@ -183,6 +193,12 @@ protected
   def publish
     within "#page_current_publish_on_date" do
       click_link I18n.t(:'admin.items.details.publish_now')
+    end
+  end
+
+  def unpublish
+    within "#page_current_publish_on_date" do
+      click_link I18n.t(:'admin.items.details.unpublish')
     end
   end
 

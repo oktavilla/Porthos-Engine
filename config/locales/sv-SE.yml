@@ -590,6 +590,7 @@
         choose_category: Välj kategori
         add_new_category: Lägg till
         publish_now: Publicera
+        unpublish: Avpublicera
         not_published: Sidan är inte publicerad
     content_templates:
       index:

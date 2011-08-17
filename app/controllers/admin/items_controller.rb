@@ -85,12 +85,12 @@ class Admin::ItemsController < ApplicationController
     respond_with @item, :location => admin_items_path(:with_page_template => @item.page_template_id)
   end
 
-  def publish
+  def toggle
     @item = Item.find(params[:id])
-    @item.update_attributes(:published_on => Time.now)
+    @item.update_attributes(:published_on => (@item.published? ? nil : Time.now))
     respond_to do |format|
       format.html do
-        if @item.can_have_a_node?
+        if @item.published? && @item.can_have_a_node? && !@item.node
           redirect_to new_admin_node_path(:resource_id => @item.id)
         else
           redirect_to admin_item_path(@item.id)

@@ -1,5 +1,7 @@
 class PageTemplate < Template
   plugin MongoMapper::Plugins::IdentityMap
+  plugin Porthos::MongoMapper::Plugins::Instructable
+
   key :handle, String
   key :page_label, String
   key :template_name, String
@@ -14,7 +16,7 @@ class PageTemplate < Template
                           :case_sensitive => false,
                           :allow_blank => true
 
-  attr_accessor :handle_was_changed
+  attr_accessor :should_propagate
 
   class_attribute :datum_template_classes
   self.datum_template_classes = [
@@ -28,17 +30,23 @@ class PageTemplate < Template
     { type: 'DatumCollectionTemplate' }
   ]
 
-  before_validation proc { self.handle_was_changed = true if changes.key?('handle') }
+  before_validation proc { self.should_propagate = true if changes.any? }
   after_save proc {
-    Rails.env.production? ? delay.propagate_handle : propagate_handle
-    self.handle_was_changed = false
-  }, :if => proc { handle_was_changed }
+    Rails.env.production? ? delay.propagate_updates : propagate_updates
+    self.should_propagate = false
+  }, :if => proc { should_propagate }
 
   def template
     @template ||= template_name.present? ? PageFileTemplate.new(template_name) : PageFileTemplate.default
   end
 
-  def propagate_handle
-    Page.set({ 'page_template_id' => self._root_document.id }, { :handle => handle })
+  def propagate_updates
+    Page.set({
+      'page_template_id' => self._root_document.id
+    }, self.shared_attributes.except(:page_template_id))
+  end
+
+  def shared_attributes
+    { page_template_id: self.id, handle: self.handle, instruction_id: self.instruction_id }
   end
 end

@@ -9,6 +9,9 @@
 
     <label for="item_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>
     <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>
+    <% if f.object.instruction_body.present? %>
+    <p class="instructions"><%= f.object.instruction_body %></p>
+    <% end %>
 
     <% if f.object.is_a?(Page) %>
     <div class="uri_field">

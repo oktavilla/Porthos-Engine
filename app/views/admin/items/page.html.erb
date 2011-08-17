@@ -36,6 +36,9 @@
       <div class="fullwidth">
         <%= f.text_field :title, :class => 'title' %>
       </div>
+      <% if @item.instruction_body.present? %>
+      <p class="instructions"><%= @item.instruction_body %></p>
+      <% end %>
       <% if @item.index_node.present? %>
       <div class="uri_field">
         <label for="item_uri">Adress:</label>

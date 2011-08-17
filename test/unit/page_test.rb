@@ -3,7 +3,7 @@ require_relative '../test_helper'
 class PageTest < ActiveSupport::TestCase
 
   setup do
-    @page_template = Factory.build(:page_template, :pages_sortable => false, :handle => 'super-awesome')
+    @page_template = Factory.build(:page_template, :pages_sortable => false, :handle => 'super-awesome', :instruction_body => 'This is an instruction')
     @page = Page.from_template(@page_template, :title => 'A page')
   end
 
@@ -30,6 +30,10 @@ class PageTest < ActiveSupport::TestCase
   test 'should get handle' do
     @page.save
     assert_equal 'super-awesome', @page.handle
+  end
+
+  test 'should get instruction' do
+    assert_equal 'This is an instruction', @page.instruction_body
   end
 
   context 'with a page template with a section' do

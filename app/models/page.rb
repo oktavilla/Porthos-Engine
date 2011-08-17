@@ -1,4 +1,5 @@
 class Page < Section
+  plugin Porthos::MongoMapper::Plugins::Instructable
   tankit Porthos.config.tanking.index_name do
     indexes :title
     indexes :uri
@@ -73,7 +74,7 @@ class Page < Section
 
   class << self
     def from_template(template, attributes = {})
-      self.new(attributes.merge(:page_template_id => template.id, :handle => template.handle)).tap do |page|
+      self.new(attributes.merge(template.shared_attributes)).tap do |page|
         page.data = template.datum_templates.map do |datum_template|
           datum_template.datum_class.constantize.from_template(datum_template)
         end

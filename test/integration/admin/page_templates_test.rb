@@ -20,6 +20,7 @@ class PageTemplatesTest < ActiveSupport::IntegrationCase
 
     fill_in 'page_template_label', :with => 'Article'
     fill_in 'page_template_page_label', :with => 'Title'
+    fill_in 'page_template_instruction_body', :with => 'Be smart about the title'
     fill_in 'page_template_handle', :with => 'article'
     check 'page_template_allow_node_placements'
 
@@ -59,5 +60,4 @@ class PageTemplatesTest < ActiveSupport::IntegrationCase
     assert has_flash_message?(page_template.label), 'Should have a flash notice with the new title'
     refute page.has_css?("#page_templates #page_template_#{page_template.id}"), 'page template removed'
   end
-
 end

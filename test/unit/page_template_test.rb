@@ -2,7 +2,11 @@ require_relative '../test_helper'
 class PageTemplateTest < ActiveSupport::TestCase
 
   setup do
-    @page_template = Factory.build(:page_template, :template_name => nil, :handle => 'bacon')
+    @page_template = Factory.build(:page_template, {
+      :template_name => nil,
+      :handle => 'bacon',
+      :instruction_body => 'Le instruction'
+    })
   end
 
   test 'presence of label' do
@@ -27,11 +31,19 @@ class PageTemplateTest < ActiveSupport::TestCase
     assert_equal PageFileTemplate.new('default'), @page_template.template, "Should have instantiated a page file template from the handle"
   end
 
-  test 'propagate handle on update' do
+  test 'propagate shared attrbutes to items' do
     page = Page.from_template(@page_template, :title => 'Chunky')
     page.save
-    @page_template.update_attributes(:handle => 'bananas')
+    assert_equal 'bacon', page.handle
+    assert_equal 'Le instruction', page.instruction_body
+
+    @page_template.instruction_id = Porthos::MongoMapper::Instruction.create(:body => 'Banana chunks is tasty').id
+    @page_template.handle = 'bananas'
+    @page_template.save
+
+    page.send(:remove_instance_variable, :@instruction_body) # reset memoized variable
     page.reload
     assert_equal 'bananas', page.handle
+    assert_equal 'Banana chunks is tasty', page.instruction_body
   end
 end

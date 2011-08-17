@@ -32,6 +32,9 @@
                   $datum.html(datum.value);
                 }
                 break;
+              case 'LinkField':
+                $datum.html($('<a href="'+datum.url+'">'+datum.title+'</a>'));
+                break;
               case 'Field':
                 switch(datum.input_type) {
                   case 'date':

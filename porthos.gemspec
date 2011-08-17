@@ -50,7 +50,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara', '~> 1.0.1'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'rack-test'
-  s.add_development_dependency 'addressable', '2.2.4'
-  s.add_development_dependency 'webmock'
+  s.add_development_dependency 'addressable', '~> 2.2'
+  s.add_development_dependency 'webmock', '~> 1.7'
   s.add_development_dependency 'simplecov'
 end

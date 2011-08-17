@@ -54,16 +54,23 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
     should 'propagate deletion to pages data' do
       page_template = Factory.create(:page_template)
-      page = Page.create_from_template(page_template, :title => 'A story')
-
       template = page_template.datum_templates.first
 
-      assert_equal template.label, page.data[template.handle].label
+      pages = []
+      2.times do |i|
+        pages << Page.create_from_template(page_template, :title => "A story #{i}")
+      end
+
+      pages.each do |page|
+        assert page.data.one? { |d| d.datum_template_id == template.id }, "Should have a datum for the page template"
+      end
 
       assert template.destroy
-      page.reload
 
-      assert_nil page.data[template.handle], 'Should have removed the datum matching the datum template'
+      pages.each do |page|
+        page.reload
+        refute page.data.one? { |d| d.datum_template_id == template.id }, 'Should have removed the datum matching the datum template'
+      end
     end
   end
 

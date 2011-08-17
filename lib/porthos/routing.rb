@@ -74,7 +74,7 @@ module Porthos
       end
 
       def regexp_prefix
-        prefix ? translate(prefix) : '.*|'
+        prefix ? "/#{translate(prefix)}" : '.*|'
       end
 
       def translated_path

@@ -23,7 +23,7 @@ module PorthosAssetTestHelpers
   end
 
   def stub_resizor_delete
-    stub_http_request(:delete, "https://resizor.com:443/assets/1.json?api_key=test-api-key").to_return(:status => 200)
+    stub_http_request(:delete, /https\:\/\/resizor.com:443\/assets\/1.json\?api_key=/).to_return(:status => 200)
   end
 
   def stub_s3_put

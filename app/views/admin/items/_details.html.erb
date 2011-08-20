@@ -33,7 +33,7 @@
   <% end -%>
   <p>Senast ändrad: <%= @item.updated_at.strftime("%d %B %Y") %><%= " av #{@item.updated_by.name}" if @item.updated_by %>.</p>
 
-  <% if @item.page_template && @item.page_template.allow_categories? -%>
+  <% if @item.is_a?(Page) && @item.page_template.allow_categories? -%>
   <h2 class="label">Kategori</h2>
   <div id="page_category">
     <div id="category_view">

@@ -30,7 +30,8 @@ class Admin::DataController < ApplicationController
   end
 
   def edit
-    respond_with @datum = @parent.data.find(params[:id])
+    @datum = @parent.data.find(params[:id])
+    respond_with(@datum)
   end
 
   def update

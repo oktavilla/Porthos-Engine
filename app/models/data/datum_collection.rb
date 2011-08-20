@@ -13,6 +13,11 @@ class DatumCollection < Datum
   end
 
   before_save :sort_data
+  before_validation do
+    self.allowed_asset_filetypes = allowed_asset_filetypes.compact.reject { |i| i.blank? }
+    self.allowed_page_template_ids = allowed_page_template_ids.compact.reject { |i| i.blank? }
+    self.content_templates_ids = content_templates_ids.compact.reject { |i| i.blank? }
+  end
 
   def allowed_page_templates
     @allowed_page_templates ||= PageTemplate.find(allowed_page_template_ids)

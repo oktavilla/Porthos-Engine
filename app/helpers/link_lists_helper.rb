@@ -1,13 +1,16 @@
 module LinkListsHelper
   def navigation(link_list, options = {})
-    links = ''
-    link_list.links.each do |link|
+    seperator = options.delete(:seperator) || ' '
+    content_tag 'nav', navigation_links(link_list).join(seperator).html_safe, { :class => link_list.handle }.merge(options)
+  end
+
+  def navigation_links(link_list)
+    link_list.links.map do |link|
       if !!request.path.match(Regexp.new("^#{link.url}"))
-        links << link_to(link.title, link.url, :class => 'current')
+        link_to(link.title, link.url, :class => 'current')
       else
-        links << link_to(link.title, link.url)
+        link_to(link.title, link.url)
       end
     end
-    content_tag 'nav', links.html_safe, { :class => link_list.handle }.merge(options)
   end
 end

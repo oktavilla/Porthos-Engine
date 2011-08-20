@@ -40,6 +40,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'kaminari'
   s.add_dependency 'tanker'
   s.add_dependency 'stringex'
+  s.add_dependency 'addressable', '~> 2.2'
 
   # Dev dependencies
   s.add_development_dependency 'sqlite3'
@@ -50,7 +51,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara', '~> 1.0.1'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'rack-test'
-  s.add_development_dependency 'addressable', '~> 2.2'
   s.add_development_dependency 'webmock', '~> 1.7'
   s.add_development_dependency 'simplecov'
 end

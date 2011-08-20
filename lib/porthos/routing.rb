@@ -42,7 +42,7 @@ module Porthos
       end
 
       def param_keys
-        path.scan(/:(\w+)/).flatten.map(&:to_sym)
+        @param_keys ||= path.scan(/:(\w+)/).flatten.map(&:to_sym)
       end
 
       def computed_path(node, params)
@@ -64,7 +64,7 @@ module Porthos
       end
 
       def regexp_template
-        "^(#{regexp_prefix})/#{translated_path}".tap do |regexp_template|
+        @regexp_template ||= "^(#{regexp_prefix})/#{translated_path}".tap do |regexp_template|
           template = regexp_template
           constraints.each do |key, value|
             template.gsub!(":#{key.to_s}", value)
@@ -74,11 +74,11 @@ module Porthos
       end
 
       def regexp_prefix
-        prefix ? "/#{translate(prefix)}" : '.*|'
+        @regexp_prefix ||= prefix ? "/#{translate(prefix)}" : '.*|'
       end
 
       def translated_path
-        translate(path)
+        @translated_path ||= translate(path)
       end
 
     private

@@ -1,4 +1,5 @@
 require 'routing_filter'
+require 'addressable/uri'
 module RoutingFilter
   class UrlResolver < Filter
     def around_recognize(path, env, &block)
@@ -50,7 +51,6 @@ module RoutingFilter
         yield
       else
         node = nil
-        node_uri = nil
         handle = params[:handle]
         conditions = { controller: params[:controller], action: params[:action] }
         index_conditions = conditions.dup.merge(action: 'index')
@@ -66,23 +66,43 @@ module RoutingFilter
           index_conditions.merge!(handle: handle)
           if node = (Node.first(conditions) || Node.first(index_conditions))
             params[:id] = resource.uri if resource.respond_to?(:uri) and resource.uri.present?
-            node_uri = "/#{node.url}" if node.resource_id.present?
           end
         end
         if !node and handle.present?
           node = Node.first(handle: handle)
         end
+
         yield.tap do |path|
           if node
-            if node_uri
-              path.replace([node_uri])
+            if node.resource_id.present?
+              path.replace [node_uri(node, params).to_s]
             else
-              rule = Porthos::Routing.rules.find_matching_params(params)
-              path.replace([rule ? rule.computed_path(node, params) : "/#{node.url}"])
+              if rule = Porthos::Routing.rules.find_matching_params(params)
+                uri = Addressable::URI.parse(rule.computed_path(node, params))
+                query_hash = stringify_param_values(params.except(*(rule.param_keys + [:controller, :action, :handle])))
+                uri.query_values = query_hash if query_hash.any?
+                path.replace([uri.to_s])
+              else
+                path.replace [node_uri(node, params).to_s]
+              end
             end
           end
         end
       end
     end
+
+  private
+
+    def node_uri(node, params)
+      uri = Addressable::URI.parse("/#{node.url}")
+      query_hash = stringify_param_values(params.except(:controller, :action, :handle, :node, :id))
+      uri.query_values = query_hash if query_hash.any?
+      uri
+    end
+
+    def stringify_param_values(params = {})
+      params.inject({}) { |hash, (k, v)| hash.merge(k => v.to_s) }
+    end
+
   end
 end

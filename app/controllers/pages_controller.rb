@@ -49,7 +49,7 @@ class PagesController < ApplicationController
 
   def search
     filters = params[:filters] || {}
-    @page_template = PageTemplate.first(handle: @node.handle)
+    @page_template = PageTemplate.where(handle: node.handle).first
 
     template = @page_template ? @page_template.template : PageTemplate.default
 
@@ -78,7 +78,7 @@ class PagesController < ApplicationController
   end
 
   def categories
-    @page_template = PageTemplate.first(handle: @node.handle)
+    @page_template = PageTemplate.where(handle: node.handle).first
     template = @page_template ? @page_template.template : PageTemplate.default
     @page_renderer = page_renderer(template, page_template: @page_template)
 
@@ -88,17 +88,16 @@ class PagesController < ApplicationController
   end
 
   def category
-    @page_template = PageTemplate.first(handle: @node.handle)
+    @page_template = PageTemplate.where(handle: node.handle).first
     template = @page_template ? @page_template.template : PageTemplate.default
     @page_renderer = page_renderer(template, page_template: @page_template)
-
     respond_to do |format|
       format.html { render template: template.views.category }
     end
   end
 
   def tagged_with
-    @page_template = PageTemplate.first(handle: @node.handle)
+    @page_template = PageTemplate.where(handle: node.handle).first
     template = @page_template ? @page_template.template : PageTemplate.default
     @page_renderer = page_renderer(template, page_template: @page_template)
 

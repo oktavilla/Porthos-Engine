@@ -24,6 +24,15 @@ module Porthos
       bucket.objects.find(key)
     end
 
+    def exists?(key)
+      begin
+        bucket.objects.find(key)
+        true
+      rescue ::S3::Error::NoSuchKey
+        false
+      end
+    end
+
     def destroy(key)
       file = bucket.objects.find(key)
       file ? file.destroy : false

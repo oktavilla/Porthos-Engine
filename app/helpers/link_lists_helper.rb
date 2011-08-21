@@ -6,7 +6,7 @@ module LinkListsHelper
 
   def navigation_links(link_list)
     link_list.links.map do |link|
-      if !!request.path.match(Regexp.new("^#{link.url}"))
+      if !!request.fullpath.starts_with?(link.url)
         link_to(link.title, link.url, :class => 'current')
       else
         link_to(link.title, link.url)

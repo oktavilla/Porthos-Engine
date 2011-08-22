@@ -54,23 +54,4 @@ class PageTemplate < Template
     self['sortable'].present?
   end
 
-  def sortable=(value)
-    if value.is_a?(SymbolOperator)
-      self['sortable'] = value
-    elsif value.is_a?(Symbol)
-      self['sortable'] = value.public_send('desc')
-    elsif value.acts_like?(:string) && value.present?
-      field, operator = value.split('.')
-      self['sortable'] = field.to_sym.public_send(operator || 'desc')
-    elsif value.is_a?(Hash)
-      value.to_options!
-      if value[:field]
-        operator = value[:operator].present? ? value[:operator] : 'desc'
-        self['sortable'] = value[:field].to_sym.public_send(operator)
-      end
-    else
-      nil
-    end
-  end
-
 end

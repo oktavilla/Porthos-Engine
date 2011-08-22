@@ -54,17 +54,26 @@ class PageTemplateTest < ActiveSupport::TestCase
     assert_equal :position.desc, @page_template.sortable
   end
 
+  test 'sortable works when dirty' do
+    @page_template.sortable = :created_at.asc
+    assert @page_template.changes.include?(:sortable)
+    @page_template.save
+    @page_template.sortable = :position.desc
+    assert_equal :created_at.asc, @page_template.changes[:sortable][0]
+    assert_equal :position.desc, @page_template.changes[:sortable][1]
+  end
+
   test 'accepts sortable as a hash with no operator specified' do
     @page_template.assign(sortable: {
       field: 'position',
       operator: ''
     })
-    assert_equal :position.desc, @page_template.sortable
+    assert_equal :position.desc, @page_template.sortable, 'Operator should have defaulted to desc'
 
     @page_template.assign(sortable: {
       field: 'position'
     })
-    assert_equal :position.desc, @page_template.sortable
+    assert_equal :position.desc, @page_template.sortable, 'Operator should have defaulted to desc'
   end
 
   test 'accepts sortable as a symbol operator' do

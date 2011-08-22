@@ -96,7 +96,7 @@ private
                        sort(:position.desc).
                        fields(:position).limit(1).
                        first
-      self.position = last_in_list ? last_in_list.position + 1 : 1
+      self.position = last_in_list ? last_in_list.position.to_i + 1 : 1
     end
   end
 

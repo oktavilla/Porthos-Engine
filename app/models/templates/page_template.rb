@@ -5,7 +5,7 @@ class PageTemplate < Template
   key :handle, String
   key :page_label, String
   key :template_name, String
-  key :pages_sortable, Boolean, :default => lambda { false }
+  key :sortable, SymbolOperator
   key :allow_categories, Boolean, :default => lambda { false }
   key :allow_node_placements, Boolean, :default => lambda { false }
 

@@ -17,11 +17,13 @@ module Porthos
         end
 
         def from_mongo(value)
-          if value.present?
+          if !value.nil? && value.present?
             if value.kind_of?(SymbolOperator)
               value
+            elsif value.is_a?(Hash) && value[:field]
+              value[:field].public_send(value[:operator] || 'desc')
             else
-              value[:field].public_send(value[:operator])
+              nil
             end
           else
             nil

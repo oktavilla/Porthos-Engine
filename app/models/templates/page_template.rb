@@ -50,6 +50,10 @@ class PageTemplate < Template
     { page_template_id: self.id, handle: self.handle, instruction_id: self.instruction_id }
   end
 
+  def sortable?
+    self['sortable'].present?
+  end
+
   def sortable=(value)
     if value.is_a?(SymbolOperator)
       self['sortable'] = value

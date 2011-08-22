@@ -26,12 +26,12 @@
   <%= f.fields_for :sortable do |sortable| %>
     <div class="contains_input">
       <%= sortable.label :field %>
-      <%= sortable.select :field, Page.sortable_keys.map { |p| [Page.human_attribute_name(p), p.to_s] } %>
+      <%= sortable.select :field, Page.sortable_keys.map { |p| [Page.human_attribute_name(p), p.to_s] }, :selected => (f.object.sortable? ? f.object.sortable.field.to_s : ''), :include_blank => true %>
     </div>
 
     <div class="contains_input">
       <%= sortable.label :operator %>
-      <%= sortable.select :operator, ['desc', 'asc'] %>
+      <%= sortable.select :operator, ['desc', 'asc'], :selected => (f.object.sortable? ? f.object.sortable.operator.to_s : ''), :include_blank => true %>
     </div>
   <% end %>
 

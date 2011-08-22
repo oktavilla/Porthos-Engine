@@ -6,11 +6,13 @@ module Porthos
         def to_mongo(value)
           if value.nil? || value.to_s == ''
             nil
-          else
+          elsif value.kind_of?(SymbolOperator)
             {
               field: value.field,
               operator: value.operator
             }
+          elsif value.is_a?(Hash)
+            value
           end
         end
 

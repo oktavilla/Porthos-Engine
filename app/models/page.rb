@@ -1,4 +1,12 @@
 class Page < Section
+  class_attribute :sortable_keys
+  self.sortable_keys = [
+    :created_at,
+    :updated_at,
+    :published_on,
+    :position
+  ]
+
   plugin Porthos::MongoMapper::Plugins::Instructable
   tankit Porthos.config.tanking.index_name do
     indexes :title
@@ -6,10 +14,7 @@ class Page < Section
     indexes :tag_names
     indexes :data
   end
-
   key :position, Integer
-
-  delegate :sortable, :sortable?, :to => :page_template
 
   before_create :move_to_list_bottom
 
@@ -61,23 +66,26 @@ class Page < Section
     @category_method_name ||= "#{page_template.handle}_tag_names"
   end
 
+
+  def sortable
+    @sortable ||= page_template ? page_template.sortable : nil
+  end
+
+  def sortable?
+    sortable.present?
+  end
+
   def previous
     if sortable?
-      raise Page.where({
+      Page.where({
         :page_template_id => self.page_template_id,
         sortable.field.public_send('lt') => self.public_send(sortable.field)
-      }).inspect #first
+      }).first
     end
   end
 
   def next
-    raise self['created_on'].inspect
     if sortable?
-      field = sortable.field.public_send('gt')
-      raise Page.where({
-        :page_template_id => self.page_template_id,
-        sortable.field.public_send('gt') => self.public_send(sortable.field)
-      }).inspect
       Page.where({
         :page_template_id => self.page_template_id,
         sortable.field.public_send('gt') => self.public_send(sortable.field)

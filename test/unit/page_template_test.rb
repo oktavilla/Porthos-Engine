@@ -2,7 +2,7 @@ require_relative '../test_helper'
 class PageTemplateTest < ActiveSupport::TestCase
 
   setup do
-    @page_template = Factory.build(:page_template, {
+    @page_template = Factory.create(:page_template, {
       :template_name => nil,
       :handle => 'bacon',
       :instruction_body => 'Le instruction'
@@ -31,9 +31,8 @@ class PageTemplateTest < ActiveSupport::TestCase
     assert_equal PageFileTemplate.new('default'), @page_template.template, "Should have instantiated a page file template from the handle"
   end
 
-  test 'propagate shared attrbutes to items' do
-    page = Page.from_template(@page_template, :title => 'Chunky')
-    page.save
+  test 'propagate shared attributes to items' do
+    page = Page.create_from_template(@page_template, :title => 'Chunky')
     assert_equal 'bacon', page.handle
     assert_equal 'Le instruction', page.instruction_body
 
@@ -46,4 +45,28 @@ class PageTemplateTest < ActiveSupport::TestCase
     assert_equal 'bananas', page.handle
     assert_equal 'Banana chunks is tasty', page.instruction_body
   end
+
+  test 'accepts sortable as a hash' do
+    @page_template.assign(sortable: {
+      field: 'position',
+      operator: 'desc'
+    })
+    assert_equal :position.desc, @page_template.sortable
+  end
+
+  test 'accepts sortable as a symbol operator' do
+    @page_template.sortable = :position.asc
+    assert_equal :position.asc, @page_template.sortable
+  end
+
+  test 'accepts sortable as a string' do
+    @page_template.sortable = 'created_at.desc'
+    assert_equal :created_at.desc, @page_template.sortable
+  end
+
+  test 'defaults sortable operator to desc' do
+    @page_template.sortable = :position
+    assert_equal :position.desc, @page_template.sortable
+  end
+
 end

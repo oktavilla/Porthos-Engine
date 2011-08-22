@@ -44,74 +44,78 @@ class PageTest < ActiveSupport::TestCase
     end
   end
 
-  context 'when sortable with position' do
-    setup do
-      @page_template.update_attributes({
-        sortable: :position.desc
-      })
-      @page.save
-    end
+  context 'when sortable' do
 
-    should 'be sortable?' do
-      assert @page.sortable?, 'should be sortable?'
-    end
-
-    should 'delegate sortable to page_template' do
-      assert_equal :position.desc, @page.sortable
-    end
-
-    should 'get a position' do
-      assert_equal 1, @page.position
-    end
-
-    context 'with siblings' do
+    context 'using the position column' do
       setup do
-        @page2 = Page.create_from_template(@page_template, :title => 'Page 2')
+        @page_template.update_attributes({
+          sortable: :position.desc
+        })
+        @page.save
       end
 
-      should 'increment positions for new siblings' do
-        assert_equal 2, @page2.position
+      should 'be sortable?' do
+        assert @page.sortable?, 'should be sortable?'
       end
 
-      should 'get previous' do
-        assert_equal @page, @page2.previous
-        assert_nil @page.previous
+      should 'delegate sortable to page_template' do
+        assert_equal :position.desc, @page.sortable
       end
 
-      should 'get next' do
-        assert_equal @page2, @page.next
-        assert_nil @page2.next
+      should 'get a position' do
+        assert_equal 1, @page.position
+      end
+
+      context 'with siblings' do
+        setup do
+          @page2 = Page.create_from_template(@page_template, :title => 'Page 2')
+        end
+
+        should 'increment positions for new siblings' do
+          assert_equal 2, @page2.position
+        end
+
+        should 'get previous' do
+          assert_equal @page, @page2.previous
+          assert_nil @page.previous
+        end
+
+        should 'get next' do
+          assert_equal @page2, @page.next
+          assert_nil @page2.next
+        end
       end
     end
-  end
 
-  context 'when sortable with published_on' do
-    setup do
-      @page_template.update_attributes({
-        sortable: :created_on.desc
-      })
-      @page.published_on = 1.week.ago
-      @page.save
-    end
-
-    should 'not get a position' do
-      refute @page.position.present?
-    end
-
-    context 'with siblings' do
+    context 'using the published_on column' do
       setup do
-        @page2 = Page.create_from_template(@page_template, title: 'Page 2', published_on: 1.day.ago)
+        @page_template.update_attributes({
+          sortable: :published_on.desc
+        })
+        @page.published_on = 1.week.ago
+        @page.save
       end
 
-      should 'get previous' do
-        assert_equal @page, @page2.previous
-        assert_nil @page.previous
+      should 'not get a position' do
+        refute @page.position.present?
       end
 
-      should 'get next' do
-        assert_equal @page2, @page.next
-        assert_nil @page2.next
+      context 'with siblings' do
+        setup do
+          @page2 = Page.create_from_template(@page_template, title: 'Page 2', published_on: 1.day.ago)
+        end
+
+        should 'get previous' do
+          assert_equal @page, @page2.previous
+          assert_nil @page.previous
+        end
+
+        should 'get next' do
+          assert_equal @page2, @page.next
+          assert_nil @page2.next
+        end
       end
     end
+
   end
 end

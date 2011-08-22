@@ -65,10 +65,11 @@ class PageTemplate < Template
     elsif value.is_a?(Hash)
       value.to_options!
       if value[:field]
-        self['sortable'] = value[:field].to_sym.public_send(value[:operator] || 'desc')
+        operator = value[:operator].present? ? value[:operator] : 'desc'
+        self['sortable'] = value[:field].to_sym.public_send(operator)
       end
     else
-      raise value.inspect
+      nil
     end
   end
 

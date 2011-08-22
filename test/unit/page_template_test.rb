@@ -54,6 +54,19 @@ class PageTemplateTest < ActiveSupport::TestCase
     assert_equal :position.desc, @page_template.sortable
   end
 
+  test 'accepts sortable as a hash with no operator specified' do
+    @page_template.assign(sortable: {
+      field: 'position',
+      operator: ''
+    })
+    assert_equal :position.desc, @page_template.sortable
+
+    @page_template.assign(sortable: {
+      field: 'position'
+    })
+    assert_equal :position.desc, @page_template.sortable
+  end
+
   test 'accepts sortable as a symbol operator' do
     @page_template.sortable = :position.asc
     assert_equal :position.asc, @page_template.sortable

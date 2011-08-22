@@ -22,10 +22,18 @@
   <%= f.label :description %>
   <%= f.text_area :description, :rows => 3 %>
 
-  <div class="contains_input">
-    <%= f.check_box :pages_sortable %>
-    <%= f.label :pages_sortable %>
-  </div>
+  <%= f.label :sortable %>
+  <%= f.fields_for :sortable do |sortable| %>
+    <div class="contains_input">
+      <%= sortable.label :field %>
+      <%= sortable.select :field, Page.sortable_keys.map { |p| [Page.human_attribute_name(p), p.to_s] } %>
+    </div>
+
+    <div class="contains_input">
+      <%= sortable.label :operator %>
+      <%= sortable.select :operator, ['desc', 'asc'] %>
+    </div>
+  <% end %>
 
   <div class="contains_input">
     <%= f.check_box :allow_categories %>

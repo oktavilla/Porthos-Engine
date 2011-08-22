@@ -5,7 +5,7 @@ class PageTemplate < Template
   key :handle, String
   key :page_label, String
   key :template_name, String
-  key :pages_sortable, Boolean, :default => lambda { false }
+  key :sortable, SymbolOperator
   key :allow_categories, Boolean, :default => lambda { false }
   key :allow_node_placements, Boolean, :default => lambda { false }
 
@@ -49,4 +49,23 @@ class PageTemplate < Template
   def shared_attributes
     { page_template_id: self.id, handle: self.handle, instruction_id: self.instruction_id }
   end
+
+  def sortable=(value)
+    if value.is_a?(SymbolOperator)
+      self['sortable'] = value
+    elsif value.is_a?(Symbol)
+      self['sortable'] = value.public_send('desc')
+    elsif value.acts_like?(:string) && value.present?
+      field, operator = value.split('.')
+      self['sortable'] = field.to_sym.public_send(operator || 'desc')
+    elsif value.is_a?(Hash)
+      value.to_options!
+      if value[:field]
+        self['sortable'] = value[:field].to_sym.public_send(value[:operator] || 'desc')
+      end
+    else
+      raise value.inspect
+    end
+  end
+
 end

@@ -1,5 +1,6 @@
 require_relative '../../test_helper'
 class PageTemplatesTest < ActiveSupport::IntegrationCase
+
   setup do
     login!
   end
@@ -23,7 +24,9 @@ class PageTemplatesTest < ActiveSupport::IntegrationCase
     fill_in 'page_template_instruction_body', :with => 'Be smart about the title'
     fill_in 'page_template_handle', :with => 'article'
     check 'page_template_allow_node_placements'
-
+    check 'page_template_allow_categories'
+    select Page.human_attribute_name(:published_on), from: 'page_template_sortable_field'
+    select 'desc', from: 'page_template_sortable_operator'
     click_button I18n.t(:save)
 
     assert has_flash_message?('Article'), 'Should have a flash notice about the new page template'
@@ -60,4 +63,5 @@ class PageTemplatesTest < ActiveSupport::IntegrationCase
     assert has_flash_message?(page_template.label), 'Should have a flash notice with the new title'
     refute page.has_css?("#page_templates #page_template_#{page_template.id}"), 'page template removed'
   end
+
 end

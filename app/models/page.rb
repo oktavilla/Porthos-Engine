@@ -1,4 +1,12 @@
 class Page < Section
+  class_attribute :sortable_keys
+  self.sortable_keys = [
+    :created_at,
+    :updated_at,
+    :published_on,
+    :position
+  ]
+
   plugin Porthos::MongoMapper::Plugins::Instructable
   tankit Porthos.config.tanking.index_name do
     indexes :title
@@ -6,7 +14,6 @@ class Page < Section
     indexes :tag_names
     indexes :data
   end
-
   key :position, Integer
 
   before_create :move_to_list_bottom
@@ -59,17 +66,31 @@ class Page < Section
     @category_method_name ||= "#{page_template.handle}_tag_names"
   end
 
-  # Sortable methods
-  def in_list?
-    @in_list ||= page_template && page_template.pages_sortable?
+
+  def sortable
+    @sortable ||= page_template ? page_template.sortable : nil
+  end
+
+  def sortable?
+    sortable.present?
   end
 
   def previous
-    Page.with_page_template(self.page_template_id).where(:position.lt => self.position).first if in_list?
+    if sortable?
+      Page.where({
+        :page_template_id => self.page_template_id,
+        sortable.field.public_send('lt') => self.public_send(sortable.field)
+      }).first
+    end
   end
 
   def next
-    Page.with_page_template(self.page_template_id).where(:position.gt => self.position).first if in_list?
+    if sortable?
+      Page.where({
+        :page_template_id => self.page_template_id,
+        sortable.field.public_send('gt') => self.public_send(sortable.field)
+      }).first
+    end
   end
 
   class << self
@@ -91,11 +112,11 @@ class Page < Section
 private
 
   def move_to_list_bottom
-    if position.blank? && in_list?
-      last_in_list = Page.where(:page_template_id => self.page_template_id).
-                       sort(:position.desc).
-                       fields(:position).limit(1).
-                       first
+    if sortable && sortable.field == :position
+      last_in_list = Page.where(page_template_id: self.page_template_id).
+        sort(:position.desc).
+        fields(:position).limit(1).
+        first
       self.position = last_in_list ? last_in_list.position.to_i + 1 : 1
     end
   end

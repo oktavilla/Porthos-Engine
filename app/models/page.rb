@@ -80,7 +80,7 @@ class Page < Section
       Page.where({
         :page_template_id => self.page_template_id,
         sortable.field.public_send('lt') => self.public_send(sortable.field)
-      }).first
+      }).sort(sortable).limit(1).first
     end
   end
 
@@ -89,7 +89,7 @@ class Page < Section
       Page.where({
         :page_template_id => self.page_template_id,
         sortable.field.public_send('gt') => self.public_send(sortable.field)
-      }).first
+      }).sort(sortable).limit(1).first
     end
   end
 

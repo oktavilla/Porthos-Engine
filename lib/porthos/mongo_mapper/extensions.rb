@@ -34,17 +34,15 @@ module Porthos
             elsif value.nil? || value.to_s == ''
               nil
             else
-              value['field'].to_sym.public_send(value['operator'] || 'desc')
+              field, operator = value.split('.')
+              self.new(field.to_sym, operator)
             end
           end
         end
 
         module InstanceMethods
           def to_mongo
-            {
-              "field" => self.field.to_s,
-              "operator" => self.operator.to_s
-            }
+            "#{field.to_s}.#{operator}"
           end
         end
       end

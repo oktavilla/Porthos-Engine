@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 class Page < Section
   class_attribute :sortable_keys
   self.sortable_keys = [
@@ -75,11 +76,17 @@ class Page < Section
     sortable.present?
   end
 
+  # About next and previous, think of it as a list
+  # When using ascending   #   When using descending
+  #         1              #          4
+  #         2              #   next ↓ 3 ↑ previous
+  #  next ↓ 3 ↑ previous   #          2
+  #         4              #          1
+
   def previous
-    return @previous if @previous
     if sortable?
-      order = sortable.operator == 'desc' ? 'lt' : 'gt'
-      @previous ||= Page.published.where({
+      order = sortable.operator == 'desc' ? 'gt' : 'lt'
+      Page.published.where({
         :page_template_id => self.page_template_id,
         sortable.field.public_send(order) => self.public_send(sortable.field)
       }).sort(sortable).limit(1).first
@@ -87,10 +94,9 @@ class Page < Section
   end
 
   def next
-    return @next if @next
     if sortable?
-      order = sortable.operator == 'desc' ? 'gt' : 'lt'
-      @next ||= Page.published.where({
+      order = sortable.operator == 'desc' ? 'lt' : 'gt'
+      Page.published.where({
         :page_template_id => self.page_template_id,
         sortable.field.public_send(order) => self.public_send(sortable.field)
       }).sort(sortable).limit(1).first

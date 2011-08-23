@@ -49,9 +49,9 @@ class PageTest < ActiveSupport::TestCase
     context 'using the position column' do
       setup do
         @page_template.update_attributes({
-          sortable: :position.desc
+          sortable: :position.asc
         })
-        @page.save
+        @page.update_attributes(published_on: 1.week.ago)
       end
 
       should 'be sortable?' do
@@ -59,7 +59,7 @@ class PageTest < ActiveSupport::TestCase
       end
 
       should 'delegate sortable to page_template' do
-        assert_equal :position.desc, @page.sortable
+        assert_equal :position.asc, @page.sortable
       end
 
       should 'get a position' do
@@ -68,7 +68,7 @@ class PageTest < ActiveSupport::TestCase
 
       context 'with siblings' do
         setup do
-          @page2 = Page.create_from_template(@page_template, :title => 'Page 2')
+          @page2 = Page.create_from_template(@page_template, :title => 'Page 2', :published_on => 1.day.ago)
         end
 
         should 'increment positions for new siblings' do
@@ -92,8 +92,7 @@ class PageTest < ActiveSupport::TestCase
         @page_template.update_attributes({
           sortable: :published_on.desc
         })
-        @page.published_on = 1.week.ago
-        @page.save
+        @page.update_attributes(published_on: 1.week.ago)
       end
 
       should 'not get a position' do
@@ -106,13 +105,13 @@ class PageTest < ActiveSupport::TestCase
         end
 
         should 'get previous' do
-          assert_equal @page, @page2.previous
-          assert_nil @page.previous
+          assert_equal @page2, @page.previous
+          assert_nil @page2.previous
         end
 
         should 'get next' do
-          assert_equal @page2, @page.next
-          assert_nil @page2.next
+          assert_equal @page, @page2.next
+          assert_nil @page.next
         end
       end
     end

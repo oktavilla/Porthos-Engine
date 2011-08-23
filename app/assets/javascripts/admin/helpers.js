@@ -9,13 +9,15 @@
     parameterize: function(string) {
       var source = $.trim(string.toLowerCase()),
           from = "åäöàáäâèéëêìíïîòóöôùúüûÑñÇç·/_,:;",
-          to   = "aaoaaaaeeeeiiiioooouuuunncc------",
+          to   = "aaoaaaaeeeeiiiioooouuuunncc--    ",
           l    = from.length,
           i    = 0;
       for (i, l; i < l; i++) {
         source = source.replace(new RegExp(from[i], 'g'), to[i]);
       }
-      return source.replace(/[^a-zA-Z0-9 \-]/g, '').replace(/\s+/g, '-').replace(/\-+/, '-');
+      return source.replace(/[^a-zA-Z0-9 \-]/g, '')
+                   .replace(/\s+/g, '-')
+                   .replace(/\-+/, '-');
     },
 
     cloneAsUrl: function(source, target) {

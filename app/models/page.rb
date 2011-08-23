@@ -76,19 +76,23 @@ class Page < Section
   end
 
   def previous
+    return @previous if @previous
     if sortable?
-      Page.where({
+      order = sortable.operator == 'desc' ? 'lt' : 'gt'
+      @previous ||= Page.published.where({
         :page_template_id => self.page_template_id,
-        sortable.field.public_send('lt') => self.public_send(sortable.field)
+        sortable.field.public_send(order) => self.public_send(sortable.field)
       }).sort(sortable).limit(1).first
     end
   end
 
   def next
+    return @next if @next
     if sortable?
-      Page.where({
+      order = sortable.operator == 'desc' ? 'gt' : 'lt'
+      @next ||= Page.published.where({
         :page_template_id => self.page_template_id,
-        sortable.field.public_send('gt') => self.public_send(sortable.field)
+        sortable.field.public_send(order) => self.public_send(sortable.field)
       }).sort(sortable).limit(1).first
     end
   end

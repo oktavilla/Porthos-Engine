@@ -21,6 +21,7 @@
       <% end %>
     <% end -%>
   </td>
+  <td><%= item.published_on.strftime("%d %b") if item.published? && item.class == Page %></td>
   <td class="status">
     <% if item.published? %>
     <span class="status published"><%= t(:published) %></span>

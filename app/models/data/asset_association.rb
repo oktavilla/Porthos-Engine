@@ -21,11 +21,13 @@ private
   end
 
   def notify_asset
-    if changes.include?(:asset_id)
+    if changes.include?(:asset_id) && asset_id.present?
       unless asset_id_was.nil?
-       Asset.find(asset_id_was).remove_usage(self._root_document)
+        if old_asset = Asset.find(asset_id_was)
+          old_asset.remove_usage(self)
+        end
       end
-      asset.add_usage(self._root_document)
+      asset.add_usage(self)
     end
   end
 

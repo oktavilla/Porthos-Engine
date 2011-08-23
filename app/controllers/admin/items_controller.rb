@@ -3,6 +3,7 @@ class Admin::ItemsController < ApplicationController
   respond_to :html, :json
 
   has_scope :with_page_template
+  has_scope :order_by
   has_scope :created_by
   has_scope :updated_by
   has_scope :is_published
@@ -20,7 +21,11 @@ class Admin::ItemsController < ApplicationController
         @current_tags = params[:tags] || []
         @items = unless @current_tags.any?
           klass = params[:type] ? params[:type].constantize : Page
-          apply_scopes(klass).sort(order).page(params[:page])
+          scoped = apply_scopes(klass)
+          unless current_scopes.include?(:order_by)
+            scoped = scoped.sort(order)
+          end
+          scoped.page(params[:page])
         else
           tagging_options = (@page_template ? { :namespace => @page_template.handle } : {}).merge(params[:taggings] || {}).to_options
           Page.tagged_with(@current_tags, tagging_options).sort(:updated_at.desc).page(params[:page])

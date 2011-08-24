@@ -154,6 +154,11 @@
         $('#page_current_publish_on_date, #page_published_on_form').toggle();
       });
 
+      $('#page_note').delegate('a', 'click', function(event) {
+        event.preventDefault();
+        $('#page_note_view, #page_note form').toggle();
+      });
+
       $('#page_category').delegate('a.change, a.cancel', 'click', function(event) {
         event.preventDefault();
         $('#category_view, #choose_page_category_form').toggle();

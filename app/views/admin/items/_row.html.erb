@@ -12,6 +12,9 @@
     <% if item.tags && item.tags.any? -%>
     <div class="tags"><%= item.tags.collect { |tag| link_to(tag.name, admin_items_path(:tags => [tag.name]))}.join(', ').html_safe %></div>
     <% end -%>
+    <% if item.note.present? -%>
+      <p class="note"><%= item.note %></p>
+    <% end -%>
   </td>
   <td class="updated_at">
     <% if item.updated_at && item.updated_at != item.created_at -%>

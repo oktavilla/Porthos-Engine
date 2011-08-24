@@ -47,10 +47,8 @@ class PagesTest < ActiveSupport::IntegrationCase
       within '#item_attributes' do
         click_link I18n.t(:edit)
       end
-
       within 'form.item_edit' do
         fill_in 'item_title', :with => 'Robin'
-        fill_in 'item_uri', :with => 'robins-awesome-page'
         click_button I18n.t(:save)
       end
 
@@ -145,6 +143,7 @@ class PagesTest < ActiveSupport::IntegrationCase
 
       click_link I18n.t(:'admin.items.details.choose_category')
       click_link I18n.t(:'admin.items.details.add_new_category')
+      save_and_open_page
       fill_in "item_#{@page_template.handle}_tag_names", :with => 'Beverages'
       click_button I18n.t(:save)
 
@@ -165,6 +164,21 @@ class PagesTest < ActiveSupport::IntegrationCase
       select 'Sausages', :from => "item_#{@page_template.handle}_tag_names"
       click_button I18n.t(:choose)
       assert page.find('#page_category p').has_content?('Sausages'), "Category should be added"
+    end
+  end
+
+  test 'adding a note to a page' do
+    Capybara.using_driver(:selenium) do
+      User.delete_all
+      login!
+      new_page = Page.create_from_template(@page_template, :title => 'Category page')
+      visit admin_item_path(new_page)
+
+      click_link I18n.t(:'admin.items.details.add_note')
+      fill_in "item_note", :with => 'Pretty awesome'
+      click_button I18n.t(:save)
+
+      assert page.find('#page_note').has_content?('Pretty awesome'), 'note should be added'
     end
   end
 

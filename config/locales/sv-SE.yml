@@ -208,6 +208,7 @@
         description: Beskrivning
         published_on: Publiceringsdatum
         parent_id: Sidtyp
+        note: Notering
       string_field_template:
         multiline: Textfält
         allow_rich_text: Tillåt formatering
@@ -592,6 +593,7 @@
         publish_now: Publicera
         unpublish: Avpublicera
         not_published: Sidan är inte publicerad
+        add_note: Lägg till
     content_templates:
       index:
         title: Innehållstyper

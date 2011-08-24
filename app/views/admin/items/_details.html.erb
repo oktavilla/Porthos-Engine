@@ -27,6 +27,25 @@
       </div>
     <% end %>
   </div>
+  <h2 class="label">Notering</h2>
+  <div id="page_note">
+    <div id="page_note_view">
+    <% if @item.note.present? %>
+      <p class="note"><%= @item.note %></p>
+      <p><a href="#"><%= t(:edit) %></a></p>
+    <% else %>
+      <p><a href="#"><%= t('.add_note') %></a></p>
+    <% end %>
+    </div>
+    <%= form_for [:admin, @item], :as => :item, :url => admin_item_path(@item), :html => { :id => 'page_notes_form', :style => 'display:none' } do |f| -%>
+      <div>
+        <%= f.text_area :note, :rows => 5, :cols => 26 %>
+        <div class="submit">
+          <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <a href="#"><%= t(:cancel) %></a>
+        </div>
+      </div>
+    <% end -%>
+  </div>
   <h2 class="label">Skapad och ändrad</h2>
   <% if @item.created_by -%>
   <p>Skapad av: <%= @item.created_by.name %>.</p>

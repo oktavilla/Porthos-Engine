@@ -8,6 +8,7 @@ class Item
     indexes :uri
     indexes :tag_names
     indexes :data
+    indexes :note
   end
 
   key :created_by_id, ObjectId
@@ -16,6 +17,7 @@ class Item
   key :title, String
   key :uri, String
   key :handle, String
+  key :note
 
   key :active, Boolean
   key :restricted, Boolean

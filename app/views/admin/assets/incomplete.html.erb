@@ -23,6 +23,8 @@
           <div class="fullwidth"><%= text_area_tag("assets[#{asset.id}][description]", '', options = {:class => 'description', :rows => 2, :cols => 38, :id => "asset_#{index}_description"}) %></div>
           <label for="assets[<%= asset.id %>][author]">Fotograf/copyright</label>
           <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][author]", asset.author, :size => "40", :id => "asset_#{index}_author" %></div>
+          <label for="assets[<%= asset.id %>][reference_number]">Referensnummer</label>
+          <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][reference_number]", asset.reference_number, :size => "40", :id => "asset_#{index}_reference_number" %></div>
           <label for="assets[<%= asset.id %>][tag_names]">Nyckelord</label>
           <div class="fullwidth"><%= text_field_tag "assets[#{asset.id}][tag_names]", '', :size => "40", :class => 'asset_tags', :id => "asset_#{index}_tag_names" %></div>
           <p class="form_help after">Dela fler nyckelord med mellanslag.</p>

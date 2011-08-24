@@ -12,6 +12,7 @@ class Asset
   key :title, String
   key :author, String
   key :description, String
+  key :reference_number, String
   key :hidden, Boolean, :default => lambda { false }
   key :created_by_id, ObjectId
   key :_usages, Array, default: lambda { [] }
@@ -20,8 +21,9 @@ class Asset
   tankit Porthos.config.tanking.index_name, :as => 'Asset' do
     indexes :name
     indexes :title
-    indexes :description
     indexes :author
+    indexes :description
+    indexes :reference_number
     indexes :tag_names
     indexes :hidden
   end

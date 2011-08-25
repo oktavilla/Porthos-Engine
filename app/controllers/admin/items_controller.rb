@@ -42,7 +42,7 @@ class Admin::ItemsController < ApplicationController
     @query = params[:query]
     page = params[:page] || 1
     per_page = params[:per_page] ? params[:per_page].to_i : 45
-    @pages = Page.search_tank(@query, :per_page => per_page, :page => page)
+    @pages = Page.search_tank(@query, :per_page => per_page, :page => page).compact
     @page_templates = PageTemplate.all
     respond_with(@pages)
   end

@@ -32,7 +32,7 @@ class Admin::AssetsController < ApplicationController
       @query = params[:query]
       page = params[:page] || 1
       per_page = params[:per_page] ? params[:per_page].to_i : 45
-      @assets = Asset.search_tank(@query, :conditions => {'hidden' => false}, :per_page => per_page, :page => page)
+      @assets = Asset.search_tank(@query, :conditions => {'hidden' => false}, :per_page => per_page, :page => page).compact
       respond_to do |format|
         format.html do
           @current_tags = params[:tags] || []

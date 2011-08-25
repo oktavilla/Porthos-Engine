@@ -4,7 +4,19 @@ class PageTest < ActiveSupport::TestCase
 
   setup do
     @page_template = Factory.create(:page_template, :handle => 'super-awesome', :instruction_body => 'This is an instruction')
-    @page = Page.from_template(@page_template, :title => 'A page')
+    @page = Page.from_template(@page_template, :title => 'Page 1')
+  end
+
+  should 'delegate sortable?' do
+    @page_template.sortable = :position.desc
+    assert @page.sortable?, 'should be sortable?'
+    @page_template.sortable = nil
+    refute @page.sortable?
+  end
+
+  should 'delegate sortable to page_template' do
+    @page_template.sortable = :position.asc
+    assert_equal :position.asc, @page.sortable
   end
 
   should "created data from datum_templates" do
@@ -45,45 +57,38 @@ class PageTest < ActiveSupport::TestCase
   end
 
   context 'when sortable' do
+    setup do
+      @now = Time.now
+      @page_template.update_attributes({
+        sortable: :position.asc
+      })
+      @page.published_on = (@now - 1.day)
+      @page.save
+      @pages = [@page]
+      4.times do |i|
+         @pages << Page.create_from_template(@page_template, :title => "Page #{i+2}", :published_on => (@now - (i+2).days))
+      end
+    end
 
     context 'using the position column' do
-      setup do
-        @page_template.update_attributes({
-          sortable: :position.asc
-        })
-        @page.update_attributes(published_on: 1.week.ago)
+      should 'get positions' do
+        5.times do |i|
+          assert_equal i+1, @pages[i].position, "#{@pages[i].title} should have gotten position #{i+1}"
+        end
       end
 
-      should 'be sortable?' do
-        assert @page.sortable?, 'should be sortable?'
+      should 'work with previous' do
+        assert_nil @pages[0].previous
+        4.times do |i|
+          assert_equal @pages[i], @pages[i+1].previous,  "#{@pages[i+1].title} previous should be #{@pages[i].title}"
+        end
       end
 
-      should 'delegate sortable to page_template' do
-        assert_equal :position.asc, @page.sortable
-      end
-
-      should 'get a position' do
-        assert_equal 1, @page.position
-      end
-
-      context 'with siblings' do
-        setup do
-          @page2 = Page.create_from_template(@page_template, :title => 'Page 2', :published_on => 1.day.ago)
+      should 'get next' do
+        4.times do |i|
+          assert_equal @pages[i+1], @pages[i].next
         end
-
-        should 'increment positions for new siblings' do
-          assert_equal 2, @page2.position
-        end
-
-        should 'get previous' do
-          assert_equal @page, @page2.previous
-          assert_nil @page.previous
-        end
-
-        should 'get next' do
-          assert_equal @page2, @page.next
-          assert_nil @page2.next
-        end
+        assert_nil @pages[4].next
       end
     end
 
@@ -92,27 +97,20 @@ class PageTest < ActiveSupport::TestCase
         @page_template.update_attributes({
           sortable: :published_on.desc
         })
-        @page.update_attributes(published_on: 1.week.ago)
       end
 
-      should 'not get a position' do
-        refute @page.position.present?
+      should 'get previous' do
+        assert_nil @pages[0].previous
+        4.times do |i|
+          assert_equal @pages[i], @pages[i+1].previous,  "#{@pages[i+1].title} previous should be #{@pages[i].title} but was #{@pages[i+1].previous.title}"
+        end
       end
 
-      context 'with siblings' do
-        setup do
-          @page2 = Page.create_from_template(@page_template, title: 'Page 2', published_on: 1.day.ago)
+      should 'get next' do
+        4.times do |i|
+          assert_equal @pages[i+1], @pages[i].next
         end
-
-        should 'get previous' do
-          assert_equal @page2, @page.previous
-          assert_nil @page2.previous
-        end
-
-        should 'get next' do
-          assert_equal @page, @page2.next
-          assert_nil @page.next
-        end
+        assert_nil @pages[4].next
       end
     end
 

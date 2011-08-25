@@ -69,7 +69,7 @@ class Page < Section
 
 
   def sortable
-    @sortable ||= page_template ? page_template.sortable : nil
+    page_template ? page_template.sortable : nil
   end
 
   def sortable?
@@ -85,21 +85,15 @@ class Page < Section
 
   def previous
     if sortable?
-      order = sortable.operator == 'desc' ? 'gt' : 'lt'
-      Page.published.where({
-        :page_template_id => self.page_template_id,
-        sortable.field.public_send(order) => self.public_send(sortable.field)
-      }).sort(sortable).limit(1).first
+      operators = sortable.operator == 'desc' ? ['gt', 'asc'] : ['lt', 'desc']
+      get_next_or_previous(*operators)
     end
   end
 
   def next
     if sortable?
-      order = sortable.operator == 'desc' ? 'lt' : 'gt'
-      Page.published.where({
-        :page_template_id => self.page_template_id,
-        sortable.field.public_send(order) => self.public_send(sortable.field)
-      }).sort(sortable).limit(1).first
+      operators = sortable.operator == 'desc' ? ['lt', 'desc'] : ['gt', 'asc']
+      get_next_or_previous(*operators)
     end
   end
 
@@ -120,6 +114,13 @@ class Page < Section
   end
 
 private
+
+  def get_next_or_previous(compare_operator, sort_operator)
+    Page.limit(1).published.where({
+      :page_template_id => self.page_template_id,
+      sortable.field.public_send(compare_operator) => self[sortable.field]
+    }).sort(sortable.field.public_send(sort_operator)).first
+  end
 
   def move_to_list_bottom
     if sortable && sortable.field == :position

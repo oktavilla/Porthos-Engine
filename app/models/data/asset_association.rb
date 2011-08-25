@@ -22,13 +22,15 @@ private
   end
 
   def notify_asset
-    if changes.include?(:asset_id) && asset_id.present?
+    if changes.include?(:asset_id)
       unless asset_id_was.nil?
         if old_asset = Asset.find(asset_id_was)
           old_asset.remove_usage(self)
         end
       end
-      asset.add_usage(self)
+      Asset.find(asset_id).tap do |new_asset|
+        new_asset.add_usage(self) if new_asset
+      end if asset_id.present?
     end
   end
 

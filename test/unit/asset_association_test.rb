@@ -40,5 +40,29 @@ class AssetAssociationTest < ActiveSupport::TestCase
       assert @asset.usages.include?(@asset_association._root_document)
     end
 
+    context 'when changing the asset_id' do
+      setup do
+        @asset_association.save
+        @new_asset = Factory.create(:image_asset, {
+          title: 'A finer image',
+          description: 'Looks gooder it does',
+          author: 'Gods',
+          file: new_tempfile('image')
+        })
+        @asset_association.update_attributes(asset_id: @new_asset.id)
+        @asset.reload
+        @new_asset.reload
+      end
+
+      should 'notify the old asset' do
+        refute @asset.usages.include?(@asset_association._root_document), "Old asset should no longer know about the asset_association"
+      end
+
+      should 'notify the new asset' do
+        assert @new_asset.usages.include?(@asset_association._root_document), "New asset should know about the asset_association"
+      end
+
+    end
+
   end
 end

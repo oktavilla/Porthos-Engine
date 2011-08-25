@@ -9,6 +9,9 @@ class FileTemplate
 
   def initialize(name)
     @full_path = self.class.available_template_paths[name]
+    unless @full_path
+      raise "FileTemplate: #{name} is not a available template"
+    end
     @path = @full_path.gsub(/(.*)app\/views\//,'')
     @handle = name
     @name = @handle.capitalize

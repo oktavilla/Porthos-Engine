@@ -10,16 +10,13 @@ module Porthos
             if value.is_a?(SymbolOperator)
               value.to_mongo
             else
-              typecasted = if value.is_a?(Symbol)
-                self.new(value, 'desc')
-              elsif value.acts_like?(:string)
+              typecasted = if value.acts_like?(:string)
                 field, operator = value.to_s.split('.')
-                field.present? ? self.new(field.to_sym, operator || 'desc') : nil
+                field.present? ? self.new(field.to_sym, operator) : nil
               elsif value.is_a?(Hash)
                 value.to_options!
-                if value[:field]
-                  operator = value[:operator].present? ? value[:operator].to_s : 'desc'
-                  self.new(value[:field].to_sym, operator)
+                if value[:field] && value[:operator]
+                  self.new(value[:field].to_sym, value[:operator].to_s)
                 else
                   nil
                 end
@@ -35,7 +32,7 @@ module Porthos
               nil
             else
               field, operator = value.split('.')
-              self.new(field.to_sym, operator)
+              field && operator ? self.new(field.to_sym, operator) : nil
             end
           end
         end

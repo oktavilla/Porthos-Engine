@@ -143,7 +143,7 @@ class PagesTest < ActiveSupport::IntegrationCase
 
       click_link I18n.t(:'admin.items.details.choose_category')
       click_link I18n.t(:'admin.items.details.add_new_category')
-      save_and_open_page
+
       fill_in "item_#{@page_template.handle}_tag_names", :with => 'Beverages'
       click_button I18n.t(:save)
 

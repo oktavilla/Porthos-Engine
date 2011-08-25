@@ -63,19 +63,6 @@ class PageTemplateTest < ActiveSupport::TestCase
     assert_equal :position.desc, @page_template.changes[:sortable][1]
   end
 
-  test 'accepts sortable as a hash with no operator specified' do
-    @page_template.assign(sortable: {
-      field: 'position',
-      operator: ''
-    })
-    assert_equal :position.desc, @page_template.sortable, 'Operator should have defaulted to desc'
-
-    @page_template.assign(sortable: {
-      field: 'position'
-    })
-    assert_equal :position.desc, @page_template.sortable, 'Operator should have defaulted to desc'
-  end
-
   test 'accepts sortable as a symbol operator' do
     @page_template.sortable = :position.asc
     assert_equal :position.asc, @page_template.sortable
@@ -84,11 +71,6 @@ class PageTemplateTest < ActiveSupport::TestCase
   test 'accepts sortable as a string' do
     @page_template.sortable = 'created_at.desc'
     assert_equal :created_at.desc, @page_template.sortable
-  end
-
-  test 'defaults sortable operator to desc' do
-    @page_template.sortable = :position
-    assert_equal :position.desc, @page_template.sortable
   end
 
 end

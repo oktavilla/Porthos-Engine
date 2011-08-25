@@ -114,5 +114,30 @@ class PageTest < ActiveSupport::TestCase
       end
     end
 
+    context 'when used with a category' do
+      setup do
+          @page_template.update_attributes({
+          sortable: :position.asc,
+          allow_categories: true
+        })
+
+        [0, 2, 3].each do |i|
+          @pages[i].update_attributes(:"#{@page_template.handle}_tag_names" => '"The Category"')
+        end
+      end
+
+      should 'get next within category' do
+        assert_equal @pages[2], @pages[0].next_in_category
+        assert_equal @pages[3], @pages[2].next_in_category
+        assert_nil   @pages[3].next_in_category
+      end
+
+      should 'get previous within category' do
+        assert_nil   @pages[0].previous_in_category
+        assert_equal @pages[0], @pages[2].previous_in_category
+        assert_equal @pages[2], @pages[3].previous_in_category
+      end
+    end
+
   end
 end

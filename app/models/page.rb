@@ -82,18 +82,35 @@ class Page < Section
   #         2              #   next ↓ 3 ↑ previous
   #  next ↓ 3 ↑ previous   #          2
   #         4              #          1
+  #
 
   def previous
     if sortable?
-      operators = sortable.operator == 'desc' ? ['gt', 'asc'] : ['lt', 'desc']
-      get_next_or_previous(*operators)
+      get_next_or_previous(*previous_operators).first
     end
   end
 
   def next
     if sortable?
-      operators = sortable.operator == 'desc' ? ['lt', 'desc'] : ['gt', 'asc']
-      get_next_or_previous(*operators)
+      get_next_or_previous(*next_operators).first
+    end
+  end
+
+  def previous_in_category
+    if sortable?
+      get_next_or_previous(*previous_operators).where({
+        :'_tags.name'.all => [category_name],
+        :'_tags.namespace' => page_template.handle
+      }).first
+    end
+  end
+
+  def next_in_category
+    if sortable?
+      get_next_or_previous(*next_operators).where({
+        :'_tags.name'.all => [category_name],
+        :'_tags.namespace' => page_template.handle
+      }).first
     end
   end
 
@@ -115,11 +132,19 @@ class Page < Section
 
 private
 
+  def previous_operators
+    sortable.operator == 'desc' ? ['gt', 'asc'] : ['lt', 'desc']
+  end
+
+  def next_operators
+    sortable.operator == 'desc' ? ['lt', 'desc'] : ['gt', 'asc']
+  end
+
   def get_next_or_previous(compare_operator, sort_operator)
     Page.limit(1).published.where({
       :page_template_id => self.page_template_id,
       sortable.field.public_send(compare_operator) => self[sortable.field]
-    }).sort(sortable.field.public_send(sort_operator)).first
+    }).sort(sortable.field.public_send(sort_operator))
   end
 
   def move_to_list_bottom

@@ -2,7 +2,8 @@ class AssetAssociation < Datum
   plugin MongoMapper::Plugins::Dirty
 
   key :title, String
-  key :description
+  key :description, String
+  key :author, String
   key :asset_id, ObjectId
   key :allowed_asset_filetypes, Array, :default => lambda { [] }
   belongs_to :asset

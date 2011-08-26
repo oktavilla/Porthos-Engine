@@ -17,7 +17,7 @@
     <ul class="items">
     <% @pages.each do |page| %>
       <li>
-        <%= render :partial => page.template.views.admin_in_list, :locals => { :page => page } %>
+        <%= render :partial => page.template.views.admin_in_list, :locals => { :item => page } %>
       </li>
     <% end %>
     </ul>

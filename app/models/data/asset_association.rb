@@ -17,7 +17,7 @@ class AssetAssociation < Datum
     if !self['title'].nil?
       self['title']
     elsif self.asset_id.present?
-      self.asset.title
+      self.asset.title if self.asset
     end
   end
 
@@ -25,7 +25,7 @@ class AssetAssociation < Datum
     if !self['description'].nil?
       self['description']
     elsif self.asset_id.present?
-      self.asset.description
+      self.asset.description if self.asset
     end
   end
 
@@ -33,7 +33,7 @@ class AssetAssociation < Datum
     if !self['author'].nil?
       self['author']
     elsif self.asset_id.present?
-      self.asset.author
+      self.asset.author if self.asset
     end
   end
 

@@ -1,6 +1,8 @@
 class AssetAssociation < Datum
   plugin MongoMapper::Plugins::Dirty
 
+  attr_accessor :should_revert_to_asset_attributes
+
   key :title, String
   key :description, String
   key :author, String
@@ -9,6 +11,7 @@ class AssetAssociation < Datum
   belongs_to :asset
 
   before_save :notify_asset
+  before_validation :revert_to_asset_attributes
 
   def title
     if !self['title'].nil?
@@ -35,6 +38,14 @@ class AssetAssociation < Datum
   end
 
 private
+
+  def revert_to_asset_attributes
+    if !!Boolean.to_mongo(should_revert_to_asset_attributes) && asset_id.present?
+      self['title'] = nil
+      self['description'] = nil
+      self['author'] = nil
+    end
+  end
 
   def notify_asset
     if changes.include?(:asset_id)

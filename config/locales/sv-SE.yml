@@ -171,6 +171,9 @@
           sound: Ljud
           video: Video
           document: Dokument
+      asset_association:
+        description: Beskrivning
+        should_revert_to_asset_attributes: Radera den ändrade beskrivningen
       content_template:
         label: Namn
         description: Beskrivning

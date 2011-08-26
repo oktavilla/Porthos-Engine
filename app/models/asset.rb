@@ -28,6 +28,14 @@ class Asset
     indexes :hidden
   end
 
+  class_attribute :filetypes
+  self.filetypes = {
+    :image => %w(jpg jpeg png gif tiff tif),
+    :video => %w(flv mov qt mpg avi mp4),
+    :sound => %w(mp3 wav aiff aif),
+    :document => []
+  }
+
   belongs_to :created_by,
              :class_name => 'User'
 
@@ -60,16 +68,9 @@ class Asset
   after_save proc { |asset| Rails.env.production? ? asset.delay.update_tank_indexes : asset.update_tank_indexes }
   after_destroy proc { |asset| Rails.env.production? ? asset.delay.delete_tank_indexes : asset.delete_tank_indexes }
 
-  @@filetypes = {
-    :image => %w(jpg jpeg png gif tiff tif),
-    :video => %w(flv mov qt mpg avi mp4),
-    :sound => %w(mp3 wav aiff aif),
-    :document => []
-  }
-  def self.filetypes; @@filetypes end
   def self.default_filetype
-    @@filetypes.keys.detect do |key|
-      @@filetypes[key].empty?
+    filetypes.keys.detect do |key|
+      filetypes[key].empty?
     end.to_s
   end
 
@@ -79,6 +80,11 @@ class Asset
 
   def remote_url
     @remote_url ||= Porthos.s3_storage.details(full_name).url
+  end
+
+  def of_the_type(filetype)
+    type = self.filetypes[filetype.to_sym]
+    type && type.include?(self.extension)
   end
 
   def usages
@@ -110,7 +116,7 @@ class Asset
 
     def from_upload(attrs)
       extension = File.extname(attrs[:file].original_filename.downcase).gsub(/\./,'')
-      if @@filetypes[:image].include?(extension)
+      if filetypes[:image].include?(extension)
         klass = ImageAsset
       else
         klass = Asset
@@ -120,7 +126,7 @@ class Asset
 
     def filetype_for_extension(_extension)
       Asset.default_filetype.tap do |_filetype|
-        @@filetypes.each { |key, extensions| _filetype.replace(key.to_s) and break if extensions.include?(_extension) }
+        filetypes.each { |key, extensions| _filetype.replace(key.to_s) and break if extensions.include?(_extension) }
       end
     end
   end

@@ -1,0 +1,22 @@
+<div class="asset_association_form">
+  <% if datum.asset %>
+  <div class="asset">
+    <%= image_tag datum.asset.version_url(size: 'w300') %>
+  </div>
+  <% end %>
+  <%= f.label :title %>
+  <div class="fullwidth">
+  <%= f.text_field :title %>
+  </div>
+  <%= f.label :description %>
+  <div class="fullwidth">
+  <%= f.text_area :description, :rows => 4 %>
+  </div>
+  <%= f.label :author %>
+  <div class="fullwidth">
+  <%= f.text_field :author %>
+  </div>
+  <% if datum.instruction_body.present? %>
+    <p class="instructions"><%= datum.instruction_body %></p>
+  <% end %>
+</div>

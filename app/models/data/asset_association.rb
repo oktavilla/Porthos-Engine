@@ -8,18 +8,33 @@ class AssetAssociation < Datum
   key :allowed_asset_filetypes, Array, :default => lambda { [] }
   belongs_to :asset
 
-  before_save :dup_asset_attributes
   before_save :notify_asset
 
-private
-
-  def dup_asset_attributes
-    if asset && new?
-      %w{title description author}.each do |field|
-        self[field] = asset[field]
-      end
+  def title
+    if !self['title'].nil?
+      self['title']
+    elsif self.asset_id.present?
+      self.asset.title
     end
   end
+
+  def description
+    if !self['description'].nil?
+      self['description']
+    elsif self.asset_id.present?
+      self.asset.description
+    end
+  end
+
+  def author
+    if !self['author'].nil?
+      self['author']
+    elsif self.asset_id.present?
+      self.asset.author
+    end
+  end
+
+private
 
   def notify_asset
     if changes.include?(:asset_id)

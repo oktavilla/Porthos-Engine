@@ -168,6 +168,50 @@ namespace :porthos do
         end
       end
 
+      desc 'Clear asset association attributes'
+      task :clear_asset_association_attributes => :environment do
+
+        def find_associations(data_holder)
+          associations = []
+          data_holder.data.each do |d|
+            if d.is_a?(AssetAssociation)
+              puts "Found association in #{d._parent_document}"
+              associations += [d]
+            elsif d.respond_to?(:data) && d.data.any?
+              puts "Looking for enclosed associations"
+              associations += find_associations(d)
+            end
+          end
+          associations
+        end
+
+        items = Item.all
+        items.each do |i|
+          puts "Updating #{i.title} (#{i.id})"
+          found = false
+          associations = find_associations(i)
+          associations.each do |assoc|
+            puts "assigning for #{assoc.id}"
+            found = true unless found
+            assoc.assign({
+              :title => nil,
+              :description => nil,
+              :author => nil
+            })
+            if assoc.asset
+              puts "Adding usage for asset #{assoc.asset.id}"
+              assoc.asset.add_usage(assoc)
+            else
+              puts "WTF NO ASSET #{assoc.id}"
+            end
+          end
+          if found
+            puts "Saved: #{i.save}"
+          end
+        end
+      end
+
     end
+
   end
 end

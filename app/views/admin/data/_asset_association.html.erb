@@ -3,12 +3,8 @@
   <% if datum.asset.is_a?(ImageAsset) %>
   <%= image_tag datum.asset.version_url(:size => '80') %>
   <% end %>
-  <% if datum.title.present? %>
-    <div class="title"><%= datum.title %></div>
-  <% end %>
-  <% if datum.description.present? %>
-    <div class="caption"><%= datum.description %></div>
-  <% end %>
+  <div class="title"><%= datum.title %></div>
+  <div class="caption"><%= datum.description %></div>
   <div class="add">
   <%= link_to t('.edit_asset'), edit_admin_asset_path(datum.asset, :return_to => admin_item_path(@item, :anchor => "datum_#{datum.id}")), :class => 'new' %>
   <% unless datum._parent_document.is_a?(FieldSet) %>

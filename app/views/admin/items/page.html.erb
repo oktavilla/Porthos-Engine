@@ -70,7 +70,6 @@
         <div class="viewable">
           <%= render partial: "admin/data/#{(datum.is_a?(StringField) ? 'field' : datum.class.to_s.underscore)}", locals: { datum: datum } %>
         </div>
-        <% unless datum.is_a?(AssetAssociation) %>
         <div class="editable">
           <%= form_for [:admin, @item, datum], :as => :datum, :url => admin_item_datum_path(@item, datum), :html => { :id => "datum_#{datum.id}_edit" } do |f| %>
             <%= render partial: "admin/data/#{(datum.is_a?(StringField) ? 'field' : datum.class.to_s.underscore)}_form", locals: { datum: datum, f: f }%>
@@ -79,7 +78,6 @@
             </div>
           <% end %>
         </div>
-        <% end -%>
       </div>
     <% else %>
       <div class="datums_header"><%= datum.label %></div>
@@ -138,7 +136,6 @@
             <div class="viewable">
               <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}", :locals => { :datum => d }%>
             </div>
-            <% unless d.is_a?(AssetAssociation) %>
             <div class="editable">
               <%= form_for [:admin, @item, d], :as => :datum, :url => admin_item_datum_path(@item, d, :parent_id => datum), :html => { :id => "datum_#{d.id}_edit" } do |f| %>
                 <%= render :partial => "admin/data/#{(d.is_a?(StringField) ? 'field' : d.class.to_s.underscore)}_form", :locals => { :datum => d, :f => f }%>
@@ -147,7 +144,6 @@
                 </div>
               <% end %>
             </div>
-            <% end %>
           </div>
         </li>
       <% end %>

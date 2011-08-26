@@ -6,7 +6,7 @@
           $content = $('#content'),
           $sortables = $content.find('ul.sortable');
 
-      $content.find('.datum .controls').not('.datum.asset_association .controls').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
+      $content.find('.datum .controls').append('<div class="edit"><a href="#" class="change">Ändra</a></div>');
       $content.find('div.editable').hide().find('div.submit').append('eller <a href="#" class="cancel">avbryt</a>');
       $content.delegate('a.change, a.cancel', 'click', function(event) {
         event.preventDefault();
@@ -20,11 +20,14 @@
 
         var updateView = function(datum) {
           var $datum = $('#datum_'+datum.id+' div.viewable');
-
-          if (datum['_type'].match(/Association/)) {
+          if (datum['_type'] == 'PageAssociation') {
             $('#datum_'+datum.id+' div.title').html($form.find('select option:selected').text());
           } else {
             switch(datum['_type']) {
+              case 'AssetAssociation':
+                $datum.find('div.title').html(datum.title);
+                $datum.find('div.caption').html(datum.description);
+                break;
               case 'StringField':
                 if (datum.multiline && !datum.allow_rich_text) {
                   $datum.html(Porthos.Helpers.simpleFormat(datum.value));

@@ -87,14 +87,22 @@ table.pages {}
     font-size:.857142857em; }
   .datums .image .add {margin-top:.5em;}
 
-.datum.field_set {}
-  .datum.field_set .content .controls {display:none;}
-  .datum.field_set .content label {display:block;}
-  .datum.field_set .field_datum {margin-bottom:.5em;}
-.datum.link_field {}
-  .datum.link_field .content .controls {display:none;}
-  .datum.link_field .content label {display:block;}
-  .datum.link_field .field_datum {margin-bottom:.5em;}
+.datum.field_set,
+.datum.link_field,
+.datum.asset_association {
+  .content {
+    .controls { display:none; }
+    label { display:block; }
+  }
+  .field_datum { margin-bottom:.5em; }
+}
+
+.datum .asset_association_form {
+  margin-left:320px;
+  img {
+    float:left;
+    margin-left:-320px; }
+}
 
 .datum_collection {}
   .datum_collection .datums_header {
@@ -119,4 +127,4 @@ table.pages {}
         width:40px;
         height:50px;
         cursor:move;
-        background:transparent url(<%= asset_path("ui_new.png") %>) 10px -777px no-repeat; }
+        background:transparent image_url("ui_new.png") 10px -777px no-repeat; }

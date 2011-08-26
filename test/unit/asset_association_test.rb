@@ -21,16 +21,31 @@ class AssetAssociationTest < ActiveSupport::TestCase
       @page.data << @asset_association
     end
 
-    should 'dup the assets attributes when new' do
-      fields_to_be_copied = %w{title description author}
-      fields_to_be_copied.each do |field|
-        assert_nil @asset_association[field], "Should not have a value for #{field} yet"
+    should 'have an asset' do
+      assert_equal @asset, @asset_association.asset
+    end
+
+    context 'reading asset attributes' do
+      setup do
+        @attrs = %w{title description author}
       end
 
-      assert @page.save
+      should 'delegate attributes to asset' do
+        @attrs.each do |attribute|
+          assert_nil @asset_association[attribute]
+          assert_equal @asset[attribute], @asset_association.public_send(attribute)
+        end
+      end
 
-      fields_to_be_copied.each do |field|
-        assert_equal @asset[field], @asset_association[field], "Should have copied the value for #{field}"
+      should 'use own attributes when set' do
+        @asset_association.assign({
+          :title => 'A very own title',
+          :description => 'A very own description',
+          :author => 'Someone else'
+        })
+        @attrs.each do |attribute|
+          refute_equal @asset[attribute], @asset_association.public_send(attribute)
+        end
       end
     end
 
@@ -61,7 +76,6 @@ class AssetAssociationTest < ActiveSupport::TestCase
       should 'notify the new asset' do
         assert @new_asset.usages.include?(@asset_association._root_document), "New asset should know about the asset_association"
       end
-
     end
 
   end

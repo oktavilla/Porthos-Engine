@@ -11,6 +11,7 @@ class ImageAsset < Asset
     indexes :author
     indexes :tag_names
     indexes :hidden
+    indexes :reference_number
   end
 
   validates_presence_of :resizor_id,

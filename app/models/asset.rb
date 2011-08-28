@@ -33,6 +33,7 @@ class Asset
     :image => %w(jpg jpeg png gif tiff tif),
     :video => %w(flv mov qt mpg avi mp4),
     :sound => %w(mp3 wav aiff aif),
+    :pdf   => %w(pdf),
     :document => []
   }
 
@@ -53,6 +54,14 @@ class Asset
 
   scope :by_filetype, lambda { |filetype|
     where(:filetype => filetype)
+  }
+
+  scope :by_extension, lambda { |extension|
+    if extension.is_a?(Array)
+      where(:extension.in => extension)
+    else
+      where(:extension => extension)
+    end
   }
 
   scope :order_by, lambda { |order|

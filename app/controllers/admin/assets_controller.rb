@@ -13,10 +13,11 @@ class Admin::AssetsController < ApplicationController
   has_scope :created_by
   has_scope :by_type
   has_scope :by_filetype, :type => :array
+  has_scope :by_extension, :type => :array
   has_scope :order_by, :default => 'created_at DESC'
 
   def index
-    @tags = Asset.tags_by_count(:limit => 30)
+    @tags = Asset.tags_by_count
     @assets = unless @current_tags.any?
       apply_scopes(Asset).page(params[:page])
     else

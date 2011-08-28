@@ -115,11 +115,6 @@
         }
       });
 
-      $('#search_query').smartAutoComplete({
-        minCharLimit: 3,
-        source: '/admin/tags/autocomplete.json?taggable=Asset'
-      });
-
       $('#content').delegate('ul.items img', 'click', function(event) {
         if (event.target.nodeName !== 'IMG') { return; }
         event.preventDefault();

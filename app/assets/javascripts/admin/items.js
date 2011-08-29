@@ -36,7 +36,11 @@
                 }
                 break;
               case 'LinkField':
-                $datum.html($('<a href="'+datum.url+'">'+datum.title+'</a>'));
+                if (datum.url != '' || datum.resource_id != null) {
+                  $datum.html($('<a href="'+datum.url+'">'+datum.title+'</a>'));
+                } else {
+                  $datum.html('');
+                }
                 break;
               case 'Field':
                 switch(datum.input_type) {
@@ -173,10 +177,10 @@
       });
 
       (function() {
-        $link_fields = $content.find('div.link_field_form');
+        var $link_fields = $content.find('div.link_field_form');
         if ($link_fields.size() > 0) {
           var selects = [],
-              $master_select = $('<select data-placeholder="Välj var du vill länka ..." style="width:450px"><option data-resource-type="" value="">Välj var du vill länka ...</option></select>');
+              $master_select = $('<select data-placeholder="Ingen länk ..." style="width:450px"><option data-resource-type="" value="">Ingen länk ...</option></select>');
 
           var updateSelects = function (selects, options) {
             $.each(selects, function(i, $select) {

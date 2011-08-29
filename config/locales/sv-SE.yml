@@ -94,6 +94,8 @@
           other: "{{count}} fel förhindrade denna {{model}} från att sparas"
         # The variable :count is also available
         body: "Det var problem med följande fält:"
+      messages:
+        invalid_email: "verkar inte vara en giltig e-postadress"
 
   mongo_mapper:
     models:
@@ -152,6 +154,8 @@
         odd: "måste vara udda"
         even: "måste vara jämnt"
         record_invalid: "Ett fel uppstod: {{errors}}"
+        invalid_email: "verkar inte vara en giltig e-postadress"
+
       models:
         field:
           handle:

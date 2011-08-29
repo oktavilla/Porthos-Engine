@@ -30,6 +30,7 @@ module Porthos
 
 end
 
+require 'porthos/validators'
 require 'porthos/redirects'
 require 'porthos/routing'
 require 'porthos/url_resolver'
@@ -37,7 +38,6 @@ require 'porthos/authentication'
 require 'porthos/helpers/application_helper'
 require 'porthos/admin'
 require 'porthos/public'
-require 'porthos/validators'
 require 'porthos/s3_storage'
 require 'porthos/active_record/restrictions'
 require 'porthos/active_record/settingable'

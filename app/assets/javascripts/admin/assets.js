@@ -54,8 +54,7 @@
         max_width  = (cropped.w / cropped.h) * rendered.h;
         max_height = rendered.h;
       }
-
-      if (cutout.x > 0) {
+      if (typeof cutout.x !== 'undefined') {
         select_area = [
           cutout.x * factor,
           cutout.y * factor,

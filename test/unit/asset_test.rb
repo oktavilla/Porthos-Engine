@@ -50,9 +50,10 @@ class AssetTest < ActiveSupport::TestCase
 
   context 'the Asset class' do
     should 'resolve asset filetype' do
-      assert_equal 'document', Asset.filetype_for_extension('pdf')
+      assert_equal 'pdf', Asset.filetype_for_extension('pdf')
       assert_equal 'image', Asset.filetype_for_extension('jpg')
       assert_equal 'sound', Asset.filetype_for_extension('mp3')
+      assert_equal 'document', Asset.filetype_for_extension('doc')
     end
   end
 

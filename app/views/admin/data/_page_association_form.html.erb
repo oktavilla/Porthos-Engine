@@ -1,8 +1,8 @@
 <% if datum._parent_document.is_a?(DatumCollection) %>
 <%= hidden_field_tag 'parent_id', datum._parent_document.id %>
 <% end %>
-<%= f.label :page_id, for: "datum_#{datum.id}_page_id" %>
+<%= f.label :page_id, datum.label, :for => "datum_#{datum['_id']}_page_id" %>
 <% if datum.instruction_body %>
   <p class="instructions"><%= datum.instruction_body %></p>
 <% end %>
-<%= f.select :page_id, datum.targets.collect { |page| [page.title, page.id] }, { include_blank: t('choose') }, 'data-placeholder' => t('choose'), :id => "datum_#{datum.id}_page_id", :class => 'choose_me' %>
+<%= f.select :page_id, datum.targets.collect { |page| [page.title, page.id] }, { include_blank: t('choose') }, :id => "datum_#{datum['_id']}_page_id", 'data-placeholder' => t('choose'), :class => 'choose_me' %>

@@ -11,13 +11,13 @@ Gem::Specification.new do |s|
   s.description = 'A minimal CMS engine for Ruby On Rails projects'
   s.files       = Dir['{app,public,lib,config}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'Gemfile', 'README.rdoc']
 
-  s.required_rubygems_version = '~> 1.3.6'
+  s.required_rubygems_version = '~> 1.8.10'
 
-  s.add_dependency 'rails', '~> 3.1.0.rc'
+  s.add_dependency 'rails', '~> 3.1.0'
 
   # Asset pipeline
-  s.add_dependency 'sass-rails', "~> 3.1.0.rc"
-  s.add_dependency 'coffee-rails', "~> 3.1.0.rc"
+  s.add_dependency 'sass-rails', "~> 3.1.0"
+  s.add_dependency 'coffee-rails', "~> 3.1.0"
   s.add_dependency 'uglifier'
   s.add_dependency 'jquery-rails'
 
@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   # Utilities
   s.add_dependency 'delayed_job'
   s.add_dependency 'has_scope', '~> 0.5.1'
-  s.add_dependency 'routing-filter'
+  s.add_dependency 'routing-filter', '~> 0.2'
   s.add_dependency 's3'
   s.add_dependency 'resizor', '~> 0.0.9'
   s.add_dependency 'kaminari'

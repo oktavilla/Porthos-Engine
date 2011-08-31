@@ -87,7 +87,8 @@ private
       updates = shared_attributes.inject({}) { |hash, (k, v)| hash.merge({ "data.$.#{k}" => v }) }
       Page.set({
         'page_template_id' => self._root_document.id,
-        'data.datum_template_id' => self.id
+        'data.datum_template_id' => self.id,
+        '_type' => 'Page'
       }, updates)
     elsif _root_document.is_a?(ContentTemplate)
       propagate_updates_to_field_sets

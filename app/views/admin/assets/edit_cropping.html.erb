@@ -23,6 +23,7 @@
       </div>
     </div>
     <%= form_for [:admin, @asset], :as => :asset, :url => admin_asset_url(@asset) do |f| %>
+      <%= hidden_field_tag(:return_to, params[:return_to]) if params[:return_to].present? %>
       <% "c#{@cropping[:width]}x#{@cropping[:height]}".tap do |cropping_name| %>
         <div style="display:none;">
           <label for="cutout_width">Bredd</label>

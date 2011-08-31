@@ -69,7 +69,9 @@
         <h2>Beskärningar</h2>
         <ul>
         <% @asset.versions.keys.each do |cropping| %>
-          <li><%= link_to cropping, edit_cropping_admin_asset_path(@asset, :cropping => cropping) %></li>
+          <li><%= link_to cropping, edit_cropping_admin_asset_path(@asset,
+            :cropping => cropping,
+            :return_to => params[:return_to]) %></li>
         <% end %>
         </ul>
       </div>

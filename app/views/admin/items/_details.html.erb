@@ -70,7 +70,7 @@
     <% end -%>
     <%= form_for [:admin, @item], :as => :item, :url => admin_item_path(@item), :html => { :id => 'page_categories_form', :style => 'display:none;' } do |f| -%>
       <div>
-        <input id="item_story_tag_names" name="item[<%= @item.category_method_name %>][]" size="30" type="text" value="">
+        <input name="item[<%= @item.category_method_name %>][]" size="30" type="text" value="">
         <input type="submit" value="<%= t(:save) %>"> <%= t(:or) %> <a href="#"><%= t(:cancel) %></a>
       </div>
     <% end -%>

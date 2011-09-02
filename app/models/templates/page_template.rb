@@ -42,7 +42,7 @@ class PageTemplate < Template
 
   def propagate_updates
     Page.set({
-      'page_template_id' => self._root_document.id
+      'page_template_id' => self.id
     }, self.shared_attributes.except(:page_template_id))
   end
 

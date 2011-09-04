@@ -38,7 +38,7 @@ Gem::Specification.new do |s|
   s.add_dependency 's3'
   s.add_dependency 'resizor', '~> 0.0.9'
   s.add_dependency 'kaminari'
-  s.add_dependency 'tanker'
+  s.add_dependency 'tanker', '~> 1.1.4'
   s.add_dependency 'stringex'
   s.add_dependency 'addressable', '~> 2.2'
 

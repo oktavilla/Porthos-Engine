@@ -24,6 +24,10 @@ module Porthos
       bucket.objects.find(key)
     end
 
+    def url(key)
+      "http://#{bucket_name}.s3.amazonaws.com/#{key}"
+    end
+
     def exists?(key)
       begin
         bucket.objects.find(key)

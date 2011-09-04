@@ -88,7 +88,7 @@ class Asset
   end
 
   def remote_url
-    @remote_url ||= Porthos.s3_storage.details(full_name).url
+    @remote_url ||= Porthos.s3_storage.url(full_name)
   end
 
   def of_the_type(filetype)

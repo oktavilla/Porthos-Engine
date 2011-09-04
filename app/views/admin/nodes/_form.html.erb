@@ -20,6 +20,12 @@
       <%= f.label :action %>
       <%= f.text_field :action %>
 
+      <%= f.label :resource_type %>
+      <%= f.text_field :resource_type %>
+
+      <%= f.label :resource_id %>
+      <%= f.text_field :resource_id %>
+
       <%= f.label :handle %>
       <%= f.select :handle,
         PageTemplate.all.collect { |t| [t.label, t.handle] },

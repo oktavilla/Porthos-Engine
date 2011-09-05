@@ -9,7 +9,9 @@ class PageTemplate < Template
   key :allow_categories, Boolean, :default => lambda { false }
   key :allow_node_placements, Boolean, :default => lambda { false }
 
-  one :section, :class => Section
+  def section
+    @section ||= Item.where(:page_template_id => self.id, :_type => 'Section').limit(1).first
+  end
 
   validates_presence_of :handle
   validates_uniqueness_of :handle,

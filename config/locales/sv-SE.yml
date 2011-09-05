@@ -273,6 +273,8 @@
         odd: "måste vara udda"
         even: "måste vara jämnt"
         record_invalid: "Ett fel uppstod: {{errors}}"
+        invalid_email: "verkar inte vara en giltig e-postadress"
+
       models:
         field:
           handle:

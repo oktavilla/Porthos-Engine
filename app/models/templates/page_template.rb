@@ -9,7 +9,7 @@ class PageTemplate < Template
   key :allow_categories, Boolean, :default => lambda { false }
   key :allow_node_placements, Boolean, :default => lambda { false }
 
-  one :section
+  one :section, :class => Section
 
   validates_presence_of :handle
   validates_uniqueness_of :handle,

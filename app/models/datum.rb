@@ -4,8 +4,6 @@ class Datum
   key :datum_template_id, ObjectId
   key :active, Boolean, :default => lambda { true }
 
-  one :datum_template
-
   def root_embedded_document
     @root_embedded_document ||= _parent_document == _root_document ? self : _parent_document.try(:root_embedded_document)
   end

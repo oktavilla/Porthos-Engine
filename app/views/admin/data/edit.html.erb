@@ -16,5 +16,54 @@
         <%= f.submit t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), admin_item_path(@item) %>
       </div>
     <% end %>
+
+    <style>
+      #display_options {
+
+      }
+      #display_options .name {width:85px}
+      #display_options .option {
+        display:block;
+      }
+      #display_options .key {font-weight:bold;}
+    </style>
+
+    <div id="display_options">
+      <table style="width:500px; margin-top:40px;">
+        <thead>
+          <tr>
+            <th colspan="2">Display options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-type="value-list" class="value_list">
+            <td scope="row" class="name">alignment</td>
+            <td class="values">
+              <span class="value">left</span>,
+              <span class="value">center</span>,
+              <span class="value">right</span>
+            </td>
+          </tr>
+          <tr data-type="key-value-list" class="key_value_list">
+            <td scope="row" class="name">size</td>
+            <td class="values">
+              <span class="option">
+                <span class="key">Fullwidth</span>
+                <span class="value">575</span>
+              </span>
+              <span class="option">
+                <span class="key">Medium</span>
+                <span class="value">320</span>
+              </span>
+              <span class="option">
+                <span class="key">Small</span>
+                <span class="value">150</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <texarea id="display_options_output"></textarea>
   </div>
 </div>

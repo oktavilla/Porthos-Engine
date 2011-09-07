@@ -1,5 +1,6 @@
 /*
  *= require chosen
+ #= require taggable
  *= require ./clearing
  *= require ./elements
  *= require ./layout

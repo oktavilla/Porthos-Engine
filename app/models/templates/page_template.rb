@@ -34,7 +34,7 @@ class PageTemplate < Template
 
   before_validation proc { self.should_propagate = true if changes.any? }
   after_save proc {
-    Rails.env.production? ? delay.propagate_updates : propagate_updates
+    delay.propagate_updates
     self.should_propagate = false
   }, :if => proc { should_propagate }
 

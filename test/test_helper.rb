@@ -33,6 +33,8 @@ ActionMailer::Base.default_url_options[:host] = "test.com"
 
 Tanker.configuration = { :url => 'http://test.api.indextank.com' }
 
+Delayed::Worker.delay_jobs = false
+
 Rails.backtrace_cleaner.remove_silencers!
 
 # Load support files

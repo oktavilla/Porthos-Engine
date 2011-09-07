@@ -47,8 +47,8 @@ class Item
   before_save :set_updated_by
   before_save :sort_data
 
-  after_save proc { |page| Rails.env.production? ? page.delay.update_tank_indexes : page.update_tank_indexes }
-  after_destroy proc { |page| Rails.env.production? ? page.delay.delete_tank_indexes : page.delete_tank_indexes }
+  after_save proc { |page| page.delay.update_tank_indexes }
+  after_destroy proc { |page| page.delay.delete_tank_indexes }
 
   scope :by_class, lambda { |klass_name| where(type: klass_name) }
 

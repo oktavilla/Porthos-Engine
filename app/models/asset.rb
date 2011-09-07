@@ -74,8 +74,8 @@ class Asset
   before_validation :process, :if => :new_record?
   after_destroy :cleanup
 
-  after_save proc { |asset| Rails.env.production? ? asset.delay.update_tank_indexes : asset.update_tank_indexes }
-  after_destroy proc { |asset| Rails.env.production? ? asset.delay.delete_tank_indexes : asset.delete_tank_indexes }
+  after_save proc { |asset| asset.delay.update_tank_indexes }
+  after_destroy proc { |asset| asset.delay.delete_tank_indexes }
 
   def self.default_filetype
     filetypes.keys.detect do |key|

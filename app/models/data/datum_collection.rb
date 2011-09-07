@@ -24,7 +24,9 @@ class DatumCollection < Datum
   end
 
   def pages
-    @pages ||= data.active.find_all { |d| d.is_a?(PageAssociation) && d.page }.collect { |d| d.page }
+    @pages ||= data.active.find_all do |d|
+      d.is_a?(PageAssociation) && d.page && d.page.published?
+    end.collect { |d| d.page }
   end
 
   def texts

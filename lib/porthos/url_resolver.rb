@@ -47,13 +47,14 @@ module RoutingFilter
     end
 
     def around_generate(params, &block)
-      if params[:controller] =~ /admin/
+      if !params[:controller].present? or params[:controller] =~ /admin/
         yield
       else
         node = nil
         handle = params[:handle]
         conditions = { controller: params[:controller], action: params[:action] }
         index_conditions = conditions.dup.merge(action: 'index')
+        puts params.inspect
         if params[:id].present?
           resource = params[:id]
           handle = resource.handle if handle.blank? and resource.respond_to?(:handle)

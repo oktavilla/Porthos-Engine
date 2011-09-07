@@ -16,6 +16,9 @@ class RulesTest < ActiveSupport::TestCase
         constraints: { id: '([a-z0-9\-\_]+)' },
         namespace: 'internets',
         prefix: 'lulz'
+      match 'cheers-dude',
+        to: { controller: 'lols', action: 'thanks' },
+        namespace: 'internets'
     end
   end
 
@@ -28,20 +31,42 @@ class RulesTest < ActiveSupport::TestCase
     should 'find all matching by namespace' do
       recognized_routes = Porthos::Routing.recognize('/my-id-123', namespace: 'posts')
       assert_equal 1, recognized_routes.size
-      assert_equal 'posts', recognized_routes[0][:controller]
-      assert_equal 'show', recognized_routes[0][:action]
+      recognized_routes[0].tap do |route|
+        assert_equal 'posts', route[:controller]
+        assert_equal 'show', route[:action]
+      end
 
       recognized_routes = Porthos::Routing.recognize('/my-id-123', namespace: 'authors')
       assert_equal 1, recognized_routes.size
-      assert_equal 'authors', recognized_routes[0][:controller]
-      assert_equal 'show', recognized_routes[0][:action]
+      recognized_routes[0].tap do |route|
+        assert_equal 'authors', route[:controller]
+        assert_equal 'show', route[:action]
+      end
     end
 
     should 'find by matching prefix' do
       recognized_routes = Porthos::Routing.recognize('/lulz/my-id-123', namespace: 'internets')
       assert_equal 1, recognized_routes.size
-      assert_equal 'lols', recognized_routes[0][:controller]
-      assert_equal 'show', recognized_routes[0][:action]
+      recognized_routes[0].tap do |route|
+        assert_equal 'lols', route[:controller]
+        assert_equal 'show', route[:action]
+      end
     end
+
+    should 'not look further then the defined path' do
+      recognized_routes = Porthos::Routing.recognize('/cheers-dude', namespace: 'internets')
+      assert_equal 1, recognized_routes.size
+      recognized_routes[0].tap do |route|
+        assert_equal 'lols', route[:controller]
+        assert_equal 'thanks', route[:action]
+      end
+      recognized_routes = Porthos::Routing.recognize('/cheers-duderinos', namespace: 'internets')
+      assert_equal 0, recognized_routes.size
+    end
+
+    should 'ignore trailing slash' do
+      assert_equal Porthos::Routing.recognize('/cheers-dude', namespace: 'internets'), Porthos::Routing.recognize('/cheers-dude/', namespace: 'internets')
+    end
+
   end
 end

@@ -5,6 +5,7 @@
   <%= form_for [:admin, @item], :as => :item, :url => admin_items_path do |f| %>
     <%= render 'admin/shared/error_messages', :object => f.object %>
     <%= hidden_field_tag 'type', params[:type] if params[:type] %>
+    <%= hidden_field_tag 'page_template_id', params[:page_template_id] if params[:page_template_id] %>
 
     <%= f.label :title %>
     <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>

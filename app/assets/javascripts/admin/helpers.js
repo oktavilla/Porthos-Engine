@@ -119,9 +119,9 @@
 
   $(document).ready(function() {
     if ($.fn.hasOwnProperty('sortable')) {
-      $('table.sortable tbody, ul.sortable, div.sortable').sortable({
+      $('table.sortable tbody').sortable({
         handle: 'span.drag_handle',
-        items: 'tr,li,div',
+        items: 'tr',
         axis: 'y',
         helper: function(e, $row) {
           $row.children().each(function() {

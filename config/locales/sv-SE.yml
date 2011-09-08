@@ -100,6 +100,7 @@
   mongo_mapper:
     models:
       asset: Fil
+      image_asset: Bild
       content_module: Innehållsmodul
       content_template: Innehållstyp
       node: Navigationsnode
@@ -238,129 +239,6 @@
       redirect:
         path: Från
         target: Till
-
-  activerecord:
-    errors:
-      template:
-        header:
-          one:   "Ett fel förhindrade denna {{model}} från att sparas"
-          other: "{{count}} fel förhindrade denna {{model}} från att sparas"
-        # The variable :count is also available
-        body: "Det var problem med följande fält:"
-      # model.errors.full_messages format.
-      format: "{{attribute}} {{message}}"
-
-      # The values :model, :attribute and :value are always available for interpolation
-      # The value :count is available when applicable. Can be used for pluralization.
-      messages:
-        inclusion: "finns inte i listan"
-        exclusion: "är reserverat"
-        invalid: "är ogiltigt"
-        confirmation: "stämmer inte överens"
-        accepted: "måste vara accepterad"
-        empty: "får ej vara tom"
-        blank: "måste anges"
-        too_long: "är för lång (maximum är {{count}} tecken)"
-        too_short: "är för kort (minimum är {{count}} tecken)"
-        wrong_length: "har fel längd (ska vara {{count}} tecken)"
-        taken: "har redan tagits"
-        not_a_number: "är inte ett nummer"
-        greater_than: "måste vara större än {{count}}"
-        greater_than_or_equal_to: "måste vara större än eller lika med {{count}}"
-        equal_to: "måste vara samma som"
-        less_than: "måste vara mindre än {{count}}"
-        less_than_or_equal_to: "måste vara mindre än eller lika med {{count}}"
-        odd: "måste vara udda"
-        even: "måste vara jämnt"
-        record_invalid: "Ett fel uppstod: {{errors}}"
-        invalid_email: "verkar inte vara en giltig e-postadress"
-
-      models:
-        field:
-          handle:
-            reserved: används redan av sidan
-        asset:
-          file:
-            unable_to_store: kunde inte sparas
-    models:
-      asset: Fil
-      content_module: Innehållsmodul
-      node: Navigationsnode
-      page: Sida
-      content_teaser: Teaser
-      user: Användare
-      redirect: Vidarebefordring
-      field_set: Innehållstyp
-      field: Fält
-      date_time_field: Datum
-      string_field: Sträng
-      text_field: Text
-      boolean_field: Booleanskt värde
-      page_association_field: Relation till sida
-      reversed_page_association_field: Relation från en annan sidtyp
-      asset_association_field: Relation till fil
-    attributes:
-      asset:
-        file: Vald fil
-        title: Titel
-        file_name: Filnamn
-        author: Copyright
-        description: Beskrivning
-      content_module:
-        name: Namn
-        template: Modul
-      node:
-        name: Namn i navigationen
-        status: Status
-        restricted: Kräver inloggning (även undersidor)
-      page:
-        title: Namn
-        description: Beskrivning
-        published_on: Publiceringsdatum
-        parent_id: Sidtyp
-      teaser:
-        title: Rubrik
-        body: Text
-      user:
-        first_name: Förnamn
-        last_name: Efternamn
-        civic_number: Personnummer
-        username: Användarnamn
-        email: E-post
-        phone: Telefon
-        cell_phone: Mobil
-        password: Lösenord
-        password_confirmation: Lösenordsbekräftelse
-      redirect:
-        path: Från
-        target: Till
-      # You can define own errors for models or model attributes.
-      # The values :model, :attribute and :value are always available for interpolation.
-      #
-      # For example,
-      #   models:
-      #     user:
-      #       blank: "This is a custom blank message for {{model}}: {{attribute}}"
-      #       attributes:
-      #         login:
-      #           blank: "This is a custom blank message for User login"
-      # Will define custom blank validation message for User model and
-      # custom blank validation message for login attribute of User model.
-      # models:
-
-    # Translate model names. Used in Model.model_name.human().
-    #models:
-      # For example,
-      #   user: "Dude"
-      # will translate User model name to "Dude"
-
-    # Translate model attribute names. Used in Model.human_attribute_name(attribute).
-    #attributes:
-      # For example,
-      #   user:
-      #     login: "Handle"
-      # will translate User attribute "login" as "Handle"
-
   date:
     formats:
       # Use the strftime parameters for formats.
@@ -546,6 +424,10 @@
     data:
       index:
         new: Lägg till fält
+      asset_association:
+        edit_asset: Ändra filen
+        choose_asset: Välj en annan fil
+        remove_asset: Ta bort filen
       image_form:
         edit_asset: Ändra bildtext
         choose_image: Välj bild

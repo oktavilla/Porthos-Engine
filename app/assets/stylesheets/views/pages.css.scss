@@ -97,6 +97,12 @@ table.pages {}
   .field_datum { margin-bottom:.5em; }
 }
 
+.datum .link_field_form {
+  border-top:1px solid #eee;
+  margin-top:1.5em;
+  padding-top:1.5em;
+}
+
 .datum .asset_association_form {
   margin-left:170px;
   img {

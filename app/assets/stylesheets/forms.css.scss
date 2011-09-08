@@ -46,6 +46,11 @@ form .uri_field {margin-top:.8em;}
       padding:.1em;
       font-size:.8571em; }
 
+form.button_to {
+  display:inline;
+  div { display:inline; }
+}
+
 .multiple_choice {
   list-style:none;
   margin:1.5em 0 1.5em 0;}

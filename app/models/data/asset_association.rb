@@ -1,7 +1,8 @@
 class AssetAssociation < Datum
   plugin MongoMapper::Plugins::Dirty
 
-  attr_accessor :should_revert_to_asset_attributes
+  attr_accessor :should_revert_to_asset_attributes,
+                :should_clear_association
 
   key :title, String
   key :description, String
@@ -11,6 +12,7 @@ class AssetAssociation < Datum
   belongs_to :asset
 
   before_save :notify_asset
+  before_validation :clear_association
   before_validation :revert_to_asset_attributes
 
   def title
@@ -38,6 +40,14 @@ class AssetAssociation < Datum
   end
 
 private
+
+  def clear_association
+    if !!Boolean.to_mongo(should_clear_association) && asset_id.present?
+      self.should_revert_to_asset_attributes = true
+      revert_to_asset_attributes
+      self['asset_id'] = nil
+    end
+  end
 
   def revert_to_asset_attributes
     if !!Boolean.to_mongo(should_revert_to_asset_attributes) && asset_id.present?

@@ -430,8 +430,8 @@
         new: Lägg till fält
       asset_association:
         edit_asset: Ändra filen
-        choose_asset: Välj en annan fil
-        remove_asset: Ta bort filen
+        choose_asset: Välj fil
+        remove: Ta bort
       image_form:
         edit_asset: Ändra bildtext
         choose_image: Välj bild

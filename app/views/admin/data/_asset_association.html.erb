@@ -6,7 +6,6 @@
   <div class="title"><%= datum.title %></div>
   <div class="caption"><%= datum.description %></div>
   <div class="add">
-  <%= link_to t('.edit_asset'), edit_admin_asset_path(datum.asset, :return_to => admin_item_path(@item, :anchor => "datum_#{datum.id}")), :class => 'new' %>
   <% unless datum._parent_document.is_a?(FieldSet) %>
     <%= link_to t('.choose_asset'), admin_assets_path(
       :by_filetype => datum.allowed_asset_filetypes,
@@ -24,6 +23,10 @@
         :asset_field_name => CGI::escape('datum[data_attributes][0][asset_id]'),
         :params => { CGI::escape('datum[data_attributes][0][id]') => datum.id }
       }}), :class => 'new' %>
+  <% end %>
+  <%= link_to t('.edit_asset'), edit_admin_asset_path(datum.asset, :return_to => admin_item_path(@item, :anchor => "datum_#{datum.id}")), :class => 'new' %>
+  <% unless datum._parent_document.is_a?(DatumCollection) %>
+    <%= button_to t('.remove'), admin_item_datum_path(@item, datum, datum: { should_clear_association: true }), method: 'put', confirm: 'Ta bort associationen till den här filen?' %>
   <% end %>
   </div>
 </div>

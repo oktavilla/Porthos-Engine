@@ -14,7 +14,7 @@ require 'mongo_mapper'
 require 'database_cleaner'
 require 'bcrypt'
 require 'has_scope'
-require 'purdytest'
+require 'turn'
 require 'porthos/test_helpers/assets_test_helper'
 require 'porthos/test_helpers/pages_test_helper'
 

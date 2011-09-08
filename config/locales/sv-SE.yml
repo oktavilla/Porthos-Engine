@@ -205,6 +205,10 @@
         instruction_body: Instruktioner
         multiline: Löptext
         allow_rich_text: Tillåt textformatering
+      link_field:
+        title: Länktext
+        url: Adress / url
+        resource: Länka till
       node:
         name: Namn i navigationen
         status: Status

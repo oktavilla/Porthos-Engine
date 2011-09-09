@@ -68,5 +68,9 @@ class RulesTest < ActiveSupport::TestCase
       assert_equal Porthos::Routing.recognize('/cheers-dude', namespace: 'internets'), Porthos::Routing.recognize('/cheers-dude/', namespace: 'internets')
     end
 
+    should 'be case insensitive' do
+      assert_equal Porthos::Routing.recognize('/cheers-dude', namespace: 'internets'), Porthos::Routing.recognize('/CHEERS-dude', namespace: 'internets')
+    end
+
   end
 end

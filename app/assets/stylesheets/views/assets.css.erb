@@ -1,0 +1,112 @@
+#uploader {margin-bottom:50px;}
+  #init_file_dialogue h2 {margin-bottom:0;}
+  #init_file_dialogue p {margin-top:0;}
+  #uploader h2 {font-size:24px;}
+  #uploader ul {
+    list-style:none;
+    margin:0;
+    border:1px solid #ccc;
+    height: 200px;
+    width:500px;
+    overflow-y:auto;}
+  #uploader li,
+  #uploader .totals {
+    margin:0;
+    padding:7px 5px 5px 5px;
+    border-bottom: 1px solid #ddd; }
+    #uploader li .name,
+    #uploader li .size,
+    #uploader li .progress,
+    #uploader .totals .add_more,
+    #uploader .totals .size {float:left;}
+    #uploader li .name,
+    #uploader .totals .add_more {
+      width:335px;
+      color:#555;}
+    #uploader .size {
+      width:70px;
+      font-style:italic;
+      text-align:right;}
+    #uploader li .progress {
+      width:70px;
+      text-align:right; }
+    #uploader .progress {
+      color:#a8b561;
+      font-weight:bold; }
+  #uploader .totals {
+    margin-bottom:2em;
+    width:490px;
+    border:1px solid #ccc;
+    border-top:none; }
+    #uploader .totals .size,
+    #uploader .totals .progress {
+      font-weight:bold;
+      color:#000; }
+    #uploader .totals .progress {
+      float:left;
+      width:70px;
+      text-align:right; }
+  #uploader #upload_complete {
+    padding:7px 0 7px 35px;
+    background:transparent url(<%= asset_path("ui.png") %>) -19px -366px no-repeat; }
+.swfupload { position:absolute; }
+
+#assets_view .items {
+  width:100%;
+  overflow:hidden; }
+#assets_view .items li {
+  display:inline-block;
+  vertical-align:top;
+  min-height:100px;
+  width:47%;
+  margin-right:20px;
+  padding-left:0; }
+  #assets_view .items div.inner { padding-left:115px; }
+
+#assets_view.edit .meta { margin-bottom: 1em; }
+#assets_view.edit_cropping img { margin-bottom: 1em; }
+
+#assets_view.incomplete .describe_asset {
+  border-top:1px solid #ccc;
+  padding:0 0 20px 290px;
+  clear:left; }
+  #assets_view.incomplete .describe_asset .preview {
+    float:left;
+    margin:20px 0 0 -290px; }
+
+#asset_usages {}
+  #asset_usages div {
+    position:relative;
+    border-top:1px solid #ccc;
+    padding:10px 0 10px 30px; }
+  #asset_usages img {
+    margin-right:10px;
+    float:left;}
+  #asset_usages .edit {
+    position:absolute;
+    font-size:12px;
+    top:0;
+    right:0;
+    background:rgba(255,255,255,.8);
+    display:block; }
+    #asset_usages .edit a {
+      display:inline-block;
+      padding:10px 5px;
+      vertical-align:middle; }
+  #asset_usages .drag_handle {
+    position:absolute;
+    display:block;
+    top:10px;
+    left:0;
+    cursor:move;
+    height:25px;
+    width:20px;
+    background:transparent url(<%= asset_path("ui_new.png") %>) 0 -790px no-repeat; }
+
+#crop {}
+  #crop .jcrop-holder {float:left;}
+  #crop #cropped_image {
+    float:left; }
+  #crop #preview_container {
+    float:left;
+    margin:0 0 0 40px; }

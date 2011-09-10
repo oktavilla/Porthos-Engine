@@ -1,0 +1,51 @@
+<%= form_for [:admin, @page_template] do |f| %>
+  <%= render 'admin/shared/error_messages', :object => f.object %>
+  <%= hidden_field_tag('return_to', params[:return_to]) if params[:return_to] %>
+
+  <%= f.label :label %>
+  <%= f.text_field :label %>
+
+  <%= f.label :page_label %>
+  <%= f.text_field :page_label %>
+
+  <%= f.label :instruction_body %>
+  <%= f.text_area :instruction_body, rows: 4 %>
+
+  <%= f.label :handle %>
+  <%= f.text_field :handle %>
+
+  <div class="contans_input">
+    <%= f.label :template_name %>
+    <%= f.select :template_name, PageFileTemplate.all.collect { |t| [t.name.titlecase, t.handle] } %>
+  </div>
+
+  <%= f.label :description %>
+  <%= f.text_area :description, :rows => 3 %>
+
+  <%= f.label :sortable %>
+  <%= f.fields_for :sortable do |sortable| %>
+    <div class="contains_input">
+      <%= sortable.label :field %>
+      <%= sortable.select :field, Page.sortable_keys.map { |p| [Page.human_attribute_name(p), p.to_s] }, :selected => (f.object.sortable? ? f.object.sortable.field.to_s : ''), :include_blank => true %>
+    </div>
+
+    <div class="contains_input">
+      <%= sortable.label :operator %>
+      <%= sortable.select :operator, ['desc', 'asc'], :selected => (f.object.sortable? ? f.object.sortable.operator.to_s : ''), :include_blank => true %>
+    </div>
+  <% end %>
+
+  <div class="contains_input">
+    <%= f.check_box :allow_categories %>
+    <%= f.label :allow_categories %>
+  </div>
+
+  <div class="contains_input">
+    <%= f.check_box :allow_node_placements %>
+    <%= f.label :allow_node_placements %>
+  </div>
+
+  <div class="submit">
+    <%= f.submit t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), (params[:return_to] || admin_page_template_path(f.object.id)) %>
+  </div>
+<% end %>

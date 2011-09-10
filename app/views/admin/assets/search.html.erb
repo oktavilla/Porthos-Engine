@@ -1,0 +1,60 @@
+<% @page_title = "Sök filer och dokument" %>
+<% @page_class = 'layout3' %>
+<%= render :partial => 'admin/assets/sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1>Sök filer och dokument</h1>
+  </div>
+  <div id="content">
+    <div class="inner">
+      <span class="notice">
+        <% if @assets.any? %>
+          <%= @assets.total_count %> filer hittades med sökningen ”<span class="query"><%= @query %></span>”.
+          <%= link_to "Tillbaka", admin_assets_path, :class => 'back' %>
+        <% else %>
+          Inga filer hittades på din sökning. <%= link_to "Tillbaka till senaste filer", admin_assets_path, :class => 'back' %>
+        <% end %>
+      </span>
+      <% if @assets.any? %>
+      <ul class="items thumbnails">
+        <% @assets.each do |asset| %>
+          <li class="<%= cycle 'even', 'odd' %>"><div class="inner">
+            <a href="<%= edit_admin_asset_path(asset) %>">
+              <% if asset.is_a?(ImageAsset) %>
+                <%= image_tag asset.version_url(:size => '100'), :id => "asset_#{asset.id}" %>
+              <% elsif asset.respond_to?(:thumbnail) and not asset.thumbnail.blank? %>
+                <%= image_tag display_image_path(:size => '100', :id => asset.thumbnail, :format => asset.thumbnail.extension), :id => "asset_#{asset.id}" %>
+              <% else %>
+                <span class="icon"></span>
+              <% end %>
+            </a>
+            <div class="title"><%= link_to asset.title, edit_admin_asset_path(asset.id) %></div>
+            <div class="description<%= ' blank' if asset.description.blank? %>">
+              <%= asset.description.blank? ? link_to('Ingen beskrivning, skriv en ...', edit_admin_asset_path(asset.id)) : truncate(asset.description, :length => 200) %>
+            </div>
+            <% if asset.tag_names.present? %>
+              <div class="tags"><%= asset.tags.collect { |tag| @current_tags.include?(tag) ? tag.name : link_to(tag.name, admin_assets_path(:tags => [tag.name])) }.join(', ').html_safe -%></div>
+            <% end %>
+            <div class="meta">
+              <span>Uppladdad</span> den <%= asset.created_at.strftime("%d %b %Y") %>
+              <% if !asset.created_by.nil? && asset.created_by.respond_to?(:name) -%>
+                <span>av</span> <%= asset.created_by.name %>
+              <% end -%>
+            </div>
+            <div class="edit">
+              <%= link_to t(:edit), edit_admin_asset_path(asset.id, :return_to => request.path) %>
+              <%= link_to t(:destroy), admin_asset_path(asset.id), :class => 'delete', :confirm => "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig.", :method => :delete %>
+            </div>
+            <% if @create_callback.present? %>
+              <div class="add">
+                <%= render :partial => 'create_callback_form', :locals => {:create_callback => @create_callback, :asset => asset} %>
+              </div>
+            <% end %>
+          </div></li>
+        <% end %>
+      </ul>
+      <%= paginate @assets %>
+      <% end %>
+    </div>
+  </div>
+</div>

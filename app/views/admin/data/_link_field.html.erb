@@ -1,0 +1,9 @@
+<div class="title">
+<% datum.resource.tap do |resource| %>
+  <% if resource.is_a?(Node) %>
+    <a href="/<%= resource.url %>"><%= datum.title.present? ? datum.title : resource.url %></a>
+  <% elsif resource.is_a?(Item) %>
+    <a href="/<%= page_path(resource) %>"><%= datum.title.present? ? datum.title : page_path(resource) %></a>
+  <% end %>
+<% end if datum.resource %>
+</div>

@@ -1,0 +1,15 @@
+#tags_view .taggables {
+  list-style:none; }
+  #tags_view .taggables li {margin:0 0 1em 0;}
+  #tags_view .taggables .tags,
+  #tags_view .taggable.page .meta {
+    font-size:12px;
+    line-height:14px;
+    color:#666; }
+  #tags_view .taggable.page .title,
+  #tags_view .taggable.page .meta {display:block;}
+  #tags_view .taggable.asset {
+    padding-left:70px; }
+    #tags_view .taggable.asset img {
+      margin:0 0 0 -70px;
+      float:left; }

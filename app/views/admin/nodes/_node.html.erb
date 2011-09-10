@@ -1,0 +1,23 @@
+<div class="<%= node.access_status %>">
+  <% if node.children.any? %>
+    <% if trail.include?(node) -%>
+      <%= link_to "-", admin_nodes_path(:nodes => [node.parent_id]), :class => 'jax toggle_handle active' %>
+    <% else -%>
+      <%= link_to "+", admin_nodes_path(:nodes => [node.id]), :class => 'jax toggle_handle' %>
+    <% end -%>
+  <% end %>
+  <span class="name"><%= node.name %></span>
+  <% if node.restricted? -%>
+  <span class="info restricted"><%= t(:restricted, :scope => [:activerecord, :attributes, :node])  %></span>
+  <% end -%>
+  <span class="edit">
+    <% if node.controller == 'pages' and node.action == 'index' -%>
+      <%= link_to "#{t(:show_all)}", admin_items_path(:with_page_template => PageTemplate.where(handle: node.handle).first), :class => 'edit' %>
+    <% elsif node.controller == 'pages' and node.action == 'show' and node.resource.present? -%>
+      <%= link_to t(:show), admin_item_path(node.resource), :class => 'edit' %>
+    <% end -%>
+    <%= link_to t(:edit), edit_admin_node_path(node), :class => 'settings' %>
+    <%= link_to t(:move, :scope => [:app, :views, :admin, :nodes, :shared]), place_admin_node_path(node) %>
+    <%= link_to t(:destroy), admin_node_path(node), :method => :delete, :class => "delete", :confirm => t(:'app.general.destroy_confirmation', :target_name => node.name) %>
+  </span>
+</div>

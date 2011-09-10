@@ -1,0 +1,22 @@
+#sessions_view {
+  background:#f2f2f2; }
+  #sessions_view #wrap {
+    margin:30px auto;
+    padding:30px;
+    background:#fff;
+    width:500px; }
+  #sessions_view .remember_me {
+    margin:-1em 115px 1em 115px; }
+  #sessions_view fieldset {
+    border-bottom:0;
+    padding:15px 115px 15px 115px; }
+  #sessions_view .submit {
+    padding-top:0;
+    padding-bottom:1em;
+    border-top:none;
+    border-bottom:1px solid #ddd; }
+  #sessions_view .forgot {
+    margin:2em 0 0 0;
+    font-size:.95em;
+    padding-left:115px; }
+  #sessions_view .flash {margin-bottom:1em;}

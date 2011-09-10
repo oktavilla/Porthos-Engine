@@ -1,0 +1,9 @@
+/*
+ *= require chosen
+ *= require ./clearing
+ *= require ./elements
+ *= require ./layout
+ *= require ./forms
+ *= require_tree ./
+ *= require admin_extensions
+*/

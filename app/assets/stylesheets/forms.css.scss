@@ -1,0 +1,118 @@
+legend {
+  margin:0 0 1em -1em;
+  padding:0 1em 0 1em;
+  font-weight:bold;
+  font-size:18px;
+  line-height:1.4em;
+  color:#000; }
+label {
+  display:block;
+  margin:1.5em 0 .3em 0;
+  font-size:14px;
+  color:#000;
+  font-weight:bold; }
+  label.notasimportant {font-weight:normal;}
+  input[type="hidden"] + label,
+  legend + label,
+  label.first_label  {margin-top:.5em;}
+fieldset {margin:.5em 0 1em 0;}
+fieldset.compact {
+  padding-top:1.5em;
+  padding-left:115px;
+  border-top:1px solid #ddd;
+  border-bottom:1px solid #ddd; }
+  fieldset.compact label {
+    float:left;
+    margin:0;
+    padding-top:.5em;
+    margin-left:-115px;
+    font-weight:normal;
+    font-size:12px;
+    width:100px;
+    text-align:right; }
+  fieldset.compact .fullwidth {
+    width:300px;
+    margin-bottom:1em;}
+  fieldset.compact .submit {
+    padding-left:115px; }
+
+form .uri_field {margin-top:.8em;}
+  form .uri_field label {
+    display:inline;
+    font-weight:normal;
+    color:#999; }
+  form .uri_field input {
+      margin-left:0;
+      padding:.1em;
+      font-size:.8571em; }
+
+form.button_to {
+  display:inline;
+  div { display:inline; }
+}
+
+.multiple_choice {
+  list-style:none;
+  margin:1.5em 0 1.5em 0;}
+  .multiple_choice li {margin:0;}
+  .multiple_choice li label {
+    font-weight:normal;
+    margin-top:.5em; }
+
+input.title {font-size:18px;font-weight:bold;}
+
+input[type="text"], input[type="password"], textarea, select { margin:0; }
+input[type="text"], input[type="password"], textarea { padding:4px; }
+
+select.choose_me {min-width:400px}
+
+.errorExplanation {
+  color:#d00; }
+  .errorExplanation ul {margin:0 0 1em 0;}
+
+.fieldWithErrors input,
+.fieldWithErrors textarea {
+  background:#fff2f2;
+  border:2px solid red;}
+
+p.fieldset_help {margin-top:0;}
+
+.form_help {
+  margin:.5em 0 .5em 0;
+  font-size:12px;
+  line-height:14px;
+  color:#666; }
+  label .form_help {
+    margin-left:.5em;
+    font-weight:normal; }
+
+.fullwidth {padding-right:10px;}
+  .fullwidth input {width:100%;}
+  .fullwidth textarea {width:100%;}
+
+div.contains_input {
+	margin: .8em 0 .3em 0; }
+	div.contains_input label,
+	div.contains_input input,
+	div.contains_input select { display:inline; }
+
+.submit {
+  margin-top:1.5em; }
+  .submit input {
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold; }
+
+form div.uri {
+  margin-top:.5em;
+  margin-bottom:1em;
+  font-weight:normal;
+  font-size:12px;
+  color:#777; }
+  form div.uri input {
+    margin:0 .2em;
+    padding:1px;
+    font-size:12px; }
+
+textarea.file {
+  font:normal 12px/16px monaco; }

@@ -1,0 +1,27 @@
+<div class="header">
+  <h1>Lägg till <%= @item.page_template ? @item.page_template.label.downcase : 'sida' %></h1>
+</div>
+<div id="content">
+  <%= form_for [:admin, @item], :as => :item, :url => admin_items_path do |f| %>
+    <%= render 'admin/shared/error_messages', :object => f.object %>
+    <%= hidden_field_tag 'type', params[:type] if params[:type] %>
+    <%= hidden_field_tag 'page_template_id', @template.id %>
+
+    <label for="item_title"><%= f.object.page_template && f.object.page_template.page_label.present? ? f.object.page_template.page_label : Page.human_attribute_name(:title) %></label>
+    <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>
+    <% if f.object['instruction_id'] && f.object.instruction_body.present? %>
+    <p class="instructions"><%= f.object.instruction_body %></p>
+    <% end %>
+
+    <% if f.object.is_a?(Page) %>
+    <div class="uri_field">
+      <%= f.label :uri %>
+      <%= page_url_parent(@item) if @item.index_node.present? %>
+      <%= f.text_field :uri, :class => "uri" %>
+    <% end %>
+
+    <div class="submit">
+      <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), admin_items_path(with_page_template: @item.page_template.id) %>
+    </div>
+  <% end %>
+</div>

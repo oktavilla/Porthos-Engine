@@ -1,0 +1,14 @@
+<% @page_title = "Sidtyper > #{@template.label} > Ändra @datum_template.label" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1><%= t('.title', :title => @template.label) %></h1>
+  </div>
+  <div id="content">
+    <%= render 'form' %>
+  </div>
+</div>

@@ -1,4 +1,5 @@
 "sv-SE":
+  'categories': "kategorier"
   number:
     # Used in number_with_delimiter()
     # These are also the defaults for 'currency', 'percentage', 'precision', and 'human'
@@ -9,7 +10,7 @@
       delimiter: " "
       # Number of decimals after the separator (the number 1 with a precision of 2 gives: 1.00)
       precision: 2
- 
+
     # Used in number_to_currency()
     currency:
       format:
@@ -19,7 +20,7 @@
         precision: 0
         delimiter: '.'
         separator: ','
- 
+
     # Used in number_to_human_size()
     human:
       format:
@@ -39,7 +40,7 @@
           mb: "MB"
           gb: "GB"
           tb: "TB"
- 
+
   # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
   datetime:
     distance_in_words:
@@ -84,7 +85,7 @@
       hour:   "Timme"
       minute: "Minut"
       second: "Sekund"
- 
+
   activemodel:
     errors:
       template:
@@ -93,8 +94,37 @@
           other: "{{count}} fel förhindrade denna {{model}} från att sparas"
         # The variable :count is also available
         body: "Det var problem med följande fält:"
- 
-  activerecord:
+      messages:
+        invalid_email: "verkar inte vara en giltig e-postadress"
+
+  mongo_mapper:
+    models:
+      asset: Fil
+      image_asset: Bild
+      content_module: Innehållsmodul
+      content_template: Innehållstyp
+      node: Navigationsnode
+      page:
+        one: Sida
+        other: Sidor
+      custom_page:
+        one: Anpassad sida
+        other: Anpassade sidor
+      content_teaser: Teaser
+      user: Användare
+      redirect: Vidarebefordring
+      field_set: Innehållstyp
+      field: Fält
+      datum_collection: Innehållsblock
+      date_time_field: Datum
+      string_field: Sträng
+      text_field: Text
+      boolean_field: Booleanskt värde
+      page_template: Sidtyp
+      page_association_field: Relation till sida
+      reversed_page_association_field: Relation från en annan sidtyp
+      asset_association_field: Relation till fil
+      string_field_template: Sträng fält
     errors:
       template:
         header:
@@ -104,9 +134,6 @@
         body: "Det var problem med följande fält:"
       # model.errors.full_messages format.
       format: "{{attribute}} {{message}}"
- 
-      # The values :model, :attribute and :value are always available for interpolation
-      # The value :count is available when applicable. Can be used for pluralization.
       messages:
         inclusion: "finns inte i listan"
         exclusion: "är reserverat"
@@ -128,45 +155,78 @@
         odd: "måste vara udda"
         even: "måste vara jämnt"
         record_invalid: "Ett fel uppstod: {{errors}}"
+        invalid_email: "verkar inte vara en giltig e-postadress"
+
       models:
         field:
           handle:
             reserved: används redan av sidan
-    models:
-      asset: Fil
-      content_module: Innehållsmodul
-      node: Navigations-node
-      page: Sida
-      content_teaser: Teaser
-      user: Användare
-      redirect: Vidarebefordring
-      field_set: Sidtyp
-      field: Fält
-      date_time_field: Datum
-      string_field: Sträng
-      text_field: Text
-      boolean_field: Booleanskt värde
-      page_association_field: Relation till sida
-      reversed_page_association_field: Relation från en annan sidtyp
-      asset_association_field: Relation till fil
+        asset:
+          file:
+            unable_to_store: kunde inte sparas
     attributes:
       asset:
         file: Vald fil
-        title: Titel 
+        title: Titel
         file_name: Filnamn
         author: Copyright
         description: Beskrivning
-      content_module:
-        name: Namn
-        template: Modul
+        filetypes:
+          image: Bild
+          sound: Ljud
+          video: Video
+          document: Dokument
+      asset_association:
+        description: Beskrivning
+        should_revert_to_asset_attributes: Radera den ändrade beskrivningen
+      content_template:
+        label: Namn
+        description: Beskrivning
+      datum_template:
+        _type: Typ
+        label: Namn
+        handle: Identifierare
+        required: Krävs
+        instruction_body: Beskrivning
+      datum:
+        _type: Typ
+        label: Namn
+        handle: Identifierare
+        required: Krävs
+        instruction_body: Beskrivning
+      field_set:
+        label: Titel
+        template_name: Template
+      field:
+        _type: Typ
+        label: Namn
+        handle: Fältnamn
+        required: Obligatorisk
+        instruction_body: Instruktioner
+        multiline: Löptext
+        allow_rich_text: Tillåt textformatering
+      link_field:
+        title: Länktext
+        url: Adress / url
+        resource: Länka till
       node:
-        name: Namn
+        name: Namn i navigationen
         status: Status
+        restricted: Kräver inloggning (även undersidor)
+      page_templates:
+        label: Namn
       page:
-        title: Namn
-        description: Beskrivning   
+        title: Titel
+        description: Beskrivning
         published_on: Publiceringsdatum
-        parent_id: Sidtyp     
+        parent_id: Sidtyp
+        note: Notering
+      string_field_template:
+        multiline: Textfält
+        allow_rich_text: Tillåt formatering
+      string_field:
+        multiline: Textfält
+        allow_rich_text: Tillåt formatering
       teaser:
         title: Rubrik
         body: Text
@@ -174,7 +234,7 @@
         first_name: Förnamn
         last_name: Efternamn
         civic_number: Personnummer
-        login: Användarnamn
+        username: Användarnamn
         email: E-post
         phone: Telefon
         cell_phone: Mobil
@@ -183,33 +243,6 @@
       redirect:
         path: Från
         target: Till
-      # You can define own errors for models or model attributes.
-      # The values :model, :attribute and :value are always available for interpolation.
-      #
-      # For example,
-      #   models:
-      #     user:
-      #       blank: "This is a custom blank message for {{model}}: {{attribute}}"
-      #       attributes:
-      #         login:
-      #           blank: "This is a custom blank message for User login"
-      # Will define custom blank validation message for User model and
-      # custom blank validation message for login attribute of User model.
-      # models:
- 
-    # Translate model names. Used in Model.human_name().
-    #models:
-      # For example,
-      #   user: "Dude"
-      # will translate User model name to "Dude"
- 
-    # Translate model attribute names. Used in Model.human_attribute_name(attribute).
-    #attributes:
-      # For example,
-      #   user:
-      #     login: "Handle"
-      # will translate User attribute "login" as "Handle"
- 
   date:
     formats:
       # Use the strftime parameters for formats.
@@ -218,16 +251,16 @@
       default: "%Y-%m-%d"
       short: "%e %b"
       long: "%e %B %Y"
- 
+
     day_names: [söndag, måndag, tisdag, onsdag, torsdag, fredag, lördag]
     abbr_day_names: [sön, mån, tis, ons, tor, fre, lör]
- 
+
     # Don't forget the nil at the beginning; there's no such thing as a 0th month
     month_names: [~, januari, februari, mars, april, maj, juni, juli, augusti, september, oktober, november, december]
     abbr_month_names: [~, jan, feb, mar, apr, maj, jun, jul, aug, sep, okt, nov, dec]
     # Used in date_select and datime_select.
     order: [ :day, :month, :year ]
- 
+
   time:
     formats:
       default: "%a, %e %b %Y %H:%M:%S %z"
@@ -235,7 +268,7 @@
       long: "%e %B %Y %H:%M"
     am: ""
     pm: ""
- 
+
 # Used in array.to_sentence.
   support:
     array:
@@ -250,9 +283,10 @@
       logged_in: Du är inloggad
       logged_out: Du är utloggad
       login_failed: Användarnamnet och lösenordet stämde inte överens
-      password_has_been_sent: Ett nytt lösenord har skapats och skickats till din e-postadress 
+      password_has_been_sent: Ett nytt lösenord har skapats och skickats till din e-postadress
       unable_to_find_user: Det gick inte att hitta någon användare med den e-postadressen
       flash_is_needed: Du behöver flash för att se den här delen av sidan
+      destroy_confirmation: Är du säker på att du vill radera %{target_name}?
     colors:
       light_magenta: Ljusmagenta
       light_cyan: Ljuscyan
@@ -293,17 +327,17 @@
       deleted: och alla sidor under den är borttagna
     admin_general:
       saved: sparades
+      updated: uppdaterades
       deleted: raderades
       logged_in: Du är inloggad
       logged_out: Du är nu utloggad och lugnt surfa vidare
       login_failed: Användarnamnet och lösenordet stämde inte överens
-    admin_pages:
+    admin_items:
       unable_to_find: Kunde inte hitta sidtypen
       saved: Dina ändringar är sparade
       active: "är nu publicerad och syns på webbplatsen"
-    admin_comments:
-      saved: Din kommentar har sparats
-      published: Din kommentar har sparats och publicerats
+    admin_contents:
+      deleted: Innehållet raderats
     admin_redirects:
       saved: Vidarebefordring sparad
       deleted: Vidarebefordring raderad
@@ -314,3 +348,196 @@
         small: Liten
     validators:
       bad_email_format: har fel format
+      bad_redirect_format: måste börja med ett /-tecken
+    views:
+      layouts:
+        admin:
+          account_nav:
+            settings: Inställningar
+            my_account: Mitt konto
+            logout: Logga ut
+      admin:
+        shared:
+          settings_sub_nav:
+            title: Innehåll
+            site_settings: Inställningar
+            content_lists: Delat innehåll
+            field_sets: Innehållstyper
+            redirects: Vidarebefordringar
+            tags: Nyckelord
+            content_modules: Moduler
+        site_settings:
+          index:
+            add_site_setting: Ny inställning
+            table:
+              name: Namn
+              value: Värde
+            no_data: Det finns inga inställningar inlagda än.
+          new:
+            title: Ny inställning
+        redirects:
+          index:
+            title: Vidarebefordring
+            add_redirect: Skapa ny vidarebefordring
+            table:
+              from: Från
+              to: Till
+            no_data: Det finns inga Vidarebefordringar inlagda än.
+          new:
+            title: Ny Vidarebefordring
+          edit:
+            title: Ändra Vidarebefordring
+          shared:
+            form_help:
+              path: "Vilken address som ska vidarebefordras, t.ex. /ge-en-gava"
+              target: "Vilken address som besökaren ska vidarebefordras till, t.ex. /stod-oss/ge-en-gava"
+        tags:
+          index:
+            title: Nyckelord
+            add_tag: Nytt nyckelord
+            table:
+              name: Namn
+            no_data: Inga nyckelord inlagda än.
+          new:
+            title: Nytt nyckelord
+          edit:
+            title: Ändra nyckelordet %{name}
+          show:
+            title: Nyckelord - ”%{name}”
+            edit_tag: Ändra
+        nodes:
+          index:
+            title: Struktur och navigation
+            no_data: Det finns inga navigationsnoder inlagda
+            add_root_node: Skapa startsida
+          new:
+            title: Placera i strukturen
+          edit:
+            title: Ändra
+          shared:
+            move: Flytta
+            show_in_nav: Syns i navigationen och är tillgänglig på internet
+            not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
+            restricted: Avstängd, inte tillgänglig på internet
+  admin:
+    assets:
+      new:
+        submit: Ladda upp
+      index:
+        upload: Ladda upp filer
+    data:
+      index:
+        new: Lägg till fält
+      asset_association:
+        edit_asset: Ändra filen
+        choose_asset: Välj fil
+        remove: Ta bort
+      image_form:
+        edit_asset: Ändra bildtext
+        choose_image: Välj bild
+    link_lists:
+      show:
+        title: "Navigationslistor > %{title}"
+        new: Lägg till länk
+    links:
+      edit:
+        title: "Navigationslistor > %{list_title} > %{title}"
+    sessions:
+      signed_in: Du är nu inloggad
+      signed_out: Du är nu utloggad
+      failed: Användarnamnet och lösenordet stämde inte överens
+      new:
+        login: Logga in
+    page_templates:
+      index:
+        title: Sidtyper
+        new: Lägg till
+      new:
+        title: Ny sidtyp
+      show:
+        title: Sidtyper > %{title}
+        add_field_template: Lägg till fält
+        add_field_set_template: Lägg till fördefinerat innehåll
+        add_datum_collection_template: Lägg till ett innehållsblock
+        all_page_templates: Alla sidtyper
+        blank_slate: Det finns inga fält definerade än
+        edit: Ändra
+        destroy: Radera
+        add_datum_template: Lägg till
+        string: Text
+        date: Datum
+        boolean: Ja/Nej
+    items:
+      index:
+        all_pages: "Alla sidor"
+        create_new: "Skapa ny %{template}sida"
+        add_section: Lägg till indexsida
+        add_custom_page: Lägg till
+      page:
+        choose: Välj
+        add_content: Lägg till innehåll
+        add_datum: "Lägg till %{label}"
+      section:
+        edit_data_definitions: Ändra fält
+        add_content: Lägg till innehåll
+        add_datum: "Lägg till %{label}"
+      details:
+        edit_category: Ändra kategori
+        choose_category: Välj kategori
+        add_new_category: Lägg till
+        publish_now: Publicera
+        unpublish: Avpublicera
+        not_published: Sidan är inte publicerad
+        add_note: Lägg till
+    content_templates:
+      index:
+        title: Innehållstyper
+        new: Skapa innehållstyp
+      new:
+        title: Ny innehållstyp
+      show:
+        add_field_template: Lägg till fält
+        edit: Ändra
+        destroy: Ta bort
+        all_content_templates: Visa alla
+        blank_slate: Det finns inga fält skapade än
+    contents:
+      teasers:
+        edit:
+          add_image: Lägg till bild
+    field_sets:
+      all_field_sets: Alla innehållstyper
+      index:
+        title: Alla innehållstyper
+        new: Lägg till ny innehållstyp
+      new:
+        title: Ny innehållstyp
+      show:
+        edit: Ändra
+        destroy: Radera
+        sort: Sortera
+        blank_slate: Det finns inga fält skapade än
+        add_field: Lägg till fält
+    users:
+      index:
+        add: Lägg till ny redaktör
+      new:
+        save: Spara
+  admins: Redaktörer
+  save: Spara
+  or: eller
+  cancel: Avbryt
+  edit: Ändra
+  destroy: Ta bort
+  choose: Välj
+  move: Flytta
+  show: Visa
+  hide: Dölj
+  show_all: Visa alla
+  yes: Ja
+  no: Nej
+  image: Bild
+  video: Video
+  sound: Ljud
+  pdf: Pdf
+  document: Dokument

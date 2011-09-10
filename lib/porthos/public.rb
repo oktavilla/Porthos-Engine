@@ -1,38 +1,21 @@
 module Porthos
   module Public
+    extend ActiveSupport::Concern
 
-    def self.included(controller)
-      controller.send :include, Porthos::AccessControl
-      controller.send :include, ClassMethods
-      controller.send :helper_method, :root_node, :root_nodes, :node, :nodes
-      controller.send :helper_method, :trail, :breadcrumbs
-    end
+    module InstanceMethods
 
-    module ClassMethods
-      # we should overwrite login_required to render a public login view
-      def require_node
-        login_required if trail.detect { |n| n.restricted? } and not logged_in?
-        raise ActiveRecord::RecordNotFound if trail.detect { |n| n.inactive? }
-      end
-      
-      def porthos_session_id
-        session[:porthos_id] ||= CGI::Session.generate_unique_id
-      end
-      
-    protected
-    
       def root_node
         @root_node ||= Node.root
       end
-    
+
       def root_nodes
         @root_nodes ||= [root_node] + root_node.children
       end
-    
+
       def node
-        @node ||= Node.find_by_slug(params[:slug]) or raise ActiveRecord::RecordNotFound
+        @node ||= params[:node] ? Node.find_by_id(params[:node][:id]) : nil
       end
-    
+
       def nodes
         # fetch the children of the selected top level node (it later recursive renders all nodes belonging to the trail)
         @nodes ||= unless node == root_node # dont fetch children for the root node (that's all nodes dummy!)
@@ -41,35 +24,33 @@ module Porthos
           []
         end
       end
-      
-      def porthos_session_id
-        session[:porthos_id] ||= ActiveSupport::SecureRandom.hex
-      end
-      
-      def node_ancestors
-        unless defined?(@node_ancestors)
-          @node_ancestors = node.ancestors.reverse
-          @node_ancestors.shift
-        end
-        @node_ancestors
-      end
-      
+
       def trail
         unless defined?(@trail)
           # fetch an ordered trail (top to bottom) of nodes
-          @trail = if node_ancestors and node_ancestors.any?
-            node_ancestors.dup << node
+          @trail = if node && node.ancestors.any?
+            node.ancestors.dup.tap do |ancestors|
+              ancestors.shift
+              ancestors << node
+            end
           else
             [node]
-          end
+          end.compact
         end
         @trail
       end
-      
+
       def breadcrumbs
-        @breadcrumbs ||= trail.collect { |n| ["/#{n.slug}", n.name] }
+        @breadcrumbs ||= trail.map { |n| ["/#{n.url}", n.name] }
       end
-      
+
     end
+
+    included do
+      helper_method :root_node, :root_nodes, :nodes, :node
+      helper_method :trail, :breadcrumbs
+      layout 'public'
+    end
+
   end
 end

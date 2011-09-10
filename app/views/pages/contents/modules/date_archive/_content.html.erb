@@ -1,0 +1,23 @@
+<% years = @field_set.dates_with_children(params) -%>
+<% if years.any? -%>
+<div class="date_archive">
+  <h2>Arkiv</h2>
+  <ul>
+  <% years.each do |year| -%>
+    <li<%= ' class="current"' if params[:year] and params[:year] == year[1] %>>
+      <a href="/<%= @node.url %>/<%= year[0] %>"><%= year[0] %></a>
+      <% if params.has_value?(year[0]) and year[1].any? -%>
+      <ul>
+      <% year[1].each do |month| -%>
+        <% month_num = month.strftime("%m") -%>
+        <li<%= ' class="current"' if params[:month] and params[:month] == month_num %>>
+          <a href="/<%= @node.url %>/<%= year[0] %>/<%= month_num %>"><%= month.strftime("%B") %></a>
+        </li>
+      <% end -%>
+      </ul>
+      <% end -%>
+    </li>
+  <% end -%>
+  </ul>
+</div>
+<% end -%>

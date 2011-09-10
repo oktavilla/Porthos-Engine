@@ -1,0 +1,21 @@
+<div class="asset_association_form">
+  <% if datum.asset && datum.asset.of_the_type(:image) %>
+  <div class="asset">
+    <%= image_tag datum.asset.version_url(size: 'w150') %>
+  </div>
+  <% end %>
+  <%= f.label :description %>
+  <p class="instructions">Ändra beskrivningen för den här sidan.</p>
+  <div class="fullwidth">
+  <%= f.text_area :description, value: datum.description, rows: 4 %>
+  </div>
+
+  <label for="datum_<%= datum.id %>_should_revert_to_asset_attributes">
+    <%= f.check_box :should_revert_to_asset_attributes %>
+    <%= datum.class.human_attribute_name :should_revert_to_asset_attributes %>
+  </label>
+
+  <% if datum.instruction_body.present? %>
+    <p class="instructions"><%= datum.instruction_body %></p>
+  <% end %>
+</div>

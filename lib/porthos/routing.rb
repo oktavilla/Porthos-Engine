@@ -1,289 +1,256 @@
-#module Porthos
-#  module Routing
-#    mattr_accessor :debug
-#    self.debug = false
-#
-#    class NodeSet
-#
-#      attr_accessor :add_conditions, :remove_conditions
-#      attr_accessor :nodes
-#      attr_reader :changed_at
-#
-#      def initialize
-#        self.nodes = {}
-#        self.add_conditions, self.remove_conditions = [], []
-#        @routing   = ActionController::Routing::Routes
-#      end
-#
-#      def load!
-#        latest_caching = cache.saved_at
-#        if not nodes.any? or not @@last_change or not latest_caching
-#          if not cache.retrive or not cache.retrive.any?
-#            Node.logger.warn("We have empty nodes, fetching from db") if Routing.debug
-#            ActiveRecord::Base.connection.select_all("select id, parent_id, controller, action, resource_id, resource_class_name, slug from nodes").each do |node|
-#              add node
-#            end
-#            update_cache
-#          else
-#            Node.logger.warn("We have empty nodes, fetching from cache") if Routing.debug
-#            load_from_cache
-#          end
-#        elsif @@last_change < latest_caching
-#          Node.logger.warn("Loading from cache: last_change: #{@@last_change}, cache.saved_at: #{cache.saved_at}") if Routing.debug
-#          load_from_cache
-#        else
-#          Node.logger.warn("Nodes not changed") if Routing.debug
-#          Node.logger.warn("last_change: #{@@last_change}, cache.saved_at: #{cache.saved_at}") if Routing.debug
-#        end
-#      end
-#
-#      def reload!
-#        clear!
-#        load!
-#      end
-#
-#      def clear!
-#        nodes.each { |id, node| remove node }
-#      end
-#
-#      def load_from_cache
-#        clear!
-#        cached_nodes = cache.retrive
-#        cached_nodes.each { |id, node| add node }
-#        @@last_change = cache.saved_at
-#      end
-#
-#      def update_cache
-#        cache.store nodes
-#        @@last_change = cache.saved_at
-#        Node.logger.warn("Stored current nodes in the cache") if Routing.debug
-#      end
-#
-#      def add(node, store_change = false)
-#        route_mappings = {
-#          :controller => node["controller"],
-#          :action     => node["action"],
-#          :id         => node["resource_id"],
-#          :slug       => node["slug"]
-#        }
-#
-#        if node['controller'] == 'pages'
-#          route_mappings[:field_set_id] = node["field_set_id"]
-#        end
-#
-#        unless node["parent_id"]
-#          @routing.add_named_route('root', '', route_mappings)
-#        else
-#          @routing.add_named_route("node_#{node['id']}", node["slug"], route_mappings)
-#          @routing.add_named_route("formatted_node_#{node['id']}", "#{node["slug"]}.:format", route_mappings)
-#        end
-#
-#        if node['controller'] == 'pages' && node['action'] == 'index'
-#          @routing.add_named_route("node_#{node['id']}_year", "#{node["slug"]}/:year", route_mappings.merge({
-#            :requirements => {
-#              :year => /[0-9]{4}/
-#            }
-#          }))
-#
-#          @routing.add_named_route("node_#{node['id']}_month", "#{node["slug"]}/:year/:month", route_mappings.merge({
-#            :requirements => {
-#              :year  => /[0-9]{4}/,
-#              :month => /[0-9]{2}/
-#            }
-#          }))
-#
-#          @routing.add_named_route("node_#{node['id']}_day", "#{node["slug"]}/:year/:month/:day", route_mappings.merge({
-#            :requirements => {
-#              :year  => /[0-9]{4}/,
-#              :month => /[0-9]{2}/,
-#              :day   => /[0-9]{2}/
-#            }
-#          }))
-#
-#          route_mappings.dup.tap do |mappings|
-#            mappings.delete(:id)
-#            @routing.add_named_route("node_child_#{node['id']}_permalink", "#{node["slug"]}/:id", mappings.merge({
-#              :action => 'show',
-#              :requirements => {
-#                :id => /[0-9]+\-.+/
-#              }
-#            }))
-#
-#            @routing.add_named_route("node_#{node['id']}_dated_page", "#{node["slug"]}/:year/:month/:day/:id", mappings.merge({
-#              :action => 'show',
-#              :requirements => {
-#                :year  => /[0-9]{4}/,
-#                :month => /[0-9]{2}/,
-#                :day   => /[0-9]{2}/,
-#                :id    => /[0-9]+\-.+/
-#              }
-#            }))
-#
-#            @routing.add_named_route("formatted_node_#{node['id']}_dated_page", "#{node["slug"]}/:year/:month/:day/:id.:format", mappings.merge({
-#              :action => 'show',
-#              :requirements => {
-#                :year  => /[0-9]{4}/,
-#                :month => /[0-9]{2}/,
-#                :day   => /[0-9]{2}/,
-#                :id    => /[0-9]+\-.+/
-#              }
-#            }))
-#          end
-#
-#          @routing.add_named_route("search_node_#{node['id']}", "#{node["slug"]}/search.:format", route_mappings.dup.merge({
-#            :action => 'search'
-#          }))
-#        end
-#
-#        add_conditions.each do |condition|
-#          condition.call(node, route_mappings, @routing)
-#        end
-#
-#        self.nodes[node["id"]] = {
-#          "id"            => node["id"],
-#          "parent_id"     => node["parent_id"],
-#          "controller"    => node["controller"],
-#          "action"        => node["action"],
-#          "resource_id"   => node["resource_id"],
-#          "resource_type" => node["resource_type"],
-#          "slug"          => node["slug"],
-#          "field_set_id"  => node["field_set_id"],
-#          "resource_class_name" => node["resource_class_name"]
-#        }
-#        Node.logger.warn("Added route for node #{node['id']}") if Routing.debug
-#        update_cache if store_change
-#      end
-#
-#      def update(node, store_change = false)
-#        Node.logger.warn("Updating route for node #{node['id']}") if Routing.debug
-#        remove node
-#        add node, store_change
-#      end
-#
-#      def remove(node, store_change = false)
-#        self.nodes.delete node["id"]
-#        @routing.named_routes.routes.delete "node_#{node['id']}"
-#        @routing.named_routes.routes.delete "formatted_node_#{node['id']}"
-#        if @routing.named_routes.routes.delete "node_#{node['id']}_year"
-#          @routing.named_routes.routes.delete  "node_#{node['id']}_month"
-#          @routing.named_routes.routes.delete  "node_#{node['id']}_day"
-#          @routing.named_routes.routes.delete  "node_#{node['id']}_dated_page"
-#          @routing.named_routes.routes.delete  "formatted_node_#{node['id']}_dated_page"
-#          @routing.named_routes.routes.delete  "node_child_#{node['id']}_permalink"
-#        end
-#
-#        remove_conditions.each do |condition|
-#          condition.call(node, @routing)
-#        end
-#
-#        Node.logger.warn("Removed route for node #{node['id']}") if Routing.debug
-#        update_cache if store_change
-#      end
-#
-#      def cache
-#        return @cache if @cache
-#        @cache = MemCacheStore.new
-#      rescue MemCache::MemCacheError => e
-#        @cache = CacheFileStore.new
-#      end
-#
-#    end
-#
-#    Nodes = NodeSet.new
-#
-#    ##
-#    # Example:
-#    #   c = Porthos::Routing::Cache.new(Porthos::Routing::Cache::FILE_ON_DISK)
-#    #   c.set Node.find(:all, :limit => 10)
-#    #   q = Porthos::Routing::Cache.new(Porthos::Routing::Cache::FILE_ON_DISK)
-#    #   puts q.last_save_date
-#    #   puts q.get.inspect
-#
-#    class CacheFileStore
-#
-#      def initialize(options = {})
-#        @options = { :file_name => "routes_cache" }.merge(options)
-#        store({}) unless exists?
-#      end
-#
-#      def saved_at
-#        File.stat(path).mtime
-#      end
-#
-#      def retrive
-#        Node.logger.warn("Fetching nodes file") if Routing.debug
-#        Marshal.load File.read(path)
-#      end
-#
-#      def store(object)
-#        Node.logger.warn("Called CacheFileStore#store") if Routing.debug
-#        File.open(path, 'w+') do |f|
-#          f << Marshal.dump(object)
-#        end
-#      end
-#
-#    protected
-#
-#      def exists?
-#        File.exists?(path)
-#      end
-#
-#      def path
-#        "#{Rails.root}/tmp/cache/#{@options[:file_name]}.marshal"
-#      end
-#
-#    end
-#
-#    class MemCacheStore
-#
-#      def initialize(options = {})
-#        namespace_key = ActionController::Base.session_options[:key]
-#        @options = {
-#          :storage_key   => 'routes',
-#          :timestamp_key => 'routes_last_changed',
-#          :host          => 'localhost',
-#          :port          => 11211,
-#          :namespace     => "#{namespace_key}-#{ENV['RAILS_ENV']}"
-#        }.merge(options)
-#        client.servers = "#{@options[:host]}:#{@options[:port]}"
-#        client.set 'test', 'active'
-#      end
-#
-#      def saved_at
-#        client.get @options[:timestamp_key]
-#      end
-#
-#      def retrive
-#        Node.logger.warn("Fetching nodes from memcache") if Routing.debug
-#        client.get @options[:storage_key]
-#      end
-#
-#      def store(object)
-#        Node.logger.warn("Called MemCacheStore#store") if Routing.debug
-#        client.set @options[:storage_key], object
-#        client.set @options[:timestamp_key], Time.now
-#      end
-#
-#    protected
-#
-#      def client
-#        @client ||= MemCache.new(:c_threshold => 10_000, :compression => true, :debug => false, :namespace => @options[:namespace], :readonly => false, :urlencode => false)
-#      end
-#
-#    end
-#
-#  end
-#end
-#
-#
-#module ActionController
-#  module Routing
-#    class RouteSet
-#      def recognize_with_porthos(request)
-#        Porthos::Routing::Nodes.load!
-#        return recognize_without_porthos(request)
-#      end
-#      alias_method_chain :recognize, :porthos
-#    end
-#  end
-#end
+module Porthos
+  module Routing
+    # A rule is a hash with three keys
+    # :test => Regexp to match the path
+    # :matches => Array of names (param keys) for each match for the path regexp.
+    # The first match should always be "url" (anything) before the params
+    # :controller => The controller name for which this rule applies to
+    # Example:
+    #   {
+    #     :test => /(^.*)\/(\d{4})\-(\d{2})\-(\d{2})/,
+    #     :matches => ['url', 'year', 'month', 'day'],
+    #     :controller => 'test_posts'
+    #   }
+    mattr_accessor :rules
+    class Rule
+      include Comparable
+      attr_accessor :path,
+                    :constraints,
+                    :controller,
+                    :action,
+                    :namespace,
+                    :prefix
+
+      def <=>(other_rule)
+        self.compare_string <=> other_rule.compare_string
+      end
+
+      def initialize(attrs = {})
+        attrs.symbolize_keys.reverse_merge(:constraints => {}).each do |key, value|
+          instance_variable_set("@#{key.to_s}".to_sym, value)
+        end
+      end
+
+      def match?(attrs)
+        attrs.each do |key, value|
+          "@#{key.to_s}".to_sym.tap do |variable_name|
+            return false if !instance_variables.include?(variable_name) or
+              instance_variable_get(variable_name) != value
+          end
+        end
+        true
+      end
+
+      def param_keys
+        @param_keys ||= path.scan(/:(\w+)/).flatten.map(&:to_sym)
+      end
+
+      def computed_path(node, params)
+        [node.url, translated_path].join('/').tap do |computed_path|
+          template = computed_path
+          constraints.each do |key, value|
+            if params[key]
+              value_for_key = if params[key].respond_to?(:to_param)
+                params[key].to_param
+              else
+                params[key].to_s
+              end
+              template.gsub!(":#{key.to_s}", value_for_key)
+            end
+          end
+          template = "/#{template}" unless template[0...1] == '/'
+          computed_path.replace(template)
+        end
+      end
+
+      def regexp_template
+        @regexp_template ||= "^(#{regexp_prefix})/#{translated_path}(\/|)$".tap do |regexp_template|
+          template = regexp_template
+          constraints.each do |key, value|
+            template.gsub!(":#{key.to_s}", value)
+          end
+          regexp_template.replace(template)
+        end.mb_chars
+      end
+
+      def regexp_prefix
+        @regexp_prefix ||= prefix ? "/#{translate(prefix)}" : '.*|'
+      end
+
+      def translated_path
+        @translated_path ||= translate(path)
+      end
+
+    private
+
+      def compare_string
+        @compare_string ||= "#{path}-#{controller}-#{action}"
+      end
+
+      def translate(i18n_string)
+        i18n_string.dup.tap do |translated_string|
+          template = translated_string
+          i18n_string.scan(/\%{([\w\.]+)}/).flatten.each do |string|
+            template.gsub!("%{#{string}}", I18n.t("routes.#{string}"))
+          end
+          translated_string.replace(template)
+        end
+      end
+
+      class << self
+        def from_hash(attrs)
+          attrs.kind_of?(Hash) ? new(attrs) : attrs
+        end
+      end
+
+    end
+
+    class Rules
+      include Enumerable
+
+      def initialize(rules = [])
+        @default_options = {}
+        @rules = rules.map { |r| Rule.from_hash(r) }
+      end
+
+      def reset!
+        @rules = []
+      end
+
+      def size
+        @rules.size
+      end
+
+      def last
+        @rules[size-1]
+      end
+
+      def each
+        @rules.each { |r| yield r }
+      end
+
+      def <<(rule)
+        @rules << Rule.from_hash(rule)
+      end
+
+      def push(args)
+        if args.respond_to?(:map)
+          @rules += args.map { |r| Rule.from_hash(r) }
+        else
+          self.push [args]
+        end
+      end
+
+      def with(options = {}, &block)
+        @default_options = options
+        instance_exec(&block)
+        @default_options = {}
+      end
+
+      def match(path, options)
+        self << { :path => path }.tap do |new_rule|
+          new_rule.merge!(@default_options)
+          new_rule.merge!(options.delete(:to))
+          new_rule.merge!(options)
+        end
+      end
+
+      def draw(&block)
+        instance_exec(&block)
+      end
+
+      def sorted
+       sort_by { |r| (r.constraints ? r.constraints.keys.size : 0)+r.path.size }.reverse
+      end
+
+      def find_matching_params(params)
+        param_keys = params.keys
+        sorted.detect do |rule|
+          (rule.action.blank? || rule.action == params[:action]) and
+          (rule.controller.blank? || rule.controller == params[:controller]) and
+          rule.constraints.keys.all? { |key| param_keys.include?(key) }
+        end
+      end
+
+    end
+
+    self.rules = Rules.new([
+
+      {
+        :path => ":id",
+        :constraints => {
+          :id => '([a-z0-9\-\_]+)'
+        },
+        :controller => 'pages',
+        :action => 'show'
+      },
+      {
+        :path => ":year/:month/:day/:id",
+        :constraints => {
+          :year => '(\d{4})',
+          :month => '(\d{2})',
+          :day => '(\d{2})',
+          :id => '([a-z0-9\-\_]+)'
+        },
+        :controller => 'pages',
+        :action => 'show'
+      },
+      {
+        :path => ":year/:month/:day",
+        :constraints => {
+          :year => '(\d{4})',
+          :month => '(\d{2})',
+          :day => '(\d{2})'
+        },
+        :controller => 'pages'
+      },
+      {
+        :path => ":year/:month",
+        :constraints => {
+          :year => '(\d{4})',
+          :month => '(\d{2})'
+        },
+        :controller => 'pages'
+      },
+      {
+        :path => ":year",
+        :constraints => {
+          :year => '(\d{4})'
+        },
+        :controller => 'pages'
+      },
+      {
+        :path => '%{categories}',
+        :controller => 'pages',
+        :action => 'categories'
+      },
+      {
+        :path => "%{categories}/:id",
+        :constraints => {
+          :id => '([a-z0-9\-\_\s\p{Word}]+)'
+        },
+        :controller => 'pages',
+        :action => 'category'
+      }
+    ])
+
+    # Find a rule definition that matches the path
+    # Returns a hash of params
+    def self.recognize(path, restrictions = {})
+      path = path.to_s.mb_chars.downcase
+      return self.rules.sorted.collect do |rule|
+        matches = path.scan(Regexp.new(rule.regexp_template)).flatten
+        next unless (matches.any? and rule.match?(restrictions))
+        {}.tap do |params|
+          params[:url] = matches.shift.gsub(/^\//,'')
+          rule.param_keys.each_with_index do |key, i|
+            params[key] = matches[i]
+          end
+          params[:action] = rule.action if rule.action.present?
+          params[:controller] = rule.controller if rule.controller.present?
+          params[:namespace] = rule.namespace if rule.namespace.present?
+        end
+      end.compact
+    end
+  end
+end

@@ -1,0 +1,23 @@
+<div class="vcard main" id="user_<%= user.id %>">
+  <span class="fn"><%= user.name %></span>
+  <a class="email" title="Skicka e-post till <%= user.name %>" href="mailto:<%= user.email %>"><%= user.email %></a>
+  <% unless user.phone.blank? and user.cell_phone.blank? -%>
+  <span class="tel">
+    <% unless user.phone.blank? -%>
+    <span class="work">
+      <span class="type">T:</span>
+      <span class="value"><%= user.phone %></span>
+    </span>
+    <% end -%>
+    <% unless user.cell_phone.blank? -%>
+    <span class="cell">
+      <span class="type">M:</span>
+      <span class="value"><%= user.cell_phone %></span>
+    </span>
+    <% end -%>
+  </span>
+  <% end %>
+  <span class="edit">
+    <%= link_to t(:edit), edit_admin_user_path(user) %>
+  </span>
+</div>

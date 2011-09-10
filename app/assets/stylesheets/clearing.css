@@ -1,0 +1,28 @@
+#nav:after,
+#main_nav:after,
+#wrap:after,
+#workspace .groups:after,
+.items li:after,
+#assets .items .inner:after,
+.add:after,
+#uploader li:after,
+#uploader .totals:after,
+#workspace .tools:after,
+#workspace .tools .add:after,
+.theme:after,
+.batch_edit .asset:after,
+#asset_usages:after,
+#asset_usages div:after,
+#tags_view .taggable:after,
+.page_content:after,
+.page_content .content:after,
+.contents li.content:after,
+#content.datums .datum:after,
+#crop:after,
+.asset_association_form:after {
+  content:".";
+  display:block;
+  height:0;
+  line-height:0;
+  clear:both;
+  visibility:hidden; }

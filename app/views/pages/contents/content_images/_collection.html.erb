@@ -1,0 +1,26 @@
+<% reset_cycle() %>
+<% if content.contents.active.any? -%>
+  <% if params["collection_#{content.id}"] %>
+    <% choosen = content.contents.active.find(params["collection_#{content.id}"]) %>
+    <%= image_tag(display_image_path(:size => 'w400', :id => choosen.resource.asset, :token => choosen.resource.asset.resize_token('w400'), :format => choosen.resource.asset.extname), :alt => choosen.resource.title) %>
+    <% unless content.contents.active.size == 0 %>
+    <div class="collection_pagination">
+      <% if choosen.higher_item -%>
+        <a href="<%= request.path %>?collection_<%= content.id %>=<%= choosen.higher_item.id %>">« Föregående</a>
+      <% end -%>
+      <% if choosen.lower_item -%>
+        <a href="<%= request.path %>?collection_<%= content.id %>=<%= choosen.lower_item.id %>">Nästa »</a>
+      <% end -%>
+    </div>
+    <% end %>
+  <% end %>
+  <ul class="images">
+  <% content.contents.active.each do |child| %>
+    <li id="image_<%= child.resource.id %>">
+      <a href="<%= request.path %>?collection_<%= content.id %>=<%= child.id %>">
+      <%= image_tag(display_image_path(:size => 'w200', :id => child.resource.asset, :token => child.resource.asset.resize_token('w200'), :format => child.resource.asset.extname), :alt => child.resource.title) %>
+      </a>
+    </li>
+  <% end -%>
+  </ul>
+<% end -%>

@@ -1,0 +1,2 @@
+class LinkFieldTemplate < DatumTemplate
+end

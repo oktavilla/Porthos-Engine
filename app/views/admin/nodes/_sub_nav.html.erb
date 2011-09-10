@@ -1,0 +1,12 @@
+<div id="sub_nav">
+  <div class="label">
+    <%= LinkList.model_name.human %>
+  </div>
+  <ul class="nav">
+  <% LinkList.all.each do |link_list| %>
+    <li<%= ' class="current"'.html_safe if @link_list == link_list %>>
+      <%= link_to link_list.title, admin_link_list_path(link_list) %>
+    </li>
+  <% end %>
+  </ul>
+</div>

@@ -1,35 +1,66 @@
 module Porthos
   class PageRenderer
 
-    class_inheritable_accessor :available_methods
-    self.available_methods = []
+    class_attribute :_available_methods
+    self._available_methods = {}
 
     def self.register_methods(*methods)
-      self.available_methods.push *methods
+      self._available_methods[self.name] = [] if self.available_methods.empty?
+      self._available_methods[self.name].push *methods
     end
 
-    attr_reader :params
-    attr_reader :field_set
+    def self.available_methods
+      self._available_methods[self.name] || []
+    end
 
-    def initialize(field_set, params)
-      @field_set = field_set
-      @params = params
-      self.available_methods.each { |m| self.send(m) } # pre fetch everything before render time
+    class_attribute :required_objects
+    self.required_objects = [:page_template]
+
+    attr_reader :controller,
+                :params,
+                :objects
+
+    def initialize(controller, objects = {})
+      @controller = controller
+      @params     = controller.params
+      @objects    = objects.to_options
+      validate_required_objects
+      create_instance_variables_for_objects
+      self.class.available_methods.each { |m| self.send(m) } # pre fetch everything before render time
+      after_initialize
       self
     end
 
     def layout_class
-      @page_class ||= @field_set.handle
+      @layout_class ||= @page_template.handle
     end
 
     def title
-      @title ||= @field_set.title
+      @title ||= @page_template.title
     end
 
     def page_id
       'pages-index'
     end
 
-    register_methods :layout_class, :title, :page_id
+    def create_instance_variables_for_objects
+      objects.each do |key, object|
+        self.class.send(:attr_reader, key)
+        instance_variable_set("@#{key.to_s}".to_sym, object)
+      end
+    end
+
+  protected
+
+    def after_initialize
+    end
+
+    def validate_required_objects
+      object_keys = @objects.keys
+      self.class.required_objects.each do |object_name|
+        raise "Missing required object #{object_name.to_s}" unless object_keys.include?(object_name)
+      end
+    end
+
   end
 end

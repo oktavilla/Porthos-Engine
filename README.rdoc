@@ -4,18 +4,18 @@ A Rails 3 CMS under development by Oktavilla (http://oktavilla.se) named after P
 
 == Requirements
 
-Rails 3.0.x
+Rails 3.1.x
 Ruby 1.9
 
 == Installation instructions
 
 Create a new rails project
 
-Add porthos (dev version) to your Gemfile: 
+Add porthos (dev version) to your Gemfile:
 
-  gem 'porthos', :git => "git://github.com/Oktavilla/Porthos-Engine.git", :branch => 'develop'
+  gem 'porthos', '~> 0.0.1'
 
-Run porthos generator 
+Run porthos generator
 
   $ rails g porthos
 

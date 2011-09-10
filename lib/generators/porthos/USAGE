@@ -1,5 +1,3 @@
 Usage:
 
-  rails g porthos CreatePorthosTables
-  
-This will create a migration for setting up Porthos db structure.
+  rails g porthos

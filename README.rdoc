@@ -11,16 +11,12 @@ Ruby 1.9
 
 Create a new rails project
 
-Add porthos (dev version) to your Gemfile:
+Add porthos to your Gemfile:
 
-  gem 'porthos', '~> 0.0.1'
+  gem 'porthos', '~> 3.0.0.beta2'
 
 Run porthos generator
 
   $ rails g porthos
 
-Run migrations
-
-  $ rake db:migrate
-
-Done. Drink beer and rock out
+Done. Drink beer and rock out.

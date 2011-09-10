@@ -66,7 +66,7 @@ code {font-size:12px;}
   display:block;
   cursor:move;
   height:25px;
-  background:transparent url(<%= asset_path("ui_new.png") %>) 0 -792px no-repeat; }
+  background:transparent image_url("ui_new.png") 0 -792px no-repeat; }
 
 .pagination {
   text-align:center;
@@ -91,11 +91,11 @@ code {font-size:12px;}
   color: #333;
   font-size:1.1667em;
   color:#390;
-  background: #cfc url(<%= asset_path("ui_new.png") %>) 40px -889px no-repeat; }
+  background: #cfc image_url("ui_new.png") 40px -889px no-repeat; }
   .flash.error {
     color:#f60;
     border-color:#ffdc92;
-    background:#ffedae url(<%= asset_path("ui_new.png") %>) 40px -948px no-repeat; }
+    background:#ffedae image_url("ui_new.png") 40px -948px no-repeat; }
 
 .blank_slate {
   font-size:36px; }
@@ -117,7 +117,7 @@ code {font-size:12px;}
     padding:6px 10px 5px 10px;
     font-size:12px;
     color:rgba(0,0,0,.85);
-    background:rgb(240,240,240) url(<%= asset_path("button_grey_bg.png") %>) 0 0 repeat-x;
+    background:rgb(240,240,240) image_url("button_grey_bg.png") 0 0 repeat-x;
     border:1px solid rgb(215,215,215);
     text-shadow:1px 1px 1px rgb(255,255,255);
     -webkit-border-radius:5px;
@@ -144,7 +144,7 @@ code {font-size:12px;}
       height: 100px;
       margin-left: -115px;
       float: left;
-      background: url(<%= asset_path("icons/filetypes/default.png") %>); }
+      background: image_url("icons/filetypes/default.png"); }
     .items.thumbnails img {
       float:left;
       margin-left:-115px;
@@ -322,14 +322,16 @@ table.sortable {
 
 table td.instructions {width:25%;}
 
-span.status {
-  line-height:1;
-  padding:3px 4px 2px 4px;
-  color:#fff;
-  text-transform:uppercase;
-  font-size:9px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px; }
+#items_view {
+  span.status {
+    line-height:1;
+    padding:3px 4px 2px 4px;
+    color:#fff;
+    text-transform:uppercase;
+    font-size:9px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px; }
   .status.published {background:green;}
   .status.unpublished {background:#d00;}
+}

@@ -237,9 +237,8 @@ module Porthos
     # Find a rule definition that matches the path
     # Returns a hash of params
     def self.recognize(path, restrictions = {})
-      path = path.to_s.mb_chars.downcase
       return self.rules.sorted.collect do |rule|
-        matches = path.scan(Regexp.new(rule.regexp_template)).flatten
+        matches = path.scan(Regexp.new(rule.regexp_template, true)).flatten
         next unless (matches.any? and rule.match?(restrictions))
         {}.tap do |params|
           params[:url] = matches.shift.gsub(/^\//,'')

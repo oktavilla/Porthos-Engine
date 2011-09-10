@@ -5,6 +5,7 @@ Gem::Specification.new do |s|
   s.name     = 'porthos'
   s.version  = Porthos::VERSION.dup
   s.platform = Gem::Platform::RUBY
+  s.homepage = "http://github.com/Oktavilla/Porthos-Engine"
   s.authors  = ['Joel Junström', 'Arvid Andersson', 'Alexis Fellenius']
   s.email    = ['bender@oktavilla.se']
 

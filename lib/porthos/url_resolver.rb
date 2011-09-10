@@ -57,8 +57,12 @@ module RoutingFilter
       else
         node = nil
         handle = params[:handle]
-        conditions = { controller: params[:controller], action: params[:action] }
+        conditions = {
+          controller: params[:controller],
+          action: params[:action]
+        }
         index_conditions = conditions.dup.merge(action: 'index')
+
         if params[:id].present?
           resource = params[:id]
           handle = resource.handle if handle.blank? and resource.respond_to?(:handle)
@@ -73,9 +77,12 @@ module RoutingFilter
             params[:id] = resource.uri if resource.respond_to?(:uri) and resource.uri.present?
           end
         end
+
         if !node and handle.present?
           node = Node.first(handle: handle)
         end
+
+        format = params.delete :format
 
         yield.tap do |path|
           if node
@@ -84,12 +91,15 @@ module RoutingFilter
             else
               if rule = Porthos::Routing.rules.find_matching_params(params)
                 uri = Addressable::URI.parse(rule.computed_path(node, params))
-                query_hash = stringify_param_values(params.except(*(rule.param_keys + [:controller, :action, :handle])))
+                query_hash = stringify_param_values(params.except(*(rule.param_keys + [:controller, :action, :handle, :format])))
                 uri.query_values = query_hash if query_hash.any?
                 path.replace([uri.to_s])
               else
                 path.replace [node_uri(node, params).to_s]
               end
+            end
+            if format.present?
+              path.replace [[path[0], format].join('.')]
             end
           end
         end

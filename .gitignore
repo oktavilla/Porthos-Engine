@@ -8,3 +8,4 @@ config/environment.rb
 .rvmrc
 .sass-cache
 coverage
+*.gem

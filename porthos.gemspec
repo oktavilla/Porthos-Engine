@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = 'A CMS engine for Ruby On Rails projects using mongodb. Featuring customizable page types, url nodes and more'
   s.files       = Dir['{app,public,lib,config}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'Gemfile', 'README.rdoc']
 
-  s.required_rubygems_version = '~> 1.8.10'
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
 
   s.add_dependency 'rails', '~> 3.1.0'
 

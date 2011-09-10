@@ -6,9 +6,10 @@ Gem::Specification.new do |s|
   s.version  = Porthos::VERSION.dup
   s.platform = Gem::Platform::RUBY
   s.authors  = ['Joel Junström', 'Arvid Andersson', 'Alexis Fellenius']
+  s.email    = ['bender@oktavilla.se']
 
-  s.summary     = 'A minimal CMS engine for Ruby On Rails projects'
-  s.description = 'A minimal CMS engine for Ruby On Rails projects'
+  s.summary     = 'A CMS engine for Ruby On Rails projects'
+  s.description = 'A CMS engine for Ruby On Rails projects using mongodb. Featuring customizable page types, url nodes and more'
   s.files       = Dir['{app,public,lib,config}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'Gemfile', 'README.rdoc']
 
   s.required_rubygems_version = '~> 1.8.10'

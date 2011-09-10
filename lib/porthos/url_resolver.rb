@@ -12,7 +12,12 @@ module RoutingFilter
             path.replace(CGI::unescape(path))
             custom_params = {}
             matched_rule = nil
-            url = path.gsub(/^\//,'')
+            format = File.extname(path)
+            unless format.blank?
+              custom_params[:format] = format.gsub('.', '')
+              path.gsub!(format, '')
+            end
+            url = path.dup.gsub(/^\//,'')
             node = Node.where(url: (url.present? ? url : '/')).first
             unless node
               Porthos::Routing.recognize(path).each do |match|

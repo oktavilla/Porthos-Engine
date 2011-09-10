@@ -2,6 +2,9 @@
 $:.push File.expand_path('../lib', __FILE__)
 require 'porthos/version'
 Gem::Specification.new do |s|
+
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+
   s.name     = 'porthos'
   s.version  = Porthos::VERSION.dup
   s.platform = Gem::Platform::RUBY
@@ -11,9 +14,7 @@ Gem::Specification.new do |s|
 
   s.summary     = 'A CMS engine for Ruby On Rails projects'
   s.description = 'A CMS engine for Ruby On Rails projects using mongodb. Featuring customizable page types, url nodes and more'
-  s.files       = Dir['{app,public,lib,config}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'Gemfile', 'README.rdoc']
-
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.files       = Dir['{app,config,lib,vendor}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'Gemfile', 'README.rdoc']
 
   s.add_dependency 'rails', '~> 3.1.0'
 

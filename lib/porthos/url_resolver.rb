@@ -82,41 +82,30 @@ module RoutingFilter
           node = Node.first(handle: handle)
         end
 
-        format = params.delete :format
+        format = params[:format]
 
-        yield.tap do |path|
+        yield.tap do |result|
           if node
+            path, _params = *result
+
             if node.resource_id.present?
-              path.replace [node_uri(node, params).to_s]
+              path = "/#{node.url}"
             else
               if rule = Porthos::Routing.rules.find_matching_params(params)
-                uri = Addressable::URI.parse(rule.computed_path(node, params))
-                query_hash = stringify_param_values(params.except(*(rule.param_keys + [:controller, :action, :handle, :format])))
-                uri.query_values = query_hash if query_hash.any?
-                path.replace([uri.to_s])
+                path = rule.computed_path(node, params)
+                _params = _params.except(*rule.param_keys)
               else
-                path.replace [node_uri(node, params).to_s]
+                path = "/#{node.url}"
               end
             end
-            if format.present?
-              path.replace [[path[0], format].join('.')]
-            end
+
+            _params.delete(:handle) if node.handle == _params[:handle]
+            path += ".#{format}" if format.present?
+
+            result.replace [path, _params]
           end
         end
       end
-    end
-
-  private
-
-    def node_uri(node, params)
-      uri = Addressable::URI.parse("/#{node.url}")
-      query_hash = stringify_param_values(params.except(:controller, :action, :handle, :node, :id))
-      uri.query_values = query_hash if query_hash.any?
-      uri
-    end
-
-    def stringify_param_values(params = {})
-      params.inject({}) { |hash, (k, v)| hash.merge(k => v.to_s) }
     end
 
   end

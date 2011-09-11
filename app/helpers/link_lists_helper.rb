@@ -5,8 +5,9 @@ module LinkListsHelper
   end
 
   def navigation_links(link_list)
+    escaped_path = CGI.unescape(request.fullpath).mb_chars
     link_list.links.map do |link|
-      if !!request.fullpath.starts_with?(link.url)
+      if !!escaped_path.starts_with?(CGI.unescape(link.url).mb_chars)
         link_to(link.title, link.url, :class => 'current')
       else
         link_to(link.title, link.url)

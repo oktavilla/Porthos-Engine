@@ -64,7 +64,7 @@ module Porthos
       end
 
       def regexp_template
-        @regexp_template ||= "^(.*|)#{regexp_prefix}/#{translated_path}(/|)$".tap do |regexp_template|
+        @regexp_template ||= "^(.*#{regexp_prefix}|#{regexp_prefix})/#{translated_path}(/|)$".tap do |regexp_template|
           template = regexp_template
           constraints.each do |key, value|
             template.gsub!(":#{key.to_s}", value)

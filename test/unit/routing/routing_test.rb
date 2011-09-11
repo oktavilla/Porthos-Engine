@@ -58,8 +58,13 @@ class RulesTest < ActiveSupport::TestCase
 
     should 'allow a prefixed route to be mounted at any point in the url' do
       recognized_lol = Porthos::Routing.recognize('/lulz/my-id-123', namespace: 'internets').first
+      assert_equal 'lols', recognized_lol[:controller]
+      assert_equal 'show', recognized_lol[:action]
+      assert_equal 'my-id-123', recognized_lol[:id]
       recognized_omg = Porthos::Routing.recognize('/omg-lol/lulz/my-id-123', namespace: 'internets').first
-      assert_equal recognized_lol.except(:url), recognized_omg.except(:url)
+      assert_equal 'lols', recognized_omg[:controller]
+      assert_equal 'show', recognized_omg[:action]
+      assert_equal 'my-id-123', recognized_omg[:id]
     end
 
     should 'not look further then the defined path' do
@@ -80,10 +85,5 @@ class RulesTest < ActiveSupport::TestCase
     should 'be case insensitive' do
       assert_equal Porthos::Routing.recognize('/cheers-dude', namespace: 'internets'), Porthos::Routing.recognize('/CHEERS-dude', namespace: 'internets')
     end
-
-    should 'ignore format' do
-      assert_equal Porthos::Routing.recognize('/cheers-dude.rss', namespace: 'internets'), Porthos::Routing.recognize('/cheers-dude.html', namespace: 'internets')
-    end
-
   end
 end

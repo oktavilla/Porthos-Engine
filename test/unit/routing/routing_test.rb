@@ -34,6 +34,7 @@ class RulesTest < ActiveSupport::TestCase
       recognized_routes[0].tap do |route|
         assert_equal 'posts', route[:controller]
         assert_equal 'show', route[:action]
+        assert_equal 'my-id-123', route[:id]
       end
 
       recognized_routes = Porthos::Routing.recognize('/my-id-123', namespace: 'authors')
@@ -41,6 +42,7 @@ class RulesTest < ActiveSupport::TestCase
       recognized_routes[0].tap do |route|
         assert_equal 'authors', route[:controller]
         assert_equal 'show', route[:action]
+        assert_equal 'my-id-123', route[:id]
       end
     end
 
@@ -50,7 +52,14 @@ class RulesTest < ActiveSupport::TestCase
       recognized_routes[0].tap do |route|
         assert_equal 'lols', route[:controller]
         assert_equal 'show', route[:action]
+        assert_equal 'my-id-123', route[:id]
       end
+    end
+
+    should 'allow a prefixed route to be mounted at any point in the url' do
+      recognized_lol = Porthos::Routing.recognize('/lulz/my-id-123', namespace: 'internets').first
+      recognized_omg = Porthos::Routing.recognize('/omg-lol/lulz/my-id-123', namespace: 'internets').first
+      assert_equal recognized_lol.except(:url), recognized_omg.except(:url)
     end
 
     should 'not look further then the defined path' do

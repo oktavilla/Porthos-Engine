@@ -64,7 +64,7 @@ module Porthos
       end
 
       def regexp_template
-        @regexp_template ||= "^(#{regexp_prefix})/#{translated_path}(\/|)$".tap do |regexp_template|
+        @regexp_template ||= "^(.*|)#{regexp_prefix}/#{translated_path}(/|)$".tap do |regexp_template|
           template = regexp_template
           constraints.each do |key, value|
             template.gsub!(":#{key.to_s}", value)
@@ -74,7 +74,7 @@ module Porthos
       end
 
       def regexp_prefix
-        @regexp_prefix ||= prefix ? "/#{translate(prefix)}" : '.*|'
+        @regexp_prefix ||= prefix ? "/#{translate(prefix)}" : ''
       end
 
       def translated_path
@@ -239,6 +239,7 @@ module Porthos
     def self.recognize(path, restrictions = {})
       return self.rules.sorted.collect do |rule|
         matches = path.scan(Regexp.new(rule.regexp_template, true)).flatten
+        matches.pop # remove trailing slash match
         next unless (matches.any? and rule.match?(restrictions))
         {}.tap do |params|
           params[:url] = matches.shift.gsub(/^\//,'')

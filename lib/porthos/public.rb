@@ -44,19 +44,9 @@ module Porthos
         @breadcrumbs ||= trail.map { |n| ["/#{n.url}", n.name] }
       end
 
-    protected
-
-      def set_routing_cache
-        Porthos.routing_cache = {}
-        yield
-        Porthos.routing_cache = {}
-      end
-
-
     end
 
     included do
-      around_filter :set_routing_cache
       helper_method :root_node, :root_nodes, :nodes, :node
       helper_method :trail, :breadcrumbs
       layout 'public'

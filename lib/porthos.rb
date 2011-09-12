@@ -12,9 +12,6 @@ require 'porthos/config'
 module Porthos
   extend self
 
-  mattr_accessor :routing_cache
-  self.routing_cache = {}
-
   def root
     Pathname.new(File.expand_path(File.dirname(__FILE__)+'../..'))
   end

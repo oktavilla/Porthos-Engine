@@ -1,10 +1,5 @@
 require 'routing_filter'
-require 'enumerator'
 module RoutingFilter
-
-  # mattr_accessor :cache
-  # self.cache = {}
-
   class UrlResolver < Filter
     def around_recognize(path, env, &block)
       excluded_path_prefixes = /(assets|admin|javascripts|stylesheets|images|graphics)/
@@ -77,43 +72,13 @@ module RoutingFilter
             conditions.merge!(resource_type: params[:controller].classify, resource_id: resource)
           end
           index_conditions.merge!(handle: handle)
-
-          if %w(Item CustomPage Section Page).include?(conditions[:resource_type])
-            # Try and find a resource
-            conditions_array = conditions_array.to_a
-            if Porthos.routing_cache.key?(conditions_array)
-              node = Porthos.routing_cache[conditions_array]
-            else
-              node = Node.limit(1).fields(:url, :resource_id, :handle).where(conditions).first
-              Porthos.routing_cache[conditions_array] = node
-            end
-          end
-
-          # Try and find a index action
-          unless node
-            index_conditions_array = index_conditions.to_a
-            if Porthos.routing_cache.key?(index_conditions_array)
-              node = Porthos.routing_cache[index_conditions_array]
-            else
-              node = Node.limit(1).fields(:url, :resource_id, :handle).where(index_conditions).first
-              Porthos.routing_cache[index_conditions_array] = node
-            end
-          end
-
-          if node
+          if node = (Node.first(conditions) || Node.first(index_conditions))
             params[:id] = resource.uri if resource.respond_to?(:uri) and resource.uri.present?
           end
         end
 
         if !node and handle.present?
-          handle_conditions = { handle: handle }
-          handle_conditions_array = handle_conditions.to_a
-          if Porthos.routing_cache.key?(handle_conditions_array)
-            node = Porthos.routing_cache[handle_conditions_array]
-          else
-            node = Node.limit(1).fields(:url, :resource_id, :handle).where(handle_conditions).first
-            Porthos.routing_cache[handle_conditions_array] = node
-          end
+          node = Node.first(handle: handle)
         end
 
         yield.tap do |result|
@@ -137,7 +102,6 @@ module RoutingFilter
             result.replace [path, _params]
           end
         end
-
       end
     end
 

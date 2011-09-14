@@ -29,7 +29,7 @@ module RoutingFilter
               end
               if node and node.handle and namespaced_match = Porthos::Routing.recognize(path, :namespace => node.handle).first
                 custom_params.merge!(namespaced_match)
-              else
+              elsif matched_rule
                 custom_params.merge!(matched_rule)
               end
             end

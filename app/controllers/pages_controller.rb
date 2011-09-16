@@ -14,10 +14,10 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       format.html { render template: template.views.index }
-      format.rss do
-        expires_in 1.hour, :public => true
-        render template: template.views.index, layout: false
-      end
+      # format.rss do
+      #   expires_in 1.hour, :public => true
+      #   render template: template.views.index, layout: false
+      # end
     end
   end
 

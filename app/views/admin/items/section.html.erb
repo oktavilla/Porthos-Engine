@@ -126,7 +126,6 @@
         <% datum.data.each do |d, i| %>
         <li id="datum_<%= d.id %>" class="datum <%= d.class.to_s.underscore %><%= ' inactive' unless d.active? %>">
           <div class="controls">
-            <%= link_to d.active? ? 'Dölj' : 'Visa', toggle_admin_item_datum_path(@item, d, :parent_id => datum), :method => :put, :class => 'visibility' %>
             <%= link_to t(:destroy), admin_item_datum_path(@item, d, :parent_id => datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
           </div>
           <div class="content">

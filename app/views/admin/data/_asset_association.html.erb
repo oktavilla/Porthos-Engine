@@ -26,7 +26,19 @@
   <% end %>
   <%= link_to t('.edit_asset'), edit_admin_asset_path(datum.asset, :return_to => admin_item_path(@item, :anchor => "datum_#{datum.id}")), :class => 'new' %>
   <% unless datum._parent_document.is_a?(DatumCollection) %>
-    <%= button_to t('.remove'), admin_item_datum_path(@item, datum, datum: { should_clear_association: true }), method: 'put', confirm: 'Ta bort associationen till den här filen?' %>
+    <% unless datum._parent_document.is_a?(FieldSet) %>
+      <%= button_to t('.remove'), admin_item_datum_path(@item, datum, datum: { should_clear_association: true }), method: 'put', confirm: 'Ta bort associationen till den här filen?' %>
+    <% else %>
+      <%= button_to t('.remove'), admin_item_datum_path(@item, datum._parent_document, {
+        parent_id: (datum.root_embedded_document unless datum._parent_document.is_root?),
+        datum: {
+          data_attributes: [{
+            id: datum.id,
+            should_clear_association: true
+          }]
+        }
+      }), method: 'put', confirm: 'Ta bort associationen till den här filen?' %>
+    <% end %>
   <% end %>
   </div>
 </div>

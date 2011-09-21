@@ -1,5 +1,6 @@
 class Admin::PagesController < ApplicationController
   include Porthos::Admin
+  include Porthos::Sweeper
   before_filter :login_required
 
   has_scope :with_field_set
@@ -123,12 +124,14 @@ class Admin::PagesController < ApplicationController
   def sort
     timestamp = Time.now
     params[:page].each_with_index do |id, i|
-      Page.update_all({
-        :first => (i == 0),
-        :next_id => params[:page][i+1],
-        :position => i+1,
-        :updated_at => timestamp
-      }, ["id = ?", id])
+      Page.find(id).tap do |page|
+        page.update_attributes({
+          :first => (i == 0),
+          :next_id => params[:page][i+1],
+          :position => i+1,
+          :updated_at => timestamp
+        })
+      end
     end
     respond_to do |format|
       format.js { render :nothing => true }

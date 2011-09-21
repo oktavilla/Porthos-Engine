@@ -1,5 +1,6 @@
 class Admin::CustomAssociationsController < ApplicationController
   include Porthos::Admin
+  include Porthos::Sweeper
   before_filter :find_page, :except => :sort
 
   def create
@@ -28,11 +29,13 @@ class Admin::CustomAssociationsController < ApplicationController
   def sort
     timestamp = Time.now
     params[:custom_association].each_with_index do |id, i|
-      CustomAssociation.update_all({
-        :first => (i == 0),
-        :next_id => params[:custom_association][i+1],
-        :updated_at => timestamp
-      }, ["id = ?", id])
+      CustomAssociation.find(id).tap do |custom_association|
+        custom_association.update_attributes({
+          :first => (i == 0),
+          :next_id => params[:custom_association][i+1],
+          :updated_at => timestamp
+        })
+      end
     end
     respond_to do |format|
       format.js { render :nothing => true }

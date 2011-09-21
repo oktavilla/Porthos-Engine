@@ -1,7 +1,8 @@
 class Admin::ContentListsController < ApplicationController
   include Porthos::Admin
+  include Porthos::Sweeper
   before_filter :login_required
-  
+
   def index
     @content_lists = ContentList.find(:all, :order => 'name')
     respond_to do |format|
@@ -15,7 +16,7 @@ class Admin::ContentListsController < ApplicationController
       format.html
     end
   end
-  
+
   def new
     @content_list = ContentList.new
     respond_to do |format|
@@ -40,7 +41,7 @@ class Admin::ContentListsController < ApplicationController
       format.html
     end
   end
-  
+
   def update
     @content_list = ContentList.find(params[:id])
     respond_to do |format|
@@ -51,7 +52,7 @@ class Admin::ContentListsController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     @content_list = ContentList.find(params[:id])
     @content_list.destroy
@@ -59,5 +60,5 @@ class Admin::ContentListsController < ApplicationController
       format.html { redirect_to admin_content_lists_path }
     end
   end
-  
+
 end

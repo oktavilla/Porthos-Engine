@@ -1,5 +1,6 @@
 class Admin::AssetUsagesController < ApplicationController
   include Porthos::Admin
+  include Porthos::Sweeper
   before_filter :login_required
   skip_after_filter :remember_uri, :only => [:create, :update, :destroy]
 
@@ -48,11 +49,13 @@ class Admin::AssetUsagesController < ApplicationController
   def sort
     timestamp = Time.now
     params[:asset_usage].each_with_index do |id, i|
-      AssetUsage.update_all({
-        :first => (i == 0),
-        :next_id => params[:asset_usage][i+1],
-        :updated_at => timestamp
-      }, ["id = ?", id])
+      AssetUsage.find(id).tap do |asset_usage|
+        asset_usage.update_attributes({
+          :first => (i == 0),
+          :next_id => params[:asset_usage][i+1],
+          :updated_at => timestamp
+        })
+      end
     end
     respond_to do |format|
       format.js { render :nothing => true }

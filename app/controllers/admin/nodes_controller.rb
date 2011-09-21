@@ -1,5 +1,6 @@
 class Admin::NodesController < ApplicationController
   include Porthos::Admin
+  include Porthos::Sweeper
   before_filter :login_required
 
   def index

@@ -18,6 +18,7 @@ require 'porthos/acts_as_settingable'
 require 'porthos/content_resource'
 require 'porthos/custom_association_proxy'
 require 'porthos/s3_storage'
+require 'porthos/sweeper'
 
 require 'resort'
 require 'sunspot'

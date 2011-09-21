@@ -1,5 +1,6 @@
 class Admin::CustomAttributesController < ApplicationController
   include Porthos::Admin
+  include Porthos::Sweeper
   before_filter :find_page
 
   def create

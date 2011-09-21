@@ -1,5 +1,6 @@
 class Admin::ContentsController < ApplicationController
   include Porthos::Admin
+  include Porthos::Sweeper
   before_filter :login_required
   skip_after_filter :remember_uri
 
@@ -93,11 +94,13 @@ class Admin::ContentsController < ApplicationController
         attributes = {}
         attributes[:column_position] = params[:column_position] if params[:column_position]
         attributes[:parent_id] = params[:parent_id] if params[:parent_id]
-        Content.update_all({
-          :first => (i == 0),
-          :next_id => params[:content][i+1],
-          :updated_at => timestamp
-        }.merge(attributes), ["id = ?", id])
+        Content.find(id).tap do |content|
+          content.update_attributes({
+            :first => (i == 0),
+            :next_id => params[:content][i+1],
+            :updated_at => timestamp
+          }.merge(attributes))
+        end
       end
       Content.find_by_id(params[:content].last).tap do |content|
         content.context.touch if content && content.context

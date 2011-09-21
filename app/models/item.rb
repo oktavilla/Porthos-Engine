@@ -48,7 +48,7 @@ class Item
   before_save :sort_data
 
   after_save proc { |page| page.delay.update_tank_indexes }
-  after_destroy proc { |page| page.delay.delete_tank_indexes }
+  after_destroy proc { |page| page.delete_tank_indexes }
 
   scope :by_class, lambda { |klass_name| where(type: klass_name) }
 

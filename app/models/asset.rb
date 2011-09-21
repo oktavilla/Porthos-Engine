@@ -75,7 +75,7 @@ class Asset
   after_destroy :cleanup
 
   after_save proc { |asset| asset.delay.update_tank_indexes }
-  after_destroy proc { |asset| asset.delay.delete_tank_indexes }
+  after_destroy proc { |asset| asset.delete_tank_indexes }
 
   def self.default_filetype
     filetypes.keys.detect do |key|

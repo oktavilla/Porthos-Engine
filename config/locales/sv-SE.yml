@@ -420,6 +420,14 @@
             not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
             restricted: Avstängd, inte tillgänglig på internet
   admin:
+    redirects:
+      index: 
+        title: Vidarebefordringar
+        new_redirect: Ny vidarebefordring
+      edit:
+        title: Ändra vidarebefordring
+      new:
+        title: Ny vidarebefordring
     assets:
       new:
         submit: Ladda upp
@@ -523,6 +531,9 @@
         add: Lägg till ny redaktör
       new:
         save: Spara
+    nodes:
+      sub_nav:
+        redirects: Vidarebefordringar
   admins: Redaktörer
   save: Spara
   or: eller

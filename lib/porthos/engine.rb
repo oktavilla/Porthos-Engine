@@ -14,7 +14,7 @@ module Porthos
     end
 
     initializer "porthos.redirects" do |app|
-      app.middleware.use Porthos::Redirects
+      app.middleware.use Porthos::RedirectApp
     end
 
     initializer 'porthos.helpers' do |app|

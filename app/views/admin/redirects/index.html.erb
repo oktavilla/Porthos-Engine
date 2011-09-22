@@ -1,27 +1,25 @@
-<% @page_title = 'Vidarebefordringar' -%>
-<% @page_class = 'layout2' -%>
+<% @page_title = t('.title') -%>
+<% @page_class = 'layout3' -%>
 <% @page_id = 'site-settings' -%>
-  <div id="sub_nav">
-    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+<%= render 'admin/nodes/sub_nav' %>
+<div id="workspace">
+  <div class="header">
+    <h1><%= t(:title, :scope => [:app, :views, :admin, :redirects, :index]) %></h1>
   </div>
-  <div id="workspace">
-    <div class="header">
-      <h1><%= t(:title, :scope => [:app, :views, :admin, :redirects, :index]) %></h1>
+  <div class="tools">
+    <div class="add">
+      <%= link_to t('.new_redirect'), new_admin_redirect_path, :class => 'new' %>
     </div>
-    <div class="tools">
-      <div class="add">
-        <%= link_to t(:add_redirect, :scope => [:app, :views, :admin, :redirects, :index]), new_admin_redirect_path, :class => 'new' %>
-      </div>
-    </div>
-    <div id="content">
-      <% if @redirects.any? %>
-        <table>
-          <tr>
-            <th><%= t(:from, :scope => [:app, :views, :admin, :redirects, :index, :table]) %></th>
-            <th><%= t(:to, :scope => [:app, :views, :admin, :redirects, :index, :table]) %></th>
-            <th></th>
-            <th></th>
-          </tr>
+  </div>
+  <div id="content">
+    <% if @redirects.any? %>
+      <table>
+        <tr>
+          <th><%= t(:from, :scope => [:app, :views, :admin, :redirects, :index, :table]) %></th>
+          <th><%= t(:to, :scope => [:app, :views, :admin, :redirects, :index, :table]) %></th>
+          <th></th>
+          <th></th>
+        </tr>
         <% @redirects.each do |redirect| %>
           <tr class="<%= cycle 'odd', 'even' %>">
             <td><%= link_to redirect.path, redirect.path %></td>
@@ -30,9 +28,9 @@
             <td><%= link_to t(:destroy), admin_redirect_path(redirect), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %></td>
           </tr>
         <% end %>
-        </table>
-      <% else %>
-        <p class="blank-slate"><%= t(:no_data, :scope => [:app, :views, :admin, :redirects, :index]) %></p>
-      <% end %>
-    </div>
+      </table>
+    <% else %>
+      <p class="blank-slate"><%= t(:no_data, :scope => [:app, :views, :admin, :redirects, :index]) %></p>
+    <% end %>
   </div>
+</div>

@@ -31,7 +31,7 @@ module Porthos
 end
 
 require 'porthos/validators'
-require 'porthos/redirects'
+require 'porthos/redirect_app'
 require 'porthos/routing'
 require 'porthos/url_resolver'
 require 'porthos/authentication'

@@ -25,7 +25,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-rails'
 
   # Mongo
-  s.add_dependency 'bson_ext'
+  s.add_dependency 'bson', '~> 1.3.1'
+  s.add_dependency 'bson_ext', '~> 1.3.1'
   s.add_dependency 'mongo_mapper'
   s.add_dependency 'mongo_mapper_tree'
   s.add_dependency 'mm-multi-parameter-attributes'

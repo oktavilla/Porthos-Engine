@@ -2,14 +2,14 @@ require_relative '../test_helper'
 
 class Thing
   include MongoMapper::Document
-  plugin Porthos::MongoMapper::Taggable::Plugin
+  plugin Porthos::MongoMapper::Plugins::Taggable::Plugin
   taggable
   key :name, String
 end
 
 class TaggableTest < ActiveSupport::TestCase
   setup do
-    Porthos::MongoMapper::Taggable.delimiter = ', '
+    Porthos::MongoMapper::Plugins::Taggable.delimiter = ', '
     DatabaseCleaner.start
   end
 
@@ -105,7 +105,7 @@ class TaggableTest < ActiveSupport::TestCase
   end
 
   test 'tagging with space as delimiter' do
-    Porthos::MongoMapper::Taggable.delimiter = ' '
+    Porthos::MongoMapper::Plugins::Taggable.delimiter = ' '
     box = Thing.new(:name => 'Box', :tank_tag_names => 'tag1 tag2 "ta g3"')
     assert_equal '"ta g3" tag1 tag2', box.tank_tag_names
   end

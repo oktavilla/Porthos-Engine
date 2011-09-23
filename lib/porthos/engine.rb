@@ -14,7 +14,11 @@ module Porthos
     end
 
     initializer "porthos.redirects" do |app|
-      #app.middleware.use Porthos::RedirectApp
+      app.middleware.use Porthos::Middleware::RedirectApp
+    end
+
+    initializer "porthos.routing_filters" do |app|
+      RoutingFilter.send :include, Porthos::Routing::Filters
     end
 
     initializer 'porthos.helpers' do |app|
@@ -32,8 +36,10 @@ module Porthos
 
     initializer 'porthos.mongo_mapper' do |app|
       ActiveSupport.on_load :mongo_mapper do
+        ::SymbolOperator.send :include, Porthos::MongoMapper::Extensions::SymbolOperator
         ::MongoMapper::Document.plugin ActiveModel::Observing
         ::MongoMapper::Document.plugin Porthos::MongoMapper::Plugins::ActsAsUri
+        ::MongoMapper::Document.plugin Porthos::MongoMapper::Plugins::Taggable::Plugin
       end
       config.after_initialize do
         ::Porthos.config.instantiate_observers

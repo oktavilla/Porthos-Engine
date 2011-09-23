@@ -11,8 +11,8 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
   context 'Porthos urls' do
 
     setup do
-      Porthos::Routing.rules.reset!
-      Porthos::Routing.rules.draw do
+      Porthos::Routing::Recognize.rules.reset!
+      Porthos::Routing::Recognize.rules.draw do
         # Posts
         match ':id',
           :to => {

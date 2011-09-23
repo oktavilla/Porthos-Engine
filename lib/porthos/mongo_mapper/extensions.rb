@@ -38,6 +38,11 @@ module Porthos
         end
 
         module InstanceMethods
+
+          def ==(other)
+            other.class.is_a?(self.class) && field == other.field && operator == other.operator
+          end
+
           def to_mongo
             "#{field.to_s}.#{operator}"
           end
@@ -46,13 +51,4 @@ module Porthos
 
     end
   end
-end
-
-class SymbolOperator
-  include Porthos::MongoMapper::Extensions::SymbolOperator
-
-  def ==(other)
-    other.class == SymbolOperator && field == other.field && operator == other.operator
-  end
-
 end

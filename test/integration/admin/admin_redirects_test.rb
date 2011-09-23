@@ -1,6 +1,6 @@
 require_relative '../../test_helper'
 
-class RedirectsTest < ActiveSupport::IntegrationCase
+class AdminRedirectsTest < ActiveSupport::IntegrationCase
   setup do
     @redirect = Redirect.create(:path => '/my-redirect', :target => '/woohoo')
     login!

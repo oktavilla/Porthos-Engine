@@ -1,8 +1,0 @@
-<% reset_cycle() %>
-<% if content.contents.active.any? -%>
-  <div class="teasers">
-  <% content.contents.active.each do |child| %>
-    <%= render(:partial => 'pages/contents/content_teasers/content_teaser', :locals => { :content => child, :parent => content }) if !child.restricted? || child.viewable_by(current_user) %>
-  <% end -%>
-  </div>
-<% end -%>

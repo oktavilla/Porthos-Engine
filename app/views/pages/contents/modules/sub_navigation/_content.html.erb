@@ -1,5 +1,0 @@
-<% nested_list_of nodes, { :end_points => node }, { :id => 'sub_nav' } do |node| %>
-  <a href="/<%= node.url %>"<%= ' class="current"' if trail and trail.include?(node) %>>
-    <span><%= node.name %></span>
-  </a>
-<% end if nodes && nodes.any? %>

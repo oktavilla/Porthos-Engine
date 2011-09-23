@@ -30,11 +30,11 @@ class DatumCollection < Datum
   end
 
   def texts
-    @texts ||= data.active.find_all { |d| d.is_a?(StringField) }
+    @texts ||= data.find_all { |d| d.is_a?(StringField) }
   end
 
   def links
-    @links ||= data.active.find_all { |d| d.is_a?(LinkField) }
+    @links ||= data.find_all { |d| d.is_a?(LinkField) }
   end
 
 protected

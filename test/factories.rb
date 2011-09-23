@@ -195,6 +195,7 @@ Factory.define :section, :parent => :item, :class => Section do |f|
 end
 
 Factory.define :page, :parent => :item, :class => Page do |f|
+  f.published_on { 1.week.ago }
 end
 
 Factory.define :asset do |f|

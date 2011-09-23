@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name     = 'porthos'
   s.version  = Porthos::VERSION.dup
   s.platform = Gem::Platform::RUBY
-  s.homepage = "http://github.com/Oktavilla/Porthos-Engine"
+  s.homepage = 'http://github.com/Oktavilla/Porthos-Engine'
   s.authors  = ['Joel Junström', 'Arvid Andersson', 'Alexis Fellenius']
   s.email    = ['bender@oktavilla.se']
 
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   # Mongo
   s.add_dependency 'bson', '~> 1.3.1'
   s.add_dependency 'bson_ext', '~> 1.3.1'
-  s.add_dependency 'mongo_mapper'
+  s.add_dependency 'mongo_mapper', '~> 0.9.2'
   s.add_dependency 'mongo_mapper_tree'
   s.add_dependency 'mm-multi-parameter-attributes'
 

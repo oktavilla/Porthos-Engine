@@ -14,12 +14,9 @@ module Porthos
                 path.replace(CGI::unescape(path))
                 custom_params = {}
                 matched_rule = nil
-                format = File.extname(path)
-                unless format.blank?
-                  custom_params[:format] = format.gsub('.', '')
-                  path.gsub!(format, '')
-                end
                 url = path.dup.gsub(/^\//,'')
+                format = File.extname(path)
+                url.gsub!(format, '') unless format.blank?
                 node = Node.where(url: (url.present? ? url : '/')).first
                 unless node
                   Porthos::Routing::Recognize.run(path).each do |match|
@@ -43,6 +40,7 @@ module Porthos
                   mapping_params = { controller: node.controller, action: node.action }
                   mapping_params[:id] = node.resource_id if node.resource_id.present?
                   path.replace('/' + mapping_params.values.reject { |part| %w(index show).include?(part) }.join('/'))
+                  path.replace(path + format) if format.present?
                 end
                 yield.tap do |_params|
                   _params.merge!(mapping_params) if node

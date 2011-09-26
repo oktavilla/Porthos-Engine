@@ -15,7 +15,9 @@ module Porthos
       end
 
       def initialize(attrs = {})
-        attrs.symbolize_keys.reverse_merge(:constraints => {}).each do |key, value|
+        attrs.symbolize_keys.reverse_merge({
+          :constraints => {}
+        }).each do |key, value|
           instance_variable_set("@#{key.to_s}".to_sym, value)
         end
       end
@@ -23,7 +25,7 @@ module Porthos
       def match?(attrs)
         attrs.each do |key, value|
           "@#{key.to_s}".to_sym.tap do |variable_name|
-            return false if !instance_variables.include?(variable_name) or
+            return false if !instance_variables.include?(variable_name) ||
               instance_variable_get(variable_name) != value
           end
         end
@@ -53,7 +55,7 @@ module Porthos
       end
 
       def regexp_template
-        @regexp_template ||= "^(.*#{regexp_prefix}|#{regexp_prefix})/#{translated_path}(/|)$".tap do |regexp_template|
+        @regexp_template ||= "^(.*#{regexp_prefix}|#{regexp_prefix})/#{translated_path}(/|\\.\\w+|)$".tap do |regexp_template|
           template = regexp_template
           constraints.each do |key, value|
             template.gsub!(":#{key.to_s}", value)

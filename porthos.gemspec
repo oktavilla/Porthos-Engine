@@ -29,8 +29,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'shoulda'
   s.add_dependency 'factory_girl'
   s.add_dependency 'redgreen'
-  s.add_dependency 'cucumber'
-  s.add_dependency 'cucumber-rails'
   s.add_dependency 'capybara'
   s.add_dependency 'database_cleaner'
   s.add_dependency 'rack-test'

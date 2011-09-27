@@ -15,8 +15,12 @@ class PagesController < ApplicationController
     respond_to do |format|
       format.html { render template: template.views.index }
       format.rss do
-        expires_in 1.hour, :public => true
-        render template: template.views.index, layout: false
+        if template_for_format_exists?(template.views.index, 'rss.builder')
+          expires_in 1.hour, :public => true
+          render template: template.views.index, layout: false
+        else
+          render nothing: true, status: :not_acceptable
+        end
       end
     end
   end
@@ -113,6 +117,11 @@ protected
 
   def page_renderer(template, objects = {})
     "#{template.name.camelize}Renderer::#{self.action_name.camelize}".constantize.new(self, objects)
+  end
+
+  def template_for_format_exists?(path, format)
+    puts Rails.root.join("#{path}.#{format}")
+    File.exists?(Rails.root.join('app', 'views', "#{path}.#{format}"))
   end
 
 end

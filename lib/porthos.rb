@@ -31,11 +31,13 @@ module Porthos
   end
 
   module Middleware
-    autoload :RedirectApp, 'porthos/middleware/redirect_app'
+    autoload :RedirectApp,         'porthos/middleware/redirect_app'
     autoload :TagsAutocompleteApp, 'porthos/middleware/tags_autocomplete_app'
+    autoload :RoutingCache,        'porthos/middleware/routing_cache'
   end
 
   module Routing
+    autoload :Cache,     'porthos/routing/cache'
     autoload :Rule,      'porthos/routing/rule'
     autoload :Rules,     'porthos/routing/rules'
     autoload :Recognize, 'porthos/routing/recognize'

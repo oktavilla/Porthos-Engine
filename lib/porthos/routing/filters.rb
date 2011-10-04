@@ -27,7 +27,7 @@ module Porthos
                       break
                     end
                   end
-                  if node and node.handle and namespaced_match = Porthos::Routing::Recognize.run(path, :namespace => node.handle).first
+                  if node && node.handle && namespaced_match = Porthos::Routing::Recognize.run(path, :namespace => node.handle).first
                     custom_params.merge!(namespaced_match)
                   elsif matched_rule
                     custom_params.merge!(matched_rule)
@@ -53,58 +53,81 @@ module Porthos
 
         def around_generate(params, &block)
           if !params[:controller].present? or params[:controller] =~ /admin/
-            yield
+            return yield
+          end
+
+          node = nil
+          conditions = {
+            controller: params[:controller],
+            action:     params[:action]
+          }
+
+          if params[:id].present?
+            conditions.merge! resource_conditions(params)
           else
-            node = nil
-            handle = params[:handle]
-            conditions = {
-              controller: params[:controller],
-              action: params[:action]
-            }
-            index_conditions = conditions.dup.merge(action: 'index')
+            conditions.merge! handle: params[:handle]
+          end
 
-            if params[:id].present?
-              resource = params[:id]
-              handle = resource.handle if handle.blank? and resource.respond_to?(:handle)
-              if resource.kind_of?(::MongoMapper::Document) or resource.kind_of?(::ActiveRecord::Base)
-                params[:id] = resource.to_param
-                conditions.merge!(resource_type: resource.class.to_s, resource_id: resource.id)
-              else
-                conditions.merge!(resource_type: params[:controller].classify, resource_id: resource)
-              end
-              index_conditions.merge!(handle: handle)
-              if node = (Node.first(conditions) || Node.first(index_conditions))
-                params[:id] = resource.uri if resource.respond_to?(:uri) and resource.uri.present?
-              end
+          conditions_key = conditions.to_a.sort
+          node = Porthos::Routing::Cache.cached[conditions_key]
+          unless node
+            node = Node.limit(1).fields(:url, :resource_id, :handle).where(conditions).first
+            if node
+              Porthos::Routing::Cache.cached[conditions_key] = node
             end
+          end
 
-            if !node and handle.present?
-              node = Node.first(handle: handle)
-            end
-
-            yield.tap do |result|
+          if !node && params[:handle]
+            handle_conditions = { handle: params[:handle] }
+            handle_conditions_key = handle_conditions.to_a
+            node = Porthos::Routing::Cache.cached[handle_conditions_key]
+            unless node
+              node = Node.limit(1).fields(:url, :resource_id, :handle).where(handle_conditions).first
               if node
-                path, _params = *result
-
-                if node.resource_id.present?
-                  path = "/#{node.url}"
-                else
-                  if rule = Porthos::Routing::Recognize.rules.find_matching_params(params)
-                    path = rule.computed_path(node, params)
-                    _params = _params.except(*rule.param_keys)
-                  else
-                    path = "/#{node.url}"
-                  end
-                end
-
-                _params.delete(:handle) if node.handle == _params[:handle]
-                path += ".#{params[:format]}" if params[:format].present?
-
-                result.replace [path, _params]
+                Porthos::Routing::Cache.cached[handle_conditions_key] = node
               end
             end
           end
+
+          if node
+            yield.tap do |result|
+              path, computed_params = *result
+
+              if node.resource_id.present? # We have a node pointing to a specific resource
+                path = "/#{node.url}"
+              else # Try and find a matching url structure
+                rule = Porthos::Routing::Recognize.rules.find_matching_params(params)
+                if rule
+                  path = rule.computed_path(node, params)
+                  computed_params = computed_params.except(*rule.param_keys)
+                else
+                  path = "/#{node.url}"
+                end
+              end
+
+              computed_params.delete(:handle) if node.handle == computed_params[:handle]
+              path += ".#{params[:format]}" if params[:format].present?
+
+              result.replace [path, computed_params]
+            end
+          else
+            yield
+          end
         end
+
+    protected
+
+        def resource_conditions(params)
+          resource = params[:id]
+          if resource.kind_of?(::MongoMapper::Document) or resource.kind_of?(::ActiveRecord::Base)
+            params[:id] = resource.try(:uri) || resource.to_param
+            params[:handle] = resource.handle if !params[:handle] && resource.respond_to?(:handle)
+            { resource_type: resource.class.to_s, resource_id: resource.id }
+          else
+            { resource_type: params[:controller].classify, resource_id: resource }
+          end
+        end
+
       end
 
     end

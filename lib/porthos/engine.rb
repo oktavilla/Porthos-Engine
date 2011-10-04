@@ -17,6 +17,10 @@ module Porthos
       app.middleware.use Porthos::Middleware::RedirectApp
     end
 
+    initializer "porthos.routing_cache" do |app|
+      app.middleware.insert_before ::MongoMapper::Middleware::IdentityMap, Porthos::Middleware::RoutingCache
+    end
+
     initializer "porthos.routing_filters" do |app|
       RoutingFilter.send :include, Porthos::Routing::Filters
     end

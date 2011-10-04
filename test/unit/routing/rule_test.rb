@@ -40,13 +40,13 @@ class RuleTest < ActiveSupport::TestCase
 
     should 'be compiled to regexp with constraints (without prefix)' do
       constraints = @attrs[:constraints]
-      assert_equal "^(.*|)/#{I18n.t('routes.authors')}/#{constraints[:genre]}/#{constraints[:id]}(/|)$", @rule.regexp_template
+      assert_equal "^(.*|)/#{I18n.t('routes.authors')}/#{constraints[:genre]}/#{constraints[:id]}(/|\\.\\w+|)$", @rule.regexp_template
     end
 
     should 'be compiled to regexp with constraints (with prefix)' do
       constraints = @attrs[:constraints]
       @rule.prefix = 'super-items'
-      assert_equal "^(.*/super-items|/super-items)/#{I18n.t('routes.authors')}/#{constraints[:genre]}/#{constraints[:id]}(/|)$", @rule.regexp_template
+      assert_equal "^(.*/super-items|/super-items)/#{I18n.t('routes.authors')}/#{constraints[:genre]}/#{constraints[:id]}(/|\\.\\w+|)$", @rule.regexp_template
     end
 
     should 'get computed' do

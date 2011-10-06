@@ -105,7 +105,7 @@ module Porthos
                 end
               end
 
-              computed_params.delete(:handle) if node.handle == computed_params[:handle]
+              computed_params.delete(:handle)
               path += ".#{params[:format]}" if params[:format].present?
 
               result.replace [path, computed_params]

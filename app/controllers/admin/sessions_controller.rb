@@ -14,6 +14,9 @@ class Admin::SessionsController < ApplicationController
   def create
     user = warden.authenticate!
     sign_in user
+    if params[:remember_me]
+      cookies.permanent.signed[Porthos::Authentication::Strategies::Rememberable.cookie_name] = user.generate_remember_me_token!
+    end
     flash[:notice] = t(:'admin.sessions.signed_in')
     redirect_to admin_root_path
   end

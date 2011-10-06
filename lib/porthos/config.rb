@@ -14,5 +14,13 @@ module Porthos
         Porthos::Tanking::Config
       end
     end
+
+    def strategies
+      if block_given?
+        yield Porthos::Authentication::Strategies.registered_strategies
+      else
+        Porthos::Authentication::Strategies.registered_strategies
+      end
+    end
   end
 end

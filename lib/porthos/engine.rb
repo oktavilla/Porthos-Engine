@@ -54,10 +54,10 @@ module Porthos
     end
 
     initializer 'porthos.authentication' do |app|
-      app.middleware.use ::Warden::Manager do |manager|
-        manager.default_strategies :password
-        manager.failure_app = Porthos::Authentication::UnauthorizedRequest
-      end
+        app.middleware.use ::Warden::Manager do |manager|
+          manager.default_strategies Porthos::Authentication::Strategies.prepared_strategies
+          manager.failure_app = Porthos::Authentication::UnauthorizedRequest
+        end
       ActiveSupport.on_load :action_controller do
         include Porthos::Authentication::Helpers
       end

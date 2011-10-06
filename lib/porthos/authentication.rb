@@ -1,21 +1,11 @@
 require 'warden'
+
 Warden::Manager.serialize_into_session do |user|
   user.id
 end
 
 Warden::Manager.serialize_from_session do |id|
   User.find(id)
-end
-
-Warden::Strategies.add(:password) do
-  def valid?
-    params['username'] || params['password']
-  end
-
-  def authenticate!
-    u = User.authenticate(params['username'], params['password'])
-    u.nil? ? fail!("Could not log in") : success!(u)
-  end
 end
 
 module Porthos
@@ -55,6 +45,7 @@ module Porthos
         def authenticate!(*args)
           warden.authenticate!(*args)
         end
+
       end
     end
 
@@ -66,6 +57,31 @@ module Porthos
       def redirect
         flash[:error] = I18n.t(:'admin.sessions.failed') if params['username'] || params['password']
         redirect_to '/admin/login'
+      end
+    end
+
+    module Strategies
+      autoload :Password, 'porthos/strategies/password.rb'
+      autoload :Rememberable, 'porthos/strategies/rememberable.rb'
+
+      mattr_accessor :registered_strategies
+      self.registered_strategies = [:password, :rememberable]
+
+      def self.prepared_strategies
+        registered_strategies.each do |name|
+          ::Warden::Strategies.add(name, Porthos::Authentication::Strategies.const_get(name.to_s.camelize))
+        end
+        registered_strategies
+      end
+
+      module Utils
+        def cookies
+          request.cookie_jar
+        end
+
+        def request
+          @request ||= ActionDispatch::Request.new(env)
+        end
       end
     end
   end

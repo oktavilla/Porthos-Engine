@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   include Porthos::Public
   before_filter :require_node
 
-  caches_action :index, :show
+  caches_action :index, :show, :cache_path => Proc.new { |c| c.params }
 
   before_filter :only => :preview do |c|
     user = c.send :current_user

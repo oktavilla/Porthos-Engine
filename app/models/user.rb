@@ -8,6 +8,7 @@ class User
   key :last_name, String
   key :username, String
   key :password_digest, String
+  key :remember_me_token, String
   key :email, String
 
   key :phone, String
@@ -52,6 +53,12 @@ class User
 
   def short_name
     "#{first_name} #{!last_name.blank? ? last_name[0...1]+'.' : ''}"
+  end
+
+  def generate_remember_me_token!
+    "#{id.to_s}#{SecureRandom.hex(24)}".tap do |token|
+      self.update_attribute(:remember_me_token, token)
+    end
   end
 
   class << self

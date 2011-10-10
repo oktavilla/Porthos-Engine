@@ -120,7 +120,7 @@ module Porthos
         def resource_conditions(params)
           resource = params[:id]
           if resource.kind_of?(::MongoMapper::Document) or resource.kind_of?(::ActiveRecord::Base)
-            params[:id] = resource.try(:uri) || resource.to_param
+            params[:id] = resource.respond_to?(:uri) ? (resource.uri || resource.to_param) : resource.to_param
             params[:handle] = resource.handle if !params[:handle] && resource.respond_to?(:handle)
             { resource_type: resource.class.to_s, resource_id: resource.id }
           else

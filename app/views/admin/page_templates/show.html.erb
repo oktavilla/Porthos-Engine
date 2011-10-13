@@ -24,7 +24,13 @@
     <% end %>
     <ul style="display:none;" id="datum_template_classes">
     <% PageTemplate.datum_template_classes.each do |klass| %>
-      <li><%= link_to (klass[:type] != 'FieldTemplate' ? klass[:type].constantize.model_name.human : t(".#{klass[:attrs][:input_type]}")), new_admin_template_datum_template_path(@page_template, template_type: klass[:type], datum_template: (klass[:attrs] || {})) %></li>
+      <li>
+      <% if klass[:attrs] %>
+        <%= link_to t(".#{klass[:attrs][:input_type]}"), new_admin_template_datum_template_path(@page_template, template_type: klass[:type], datum_template: {}) %>
+      <% else %>
+        <%= link_to klass[:type].constantize.model_name.human, new_admin_template_datum_template_path(@page_template, template_type: klass[:type]) %>
+      <% end %>
+      </li>
     <% end %>
     </ul>
   </div>

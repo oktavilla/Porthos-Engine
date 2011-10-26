@@ -221,6 +221,7 @@
         published_on: Publiceringsdatum
         parent_id: Sidtyp
         note: Notering
+        page_template: Sidtyp
       string_field_template:
         multiline: Textfält
         allow_rich_text: Tillåt formatering
@@ -497,6 +498,8 @@
         unpublish: Avpublicera
         not_published: Sidan är inte publicerad
         add_note: Lägg till
+      search:
+        title: "Sökresultat för ”%{query}”"
     content_templates:
       index:
         title: Innehållstyper

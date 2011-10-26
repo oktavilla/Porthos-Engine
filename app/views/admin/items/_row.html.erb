@@ -1,5 +1,5 @@
 <tr id="item_<%= item.id %>">
-  <% if sortable %>
+  <% if defined?(sortable) and sortable %>
   <td class="sort"><% if item.is_a?(Page) %><span class="drag_handle"></span><% end %></td>
   <% end %>
   <td class="content">
@@ -16,6 +16,11 @@
       <p class="note"><%= item.note %></p>
     <% end -%>
   </td>
+  <% if defined?(display_page_type) and display_page_type %>
+  <td class="page_template">
+    <%= link_to item.page_template.label, admin_items_path(:with_page_template => item.page_template.id) %>
+  </td>
+  <% end %>
   <td class="updated_at">
     <% if item.updated_at && item.updated_at != item.created_at -%>
       <% if item.updated_at.year != Time.now.year %>

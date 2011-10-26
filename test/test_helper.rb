@@ -14,7 +14,6 @@ require 'mongo_mapper'
 require 'database_cleaner'
 require 'bcrypt'
 require 'has_scope'
-require 'turn'
 require 'porthos/test_helpers/assets_test_helper'
 require 'porthos/test_helpers/pages_test_helper'
 
@@ -29,9 +28,10 @@ DatabaseCleaner[:mongo_mapper].strategy = :truncation
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
-ActionMailer::Base.default_url_options[:host] = "test.com"
-
-Tanker.configuration = { :url => 'http://test.api.indextank.com' }
+ActionMailer::Base.default_url_options[:ost] = "test.com"
+Tanker.configuration = {
+  :pagination_backend => :kaminari,
+  :url => 'http://test.api.indextank.com' }
 
 Delayed::Worker.delay_jobs = false
 

@@ -5,6 +5,35 @@ class PagesTest < ActiveSupport::IntegrationCase
     @page_template = Factory.create(:hero_page_template)
   end
 
+  test 'listing pages' do
+    Page.create_from_template(@page_template, :title => 'Page no1', :tag_names => 'tag1 tag2')
+    visit admin_items_path
+    assert page.find("table.pages").has_content?('Page no1'), 'Should display page in the pages list'
+  end
+
+  test 'searching for pages' do
+    Capybara.using_driver(:selenium) do
+      test_page = Page.create_from_template(@page_template, :title => 'Page no1', :tag_names => 'tag1 tag2')
+      stub_index_tank_put
+      stub_request(:get, /api.indextank.com\/v1\/indexes\//).
+        to_return(:status => 200, :body => "{
+            \"matches\": 1,
+            \"query\": \"title:(test) OR uri:(test) OR tag_names:(test) OR data:(test) OR __any:(test) __type:(Page)\",
+            \"facets\": {},
+            \"search_time\": \"0.005\",
+            \"results\": [{\"docid\": \"Page #{test_page.id.to_s}\", \"__type\": \"Page\", \"__id\": \"#{test_page.id.to_s}\", \"query_relevance_score\": -6861131.0}] }")
+      User.delete_all
+      login!
+      visit admin_items_path
+      fill_in 'query', :with => 'no1'
+      page.evaluate_script("$('#items_search').submit()") # faking hitting enter in search form
+      within 'table.pages' do
+        assert page.has_content?('Page no1'), 'should see campaign in search results list'
+        assert page.has_content?(@page_template.label), 'should see page template label in search results list'
+      end
+    end
+  end
+
   test 'listning pages by tag' do
     page1 = Page.create_from_template(@page_template, :title => 'Page no1', :tag_names => 'tag1 tag2')
     page2 = Page.create_from_template(@page_template, :title => 'Page no2', :tag_names => 'tag2')
@@ -86,17 +115,6 @@ class PagesTest < ActiveSupport::IntegrationCase
     assert_equal admin_login_path, current_path
   end
 
-  test 'publishing a page without all required data' do
-    skip 'Not implemented'
-    batman = create_page
-    batman.data.each { |d| d.required = true }
-
-    visit admin_item_path(batman.id)
-
-    publish
-    refute published?
-  end
-
   test 'publishing a page' do
     batman = create_page
     batman.data.each { |d| d.required = false } && batman.save
@@ -141,11 +159,12 @@ class PagesTest < ActiveSupport::IntegrationCase
       new_page = Page.create_from_template(@page_template, :title => 'Category page')
       visit admin_item_path(new_page)
 
-      click_link I18n.t(:'admin.items.details.choose_category')
-      click_link I18n.t(:'admin.items.details.add_new_category')
-
-      fill_in "item_#{@page_template.handle}_tag_names", :with => 'Beverages'
-      click_button I18n.t(:save)
+      within '#page_category' do
+        click_link I18n.t(:'admin.items.details.choose_category')
+        click_link I18n.t(:'admin.items.details.add_new_category')
+        fill_in "item_category_name", :with => 'Beverages'
+        click_button I18n.t(:save)
+      end
 
       assert page.find('#page_category').has_content?('Beverages'), 'Category should be added'
       refute page.find('#page_tags p').has_content?('Beverages'), 'category should not be listed as a tag'

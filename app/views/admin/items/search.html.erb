@@ -1,9 +1,9 @@
-<% @page_title = 'Sidor' -%>
+<% @page_title = t('.title', :query => @query) -%>
 <% @page_class = 'layout3' -%>
 <%= render :partial => 'admin/items/sub_nav' %>
 <div id="workspace">
   <div class="header">
-    <h1>Sökresultat för ”<%= @query %>”</h1>
+    <h1><%= t('.title', :query => @query) %></h1>
   </div>
   <div class="tools">
     <div class="add">
@@ -14,13 +14,22 @@
     </div>
   </div>
   <div id="content">
-    <ul class="items">
-    <% @pages.each do |page| %>
-      <li>
-        <%= render :partial => page.template.views.admin_in_list, :locals => { :item => page } %>
-      </li>
-    <% end %>
-    </ul>
+    <table class="pages">
+      <thead>
+        <tr>
+          <th><%= Page.human_attribute_name(:title) %></th>
+          <th><%= Page.human_attribute_name(:page_template) %></th>
+          <th><%= Page.human_attribute_name(:updated_at) %></th>
+          <th><%= Page.human_attribute_name(:published_on) %></th>
+          <th><%= t(:status) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pages.each do |page| %>
+          <%= render partial: 'row', locals: { item: page, display_page_type: true } %>
+        <% end %>
+      </tbody>
+    </table>
     <%= paginate @pages if @pages.any? %>
   </div>
 </div>

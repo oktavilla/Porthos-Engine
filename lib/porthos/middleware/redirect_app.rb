@@ -6,7 +6,9 @@ module Porthos
       end
 
       def call(env)
-        redirect = Redirect.first(path: env['PATH_INFO'])
+        path = env['PATH_INFO']
+        path = path[0...-1] if path.ends_with?('/')
+        redirect = Redirect.first(path: path)
         redirect_path = redirect ? redirect['target'] : nil
         if redirect && redirect_path
           if not env['QUERY_STRING'].blank?

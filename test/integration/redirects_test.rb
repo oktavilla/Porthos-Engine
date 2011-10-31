@@ -1,7 +1,7 @@
 require_relative '../test_helper'
 
 class RedirectsTest < ActiveSupport::IntegrationCase
-  test 'getting redirected' do
+  setup do
     page_template = Factory(:hero_page_template)
     Factory(:node, {
       url: 'take-me-here',
@@ -9,8 +9,15 @@ class RedirectsTest < ActiveSupport::IntegrationCase
       resource: Page.create_from_template(page_template, { title: 'Batman', published_on: (Time.now-3600) })
     })
     Redirect.create(path: '/my-redirect', target: '/take-me-here')
+  end
 
+  test 'getting redirected' do
     visit '/my-redirect'
+    assert_equal '/take-me-here', current_path, 'should get redirected to target'
+  end
+
+  test 'ignores trailing slash' do
+    visit '/my-redirect/'
     assert_equal '/take-me-here', current_path, 'should get redirected to target'
   end
 end

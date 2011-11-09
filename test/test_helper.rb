@@ -1,5 +1,6 @@
 # Configure Rails Envinronment
 ENV["RAILS_ENV"] = "test"
+gem 'minitest'
 require 'simplecov'
 SimpleCov.start 'rails'
 

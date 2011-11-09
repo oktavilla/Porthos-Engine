@@ -7,9 +7,13 @@ module Porthos
 
       def call(env)
         path = env['PATH_INFO']
-        path = path[0...-1] if path.ends_with?('/')
-        redirect = Redirect.first(path: path)
-        redirect_path = redirect ? redirect['target'] : nil
+        unless blacklisted?(path)
+          path = path[0...-1] if path.ends_with?('/')
+          redirect = Redirect.first(path: path)
+          redirect_path = redirect ? redirect['target'] : nil
+        else
+          redirect = false
+        end
         if redirect && redirect_path
           if not env['QUERY_STRING'].blank?
             if redirect_path.include?('?')
@@ -27,7 +31,11 @@ module Porthos
       def each(&block)
         ['You are being redirected.'].each(&block)
       end
-
+    
+      def blacklisted?(path)
+        path.match(/\/admin($|\/)|\/assets($|\/)/) != nil
+      end
+      
     end
   end
 end

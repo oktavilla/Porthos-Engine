@@ -9,7 +9,7 @@ module Porthos
         path = env['PATH_INFO']
         unless blacklisted?(path)
           path = path[0...-1] if path.ends_with?('/')
-          redirect = Redirect.first(path: path)
+          redirect = Redirect.first(path: URI.decode(path))
           redirect_path = redirect ? redirect['target'] : nil
         else
           redirect = false

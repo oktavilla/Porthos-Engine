@@ -1,0 +1,14 @@
+<%= f.label :value, datum.label, :for => "datum_#{datum.id}_value" %>
+<div class="fullwidth">
+<% if datum.multiline? %>
+  <% if datum.instruction_body %>
+    <p class="instructions"><%= datum.instruction_body %></p>
+  <% end %>
+  <%= f.text_area :value, :class => (datum.allow_rich_text? ? 'editor' : 'normal'), :id => "datum_#{datum.id}_value" %>
+<% else %>
+  <%= f.text_field :value, :id => "datum_#{datum.id}_value" %>
+  <% if datum.instruction_body %>
+    <p class="instructions"><%= datum.instruction_body %></p>
+  <% end %>
+<% end %>
+</div>

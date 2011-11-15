@@ -1,0 +1,1 @@
+<%= datum.allow_rich_text? ? datum.value.to_s.html_safe : simple_format(datum.value.to_s.dup) %>

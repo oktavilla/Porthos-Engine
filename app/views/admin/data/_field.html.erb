@@ -1,7 +1,8 @@
-<% if datum.input_type == 'string' %>
-  <%= datum.allow_rich_text? ? datum.value.to_s.html_safe : simple_format(datum.value.to_s.dup) %>
-<% elsif datum.input_type == 'date' %>
-  <%= datum.value.in_time_zone.strftime("%Y-%m-%d") if datum.value.present? %>
-<% elsif datum.input_type == 'boolean' %>
-  <%= datum.value? ? 'Ja' : 'Nej' %>
+<% begin %>
+<%= render partial: "admin/data/fields/#{datum.input_type}", locals: { datum: datum } %>
+<% rescue ActionView::MissingTemplate => e %>
+<p class="error">
+  Couldn't find template for field with input type ”<%= datum.input_type %>”
+  (<%= e.message %>)
+</p>
 <% end %>

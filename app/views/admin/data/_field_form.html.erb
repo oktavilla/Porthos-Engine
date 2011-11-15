@@ -1,27 +1,8 @@
-<% if datum.input_type == 'string' %>
-  <%= f.label :value, datum.label, :for => "datum_#{datum.id}_value" %>
-  <div class="fullwidth">
-  <% if datum.multiline? %>
-    <% if datum.instruction_body %>
-      <p class="instructions"><%= datum.instruction_body %></p>
-    <% end %>
-    <%= f.text_area :value, :class => (datum.allow_rich_text? ? 'editor' : 'normal'), :id => "datum_#{datum.id}_value" %>
-  <% else %>
-    <%= f.text_field :value, :id => "datum_#{datum.id}_value" %>
-    <% if datum.instruction_body %>
-      <p class="instructions"><%= datum.instruction_body %></p>
-    <% end %>
-  <% end %>
-  </div>
-<% elsif datum.input_type == 'date' %>
-  <%= f.label :value, datum.label, :for => "datum_#{datum.id}_value" %>
-  <% if datum.instruction_body %>
-    <p class="instructions"><%= datum.instruction_body %></p>
-  <% end %>
-  <%= f.text_field :value, :value => (datum.value.present? ? datum.value.in_time_zone.strftime("%Y-%m-%d") : ''), :class => 'date', :id => "datum_#{datum.id}_value" %>
-<% elsif datum.input_type == 'boolean' %>
-  <label for="<%= "datum_#{datum.id}_value" %>" class="contains-input">
-    <%= f.check_box :value, :id => "datum_#{datum.id}_value" %>
-    <%= datum.label %>
-  </label>
+<% begin %>
+<%= render partial: "admin/data/fields/#{datum.input_type}_form", locals: { f: f, datum: datum } %>
+<% rescue ActionView::MissingTemplate => e %>
+<p class="error">
+  Couldn't find template form for field with input type ”<%= datum.input_type %>”
+  (<%= e.message %>)
+</p>
 <% end %>

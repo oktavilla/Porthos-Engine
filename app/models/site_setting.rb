@@ -1,5 +1,9 @@
 class SiteSetting
   include MongoMapper::Document
+
+  key :name, String
+  key :value, String
+
   validates_presence_of :name
   validates_uniqueness_of :name
 

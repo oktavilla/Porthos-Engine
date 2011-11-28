@@ -31,5 +31,7 @@ module Porthos
 end
 
 Warden::Manager.before_logout do |user, auth, opts|
-  user.update_attribute :remember_me_token, nil
+  if user
+    user.update_attribute :remember_me_token, nil
+  end
 end

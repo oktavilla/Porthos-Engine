@@ -46,7 +46,7 @@ class PagesController < ApplicationController
   end
 
   def preview
-    @page = Page.find(params[:id])
+    @page = Item.find(params[:id])
     template = @page.page_template.template
     @page_renderer = page_renderer(template, page_template: @page.page_template, page: @page)
     respond_to do |format|

@@ -5,13 +5,13 @@ module PorthosAssetTestHelpers
     when 'text'  then 'page.txt'
     end
     tempfile = Tempfile.new(Time.now.to_s)
-    tempfile.write IO.read(test_file_path(file))
+    tempfile.write IO.read(stub_file_path(file))
     tempfile.rewind
     uploaded_file = ActionDispatch::Http::UploadedFile.new(:filename => file, :tempfile => tempfile)
     uploaded_file
   end
 
-  def test_file_path(filename = 'page.txt')
+  def stub_file_path(filename = 'page.txt')
     path = File.join(Porthos.root, 'test', 'files')
     File.join(path, filename)
   end

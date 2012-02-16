@@ -17,6 +17,9 @@ module Porthos
     def store(source, target)
       file = bucket.objects.build(target)
       file.content = source
+      if source.respond_to?(:original_filename)
+        file.content_type = resolve_mime_type(source.original_filename)
+      end
       file.save
     end
 
@@ -43,6 +46,10 @@ module Porthos
     end
 
   protected
+
+    def resolve_mime_type(filename)
+      MIME::Types.type_for(filename).first.to_s
+    end
 
     def bucket
       @bucket ||= service.buckets.find(bucket_name).tap do |bucket|

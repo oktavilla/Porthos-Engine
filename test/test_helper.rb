@@ -16,7 +16,7 @@ require 'database_cleaner'
 require 'bcrypt'
 require 'has_scope'
 require 'porthos/test_helpers/assets_test_helper'
-require 'porthos/test_helpers/pages_test_helper'
+require 'porthos/test_helpers/searchify_stubs'
 
 WebMock.allow_net_connect!
 
@@ -32,7 +32,7 @@ ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.default_url_options[:ost] = "test.com"
 Tanker.configuration = {
   :pagination_backend => :kaminari,
-  :url => 'http://test.api.indextank.com' }
+  :url => 'http://test.api.searchify.com' }
 
 Delayed::Worker.delay_jobs = false
 
@@ -44,12 +44,12 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 class ActiveSupport::TestCase
   include PorthosAssetTestHelpers
-  include PorthosPageTestHelpers
+  include SearchifyStubs
 
   setup do
     WebMock.allow_net_connect!
-    stub_index_tank_put
-    stub_index_tank_delete
+    stub_searchify_put
+    stub_searchify_delete
     DatabaseCleaner.start
   end
 

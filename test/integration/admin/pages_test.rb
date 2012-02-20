@@ -14,8 +14,8 @@ class PagesTest < ActiveSupport::IntegrationCase
   test 'searching for pages' do
     Capybara.using_driver(:selenium) do
       test_page = Page.create_from_template(@page_template, :title => 'Page no1', :tag_names => 'tag1 tag2')
-      stub_index_tank_put
-      stub_request(:get, /api.indextank.com\/v1\/indexes\//).
+      stub_searchify_put
+      stub_request(:get, /api.searchify.com\/v1\/indexes\//).
         to_return(:status => 200, :body => "{
             \"matches\": 1,
             \"query\": \"title:(test) OR uri:(test) OR tag_names:(test) OR data:(test) OR __any:(test) __type:(Page)\",

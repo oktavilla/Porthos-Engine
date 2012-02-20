@@ -8,7 +8,7 @@ class NodesTest < ActiveSupport::IntegrationCase
   end
 
   test 'adding a node pointing to a page' do
-    new_page = Factory(:page, :page_template => @page_template)
+    new_page = Factory(:page, :page_template => @page_template, :published_on => nil)
     visit admin_item_path(new_page)
     click_link I18n.t(:'admin.items.details.publish_now')
     assert_equal new_admin_node_path, current_path

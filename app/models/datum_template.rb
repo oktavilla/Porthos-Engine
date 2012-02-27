@@ -122,7 +122,7 @@ private
     _root_document.concerned_items.each do |item|
       _root_document.find_matching_field_sets_in_item(item).each do |field_set|
         field_set.data.detect { |datum| datum.datum_template_id == self.id }.tap do |datum|
-          datum.assign(self.shared_attributes) if datum
+          datum.attributes = self.shared_attributes if datum
         end
       end
       item.save

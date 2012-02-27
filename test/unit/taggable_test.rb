@@ -57,7 +57,9 @@ class TaggableTest < ActiveSupport::TestCase
     box = Thing.create(:name => 'Box', :tag_names => 'tag1, tag2')
     circle = Thing.create(:name => 'Circle', :tag_names => 'tag2')
     triangle = Thing.create(:name => 'Triangle', :tag_names => 'tag1, tag2, tag3')
+
     tags_by_count = Thing.tags_by_count
+
     assert_equal 'tag2', tags_by_count.first.name
     assert_equal 3, tags_by_count.first.count
     assert_equal 'tag3', tags_by_count.last.name

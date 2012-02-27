@@ -12,7 +12,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'searching for pages' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       test_page = Page.create_from_template(@page_template, :title => 'Page no1', :tag_names => 'tag1 tag2')
       stub_searchify_put
       stub_request(:get, /api.searchify.com\/v1\/indexes\//).
@@ -26,7 +26,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       login!
       visit admin_items_path
       fill_in 'query', :with => 'no1'
-      page.evaluate_script("$('#items_search').submit()") # faking hitting enter in search form
+      page.execute_script("$('#items_search').submit()") # faking hitting enter in search form
       within 'table.pages' do
         assert page.has_content?('Page no1'), 'should see campaign in search results list'
         assert page.has_content?(@page_template.label), 'should see page template label in search results list'
@@ -68,7 +68,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'updating page details' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       User.delete_all
       login!
       batman = create_page
@@ -76,7 +76,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       within '#item_attributes' do
         click_link I18n.t(:edit)
       end
-      within 'form.item_edit' do
+      within 'form.edit_item' do
         fill_in 'item_title', :with => 'Robin'
         click_button I18n.t(:save)
       end
@@ -94,7 +94,6 @@ class PagesTest < ActiveSupport::IntegrationCase
 
     visit page_path(batman)
 
-    assert_equal "/#{node.url}", current_path
     assert page.has_content?(batman.title)
 
     visit admin_item_path(batman)
@@ -103,7 +102,7 @@ class PagesTest < ActiveSupport::IntegrationCase
       click_link I18n.t('edit')
     end
 
-    within '.header form.item_edit' do
+    within '.header form.edit_item' do
       check 'item_restricted'
       click_button I18n.t(:save)
     end
@@ -151,8 +150,8 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'categorizing a page' do
-    Capybara.using_driver(:selenium) do
-      # Need to reset env/session for selenium
+    Capybara.using_driver(:webkit) do
+      # Need to reset env/session for webkit
       User.delete_all
       login!
       @page_template.update_attribute(:allow_categories, true)
@@ -172,7 +171,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'changing category for a page' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       User.delete_all
       login!
       @page_template.update_attribute(:allow_categories, true)
@@ -187,7 +186,7 @@ class PagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'adding a note to a page' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       User.delete_all
       login!
       new_page = Page.create_from_template(@page_template, :title => 'Category page')

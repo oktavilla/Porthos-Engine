@@ -14,15 +14,21 @@ Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
-  t.verbose = false
+  t.verbose = true
+end
+
+Rake::TestTask.new('test:units') do |t|
+  t.libs << 'lib'
+  t.libs << 'test'
+  t.pattern = 'test/unit/**/*_test.rb'
+  t.verbose = true
+end
+
+Rake::TestTask.new('test:integration') do |t|
+  t.libs << 'lib'
+  t.libs << 'test'
+  t.pattern = 'test/integration/**/*_test.rb'
+  t.verbose = true
 end
 
 task :default => :test
-
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Porthos'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README.rdoc')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end

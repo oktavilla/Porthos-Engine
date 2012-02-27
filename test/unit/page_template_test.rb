@@ -47,10 +47,10 @@ class PageTemplateTest < ActiveSupport::TestCase
   end
 
   test 'accepts sortable as a hash' do
-    @page_template.assign(sortable: {
+    @page_template.attributes = { sortable: {
       field: 'position',
       operator: 'desc'
-    })
+    }}
     assert_equal :position.desc, @page_template.sortable
   end
 

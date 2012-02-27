@@ -36,21 +36,19 @@ module Porthos
           end
         end
 
-        module InstanceMethods
-        private
-          def generate_uri
-            options = self.class.acts_as_uri_options
-            base_url = self.send options[:target]
-            base_url = self.send(options[:source]).to_s.to_url if base_url.blank? || !options[:only_when_blank]
-            write_attribute(options[:target], base_url)
-          end
+      private
+        def generate_uri
+          options = self.class.acts_as_uri_options
+          base_url = self.send options[:target]
+          base_url = self.send(options[:source]).to_s.to_url if base_url.blank? || !options[:only_when_blank]
+          write_attribute(options[:target], base_url)
+        end
 
-          def uniqueness_of_uri_among_siblings
-            options = self.class.acts_as_uri_options
-            current_uri = self.send options[:target]
-            if _parent_document && _parent_document.send(self.model_name.tableize).one? { |s| s.id != self.id && s.send(options[:target]) == current_uri }
-              errors.add(options[:target], :taken)
-            end
+        def uniqueness_of_uri_among_siblings
+          options = self.class.acts_as_uri_options
+          current_uri = self.send options[:target]
+          if _parent_document && _parent_document.send(self.model_name.tableize).one? { |s| s.id != self.id && s.send(options[:target]) == current_uri }
+            errors.add(options[:target], :taken)
           end
         end
       end

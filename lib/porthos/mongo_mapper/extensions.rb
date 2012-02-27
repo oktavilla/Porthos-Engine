@@ -37,16 +37,10 @@ module Porthos
           end
         end
 
-        module InstanceMethods
-
-          def ==(other)
-            other.class.is_a?(self.class) && field == other.field && operator == other.operator
-          end
-
-          def to_mongo
-            "#{field.to_s}.#{operator}"
-          end
+        def to_mongo
+          "#{field.to_s}.#{operator}"
         end
+
       end
 
     end

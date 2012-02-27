@@ -11,7 +11,7 @@ class DatumTemplatesTest < ActiveSupport::IntegrationCase
     visit admin_page_template_path(@page_template)
     click_link I18n.t(:"admin.page_templates.show.string")
 
-    within("form.datum_template_new") do
+    within("form.new_datum_template") do
       assert_equal StringFieldTemplate.model_name, page.find('#template_type').value
 
       fill_in "datum_template_label", :with => 'Description'

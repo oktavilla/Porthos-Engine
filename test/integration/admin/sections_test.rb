@@ -13,7 +13,7 @@ class SectionsTest < ActiveSupport::IntegrationCase
   end
 
   test 'adding a string field' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       login!
       create_a_field
 

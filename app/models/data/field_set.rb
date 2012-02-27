@@ -13,7 +13,7 @@ class FieldSet < Datum
       attrs.to_options!
       datum_id = attrs.delete(:id)
       data.detect { |d| d.id.to_s == datum_id.to_s }.tap do |datum|
-        datum.assign(attrs) if datum && attrs.keys.any?
+        datum.attributes = attrs if datum && attrs.keys.any?
       end if datum_id
     end
   end

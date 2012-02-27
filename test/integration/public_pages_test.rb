@@ -40,11 +40,13 @@ class PublicPagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'visiting a restricted page when logged in' do
-    login!
-    my_page = create_restricted_page
-    visit page_path(my_page)
+    Capybara.using_driver(:webkit) do
+      login!
+      my_page = create_restricted_page
+      visit page_path(my_page)
 
-    assert_equal page_path(my_page), current_path
+      assert_equal page_path(my_page), current_path
+    end
   end
 
 private

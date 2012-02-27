@@ -16,19 +16,20 @@ Gem::Specification.new do |s|
   s.description = 'A CMS engine for Ruby On Rails projects using mongodb. Featuring customizable page types, url nodes and more'
   s.files       = Dir['{app,config,lib,vendor}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'Gemfile', 'README.md']
 
-  s.add_dependency 'rails', '~> 3.1.0'
+  s.add_dependency 'rails', '~> 3.2.1'
 
   # Asset pipeline
-  s.add_dependency 'sass-rails', "~> 3.1.0"
-  s.add_dependency 'coffee-rails', "~> 3.1.0"
+  #
+  s.add_dependency 'sass-rails',   '~> 3.2.3'
+  s.add_dependency 'coffee-rails', '~> 3.2.1'
   s.add_dependency 'uglifier'
   s.add_dependency 'jquery-rails'
 
   # Mongo
-  s.add_dependency 'bson', '~> 1.3.1'
-  s.add_dependency 'bson_ext', '~> 1.3.1'
-  s.add_dependency 'mongo_mapper', '~> 0.9.2'
-  s.add_dependency 'mongo_mapper_tree'
+  s.add_dependency 'bson', '~> 1.6.0'
+  s.add_dependency 'bson_ext', '~> 1.6.0'
+  s.add_dependency 'mongo_mapper', '~> 0.11.0'
+  s.add_dependency 'mongo_mapper_tree', '~> 1.0.0'
   s.add_dependency 'mm-multi-parameter-attributes'
 
   # Authentication
@@ -38,7 +39,7 @@ Gem::Specification.new do |s|
   # Utilities
   s.add_dependency 'delayed_job'
   s.add_dependency 'has_scope', '~> 0.5.1'
-  s.add_dependency 'routing-filter', '~> 0.2'
+  s.add_dependency 'routing-filter', '~> 0.3'
   s.add_dependency 's3'
   s.add_dependency 'resizor', '~> 0.0.9'
   s.add_dependency 'kaminari'
@@ -52,9 +53,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'factory_girl'
-  s.add_development_dependency 'capybara', '~> 1.0.1'
+  s.add_development_dependency 'capybara', '~> 1.1.2'
+  s.add_development_dependency 'capybara-webkit'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'webmock', '~> 1.7'
-  s.add_development_dependency 'simplecov'
 end

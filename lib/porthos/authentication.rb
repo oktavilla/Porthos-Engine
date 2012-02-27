@@ -17,36 +17,34 @@ module Porthos
         helper_method :warden, :signed_in?, :current_user
       end
 
-      module InstanceMethods
-        def warden
-          env['warden']
-        end
-
-        def signed_in?(*args)
-          warden.authenticated?(*args)
-        end
-
-        def current_user(*args)
-          warden.user(*args)
-        end
-
-        def sign_in(*args)
-          warden.set_user(*args)
-        end
-
-        def sign_out(*args)
-          warden.logout(*args)
-        end
-
-        def authenticate(*args)
-          warden.authenticate(*args)
-        end
-
-        def authenticate!(*args)
-          warden.authenticate!(*args)
-        end
-
+      def warden
+        env['warden']
       end
+
+      def signed_in?(*args)
+        warden.authenticated?(*args)
+      end
+
+      def current_user(*args)
+        warden.user(*args)
+      end
+
+      def sign_in(*args)
+        warden.set_user(*args)
+      end
+
+      def sign_out(*args)
+        warden.logout(*args)
+      end
+
+      def authenticate(*args)
+        warden.authenticate(*args)
+      end
+
+      def authenticate!(*args)
+        warden.authenticate!(*args)
+      end
+
     end
 
     class UnauthorizedRequest < ActionController::Base

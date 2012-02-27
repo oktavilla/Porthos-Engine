@@ -8,7 +8,7 @@ class CustomPagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'adding a field' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       login!
       create_a_field
       page.find('.datums').tap do |datums|
@@ -19,7 +19,7 @@ class CustomPagesTest < ActiveSupport::IntegrationCase
   end
 
   test 'editing a field' do
-    Capybara.using_driver(:selenium) do
+    Capybara.using_driver(:webkit) do
       login!
       create_a_field
       within '.tools' do

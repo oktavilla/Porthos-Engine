@@ -42,10 +42,11 @@ module Porthos
                   path.replace('/' + mapping_params.values.reject { |part| %w(index show).include?(part) }.join('/'))
                   path.replace(path + format) if format.present?
                 end
-                yield.tap do |_params|
-                  _params.merge!(mapping_params) if node
-                  _params.merge!(custom_params)
-                end
+                # yield.tap do |_params|
+                   params.merge!(mapping_params) if node
+                   params.merge!(custom_params)
+                # end
+                params
               end
             end
           end

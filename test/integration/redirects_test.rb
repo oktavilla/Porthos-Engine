@@ -12,12 +12,16 @@ class RedirectsTest < ActiveSupport::IntegrationCase
   end
 
   test 'getting redirected' do
-    visit '/my-redirect'
-    assert_equal '/take-me-here', current_path, 'should get redirected to target'
+    Capybara.using_driver(:webkit) do
+      visit '/my-redirect'
+      assert_equal '/take-me-here', current_path, 'should get redirected to target'
+    end
   end
 
   test 'ignores trailing slash' do
-    visit '/my-redirect/'
-    assert_equal '/take-me-here', current_path, 'should get redirected to target'
+    Capybara.using_driver(:webkit) do
+      visit '/my-redirect/'
+      assert_equal '/take-me-here', current_path, 'should get redirected to target'
+    end
   end
 end

@@ -21,9 +21,9 @@ module Porthos
                 unless node
                   Porthos::Routing::Recognize.run(path).each do |match|
                     next unless url.start_with?(match[:url])
-                    matched_rule = match
                     matched_url = match.delete(:url)
                     if node = Node.where(url: matched_url).first
+                      matched_rule = match
                       break
                     end
                   end
@@ -42,11 +42,10 @@ module Porthos
                   path.replace('/' + mapping_params.values.reject { |part| %w(index show).include?(part) }.join('/'))
                   path.replace(path + format) if format.present?
                 end
-                # yield.tap do |_params|
-                   params.merge!(mapping_params) if node
-                   params.merge!(custom_params)
-                # end
-                params
+                yield.tap do |_params|
+                  _params.merge!(mapping_params) if node
+                  _params.merge!(custom_params)
+                end
               end
             end
           end

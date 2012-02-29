@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'has_scope', '~> 0.5.1'
   s.add_dependency 'routing-filter', '~> 0.3'
   s.add_dependency 's3'
-  s.add_dependency 'resizor', '~> 0.0.11'
+  s.add_dependency 'resizor', '~> 0.0.12'
   s.add_dependency 'kaminari'
   s.add_dependency 'tanker', '~> 1.1.4'
   s.add_dependency 'stringex'

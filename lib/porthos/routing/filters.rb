@@ -7,52 +7,55 @@ module Porthos
         def around_recognize(path, env, &block)
           excluded_path_prefixes = /(assets|admin|javascripts|stylesheets|images|graphics)/
           if env["REQUEST_URI"] =~ excluded_path_prefixes or path =~ excluded_path_prefixes
-            yield
-          else
-            yield.tap do |params|
-              unless params.any?
-                path.replace URI.unescape(path)
-                custom_params = {}
-                matched_rule = nil
-                url = path.dup.gsub(/^\//,'')
-                format = File.extname(path)
-                url.gsub!(format, '') unless format.blank?
-                node = Node.where(url: (url.present? ? url : '/')).first
-                unless node
-                  Porthos::Routing::Recognize.run(path).each do |match|
-                    next unless url.start_with?(match[:url])
-                    matched_url = match.delete(:url)
-                    if node = Node.where(url: matched_url).first
-                      matched_rule = match
-                      break
-                    end
-                  end
-                  if node && node.handle && namespaced_match = Porthos::Routing::Recognize.run(path, :namespace => node.handle).first
-                    custom_params.merge!(namespaced_match)
-                  elsif matched_rule
-                    custom_params.merge!(matched_rule)
-                  end
-                end
+            return yield
+          end
+           
+          params = {}
 
-                if node
-                  custom_params[:handle] = node.handle if node.handle.present?
-                  custom_params[:node] = { id: node.id, url: node.url }
-                  mapping_params = { controller: node.controller, action: node.action }
-                  mapping_params[:id] = node.resource_id if node.resource_id.present?
-                  path.replace('/' + mapping_params.values.reject { |part| %w(index show).include?(part) }.join('/'))
-                  path.replace(path + format) if format.present?
-                end
-                yield.tap do |_params|
-                  _params.merge!(mapping_params) if node
-                  _params.merge!(custom_params)
-                end
+          path.replace URI.unescape(path)
+          matched_rule_params = {}
+          url = path.dup.gsub(/^\//,'')
+          format = File.extname(path)
+          url.gsub!(format, '') unless format.blank?
+          url << '/' if url.blank? # The root node has a single slash as url
+          
+          node = Node.where(url: url).first
+          unless node
+            Porthos::Routing::Recognize.run(path).each do |match|
+              next unless url.start_with?(match[:url])
+              if node = Node.where(url: match.delete(:url)).first
+                matched_rule_params = match
+                break
               end
             end
+            if node && node.handle && namespaced_match = Porthos::Routing::Recognize.run(path, :namespace => node.handle).first
+              params.merge!(namespaced_match)
+            elsif matched_rule_params.any?
+              params.merge!(matched_rule_params)
+            end
+          end
+
+          if node
+            params[:handle] = node.handle if node.handle.present?
+            params[:node] = { id: node.id, url: node.url }
+
+            # Update the env path to match rails routes
+            path_parts = [
+              node.controller,
+              node.action,
+              node.resource_id,
+              format
+            ]
+            path.replace('/' + path_parts.reject(&:blank?).reject { |part| %w(index show).include?(part) }.join('/'))
+          end
+
+          yield.tap do |p|
+            p.merge!(params)
           end
         end
 
         def around_generate(params, &block)
-          if !params[:controller].present? or params[:controller] =~ /admin/
+          if ! params[:controller].present? || params[:controller] =~ /admin/
             return yield
           end
 

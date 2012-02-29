@@ -98,6 +98,21 @@ class Item
     published? and node.present?
   end
 
+  def association_ids(source = nil)
+    collection = source || self.data
+    result = []
+
+    collection.find_all { |d| d.active? }.each do |d|
+      if d.respond_to?(:page_id)
+        result << d.page_id
+      elsif d.respond_to?(:data) && d.data.any?
+        result += association_ids(d.data)
+      end
+    end
+
+    result.compact.uniq
+  end
+  
 private
 
   def sort_data

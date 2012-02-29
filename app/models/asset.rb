@@ -1,5 +1,7 @@
 class Asset
   include MongoMapper::Document
+  plugin MongoMapper::Plugins::IdentityMap
+  
   include Tanker
 
   taggable

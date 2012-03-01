@@ -43,7 +43,7 @@ module Porthos
             path_parts = [
               node.controller,
               node.action,
-              node.resource_id,
+              (node.action != 'index' ? node.resource_id : nil),
               format
             ]
             path.replace('/' + path_parts.reject(&:blank?).reject { |part| %w(index show).include?(part) }.join('/'))

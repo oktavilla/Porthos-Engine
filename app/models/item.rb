@@ -23,7 +23,9 @@ class Item
   key :restricted, Boolean
 
   key :published_on, Time
-
+  
+  key :association_ids, Array, typecast: 'ObjectId'
+  
   timestamps!
 
   taggable
@@ -46,7 +48,9 @@ class Item
   before_create :set_created_by
   before_save :set_updated_by
   before_save :sort_data
-
+  before_save :store_association_ids
+  
+  after_save :touch_associations
   after_save proc { |page| page.delay.update_tank_indexes }
   after_destroy proc { |page| page.delete_tank_indexes }
 
@@ -98,7 +102,7 @@ class Item
     published? and node.present?
   end
 
-  def association_ids(source = nil)
+  def find_association_ids(source = nil)
     collection = source || self.data
     result = []
 
@@ -106,7 +110,7 @@ class Item
       if d.respond_to?(:page_id)
         result << d.page_id
       elsif d.respond_to?(:data) && d.data.any?
-        result += association_ids(d.data)
+        result += find_association_ids(d.data)
       end
     end
 
@@ -126,5 +130,15 @@ private
   def set_updated_by
     self.updated_by = User.current
   end
+  
+  def store_association_ids
+    self.association_ids = find_association_ids
+  end
 
+  def touch_associations
+    Item.collection.update({
+      :association_ids => self.id
+    }, :'$set' => { :updated_at => self.updated_at.utc })
+  end
+  
 end

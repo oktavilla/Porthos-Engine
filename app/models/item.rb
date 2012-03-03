@@ -121,9 +121,7 @@ private
   end
 
   def touch_associations
-    Item.collection.update({
-      :association_ids => self.id
-    }, :'$set' => { :updated_at => self.updated_at.utc })
+    Item.set({ association_ids: self.id }, { updated_at: self.updated_at.utc })
   end
 
   def find_association_ids(source = nil)

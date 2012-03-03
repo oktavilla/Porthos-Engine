@@ -26,7 +26,7 @@ class PagesController < ApplicationController
   end
 
   def show
-    @page = if params[:id].is_a?(BSON::ObjectId) || BSON::ObjectId.legal?(params[:id])
+    @page = if BSON::ObjectId.legal?(params[:id].to_s)
       Item.published.find(params[:id])
     else
       Item.published.where(uri: params[:id], handle: params[:handle]).first

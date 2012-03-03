@@ -40,7 +40,7 @@ class ItemTest < ActiveSupport::TestCase
       PageAssociation.new(:page_id => 4, :active => true)
     ]
       
-    assert_equal [1, 2, 4], @item.find_association_ids
+    assert_equal [1, 2, 4], @item.send(:find_association_ids)
   end
 
   context 'with associations to other items' do

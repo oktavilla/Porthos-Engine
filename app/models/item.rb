@@ -102,21 +102,6 @@ class Item
     published? and node.present?
   end
 
-  def find_association_ids(source = nil)
-    collection = source || self.data
-    result = []
-
-    collection.find_all { |d| d.active? }.each do |d|
-      if d.respond_to?(:page_id)
-        result << d.page_id
-      elsif d.respond_to?(:data) && d.data.any?
-        result += find_association_ids(d.data)
-      end
-    end
-
-    result.compact.uniq
-  end
-  
 private
 
   def sort_data
@@ -140,5 +125,20 @@ private
       :association_ids => self.id
     }, :'$set' => { :updated_at => self.updated_at.utc })
   end
-  
+
+  def find_association_ids(source = nil)
+    collection = source || self.data
+    result = []
+
+    collection.find_all { |d| d.active? }.each do |d|
+      if d.respond_to?(:page_id)
+        result << d.page_id
+      elsif d.respond_to?(:data) && d.data.any?
+        result += find_association_ids(d.data)
+      end
+    end
+
+    result.compact.uniq
+  end
+
 end

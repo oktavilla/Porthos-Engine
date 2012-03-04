@@ -46,45 +46,14 @@ class DatumTest < ActiveSupport::TestCase
     refute decendant.is_root?
   end
 
-  test "sets updated_at when created" do
-    page = Factory.create(:page, :data => [Factory.build(:datum_collection, :handle => 'article')])
+  test "delegates updated_at to its root document" do
+    page = Factory.create(:page, :data => [])
     child = Factory.build(:string_field)
     page.data << child
 
-    assert child.updated_at.nil?, 'sanity check that updated_at is nil'
-
     page.save
 
-    refute child.updated_at.nil?
-    assert child.updated_at.is_a?(Time)
-  end
-
-  test "sets updated_at when using update attributes" do
-    page = Factory.create(:page, :data => [Factory.build(:datum_collection, :handle => 'article')])
-    child = Factory.build(:string_field)
-    page.data << child
-    page.save
-
-    last_timestamp = child.updated_at
-    last_cache_key = child.cache_key
-    sleep(1) # mongomapper does not save milliseconds
-
-    child.update_attributes(value: 'A value')
-
-    refute_equal child.cache_key, last_cache_key, 'should have a new cache key'
-    assert child.updated_at > last_timestamp, 'should have increased the updated_at'
-  end
-
-  test "does not update updated_at when parent is saved in another context" do
-    page = Factory.create(:page, :data => [Factory.build(:datum_collection, :handle => 'article')])
-    child = Factory.build(:string_field)
-    page.data << child
-    page.save
-
-    last_timestamp = child.updated_at
-    page.update_attributes(title: 'A new title')
-
-    assert_equal last_timestamp, child.updated_at, 'should not have increased the updated_at'
+    assert_equal page.updated_at, child.updated_at
   end
 
 end

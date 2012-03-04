@@ -38,7 +38,7 @@ class ObserverTest < ActiveSupport::TestCase
           assert_equal 1, @recorder.call_count[callback], "should have called #{callback} once"
         end
 
-        should "contain the model of the callback" do
+        should "contain the model of the callback #{callback}" do
           assert_equal @animal, @recorder.last_record[callback]
         end
       end

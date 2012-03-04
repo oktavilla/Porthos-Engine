@@ -29,13 +29,6 @@ class DatumCollection < Datum
     end.collect { |d| d.item }
   end
 
-  def texts
-    @texts ||= data.find_all { |d| d.is_a?(StringField) }
-  end
-
-  def links
-    @links ||= data.find_all { |d| d.is_a?(LinkField) }
-  end
 
 protected
 

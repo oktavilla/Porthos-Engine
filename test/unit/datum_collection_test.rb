@@ -37,10 +37,15 @@ class DatumCollectionTest < ActiveSupport::TestCase
         @datum_collection.data << PageAssociation.new(:page => p)
       end
     end
-
-    assert_equal pages, @datum_collection.pages
+    
+    assert_equal pages.map(&:id), @datum_collection.page_ids
+    
+    assert_equal pages, @datum_collection.pages.all
     @datum_collection.data.last.active = false
+    
     @datum_collection.send :remove_instance_variable, :@pages
+    @datum_collection.send :remove_instance_variable, :@page_ids
+    
     assert_equal 2, @datum_collection.pages.size, 'should not include inactive data'
   end
 
@@ -49,6 +54,8 @@ class DatumCollectionTest < ActiveSupport::TestCase
     assert_empty @datum_collection.pages
 
     @datum_collection.send :remove_instance_variable, :@pages
+    @datum_collection.send :remove_instance_variable, :@page_ids
+
     @datum_collection.data << PageAssociation.new(:page => Factory.build(:page))
     assert_equal 1, @datum_collection.pages.size
   end

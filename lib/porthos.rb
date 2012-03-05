@@ -41,6 +41,7 @@ module Porthos
     autoload :Rule,      'porthos/routing/rule'
     autoload :Rules,     'porthos/routing/rules'
     autoload :Recognize, 'porthos/routing/recognize'
+    autoload :Resolver,  'porthos/routing/resolver'
     autoload :Filters,   'porthos/routing/filters'
   end
 

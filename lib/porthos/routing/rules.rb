@@ -56,7 +56,7 @@ module Porthos
       end
 
       def sorted
-       sort_by { |r| (r.constraints ? r.constraints.keys.size : 0)+r.path.size }.reverse
+       sort_by { |r| (r.constraints ? r.constraints.keys.size : 0)+r.path.size+r.prefix.to_s.size }.reverse
       end
 
       def find_matching_params(params)

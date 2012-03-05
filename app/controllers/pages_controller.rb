@@ -120,7 +120,6 @@ protected
   end
 
   def template_for_format_exists?(path, format)
-    puts Rails.root.join("#{path}.#{format}")
     File.exists?(Rails.root.join('app', 'views', "#{path}.#{format}"))
   end
 

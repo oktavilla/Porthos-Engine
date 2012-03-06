@@ -17,8 +17,8 @@ module Porthos
         end
 
         if @params.any?
+          @path = generate_path(params, format)
           if node
-            @path = '/' + path_parts(node, format).join('/')
             @params[:node] = { id: node.id, url: node.url }
           end
           @params.delete(:url) # we don't want url in returned params
@@ -73,13 +73,23 @@ module Porthos
         matched_rule
       end
 
-      def path_parts(node, format)
-        [
-          node.controller,
-          node.action,
-          (node.action != 'index' ? node.resource_id : nil),
-          format
-        ].reject(&:blank?).reject { |part| %w(index show).include?(part) }
+      def generate_path(params, format)
+        parts = if %w(index show).include?(params[:action])
+          [
+            params[:controller],
+            params[:action],
+            CGI::escape(params[:id].to_s)
+          ]
+        else
+          [
+            params[:controller],
+            CGI::escape(params[:id].to_s),
+            params[:action]
+          ]
+        end
+        parts = parts.reject(&:blank?).reject { |part| %w(index show).include?(part) }
+
+        "/#{parts.join('/')}#{format}"
       end
 
       def node_params(node)
@@ -88,6 +98,7 @@ module Porthos
           _hash[:node] = { id: node.id, url: node.url }
           _hash[:controller] = node.controller
           _hash[:action] = node.action
+          _hash[:id] = node.resource_id
         end
       end
 

@@ -9,7 +9,10 @@ module Porthos
         @node_by_url_cache = {}
         resolve
       end
-
+      
+      # Find matching nodes or ruls for the current request path
+      #
+      # Sets params and path depending on what we find
       def resolve
         if node = node_by_url(path_as_url)
           self.params = node_params(node)
@@ -19,6 +22,10 @@ module Porthos
 
         if params.any?
           if node
+            # Set path to whatver root node we have
+            # This seems wrong and probably is but it works. If we set the "correct path"
+            # there is a lot of fucntionality we need to take into account as path options for routes etc.
+            # So, do not refactor this unless you can fix it for real
             self.path = generate_path(node_params(node), format)
             self.params[:node] = { id: node.id, url: node.url }
           else
@@ -29,7 +36,10 @@ module Porthos
       end
 
       private
-
+      
+      # Removes format and leading slash from the request path
+      #
+      # Returns path string
       def path_as_url
         url = request_path.gsub(/^\//,'').gsub(/#{format}$/, '')
           url << '/' if url.blank?
@@ -39,12 +49,19 @@ module Porthos
       def format
         @format ||= File.extname(request_path)
       end
-
+      
+      # Find a node matching the current url
+      #
+      # This caches results in a hash in case we need multiple lookups
+      # Returns instance of Node or nil if none was found
       def node_by_url(url)
         return @node_by_url_cache[url] if @node_by_url_cache[url]
         @node_by_url_cache[url] = Node.where(url: url).first
       end
-
+      
+      # Looks for matching rules and nodes from the path
+      # 
+      # Returns array of a node and params
       def recognize_path
         node = nil
         path_params = {}

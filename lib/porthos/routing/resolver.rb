@@ -1,32 +1,45 @@
 module Porthos
   module Routing
     class Resolver
-      attr_reader :request_path, :params, :path
+      attr_reader :request_path
+      attr_accessor :params, :path
 
       def initialize(path)
         @request_path = CGI::unescape(path) # needs CGI::unescape to remove + characters
         @node_by_url_cache = {}
         resolve
       end
-
+      
+      # Find matching nodes or ruls for the current request path
+      #
+      # Sets params and path depending on what we find
       def resolve
         if node = node_by_url(path_as_url)
-          @params = node_params(node)
+          self.params = node_params(node)
         else
-          node, @params = recognize_path
+          node, self.params = recognize_path
         end
 
-        if @params.any?
+        if params.any?
           if node
-            @path = '/' + path_parts(node, format).join('/')
-            @params[:node] = { id: node.id, url: node.url }
+            # Set path to whatver root node we have
+            # This seems wrong and probably is but it works. If we set the "correct path"
+            # there is a lot of fucntionality we need to take into account as path options for routes etc.
+            # So, do not refactor this unless you can fix it for real
+            self.path = generate_path(node_params(node), format)
+            self.params[:node] = { id: node.id, url: node.url }
+          else
+            self.path = generate_path(params, format)
           end
-          @params.delete(:url) # we don't want url in returned params
+          params.delete(:url) # we don't want url in returned params
         end
       end
 
       private
-
+      
+      # Removes format and leading slash from the request path
+      #
+      # Returns path string
       def path_as_url
         url = request_path.gsub(/^\//,'').gsub(/#{format}$/, '')
           url << '/' if url.blank?
@@ -36,12 +49,19 @@ module Porthos
       def format
         @format ||= File.extname(request_path)
       end
-
+      
+      # Find a node matching the current url
+      #
+      # This caches results in a hash in case we need multiple lookups
+      # Returns instance of Node or nil if none was found
       def node_by_url(url)
         return @node_by_url_cache[url] if @node_by_url_cache[url]
         @node_by_url_cache[url] = Node.where(url: url).first
       end
-
+      
+      # Looks for matching rules and nodes from the path
+      # 
+      # Returns array of a node and params
       def recognize_path
         node = nil
         path_params = {}
@@ -73,13 +93,23 @@ module Porthos
         matched_rule
       end
 
-      def path_parts(node, format)
-        [
-          node.controller,
-          node.action,
-          (node.action != 'index' ? node.resource_id : nil),
-          format
-        ].reject(&:blank?).reject { |part| %w(index show).include?(part) }
+      def generate_path(params, format)
+        parts = if %w(index show).include?(params[:action])
+          [
+            params[:controller],
+            params[:action],
+            CGI::escape(params[:id].to_s)
+          ]
+        else
+          [
+            params[:controller],
+            CGI::escape(params[:id].to_s),
+            params[:action]
+          ]
+        end
+        parts = parts.reject(&:blank?).reject { |part| %w(index show).include?(part) }
+
+        "/#{parts.join('/')}#{format}"
       end
 
       def node_params(node)
@@ -88,6 +118,7 @@ module Porthos
           _hash[:node] = { id: node.id, url: node.url }
           _hash[:controller] = node.controller
           _hash[:action] = node.action
+          _hash[:id] = node.resource_id
         end
       end
 

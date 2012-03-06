@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       get 'preview'
     end
   end
-  match 'pages/categories/:id' => 'pages#category', :as => 'pages_category'
+  match 'pages/:id/category' => 'pages#category', :as => 'pages_category'
 
   namespace :admin do
     root :to => 'items#index'

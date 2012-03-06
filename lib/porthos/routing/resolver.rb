@@ -17,9 +17,11 @@ module Porthos
         end
 
         if @params.any?
-          @path = generate_path(params, format)
           if node
+            @path = generate_path(node_params(node), format)
             @params[:node] = { id: node.id, url: node.url }
+          else
+            @path = generate_path(params, format)
           end
           @params.delete(:url) # we don't want url in returned params
         end

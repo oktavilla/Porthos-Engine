@@ -1,7 +1,8 @@
 module Porthos
   module Routing
     class Resolver
-      attr_reader :request_path, :params, :path
+      attr_reader :request_path
+      attr_accessor :params, :path
 
       def initialize(path)
         @request_path = CGI::unescape(path) # needs CGI::unescape to remove + characters
@@ -11,19 +12,19 @@ module Porthos
 
       def resolve
         if node = node_by_url(path_as_url)
-          @params = node_params(node)
+          self.params = node_params(node)
         else
-          node, @params = recognize_path
+          node, self.params = recognize_path
         end
 
-        if @params.any?
+        if params.any?
           if node
-            @path = generate_path(node_params(node), format)
-            @params[:node] = { id: node.id, url: node.url }
+            self.path = generate_path(node_params(node), format)
+            self.params[:node] = { id: node.id, url: node.url }
           else
-            @path = generate_path(params, format)
+            self.path = generate_path(params, format)
           end
-          @params.delete(:url) # we don't want url in returned params
+          params.delete(:url) # we don't want url in returned params
         end
       end
 

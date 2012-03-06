@@ -28,7 +28,7 @@ class DatumCollection < Datum
   end
 
   def page_ids
-    @page_ids ||= data.active.map { |d| d.try(:page_id) }.compact
+    @page_ids ||= data.active.find_all { |d| d.respond_to?(:page_id) }.map { |d| d.try(:page_id) }.compact
   end
 
 protected

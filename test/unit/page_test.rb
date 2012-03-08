@@ -49,11 +49,26 @@ class PageTest < ActiveSupport::TestCase
   end
 
   context 'with a page template with a section' do
-    should 'be access the section directly' do
-      section = Factory.create(:section, page_template_id: @page_template.id)
-      assert_equal section, @page.section
+    setup do
+      @section = Factory.create(:section, page_template_id: @page_template.id)
+    end
+
+    should 'access the section directly' do
+      assert_equal @section, @page.section
       assert_equal @page_template.section, @page.section
     end
+
+    should 'touch its section when updated' do
+
+      def @page.updated_at
+        Time.local(2009, 8, 15, 14, 0, 0).utc
+      end
+
+      @page.update_attribute(:title, 'Wow! I am updated')
+      assert_equal Time.local(2009, 8, 15, 14, 0, 0).utc, @page.updated_at
+      assert_equal Time.local(2009, 8, 15, 14, 0, 0).utc, @section.reload.updated_at
+    end
+
   end
 
   context 'when sortable' do

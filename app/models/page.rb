@@ -18,6 +18,7 @@ class Page < Section
   key :position, Integer
 
   before_create :move_to_list_bottom
+  after_save :touch_section
 
   scope :with_page_template, lambda { |page_template_id|
     where(:page_template_id => page_template_id)
@@ -66,7 +67,6 @@ class Page < Section
   def category_method_name
     @category_method_name ||= "#{page_template.handle}_tag_names"
   end
-
 
   def sortable
     page_template ? page_template.sortable : nil
@@ -163,5 +163,9 @@ private
 
   def index_node_restricted?
     index_node && (index_node.restricted? || index_node.ancestors.detect { |n| n.restricted? })
+  end
+
+  def touch_section
+    Section.set({ page_template_id: self.page_template_id }, { updated_at: self.updated_at.utc })
   end
 end

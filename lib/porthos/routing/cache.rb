@@ -13,7 +13,13 @@ module Porthos
         
         @resource_nodes = {}
         nodes.each do |node|
-          @resource_nodes[node.routing_cache_key] = node
+          cache_key = {
+            :controller    => node.controller,
+            :action        => node.action,
+            :resource_type => node.resource_type,
+            :resource_id   => node.resource_id.to_s
+          }.sort
+          @resource_nodes[cache_key] = node
         end
 
         @resource_nodes

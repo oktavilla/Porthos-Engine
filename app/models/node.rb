@@ -80,15 +80,6 @@ class Node
 
   end
 
-  def routing_cache_key
-    @routing_cache_key ||= {
-      :controller => self.controller,
-      :action => self.action,
-      :resource_type => self.resource_type,
-      :resource_id => self.resource_id.to_s
-    }.sort
-  end
-  
 private
 
   def generate_url

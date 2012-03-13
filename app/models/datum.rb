@@ -17,6 +17,20 @@ class Datum
     _root_document.try(:updated_at)
   end
 
+  def cache_key(*suffixes)
+    cache_key = case
+                when !persisted?
+                  "#{self.class.name}/new"
+                when timestamp = _root_document[:updated_at]
+                  "#{self.class.name}/#{id}-#{timestamp.to_s(:number)}"
+                else
+                  "#{self.class.name}/#{id}"
+                end
+    cache_key += "/#{suffixes.join('/')}" unless suffixes.empty?
+    cache_key
+  end
+
+
   class << self
     def from_template(template)
       template.datum_class.constantize.new.tap do |field|

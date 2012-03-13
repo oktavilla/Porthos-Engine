@@ -51,9 +51,25 @@ class DatumTest < ActiveSupport::TestCase
     child = Factory.build(:string_field)
     page.data << child
 
-    page.save
+    page.updated_at = Time.local(2000, 1, 1)
 
-    assert_equal page.updated_at, child.updated_at
+    assert_equal Time.local(2000, 1, 1), child.updated_at
+  end
+
+  test 'uses the root documents timestamp for its cache key' do
+    page = Factory.create(:page, :data => [])
+    child = Factory.build(:string_field)
+    page.data << child
+
+    def child.id
+      'lol'
+    end
+    def child.persisted?
+      true
+    end
+    page.updated_at = Time.local(2000, 1, 1).utc
+    
+    assert_equal "StringField/lol-#{Time.local(2000, 1, 1).utc.to_s(:number)}", child.cache_key    
   end
 
 end

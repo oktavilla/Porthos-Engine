@@ -16,9 +16,9 @@ module PorthosAssetTestHelpers
     File.join(path, filename)
   end
 
-  def stub_resizor_post
+  def stub_resizor_post(filename = 'image.jpg')
     stub_http_request(:post, "https://resizor.com:443/assets.json").with { |request|
-      request.body.include?("Content-Disposition: form-data; name=\"file\"; filename=\"image.jpg")
+      request.body.include?("Content-Disposition: form-data; name=\"file\"; filename=\"#{filename}")
     }.to_return(:status => 201, :body => '{"asset": { "id":1, "name":"i", "extension":"jpg", "mime_type":"image/jpeg", "height":500, "width":332, "file_size":666, "created_at":"2010-10-23T13:07:25Z"}}')
   end
 

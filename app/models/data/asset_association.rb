@@ -16,30 +16,26 @@ class AssetAssociation < Datum
   before_validation :revert_to_asset_attributes
 
   def title
-    if !self['title'].nil?
-      self['title']
-    elsif self.asset_id.present?
-      self.asset.title if self.asset
-    end
+    self_or_asset_attribute 'title'
   end
 
   def description
-    if !self['description'].nil?
-      self['description']
-    elsif self.asset_id.present?
-      self.asset.description if self.asset
-    end
+    self_or_asset_attribute 'description'
   end
 
   def author
-    if !self['author'].nil?
-      self['author']
-    elsif self.asset_id.present?
-      self.asset.author if self.asset
-    end
+    self_or_asset_attribute 'author'
   end
 
-private
+  private
+  
+  def self_or_asset_attribute(attribute)
+    if self[attribute].present?
+      self[attribute]
+    elsif self.asset
+      asset.public_send attribute
+    end
+  end
 
   def clear_association
     if !!Boolean.to_mongo(should_clear_association) && asset_id.present?

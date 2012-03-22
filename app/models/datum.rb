@@ -18,16 +18,19 @@ class Datum
   end
 
   def cache_key(*suffixes)
-    cache_key = case
-                when !persisted?
-                  "#{self.class.name}/new"
-                when timestamp = _root_document[:updated_at]
-                  "#{self.class.name}/#{id}-#{timestamp.to_s(:number)}"
-                else
-                  "#{self.class.name}/#{id}"
-                end
-    cache_key += "/#{suffixes.join('/')}" unless suffixes.empty?
-    cache_key
+    cache_key = [ self.class.name ]
+    if ! persisted?
+      cache_key << 'new'
+    else
+      if timestamp = _root_document[:updated_at]
+        cache_key << [ id, timestamp.to_s(:number) ].join('-')
+      else
+        cache_key << id
+      end
+      cache_key << [_root_document.class.name, _root_document.id].join('-')
+    end
+    cache_key += Array[*suffixes] unless suffixes.empty?
+    cache_key.join('/')
   end
 
 

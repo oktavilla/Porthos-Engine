@@ -16,15 +16,15 @@ class AssetAssociation < Datum
   before_validation :revert_to_asset_attributes
 
   def title
-    self_or_asset_attribute 'title'
+    @title ||= self_or_asset_attribute 'title'
   end
 
   def description
-    self_or_asset_attribute 'description'
+    @description ||= self_or_asset_attribute 'description'
   end
 
   def author
-    self_or_asset_attribute 'author'
+    @author ||= self_or_asset_attribute 'author'
   end
 
   private
@@ -32,8 +32,8 @@ class AssetAssociation < Datum
   def self_or_asset_attribute(attribute)
     if self[attribute].present?
       self[attribute]
-    elsif self.asset
-      asset.public_send attribute
+    elsif asset_id.present?
+      asset[attribute] if self.asset
     end
   end
 

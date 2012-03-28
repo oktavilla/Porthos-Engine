@@ -2,6 +2,7 @@ class LinkList
   include MongoMapper::Document
   key :title, String
   key :handle, String
+  timestamps!
 
   many :links
 

@@ -5,6 +5,10 @@ class LinkListTest < ActiveSupport::TestCase
       @link_list = LinkList.new(title: 'Some links in the footer', handle: 'footer_links')
     end
 
+    should 'have timestamps' do
+      assert @link_list.respond_to?(:updated_at)
+    end
+
     should 'be valid with valid attributes' do
       assert @link_list.valid?
     end

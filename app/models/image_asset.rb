@@ -18,8 +18,8 @@ class ImageAsset < Asset
                         :on => :create,
                         :message => I18n.t(:unable_to_store)
 
-  def remote_url
-    resizor_asset.url(:size => 'original', :format => extension)
+  def remote_url(options = {})
+    resizor_asset.url({:size => 'original', :format => extension}.merge(options))
   end
 
 

@@ -11,12 +11,12 @@ Rails.application.routes.draw do
       get 'preview'
     end
   end
-  match 'pages/:id/category' => 'pages#category', :as => 'pages_category'
+  get 'pages/:id/category' => 'pages#category', :as => 'pages_category'
 
   namespace :admin do
     root :to => 'items#index'
-    match 'login' => 'sessions#new', :as => 'login'
-    match '/logout' => 'sessions#destroy', :as => 'logout'
+    get '/login' => 'sessions#new', :as => 'login'
+    get '/logout' => 'sessions#destroy', :as => 'logout'
     resources :sessions
     resources :users do
       collection do

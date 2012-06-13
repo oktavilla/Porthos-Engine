@@ -23,7 +23,7 @@
       <tr class="<%= cycle 'odd', 'even' %>">
         <td><%= link_to tag.name, admin_tag_path(tag) %></td>
         <td><%= link_to t(:edit), edit_admin_tag_path(tag) %></td>
-        <td><%= link_to t(:destroy), admin_tag_path(tag), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %></td>
+        <td><%= link_to t(:destroy), admin_tag_path(tag), method: :delete, class: 'delete', data: { confirm: 'Är du säker?' } %></td>
       </tr>
     <% end %>
   </table>

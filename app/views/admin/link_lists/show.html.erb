@@ -7,7 +7,7 @@
     <h1><%= @link_list.title %></h1>
     <span class="away">
       <%= link_to t(:edit), edit_admin_link_list_path(@link_list), :class => 'edit_settings action' %>
-      <%= link_to t(:destroy), admin_link_list_path(@link_list), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @link_list.title), :class => 'destroy action' %>
+      <%= link_to t(:destroy), admin_link_list_path(@link_list), method: 'delete', data: { confirm: t(:destroy_confirmation, scope: [:app, :general], target_name: @link_list.title) }, class: 'destroy action' %>
     </span>
   </div>
   <div class="tools">
@@ -33,7 +33,7 @@
           <td class="title"><%= link.title %></td>
           <td><%= link.url %></td>
           <td><%= link_to t(:edit), edit_admin_link_list_link_path(@link_list, link) %></td>
-          <td><%= link_to t(:destroy), admin_link_list_link_path(@link_list, link), :method => :delete, :confirm => "Vill du verkligen ta bort #{link.title}? Fältet och dess infomation kommer tas bort från alla #{@link_list.title} sidor." %>
+          <td><%= link_to t(:destroy), admin_link_list_link_path(@link_list, link), method: :delete, data: { confirm: "Vill du verkligen ta bort #{link.title}? Fältet och dess infomation kommer tas bort från alla #{@link_list.title} sidor." } %>
         </tr>
         <% end -%>
       </tbody>

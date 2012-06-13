@@ -8,7 +8,7 @@
       <% if @item.node %>
         <%= link_to 'Ändra i navigationen', edit_admin_node_path(@item.node, :return_to => request.path), :class => 'edit_settings action' %>
       <% end %>
-      <%= link_to t(:destroy), admin_item_path(@item.id), { :method => :delete, :confirm => "Är du säker att du vill ta bort sidan. Det går inte att ångra.", :class => 'action delete' } %>
+      <%= link_to t(:destroy), admin_item_path(@item.id), method: :delete, data: { confirm: "Är du säker att du vill ta bort sidan. Det går inte att ångra." }, class: 'action delete' %>
     </span>
     <div class="parents"><%= link_to @item.page_template.label, admin_items_path(with_page_template: @item.page_template) %></div>
     <div class="page_title">
@@ -129,7 +129,7 @@
         <% datum.data.each do |d, i| %>
         <li id="datum_<%= d.id %>" class="datum <%= d.class.to_s.underscore %><%= ' inactive' unless d.active? %>">
           <div class="controls">
-            <%= link_to t(:destroy), admin_item_datum_path(@item, d, :parent_id => datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+            <%= link_to t(:destroy), admin_item_datum_path(@item, d, parent_id: datum), method: :delete, data: { confirm: "Är du säker? Detta går inte att ångra." }, class: 'delete' %>
           </div>
           <div class="content">
             <div class="viewable">

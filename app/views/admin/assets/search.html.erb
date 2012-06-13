@@ -43,7 +43,7 @@
             </div>
             <div class="edit">
               <%= link_to t(:edit), edit_admin_asset_path(asset.id, :return_to => request.path) %>
-              <%= link_to t(:destroy), admin_asset_path(asset.id), :class => 'delete', :confirm => "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig.", :method => :delete %>
+              <%= link_to t(:destroy), admin_asset_path(asset.id), class: 'delete', data: { confirm: "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig." }, method: :delete %>
             </div>
             <% if @create_callback.present? %>
               <div class="add">

@@ -5,7 +5,7 @@
   <div class="header" id="item_attributes">
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span><%=t 'edit' %></span></a>
-      <%= link_to t(:destroy), admin_item_path(@item.id), { :method => :delete, :confirm => "Är du säker att du vill ta bort sidan. Det går inte att ångra.", :class => 'action delete' } %>
+      <%= link_to t(:destroy), admin_item_path(@item.id), method: :delete, data: { confirm: "Är du säker att du vill ta bort sidan. Det går inte att ångra." }, class: 'action delete' %>
     </span>
     <div class="page_title">
       <h1><%= @item.title %></h1>
@@ -126,7 +126,7 @@
         <% datum.data.each do |d, i| %>
         <li id="datum_<%= d.id %>" class="datum <%= d.class.to_s.underscore %><%= ' inactive' unless d.active? %>">
           <div class="controls">
-            <%= link_to t(:destroy), admin_item_datum_path(@item, d, :parent_id => datum), :method => :delete, :confirm => "Är du säker? Detta går inte att ångra.", :class => 'delete' %>
+            <%= link_to t(:destroy), admin_item_datum_path(@item, d, parent_id: datum), method: :delete, data: { confirm: "Är du säker? Detta går inte att ångra." }, class: 'delete' %>
           </div>
           <div class="content">
             <div class="viewable">

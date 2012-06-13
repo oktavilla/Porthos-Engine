@@ -48,7 +48,7 @@
           <td><%= t(datum.required? ? :yes : :no) %></td>
           <td><%= link_to t(:edit), edit_admin_item_datum_path(@item, datum) %></td>
           <td>
-            <%= link_to t(:destroy), admin_item_datum_path(@item, datum, :return_to => admin_item_data_path(@item)), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum.label}? Fältet och dess information kommer tas bort från alla #{@item.title} sidor." %>
+            <%= link_to t(:destroy), admin_item_datum_path(@item, datum, return_to: admin_item_data_path(@item)), method: :delete, data: { confirm: "Vill du verkligen ta bort #{datum.label}? Fältet och dess information kommer tas bort från alla #{@item.title} sidor." } %>
           </td>
         </tr>
         <% end -%>

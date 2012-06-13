@@ -25,7 +25,7 @@
             <td><%= link_to redirect.path, redirect.path %></td>
             <td>&rarr; <%= link_to redirect.target, redirect.target %></td>
             <td><%= link_to t(:edit), edit_admin_redirect_path(redirect) %></td>
-            <td><%= link_to t(:destroy), admin_redirect_path(redirect), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %></td>
+            <td><%= link_to t(:destroy), admin_redirect_path(redirect), method: :delete, class: 'delete', data: { confirm: 'Är du säker?' } %></td>
           </tr>
         <% end %>
       </table>

@@ -32,7 +32,7 @@
               <%= link_to t(:edit), edit_admin_site_setting_path(setting) %>
             </td>
             <td>
-              <%= link_to t(:destroy), admin_site_setting_path(setting), :method => :delete, :class => 'delete', :confirm => 'Är du säker?' %>
+              <%= link_to t(:destroy), admin_site_setting_path(setting), method: :delete, class: 'delete', data: { confirm: 'Är du säker?' } %>
             </td>
           </tr>
         <% end %>

@@ -8,9 +8,9 @@
   <div class="header">
     <h1><%= @page_template.label %></h1>
     <span class="away">
-      <%= link_to t('.edit'), edit_admin_page_template_path(@page_template), :class => 'edit_settings action' %>
-      <%= link_to t('.destroy'), admin_page_template_path(@page_template), :method => 'delete', :confirm => t(:destroy_confirmation, :scope => [:app, :general], :target_name => @page_template.label), :class => 'destroy action' %>
-      <%= link_to t('.all_page_templates'), admin_page_templates_path, :class => 'action' %>
+      <%= link_to t('.edit'), edit_admin_page_template_path(@page_template), class: 'edit_settings action' %>
+      <%= link_to t('.destroy'), admin_page_template_path(@page_template), method: 'delete', data: { confirm: t(:destroy_confirmation, scope: [:app, :general], target_name: @page_template.label) }, class: 'destroy action' %>
+      <%= link_to t('.all_page_templates'), admin_page_templates_path, class: 'action' %>
     </span>
   </div>
   <div class="tools">
@@ -58,7 +58,7 @@
           <td><%= datum_template.class.model_name.human %></td>
           <td><%= t(datum_template.required? ? :yes : :no) %></td>
           <td><%= link_to t(:edit), edit_admin_template_datum_template_path(@page_template, datum_template) %></td>
-          <td><%= link_to t(:destroy), admin_template_datum_template_path(@page_template, datum_template), :method => :delete, :confirm => "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess information kommer tas bort från alla #{@page_template.label} sidor." %></td>
+          <td><%= link_to t(:destroy), admin_template_datum_template_path(@page_template, datum_template), method: :delete, data: { confirm: "Vill du verkligen ta bort #{datum_template.label}? Fältet och dess information kommer tas bort från alla #{@page_template.label} sidor." } %></td>
         </tr>
         <% end -%>
       </tbody>

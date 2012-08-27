@@ -52,7 +52,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mongo-rails-instrumentation', '~> 0.2'
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'launchy'
-  s.add_development_dependency 'factory_girl'
+  s.add_development_dependency 'factory_girl', '~> 3.6.1'
   s.add_development_dependency 'capybara', '~> 1.1.2'
   s.add_development_dependency 'capybara-webkit'
   s.add_development_dependency 'database_cleaner'

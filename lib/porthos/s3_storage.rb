@@ -19,6 +19,7 @@ module Porthos
       file.content = source
       if source.respond_to?(:original_filename)
         file.content_type = resolve_mime_type(source.original_filename)
+        file.content_disposition = make_content_disposition source.original_filename
       end
       file.save
     end
@@ -49,6 +50,16 @@ module Porthos
 
     def resolve_mime_type(filename)
       MIME::Types.type_for(filename).first.to_s
+    end
+
+    def make_content_disposition(filename)
+      extension = File.extname(filename).gsub(/\./,'').gsub(/\?.*/,'').downcase
+
+      if Asset.filetypes[:image].include?(extension)
+        "inline; filename=\"#{filename}\""
+      else
+        "attachment; filename=\"#{filename}\""
+      end
     end
 
     def bucket

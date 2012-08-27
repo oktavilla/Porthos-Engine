@@ -23,12 +23,25 @@ class S3StorageTest < ActiveSupport::TestCase
       assert_equal 'image/jpeg', @s3_storage.send(:resolve_mime_type, 'image.jpg')
     end
 
+    context 'make content disposition string' do
+      should 'be attachment default' do
+        assert_equal 'attachment; filename="file.pdf"', @s3_storage.send(:make_content_disposition, 'file.pdf')
+      end
+
+      should 'be inline if image' do
+        assert_equal 'inline; filename="file.jpg"', @s3_storage.send(:make_content_disposition, 'file.jpg')
+      end
+    end
+
     should 'store file' do
       stub_s3_head
       stub_s3_put
-      @s3_storage.store(new_tempfile('text'), 'my-file.txt')
+      @s3_storage.store(new_tempfile('text'), 'page.txt')
 
-      assert_requested :put, 'http://my-bucket.s3.amazonaws.com/my-file.txt?'
+      assert_requested :put, 'http://my-bucket.s3.amazonaws.com/page.txt?' do |req|
+        req.headers['Content-Disposition'] == 'attachment; filename="page.txt"' &&
+          req.headers['Content-Type'] == 'text/plain'
+      end
     end
 
     should 'retrieve details for file' do
@@ -41,7 +54,7 @@ class S3StorageTest < ActiveSupport::TestCase
       assert_equal 'http://my-bucket.s3.amazonaws.com/my-file.txt', @s3_storage.url('my-file.txt')
     end
 
-    context 'knwo if a file exists on s3' do
+    context 'know if a file exists on s3' do
       should 'return true if it exists' do
         stub_s3_head
         assert @s3_storage.exists?('my-file.txt')

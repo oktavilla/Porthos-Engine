@@ -20,6 +20,7 @@ CKEDITOR.editorConfig = function(config) {
     ['Table'],
     ['Maximize', 'ShowBlocks', 'Source']
   ];
+  config.height = 500;
   config.stylesSet = 'my_styles';
   config.toolbar = 'Basic';
   config.forcePasteAsPlainText = true;

@@ -93,8 +93,9 @@
         $('textarea.editor').ckeditor();
       }
 
-      $('input.date').datepicker({
-        dateFormat: 'yy-mm-dd'
+      $('input.date').datetimepicker({
+        dateFormat: 'yy-mm-dd',
+        timeFormat: "hh:mm"
       });
 
       $content.find('div.controls ul').hide();

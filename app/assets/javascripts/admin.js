@@ -1,5 +1,6 @@
 #= require rails
 #= require chosen
+#= require ./lib/datetimepicker
 #= require admin/settings
 #= require admin/editor
 #= require admin/helpers

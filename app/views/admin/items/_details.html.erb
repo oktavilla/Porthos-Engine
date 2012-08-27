@@ -20,7 +20,9 @@
     </div>
     <%= form_for [:admin, @item], :as => :item, :url => admin_item_path(@item), :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>
       <div>
-        <%= f.text_field :published_on, :value => (@item.published_on.present? ? @item.published_on.in_time_zone.to_date : nil), :class => 'date', :placeholder => 'År-Månad-Dag' %>
+      <% (@item.published_on || Time.now).in_time_zone.tap do |published_on| %>
+        <%= f.text_field :published_on, :value => (@item.published_on.present? ? @item.published_on.in_time_zone.strftime("%Y-%m-%d %H:%M") : nil), "time:hour" => published_on.strftime('%H'), "time:minute" => published_on.strftime("%M"), :class => 'date', :placeholder => 'År-Månad-Dag Timme:Minut' %>
+      <% end %>
         <div class="submit">
           <input type="submit" value="Spara publiceringsdatum"> eller <a href="#">avbryt</a>
         </div>

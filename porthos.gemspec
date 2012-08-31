@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails', '~> 3.2.6'
 
   # Asset pipeline
-  #
   s.add_dependency 'sass-rails',   '~> 3.2.4'
   s.add_dependency 'coffee-rails', '~> 3.2.1'
   s.add_dependency 'uglifier'
@@ -41,7 +40,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'has_scope', '~> 0.5.1'
   s.add_dependency 'routing-filter', '~> 0.3'
   s.add_dependency 's3'
-  s.add_dependency 'resizor', '~> 0.0.13'
+  s.add_dependency 'resizor', '~> 0.0.16'
   s.add_dependency 'kaminari'
   s.add_dependency 'tanker', '~> 1.1.4'
   s.add_dependency 'stringex'

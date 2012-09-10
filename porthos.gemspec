@@ -16,10 +16,10 @@ Gem::Specification.new do |s|
   s.description = 'A CMS engine for Ruby On Rails projects using mongodb. Featuring customizable page types, url nodes and more'
   s.files       = Dir['{app,config,lib,vendor}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'Gemfile', 'README.md']
 
-  s.add_dependency 'rails', '~> 3.2.6'
+  s.add_dependency 'rails', '~> 3.2.8'
 
   # Asset pipeline
-  s.add_dependency 'sass-rails',   '~> 3.2.4'
+  s.add_dependency 'sass-rails',   '~> 3.2.5'
   s.add_dependency 'coffee-rails', '~> 3.2.1'
   s.add_dependency 'uglifier'
   s.add_dependency 'jquery-rails'

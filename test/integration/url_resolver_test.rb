@@ -68,6 +68,13 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
         :action => 'index',
         :handle => 'authors',
         :url => 'the-authors')
+      @inactive_blog_node = FactoryGirl.create(:node,
+        :controller => 'posts',
+        :action => 'index',
+        :handle => 'inactive-blog',
+        :url => 'the-inactive-blog',
+        :status => -1)
+
     end
 
 
@@ -191,6 +198,15 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
           assert_equal "contact", params[:action]
         end
       end
+
+      context 'with an inactive node' do
+        should 'throw an routing error' do
+          assert_raise ActionController::RoutingError do
+            visit "/the-inactive-blog"
+          end
+        end
+      end
+
     end
   end
 end

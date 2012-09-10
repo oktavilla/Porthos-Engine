@@ -9,7 +9,7 @@ module Porthos
         @node_by_url_cache = {}
         resolve
       end
-      
+
       # Find matching nodes or ruls for the current request path
       #
       # Sets params and path depending on what we find
@@ -22,6 +22,7 @@ module Porthos
 
         if params.any?
           if node
+            return {} if node.inactive?
             # Set path to whatver root node we have
             # This seems wrong and probably is but it works. If we set the "correct path"
             # there is a lot of fucntionality we need to take into account as path options for routes etc.
@@ -36,7 +37,7 @@ module Porthos
       end
 
       private
-      
+
       # Removes format and leading slash from the request path
       #
       # Returns path string
@@ -49,7 +50,7 @@ module Porthos
       def format
         @format ||= File.extname(request_path)
       end
-      
+
       # Find a node matching the current url
       #
       # This caches results in a hash in case we need multiple lookups
@@ -58,9 +59,9 @@ module Porthos
         return @node_by_url_cache[url] if @node_by_url_cache[url]
         @node_by_url_cache[url] = Node.where(url: url).first
       end
-      
+
       # Looks for matching rules and nodes from the path
-      # 
+      #
       # Returns array of a node and params
       def recognize_path
         node = nil

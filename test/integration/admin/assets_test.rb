@@ -11,7 +11,7 @@ class AssetsTest < ActiveSupport::IntegrationCase
   teardown { WebMock.allow_net_connect! }
 
   test 'listning assets' do
-    asset = Factory.create(:asset, :file => new_tempfile('text'))
+    asset = FactoryGirl.create(:asset, :file => new_tempfile('text'))
     visit admin_assets_path
 
     assert page.find("ul.items #asset_#{asset.id}").has_content?(asset.name), 'Should display the asset in the assets list'
@@ -42,7 +42,7 @@ class AssetsTest < ActiveSupport::IntegrationCase
   end
 
   test 'editing a asset' do
-    asset = Factory.create(:asset, :file => new_tempfile('text'))
+    asset = FactoryGirl.create(:asset, :file => new_tempfile('text'))
     visit admin_assets_path
 
     within("#asset_#{asset.id}") do
@@ -57,7 +57,7 @@ class AssetsTest < ActiveSupport::IntegrationCase
 
   test 'set cropping settings for image asset' do
     stub_resizor_post
-    asset = Factory.create(:image_asset, :file => new_tempfile('image'), :versions => {'c100x100' => {}})
+    asset = FactoryGirl.create(:image_asset, :file => new_tempfile('image'), :versions => {'c100x100' => {}})
     visit admin_assets_path
     within("#asset_#{asset.id}") do
       click_link I18n.t(:edit)
@@ -74,7 +74,7 @@ class AssetsTest < ActiveSupport::IntegrationCase
 
   test 'deleting an asset' do
     stub_s3_delete
-    asset = Factory.create(:asset, :file => new_tempfile('text'))
+    asset = FactoryGirl.create(:asset, :file => new_tempfile('text'))
     visit admin_assets_path
 
     within("#asset_#{asset.id}") do
@@ -87,9 +87,9 @@ class AssetsTest < ActiveSupport::IntegrationCase
   end
 
   test 'listning assets by tag' do
-    asset1 = Factory.create(:asset, :title => 'Asset 1', :tag_names => 'tag1 tag2', :file => new_tempfile('text'))
-    asset2 = Factory.create(:asset, :title => 'Asset 2', :tag_names => 'tag2', :file => new_tempfile('text'))
-    asset3 = Factory.create(:asset, :title => 'Asset 3', :tag_names => 'tag1 tag3', :file => new_tempfile('text'))
+    asset1 = FactoryGirl.create(:asset, :title => 'Asset 1', :tag_names => 'tag1 tag2', :file => new_tempfile('text'))
+    asset2 = FactoryGirl.create(:asset, :title => 'Asset 2', :tag_names => 'tag2', :file => new_tempfile('text'))
+    asset3 = FactoryGirl.create(:asset, :title => 'Asset 3', :tag_names => 'tag1 tag3', :file => new_tempfile('text'))
 
     visit admin_assets_path(:tags => ['tag1'])
 

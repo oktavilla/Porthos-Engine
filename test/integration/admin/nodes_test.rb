@@ -3,12 +3,12 @@ require_relative '../../test_helper'
 class NodesTest < ActiveSupport::IntegrationCase
   setup do
     login!
-    @page_template = Factory(:page_template, :allow_node_placements => true)
-    @root_node = Factory(:root_node, :handle => @page_template.handle)
+    @page_template = FactoryGirl.create(:page_template, :allow_node_placements => true)
+    @root_node = FactoryGirl.create(:root_node, :handle => @page_template.handle)
   end
 
   test 'adding a node pointing to a page' do
-    new_page = Factory(:page, :page_template => @page_template, :published_on => nil)
+    new_page = FactoryGirl.create(:page, :page_template => @page_template, :published_on => nil)
     visit admin_item_path(new_page)
     click_link I18n.t(:'admin.items.details.publish_now')
     assert_equal new_admin_node_path, current_path
@@ -21,8 +21,8 @@ class NodesTest < ActiveSupport::IntegrationCase
   end
 
   test 'adding a node pointing to a page template' do
-    page_template = Factory(:page_template, :allow_node_placements => false)
-    new_section = Factory(:section, :page_template_id => page_template.id, :published_on => 1.day.ago)
+    page_template = FactoryGirl.create(:page_template, :allow_node_placements => false)
+    new_section = FactoryGirl.create(:section, :page_template_id => page_template.id, :published_on => 1.day.ago)
     visit new_admin_node_path
     fill_in 'node_name', with: 'My section'
     fill_in 'node_slug', with: 'my-section'
@@ -73,9 +73,9 @@ class NodesTest < ActiveSupport::IntegrationCase
 protected
 
   def create_page_node
-    Factory(:node, :name => 'Node',
+    FactoryGirl.create(:node, :name => 'Node',
       :parent => @root_node,
-      :resource => Factory(:page, :page_template_id => @page_template.id))
+      :resource => FactoryGirl.create(:page, :page_template_id => @page_template.id))
   end
 
 end

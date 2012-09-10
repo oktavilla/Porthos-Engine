@@ -2,7 +2,7 @@ require_relative '../test_helper'
 class UserTest < ActiveSupport::TestCase
 
   setup do
-    @user = Factory.build(:user, :username => 'foxie', :password => 'chunky!bacon', :password_confirmation => 'chunky!bacon')
+    @user = FactoryGirl.build(:user, :username => 'foxie', :password => 'chunky!bacon', :password_confirmation => 'chunky!bacon')
   end
 
   test 'encrypts password' do

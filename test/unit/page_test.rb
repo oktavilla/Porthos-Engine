@@ -3,7 +3,7 @@ require_relative '../test_helper'
 class PageTest < ActiveSupport::TestCase
 
   setup do
-    @page_template = Factory.create(:page_template, :handle => 'super_awesome', :instruction_body => 'This is an instruction')
+    @page_template = FactoryGirl.create(:page_template, :handle => 'super_awesome', :instruction_body => 'This is an instruction')
     @page = Page.from_template(@page_template, :title => 'Page 1')
   end
 
@@ -50,7 +50,7 @@ class PageTest < ActiveSupport::TestCase
 
   context 'with a page template with a section' do
     setup do
-      @section = Factory.create(:section, page_template_id: @page_template.id)
+      @section = FactoryGirl.create(:section, page_template_id: @page_template.id)
     end
 
     should 'access the section directly' do

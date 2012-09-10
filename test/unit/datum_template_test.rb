@@ -24,10 +24,10 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
   context 'when child to a page template' do
     should 'propagate created to pages data' do
-      page_template = Factory.create(:page_template, :datum_templates => [])
+      page_template = FactoryGirl.create(:page_template, :datum_templates => [])
       page = Page.create_from_template(page_template, :title => 'A story')
 
-      template = Factory.build(:string_field_template, :handle => 'the_beginning', :label => 'Once upon a time')
+      template = FactoryGirl.build(:string_field_template, :handle => 'the_beginning', :label => 'Once upon a time')
       page_template.datum_templates << template
       page_template.save
 
@@ -38,8 +38,8 @@ class DatumTemplateTest < ActiveSupport::TestCase
     end
 
     should 'propagate changes to pages datum' do
-      page_template = Factory.create(:page_template, {
-        :datum_templates => [Factory.build(:string_field_template, :handle => 'the_beginning', :label => 'Once upon a time')]
+      page_template = FactoryGirl.create(:page_template, {
+        :datum_templates => [FactoryGirl.build(:string_field_template, :handle => 'the_beginning', :label => 'Once upon a time')]
       })
       page = Page.create_from_template(page_template, :title => 'A story')
 
@@ -53,7 +53,7 @@ class DatumTemplateTest < ActiveSupport::TestCase
     end
 
     should 'propagate deletion to pages data' do
-      page_template = Factory.create(:page_template)
+      page_template = FactoryGirl.create(:page_template)
       template = page_template.datum_templates.first
 
       pages = []
@@ -77,9 +77,9 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
   context 'When child to a content template' do
     setup do
-      @content_template = Factory.create(:content_template, {
+      @content_template = FactoryGirl.create(:content_template, {
         datum_templates: [
-          Factory.build(:string_field_template, {
+          FactoryGirl.build(:string_field_template, {
             label: 'The string to rule them all',
             handle: 'the_string'
           })
@@ -90,8 +90,8 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
     context 'and is created' do
       setup do
-        @page_template = Factory.create(:page_template, :datum_templates => [
-          Factory.build(:field_set_template, {
+        @page_template = FactoryGirl.create(:page_template, :datum_templates => [
+          FactoryGirl.build(:field_set_template, {
             handle: 'a_field_set',
             content_template: @content_template
           })
@@ -100,7 +100,7 @@ class DatumTemplateTest < ActiveSupport::TestCase
       end
 
       should 'propagate to field sets directly under a page' do
-        some_string = Factory.build(:string_field_template, {
+        some_string = FactoryGirl.build(:string_field_template, {
           label: 'Just an ordinary string',
           handle: 'some_string'
         })
@@ -113,8 +113,8 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
     context 'and is updated' do
       should 'propagate to field sets directly under a page' do
-        page_template = Factory.create(:page_template, :datum_templates => [
-          Factory.build(:field_set_template, {
+        page_template = FactoryGirl.create(:page_template, :datum_templates => [
+          FactoryGirl.build(:field_set_template, {
             handle: 'a_field_set',
             content_template: @content_template
           })
@@ -129,8 +129,8 @@ class DatumTemplateTest < ActiveSupport::TestCase
       end
 
       should 'propagate to field sets under a content block' do
-        page_template = Factory.create(:page_template, :datum_templates => [
-          Factory.build(:datum_collection_template, {
+        page_template = FactoryGirl.create(:page_template, :datum_templates => [
+          FactoryGirl.build(:datum_collection_template, {
             handle: 'a_datum_collection',
             content_templates_ids: [@content_template.id]
           })
@@ -153,8 +153,8 @@ class DatumTemplateTest < ActiveSupport::TestCase
 
     context 'and is removed' do
       should 'propagate to field sets directly under a page' do
-        page_template = Factory.create(:page_template, :datum_templates => [
-          Factory.build(:field_set_template, {
+        page_template = FactoryGirl.create(:page_template, :datum_templates => [
+          FactoryGirl.build(:field_set_template, {
             handle: 'a_field_set',
             content_template: @content_template
           })
@@ -168,8 +168,8 @@ class DatumTemplateTest < ActiveSupport::TestCase
       end
 
       should 'propagate to field sets under a content block' do
-        page_template = Factory.create(:page_template, :datum_templates => [
-          Factory.build(:datum_collection_template, {
+        page_template = FactoryGirl.create(:page_template, :datum_templates => [
+          FactoryGirl.build(:datum_collection_template, {
             handle: 'a_datum_collection',
             content_templates_ids: [@content_template.id]
           })

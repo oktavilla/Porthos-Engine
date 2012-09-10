@@ -31,7 +31,7 @@ class LinkListsTest < ActiveSupport::IntegrationCase
   end
 
   test 'adding a link to a node' do
-    node = Factory.create(:node, :name => 'Point me')
+    node = FactoryGirl.create(:node, :name => 'Point me')
 
     visit_link_list
     click_link I18n.t(:'admin.link_lists.show.new')
@@ -70,7 +70,7 @@ class LinkListsTest < ActiveSupport::IntegrationCase
 private
 
   def create_a_link(attrs = {})
-    Factory.build(:link, { :title => 'Some link' }.merge(attrs)).tap do |link|
+    FactoryGirl.build(:link, { :title => 'Some link' }.merge(attrs)).tap do |link|
       @link_list.links << link
       @link_list.save
     end

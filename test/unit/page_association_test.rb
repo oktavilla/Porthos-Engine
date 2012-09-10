@@ -4,7 +4,7 @@ class PageAssociationTest < ActiveSupport::TestCase
   test "gets all pages except it's root as targets" do
     pages = []
     2.times do
-      pages << Factory(:page, :published_on => 1.day.ago)
+      pages << FactoryGirl.create(:page, :published_on => 1.day.ago)
     end
 
     page = pages.first
@@ -18,10 +18,10 @@ class PageAssociationTest < ActiveSupport::TestCase
   test 'gets all pages except the root and siblings as targets when child to a content block' do
     pages = []
     4.times do
-      pages << Factory(:page, :published_on => 1.day.ago)
+      pages << FactoryGirl.create(:page, :published_on => 1.day.ago)
     end
 
-    datum_collection = Factory(:datum_collection)
+    datum_collection = FactoryGirl.create(:datum_collection)
     pages[0].data << datum_collection
     page_association = PageAssociation.new(:page_id => pages[1].id)
     datum_collection.data << page_association
@@ -33,10 +33,10 @@ class PageAssociationTest < ActiveSupport::TestCase
 
   test 'targets gets scoped by page template ids' do
     published_date = 1.day.ago
-    page_template = Factory(:page_template, :datum_templates => [])
+    page_template = FactoryGirl.create(:page_template, :datum_templates => [])
     page1 = Page.create_from_template(page_template, :title => 'Page 1', :published_on => published_date)
-    page2 = Page.create_from_template(Factory(:page_template), :title => 'Page 2', :published_on => published_date)
-    page3 = Page.create_from_template(Factory(:page_template), :title => 'Page 3', :published_on => published_date)
+    page2 = Page.create_from_template(FactoryGirl.create(:page_template), :title => 'Page 2', :published_on => published_date)
+    page3 = Page.create_from_template(FactoryGirl.create(:page_template), :title => 'Page 3', :published_on => published_date)
 
     page2.data << PageAssociation.new(:page_template_ids => [page_template.id], :handle => 'le_page')
 
@@ -44,8 +44,8 @@ class PageAssociationTest < ActiveSupport::TestCase
   end
 
   test 'targets should not include unpublished pages' do
-    page1 = Factory(:page)
-    page2 = Factory(:page, :published_on => nil)
+    page1 = FactoryGirl.create(:page)
+    page2 = FactoryGirl.create(:page, :published_on => nil)
 
     page1.data << PageAssociation.new(:handle => 'le_page')
 

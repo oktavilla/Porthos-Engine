@@ -25,8 +25,8 @@ class LinkListTest < ActiveSupport::TestCase
     end
 
     should 'sort links' do
-      link1 = Factory(:link, :position => 2)
-      link2 = Factory(:link, :position => 1)
+      link1 = FactoryGirl.create(:link, :position => 2)
+      link2 = FactoryGirl.create(:link, :position => 1)
 
       @link_list.links = [link1, link2]
       @link_list.save # trigger sort callback

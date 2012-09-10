@@ -22,7 +22,7 @@ protected
   end
 
   def login!
-    @user = Factory.create(:user, {
+    @user = FactoryGirl.create(:user, {
       :username => 'a-user',
       :password => 'password',
       :password_confirmation => 'password'

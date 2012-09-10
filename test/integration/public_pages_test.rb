@@ -2,15 +2,15 @@ require_relative '../test_helper'
 require 'launchy'
 class PublicPagesTest < ActiveSupport::IntegrationCase
   setup do
-    @page_template = Factory(:hero_page_template)
-    @root_node = Factory(:root_node)
+    @page_template = FactoryGirl.create(:hero_page_template)
+    @root_node = FactoryGirl.create(:root_node)
   end
 
   test 'rendering a index node by url' do
-    page1 = create_page(:data => [ Factory.build(:string_field, :handle => 'description', :value => 'Lorem ipsum')])
-    page2 = create_page(:title => 'Spiderman', :data => [ Factory.build(:string_field, :handle => 'description', :value => 'Some other text')])
+    page1 = create_page(:data => [ FactoryGirl.build(:string_field, :handle => 'description', :value => 'Lorem ipsum')])
+    page2 = create_page(:title => 'Spiderman', :data => [ FactoryGirl.build(:string_field, :handle => 'description', :value => 'Some other text')])
 
-    node = Factory(:node, :url => 'heroes', :handle => @page_template.handle)
+    node = FactoryGirl.create(:node, :url => 'heroes', :handle => @page_template.handle)
 
     visit '/heroes'
 
@@ -20,7 +20,7 @@ class PublicPagesTest < ActiveSupport::IntegrationCase
 
   test 'rendering a page by url' do
     _page = create_page
-    node = Factory(:node, {
+    node = FactoryGirl.create(:node, {
       :url => 'my-page',
       :action => 'show',
       :resource_type => 'Page',
@@ -57,7 +57,7 @@ private
 
   def create_restricted_page(options = {})
     create_page(options.merge(:restricted => true)).tap do |my_page|
-      node = Factory(:node, {
+      node = FactoryGirl.create(:node, {
         url: my_page.uri,
         controller: 'pages',
         action: 'show',

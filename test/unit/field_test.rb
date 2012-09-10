@@ -2,7 +2,7 @@ require_relative '../test_helper'
 class FieldTest < ActiveSupport::TestCase
 
   test 'building a field from a template' do
-    field_template = Factory.build(:field_template)
+    field_template = FactoryGirl.build(:field_template)
     field = Field.from_template(field_template)
     assert field.kind_of?(Field)
     field_template.shared_attributes.each do |key, attribute|
@@ -38,7 +38,7 @@ class FieldTest < ActiveSupport::TestCase
   end
 
   test 'string field rendering settings' do
-    field_template = Factory.build(:string_field_template)
+    field_template = FactoryGirl.build(:string_field_template)
     string_field = Field.from_template(field_template)
 
     assert string_field.respond_to?(:multiline)

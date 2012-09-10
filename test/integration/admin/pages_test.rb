@@ -2,7 +2,7 @@ require_relative '../../test_helper'
 class PagesTest < ActiveSupport::IntegrationCase
   setup do
     login!
-    @page_template = Factory.create(:hero_page_template)
+    @page_template = FactoryGirl.create(:hero_page_template)
   end
 
   test 'listing pages' do
@@ -175,8 +175,8 @@ class PagesTest < ActiveSupport::IntegrationCase
       User.delete_all
       login!
       @page_template.update_attribute(:allow_categories, true)
-      sausage_page = Factory.create(:page, :page_template => @page_template, :"#{@page_template.handle}_tag_names" => 'Sausages')
-      new_page = Factory.create(:page, :page_template => @page_template, :"#{@page_template.handle}_tag_names" => 'Beverages')
+      sausage_page = FactoryGirl.create(:page, :page_template => @page_template, :"#{@page_template.handle}_tag_names" => 'Sausages')
+      new_page = FactoryGirl.create(:page, :page_template => @page_template, :"#{@page_template.handle}_tag_names" => 'Beverages')
       visit admin_item_path(new_page)
       click_link I18n.t(:'admin.items.details.edit_category')
       select 'Sausages', :from => "item_#{@page_template.handle}_tag_names"

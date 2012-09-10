@@ -2,7 +2,7 @@ require_relative '../test_helper'
 class PageTemplateTest < ActiveSupport::TestCase
 
   setup do
-    @page_template = Factory.create(:page_template, {
+    @page_template = FactoryGirl.create(:page_template, {
       :template_name => nil,
       :handle => 'bacon',
       :instruction_body => 'Le instruction'
@@ -17,7 +17,7 @@ class PageTemplateTest < ActiveSupport::TestCase
 
   test 'uniqueness of label' do
     @page_template.save
-    page_template2 = Factory.build(:page_template, :label => @page_template.label)
+    page_template2 = FactoryGirl.build(:page_template, :label => @page_template.label)
     refute page_template2.valid?, 'should not be valid'
     assert_not_nil page_template2.errors[:label], 'should have errors on label'
   end

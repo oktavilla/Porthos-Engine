@@ -5,7 +5,7 @@ class ContentTemplatesTest < ActiveSupport::IntegrationCase
   end
 
   test 'listing content_templates' do
-    content_template = Factory(:content_template)
+    content_template = FactoryGirl.create(:content_template)
 
     visit admin_content_templates_path
     assert page.find("#content_templates #content_template_#{content_template.id}").has_content?(content_template.label), 'content template should be in the list'
@@ -28,7 +28,7 @@ class ContentTemplatesTest < ActiveSupport::IntegrationCase
   end
 
   test 'editing a content template' do
-    content_template = Factory(:content_template)
+    content_template = FactoryGirl.create(:content_template)
     visit admin_content_templates_path
 
     within("#content_templates #content_template_#{content_template.id}") do
@@ -47,7 +47,7 @@ class ContentTemplatesTest < ActiveSupport::IntegrationCase
   end
 
   test "destroying a content template" do
-    content_template = Factory(:content_template)
+    content_template = FactoryGirl.create(:content_template)
     visit admin_content_template_path(content_template)
 
     within(".header") do

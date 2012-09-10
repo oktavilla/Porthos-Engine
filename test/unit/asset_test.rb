@@ -6,7 +6,7 @@ class AssetTest < ActiveSupport::TestCase
       WebMock.disable_net_connect!
       stub_s3_put
       stub_s3_head
-      @asset = Factory.create(:asset, :file => new_tempfile('text'))
+      @asset = FactoryGirl.create(:asset, :file => new_tempfile('text'))
     end
     subject { @asset }
 
@@ -33,7 +33,7 @@ class AssetTest < ActiveSupport::TestCase
     end
 
     should 'generate a unique filename' do
-      new_asset = Factory.create(:asset, :file => new_tempfile('text'))
+      new_asset = FactoryGirl.create(:asset, :file => new_tempfile('text'))
       assert_not_equal new_asset.name, @asset.name
     end
 

@@ -15,7 +15,7 @@ class SessionsTest < ActiveSupport::IntegrationCase
   end
 
   test 'login with remember me' do
-    Factory.create(:user, {
+    FactoryGirl.create(:user, {
       :username => 'a-user',
       :password => 'password',
       :password_confirmation => 'password' })

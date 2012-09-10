@@ -3,7 +3,7 @@ require_relative '../../test_helper'
 class DatumTemplatesTest < ActiveSupport::IntegrationCase
   setup do
     login!
-    @page_template = Factory(:page_template)
+    @page_template = FactoryGirl.create(:page_template)
   end
 
   # TODO: Add tests for the different kinds of datum_templates and their forms
@@ -47,7 +47,7 @@ class DatumTemplatesTest < ActiveSupport::IntegrationCase
   end
 
   test 'destroying a datum_template' do
-    page_template = Factory(:page_template, :datum_templates => [ Factory.build(:datum_template) ])
+    page_template = FactoryGirl.create(:page_template, :datum_templates => [ FactoryGirl.build(:datum_template) ])
     datum_template = page_template.datum_templates.first
 
     visit admin_page_template_path(page_template)

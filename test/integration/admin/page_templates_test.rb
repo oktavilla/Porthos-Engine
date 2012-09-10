@@ -6,7 +6,7 @@ class PageTemplatesTest < ActiveSupport::IntegrationCase
   end
 
   test 'listing page_templates' do
-    page_template = Factory(:page_template)
+    page_template = FactoryGirl.create(:page_template)
 
     visit admin_page_templates_path
     assert page.find("#page_templates #page_template_#{page_template.id}").has_content?(page_template.label), 'Page template should be in the list'
@@ -34,7 +34,7 @@ class PageTemplatesTest < ActiveSupport::IntegrationCase
   end
 
   test 'editing a page template' do
-    page_template = Factory(:page_template)
+    page_template = FactoryGirl.create(:page_template)
     visit admin_page_templates_path
 
     within("#page_templates #page_template_#{page_template.id}") do
@@ -52,7 +52,7 @@ class PageTemplatesTest < ActiveSupport::IntegrationCase
   end
 
   test "destroying a page template" do
-    page_template = Factory(:page_template)
+    page_template = FactoryGirl.create(:page_template)
     visit admin_page_template_path(page_template)
 
     within(".header") do

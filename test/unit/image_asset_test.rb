@@ -9,7 +9,7 @@ class ImageAssetTest < ActiveSupport::TestCase
       WebMock.disable_net_connect!
       stub_resizor_post
       stub_resizor_delete
-      @image_asset = Factory.create(:image_asset, :file => new_tempfile('image'))
+      @image_asset = FactoryGirl.create(:image_asset, :file => new_tempfile('image'))
     end
 
     should 'set correct file type' do

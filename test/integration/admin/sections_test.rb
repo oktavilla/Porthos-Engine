@@ -2,7 +2,7 @@ require_relative '../../test_helper'
 require 'launchy'
 class SectionsTest < ActiveSupport::IntegrationCase
   setup do
-    @page_template = Factory.create(:page_template, :allow_node_placements => false)
+    @page_template = FactoryGirl.create(:page_template, :allow_node_placements => false)
   end
 
   test 'adding a section' do

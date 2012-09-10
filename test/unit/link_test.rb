@@ -3,8 +3,8 @@ class LinkTest < ActiveSupport::TestCase
   context 'Link' do
     setup do
       @link_list = LinkList.new(title: 'Footer links', handle: 'footer_links')
-      @node = Factory.build(:node)
-      @link = Factory.build(:link)
+      @node = FactoryGirl.build(:node)
+      @link = FactoryGirl.build(:link)
     end
 
     should 'be valid with valid attributes' do

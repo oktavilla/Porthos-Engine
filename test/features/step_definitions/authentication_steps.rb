@@ -4,7 +4,7 @@ Then /^I should be logged out$/ do
 end
 
 Given /^I have one\s+user "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
-  user = Factory(:user, {
+  user = FactoryGirl.create(:user, {
     :login => login,
     :password => password,
     :password_confirmation => password

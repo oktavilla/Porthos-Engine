@@ -2,11 +2,11 @@ require_relative '../test_helper'
 
 class ItemTest < ActiveSupport::TestCase
   setup do
-    @item = Factory.build(:item)
+    @item = FactoryGirl.build(:item)
   end
 
   should "have access to data values by their handles" do
-    @item.data = [Factory.build(:string_field, :handle => 'short_description')]
+    @item.data = [FactoryGirl.build(:string_field, :handle => 'short_description')]
     assert_equal @item.data.first, @item.data['short_description'], "Should return the datum by it's handle"
   end
 
@@ -45,7 +45,7 @@ class ItemTest < ActiveSupport::TestCase
 
   context 'with associations to other items' do
     setup do
-      @another_item = Factory(:item)
+      @another_item = FactoryGirl.create(:item)
       @item.data << PageAssociation.new(:page_id => @another_item.id, :active => true)
     end
 

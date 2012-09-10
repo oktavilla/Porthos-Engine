@@ -28,7 +28,7 @@ class UsersTest < ActiveSupport::IntegrationCase
   end
 
   test 'deleting a user should not be possible' do
-    user = Factory.create(:user, :first_name => 'Dorkey', :last_name => 'Bork')
+    user = FactoryGirl.create(:user, :first_name => 'Dorkey', :last_name => 'Bork')
     visit admin_users_path
 
     refute page.find("#userslist #user_#{user.id}").has_content?(I18n.t(:destroy))

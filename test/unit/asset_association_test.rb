@@ -10,13 +10,13 @@ class AssetAssociationTest < ActiveSupport::TestCase
       stub_resizor_post
       stub_s3_put
       stub_s3_head
-      @asset = Factory.create(:image_asset, {
+      @asset = FactoryGirl.create(:image_asset, {
         title: 'A fine image',
         description: 'Looks good it does',
         author: 'God',
         file: new_tempfile('image')
       })
-      @page = Factory.build(:page)
+      @page = FactoryGirl.build(:page)
       @asset_association = AssetAssociation.new(:asset => @asset)
       @page.data << @asset_association
     end
@@ -59,7 +59,7 @@ class AssetAssociationTest < ActiveSupport::TestCase
     context 'when changing the asset_id' do
       setup do
         @asset_association.save
-        @new_asset = Factory.create(:image_asset, {
+        @new_asset = FactoryGirl.create(:image_asset, {
           title: 'A finer image',
           description: 'Looks gooder it does',
           author: 'Gods',

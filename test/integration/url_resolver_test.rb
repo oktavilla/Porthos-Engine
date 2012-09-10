@@ -58,12 +58,12 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
           :namespace => 'authors'
       end
 
-      @blog_node = Factory(:node,
+      @blog_node = FactoryGirl.create(:node,
         :controller => 'posts',
         :action => 'index',
         :handle => 'blog',
         :url => 'the-blog')
-      @authors_node = Factory(:node,
+      @authors_node = FactoryGirl.create(:node,
         :controller => 'authors',
         :action => 'index',
         :handle => 'authors',
@@ -75,7 +75,7 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
       context 'for a path with parameters' do
 
         should 'result in a url with the parameters in the correct places' do
-          post = Factory(:post, :handle => 'blog')
+          post = FactoryGirl.create(:post, :handle => 'blog')
           assert_equal "/the-blog/#{post.id}", post_path(post)
           assert_equal '/the-blog/2001/01/01', posts_path(:year => '2001',
             :month => '01',
@@ -83,14 +83,14 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
             :host => 'test.com',
             :handle => 'blog')
 
-          author = Factory(:author, :handle => 'authors')
+          author = FactoryGirl.create(:author, :handle => 'authors')
           assert_equal "/the-blog/#{post.id}/author/#{author.id}",
             author_path(author, :post_id => post.id, :handle => 'blog')
           assert_equal "/the-authors/#{author.id}", author_path(author)
         end
 
         should 'use #uri if defined on resource' do
-          post = Factory(:post, :handle => 'blog')
+          post = FactoryGirl.create(:post, :handle => 'blog')
           post.class_eval do
             def uri
               'my-super-duper-page'
@@ -102,8 +102,8 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
 
       context 'for a specific resource' do
         should 'rewrite the path to match the nodes url' do
-          post = Factory(:post)
-          node = Factory(:node, :controller => 'posts', :action => 'show', :resource => post)
+          post = FactoryGirl.create(:post)
+          node = FactoryGirl.create(:node, :controller => 'posts', :action => 'show', :resource => post)
           assert_equal "/#{node.url}", post_path(:id => post)
         end
       end
@@ -148,8 +148,8 @@ class UrlResolverTest < ActiveSupport::IntegrationCase
 
       context 'for a resource' do
         setup do
-          @post = Factory(:post)
-          @author = Factory(:author)
+          @post = FactoryGirl.create(:post)
+          @author = FactoryGirl.create(:author)
         end
 
         should 'have a rest route route' do

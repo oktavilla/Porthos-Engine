@@ -3,7 +3,7 @@ require_relative '../test_helper'
 class DatumCollectionTest < ActiveSupport::TestCase
 
   setup do
-    @template = Factory.build(:datum_collection_template)
+    @template = FactoryGirl.build(:datum_collection_template)
     @datum_collection = Field.from_template(@template)
   end
 
@@ -15,12 +15,12 @@ class DatumCollectionTest < ActiveSupport::TestCase
   end
 
   test 'data is sorted by position' do
-    page = Factory.build(:page)
+    page = FactoryGirl.build(:page)
     page.data << @datum_collection
 
-    data1 = Factory.build(:string_field, :position => 3)
-    data2 = Factory.build(:field_set, :position => 2)
-    data3 = Factory.build(:text_field, :position => 1)
+    data1 = FactoryGirl.build(:string_field, :position => 3)
+    data2 = FactoryGirl.build(:field_set, :position => 2)
+    data3 = FactoryGirl.build(:text_field, :position => 1)
 
     @datum_collection.data = [data1, data2, data3]
     page.save
@@ -29,10 +29,10 @@ class DatumCollectionTest < ActiveSupport::TestCase
   end
 
   test 'returns pages from page associations' do
-    page = Factory.build(:page)
+    page = FactoryGirl.build(:page)
     pages = []
     3.times do
-      Factory.build(:page).tap do |p|
+      FactoryGirl.build(:page).tap do |p|
         pages << p
         @datum_collection.data << PageAssociation.new(:page => p)
       end
@@ -56,7 +56,7 @@ class DatumCollectionTest < ActiveSupport::TestCase
     @datum_collection.send :remove_instance_variable, :@pages
     @datum_collection.send :remove_instance_variable, :@page_ids
 
-    @datum_collection.data << PageAssociation.new(:page => Factory.build(:page))
+    @datum_collection.data << PageAssociation.new(:page => FactoryGirl.build(:page))
     assert_equal 1, @datum_collection.pages.size
   end
 

@@ -3,7 +3,7 @@ require_relative '../test_helper'
 class FieldSetTest < ActiveSupport::TestCase
 
   setup do
-    @field_set_template = Factory.build(:field_set_template)
+    @field_set_template = FactoryGirl.build(:field_set_template)
     @field_set = FieldSet.from_template(@field_set_template)
   end
 

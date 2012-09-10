@@ -2,8 +2,8 @@ require_relative '../test_helper'
 
 class RedirectsTest < ActiveSupport::IntegrationCase
   setup do
-    page_template = Factory(:hero_page_template)
-    Factory(:node, {
+    page_template = FactoryGirl.create(:hero_page_template)
+    FactoryGirl.create(:node, {
       url: 'take-me-here',
       action: 'show',
       resource: Page.create_from_template(page_template, { title: 'Batman', published_on: (Time.now-3600) })

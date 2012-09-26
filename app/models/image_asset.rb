@@ -21,7 +21,7 @@ class ImageAsset < Asset
   def remote_url(options = {})
     resizor_asset.url({:size => 'original', :format => extension}.merge(options))
   end
-
+  alias :url :remote_url
 
   def versions=(new_version)
     super(versions.is_a?(Hash) ? versions.merge(new_version) : new_version)

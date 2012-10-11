@@ -1,0 +1,51 @@
+<div id="workspace">
+  <div class="header">
+    <h1><%= page_template.label %></h1>
+  </div>
+  <div class="tools">
+    <div class="add">
+      <%= link_to t('.create_new', :template => page_template.label.downcase), new_admin_item_path(:page_template_id => page_template.id), :class => 'new' %>
+    </div>
+    <%= render 'sorting' unless page_template.sorted_manually? %>
+  </div>
+
+  <div id="content">
+    <div class="tablewrap">
+      <% if !page_template.allow_node_placements? && !page_template.section %>
+        <div class="section">
+          <%= link_to t('.add_section'), new_admin_item_path(type: 'Section', page_template_id: page_template.id) %>
+        </div>
+      <% end %>
+      <table class="pages<%= ' sortable' if page_template.sorted_manually? %>">
+        <thead>
+          <tr>
+            <% if page_template.sorted_manually? %>
+              <th class="sort"></th>
+            <% end %>
+            <th><%= Page.human_attribute_name(:title) %></th>
+            <th><%= Page.human_attribute_name(:updated_at) %></th>
+            <th><%= Page.human_attribute_name(:published_on) %></th>
+            <th><%= t(:status) %></th>
+          </tr>
+        </thead>
+        <% if !@current_tags.any? && page_template.section %>
+          <tbody class="section">
+            <%= render 'row', item: page_template.section, sortable: page_template.sorted_manually? %>
+          </tbody>
+        <% end %>
+        <% if page_template.sorted_manually? %>
+          <%= tag 'tbody', :'data-sort-uri' => sort_admin_items_path(page_template_id: page_template.id), :id => 'pages' %>
+        <% else %>
+          <tbody>
+        <% end %>
+        <% cache ['v1', page_template, params[:page], current_scopes.values, 'admin-list'] do %>
+          <% items.each do |item| %>
+            <%= render 'row', item: item, sortable: page_template.sorted_manually? %>
+          <% end %>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%= paginate items if items.any? %>
+  </div>
+</div>

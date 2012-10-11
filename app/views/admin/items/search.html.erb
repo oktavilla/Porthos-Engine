@@ -1,5 +1,5 @@
-<% @page_title = t('.title', :query => @query) -%>
-<% @page_class = 'layout3' -%>
+<% @page_title = t('.title', :query => @query) %>
+<% @page_class = 'layout3' %>
 <%= render :partial => 'admin/items/sub_nav' %>
 <div id="workspace">
   <div class="header">
@@ -8,7 +8,7 @@
   <div class="tools">
     <div class="add">
       Lägg till:
-      <% @page_templates.each do |page_template| -%>
+      <% @page_templates.each do |page_template| %>
         <%= link_to page_template.label, (!current_scopes[:with_parent] ? new_admin_item_path(:page => { :page_template_id => page_template.id }) : new_admin_item_path(:page => { :page_template_id => page_template, :parent_id => current_scopes[:with_parent].split(',')[0], :parent_type => current_scopes[:with_parent].split(',')[1] })), :class => 'new' %>
       <% end if @page_templates.any? %>
     </div>

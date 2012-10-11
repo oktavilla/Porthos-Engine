@@ -1,4 +1,6 @@
 require 'warden'
+require 'porthos/strategies/password.rb'
+require 'porthos/strategies/rememberable.rb'
 
 Warden::Manager.serialize_into_session do |user|
   user.id
@@ -59,9 +61,6 @@ module Porthos
     end
 
     module Strategies
-      autoload :Password, 'porthos/strategies/password.rb'
-      autoload :Rememberable, 'porthos/strategies/rememberable.rb'
-
       mattr_accessor :registered_strategies
       self.registered_strategies = [:password, :rememberable]
 

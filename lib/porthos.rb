@@ -9,8 +9,9 @@ require 'mm-multi-parameter-attributes'
 require 'delayed_job'
 require 'kaminari'
 
-require 'porthos/config'
 module Porthos
+  autoload :Config, 'porthos/config'
+
   extend self
 
   def root
@@ -28,49 +29,49 @@ module Porthos
   def config
     Porthos::Config
   end
+
+  module Middleware
+    autoload :RedirectApp,         'porthos/middleware/redirect_app'
+    autoload :TagsAutocompleteApp, 'porthos/middleware/tags_autocomplete_app'
+    autoload :RoutingCache,        'porthos/middleware/routing_cache'
+  end
+
+  module Routing
+    autoload :Cache,     'porthos/routing/cache'
+    autoload :Rule,      'porthos/routing/rule'
+    autoload :Rules,     'porthos/routing/rules'
+    autoload :Recognize, 'porthos/routing/recognize'
+    autoload :Resolver,  'porthos/routing/resolver'
+    autoload :Filters,   'porthos/routing/filters'
+  end
+
+  autoload :S3Storage, 'porthos/s3_storage'
+
+  autoload :Authentication, 'porthos/authentication'
+  autoload :Admin,  'porthos/admin'
+  autoload :Public, 'porthos/public'
+  autoload :ApplicationHelper, 'porthos/helpers/application_helper'
+
+  module ActiveRecord
+    autoload :Restrictions, 'porthos/active_record/restrictions'
+    autoload :Settingable,  'porthos/active_record/settingable'
+  end
+
+  module MongoMapper
+    autoload :Extensions, 'porthos/mongo_mapper/extensions'
+    autoload :Callbacks,  'porthos/mongo_mapper/callbacks'
+    autoload :Observer,   'porthos/mongo_mapper/observer'
+
+    module Plugins
+      autoload :ActsAsUri,    'porthos/mongo_mapper/plugins/acts_as_uri'
+      autoload :Instructable, 'porthos/mongo_mapper/plugins/instructable'
+      autoload :Taggable,     'porthos/mongo_mapper/plugins/taggable'
+    end
+  end
+
+  autoload :DatumMethods, 'porthos/datum_methods'
+  autoload :Tanking,      'porthos/tanking'
+
 end
-
-require 'porthos/s3_storage'
-
-# ActiveRecord
-require 'porthos/active_record/restrictions'
-require 'porthos/active_record/settingable'
-
-# MongoMapper
-require 'porthos/mongo_mapper/extensions'
-require 'porthos/mongo_mapper/callbacks'
-require 'porthos/mongo_mapper/observer'
-
-# MongoMapper Plugins
-require 'porthos/mongo_mapper/plugins/acts_as_uri'
-require 'porthos/mongo_mapper/plugins/instructable'
-require 'porthos/mongo_mapper/plugins/taggable'
-
-# SearchEngine
-require 'porthos/tanking'
-
-# Routing
-require 'porthos/routing/cache'
-require 'porthos/routing/rule'
-require 'porthos/routing/rules'
-require 'porthos/routing/recognize'
-require 'porthos/routing/resolver'
-require 'porthos/routing/filters'
-
-# MiddleWare
-require 'porthos/middleware/redirect_app'
-require 'porthos/middleware/tags_autocomplete_app'
-require 'porthos/middleware/routing_cache'
-
-# ActiveModel
 require 'porthos/validators'
-
-# Application
-require 'porthos/authentication'
-require 'porthos/admin'
-require 'porthos/public'
-require 'porthos/helpers/application_helper'
-
-require 'porthos/datum_methods'
-
 require 'porthos/engine'

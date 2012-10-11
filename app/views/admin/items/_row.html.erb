@@ -1,52 +1,60 @@
-<tr id="item_<%= item.id %>">
-  <% if defined?(sortable) and sortable %>
-  <td class="sort"><% if item.is_a?(Page) %><span class="drag_handle"></span><% end %></td>
-  <% end %>
-  <td class="content">
-    <%= render :partial => item.template.views.admin_in_list, :locals => { :item => item } %>
-    <% if item.has_url? %>
-      <% page_path(item).tap do |uri| %>
-        <%= link_to uri, uri %>
-      <% end %>
-    <% end -%>
-    <% if item.tags && item.tags.any? -%>
-    <div class="tags"><%= item.tags.collect { |tag| link_to(tag.name, admin_items_path(:tags => [tag.name]))}.join(', ').html_safe %></div>
-    <% end -%>
-    <% if item.note.present? -%>
-      <p class="note"><%= item.note %></p>
-    <% end -%>
-  </td>
-  <% if defined?(display_page_type) and display_page_type %>
-  <td class="page_template">
-    <%= link_to item.page_template.label, admin_items_path(:with_page_template => item.page_template.id) %>
-  </td>
-  <% end %>
-  <td class="updated_at">
-    <% if item.updated_at && item.updated_at != item.created_at -%>
-      <% if item.updated_at.year != Time.now.year %>
-        <%= item.updated_at.strftime("%d %b %Y") %>
-      <% else %>
-        <%= item.updated_at.strftime("%d %b") %>
-      <% end %>
-      <% if item.updated_by.present? %>
-       <%= t(:by) %> <%= item.updated_by.first_name %>
-      <% end %>
-    <% end -%>
-  </td>
-  <td>
-    <% if item.published? && item.class == Page %>
-      <% if item.published_on.year != Time.now.year %>
-        <%= item.published_on.strftime("%d %b %Y")  %></td>
-      <% else %>
-        <%= item.published_on.strftime("%d %b") if item.published? && item.class == Page %>
-      <% end %>
+<% cache ['v1', item, local_assigns.values] do %>
+  <tr id="item_<%= item.id %>">
+    <% if local_assigns[:sortable] %>
+      <td class="sort">
+        <% if item.is_a?(Page) %>
+          <span class="drag_handle"></span>
+        <% end %>
+      </td>
     <% end %>
-  </td>
-  <td class="status">
-    <% if item.published? %>
-    <span class="status published"><%= t(:published) %></span>
-    <% else %>
-    <span class="status unpublished"><%= t(:unpublished) %></span>
+    <td class="content">
+      <%= render item.template.views.admin_in_list, item: item %>
+      <% if item.has_url? %>
+        <% page_path(item).tap do |uri| %>
+          <%= link_to uri, uri %>
+        <% end %>
+      <% end %>
+      <% if item.tags && item.tags.any? %>
+        <div class="tags">
+          <%= item.tags.map { |tag| link_to(tag.name, admin_items_path(tags: [tag.name]))}.join(', ').html_safe %>
+        </div>
+      <% end %>
+      <% if item.note.present? %>
+        <p class="note"><%= item.note %></p>
+      <% end %>
+    </td>
+    <% if local_assigns[:display_page_type] %>
+    <td class="page_template">
+      <%= link_to item.page_template.label, admin_items_path(with_page_template: item.page_template.id) %>
+    </td>
     <% end %>
-  </td>
-</tr>
+    <td class="updated_at">
+      <% if item.updated_at && item.updated_at != item.created_at %>
+        <% if item.updated_at.year != Time.now.year %>
+          <%= item.updated_at.strftime("%d %b %Y") %>
+        <% else %>
+          <%= item.updated_at.strftime("%d %b") %>
+        <% end %>
+        <% if item.updated_by.present? %>
+         <%= t(:by) %> <%= item.updated_by.first_name %>
+        <% end %>
+      <% end %>
+    </td>
+    <td>
+      <% if item.published? && item.class.to_s == "Page" %>
+        <% if item.published_on.year != Time.now.year %>
+          <%= item.published_on.strftime "%d %b %Y" %></td>
+        <% else %>
+          <%= item.published_on.strftime "%d %b" %>
+        <% end %>
+      <% end %>
+    </td>
+    <td class="status">
+      <% if item.published? %>
+        <span class="status published"><%= t(:published) %></span>
+      <% else %>
+        <span class="status unpublished"><%= t(:unpublished) %></span>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

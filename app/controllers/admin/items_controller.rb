@@ -102,10 +102,16 @@ class Admin::ItemsController < ApplicationController
   end
 
   def sort
-    timestamp = Time.now
-    params[:item].each_with_index do |id, i|
-      Page.set(id, :position => i+1)
+    params[:item].each_with_index do |id, index|
+      object_id = BSON::ObjectId.from_string id
+      Page.set(object_id, :position => index+1)
     end
+
+    if params[:page_template_id]
+      object_id = BSON::ObjectId.from_string params[:page_template_id]
+      PageTemplate.set object_id, updated_at: Time.zone.now.utc
+    end
+
     respond_to do |format|
       format.js { render :nothing => true }
     end

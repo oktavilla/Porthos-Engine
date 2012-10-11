@@ -1,0 +1,36 @@
+<div id="workspace">
+  <div class="header">
+    <h1><%= t('.all_pages') %></h1>
+  </div>
+
+  <div class="tools">
+    <% if params[:type] == 'CustomPage' %>
+      <div class="add">
+        <%= link_to t('.create_new', :template => CustomPage.model_name.human), new_admin_item_path(:type => 'CustomPage'), :class => 'new' %>
+      </div>
+    <% else %>
+      <%= render 'sorting' %>
+    <% end %>
+  </div>
+
+  <div id="content">
+    <div class="tablewrap">
+      <table class="pages">
+        <thead>
+          <tr>
+            <th><%= Page.human_attribute_name(:title) %></th>
+            <th><%= Page.human_attribute_name(:updated_at) %></th>
+            <th><%= Page.human_attribute_name(:published_on) %></th>
+            <th><%= t(:status) %></th>
+          </tr>
+        </thead>
+        <tbody>
+        <% items.each do |item| %>
+          <%= render partial: 'row', locals: { item: item } %>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%= paginate items if items.any? %>
+  </div>
+</div>

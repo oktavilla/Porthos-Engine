@@ -1,75 +1,8 @@
 <% @page_title = 'Sidor' -%>
 <% @page_class = 'layout3' -%>
 <%= render :partial => 'admin/items/sub_nav' %>
-<% (@page_template && @page_template.sortable? && @page_template.sortable.field == :position).tap do |sortable| %>
-<div id="workspace">
-  <div class="header">
-    <% if @page_template %>
-    <h1><%= @page_template.label %></h1>
-    <% else %>
-    <h1><%= t('.all_pages') %></h1>
-    <% end %>
-  </div>
-  <div class="tools">
-    <% if @page_template %>
-    <div class="add">
-      <%= link_to t('.create_new', :template => @page_template.label.downcase), new_admin_item_path(:page_template_id => @page_template.id), :class => 'new' %>
-    </div>
-    <% elsif params[:type] == 'CustomPage' %>
-    <div class="add">
-      <%= link_to t('.create_new', :template => CustomPage.model_name.human), new_admin_item_path(:type => 'CustomPage'), :class => 'new' %>
-    </div>
-    <% end %>
-  <% unless sortable %>
-    <%= form_tag admin_items_path, :method => :get do |f| %>
-    <div class="sort">
-      <label for="filters_order_by">Sortering:</label>
-      <% current_scopes.except(:order_by).each do |filter, value| -%>
-        <%= hidden_field_tag filter, value %>
-      <% end -%>
-        <%= select_tag 'order_by', options_for_select({ 'Välj sortering' => '', 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, current_scopes[:order_by]) %>
-    </div>
-    <% end %>
-  <% end %>
-  </div>
-  <div id="content">
-    <div class="tablewrap">
-      <% if @page_template && !@page_template.allow_node_placements? && !@page_template.section %>
-      <div class="section">
-        <%= link_to t('.add_section'), new_admin_item_path(type: 'Section', page_template_id: @page_template.id) %>
-      </div>
-      <% end %>
-      <table class="pages <%= ' sortable' if sortable %>">
-        <thead>
-          <tr>
-            <% if sortable %>
-            <th class="sort"></th>
-            <% end %>
-            <th><%= Page.human_attribute_name(:title) %></th>
-            <th><%= Page.human_attribute_name(:updated_at) %></th>
-            <th><%= Page.human_attribute_name(:published_on) %></th>
-            <th><%= t(:status) %></th>
-          </tr>
-        </thead>
-        <% if @page_template && !@current_tags.any? && @page_template.section %>
-        <% @page_template.section.tap do |section| %>
-        <tbody class="section">
-          <%= render partial: 'row', locals: { item: section, sortable: sortable } %>
-        </tbody>
-        <% end %>
-        <% end %>
-        <% if sortable %>
-        <%= tag 'tbody', :'data-sort-uri' => sort_admin_items_path, :id => 'pages' %>
-        <% else %>
-        <tbody>
-        <% end %>
-        <% @items.each do |item| %>
-          <%= render partial: 'row', locals: { item: item, sortable: sortable } %>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
-    <%= paginate @items if @items.any? %>
-  </div>
-</div>
+<% if @page_template %>
+  <%= render 'index_for_page_template', page_template: @page_template, items: @items %>
+<% else %>
+  <%= render 'default', items: @items %>
 <% end %>

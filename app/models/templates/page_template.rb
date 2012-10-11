@@ -56,4 +56,12 @@ class PageTemplate < Template
     self['sortable'].present?
   end
 
+  def sortable_field
+    sortable? ? sortable.field : nil
+  end
+
+  def sorted_manually?
+    sortable_field == :position
+  end
+
 end

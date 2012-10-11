@@ -1,10 +1,10 @@
 <ul class="nodes">
 <% nodes.each do |node| %>
   <li id="node_<%= node.id %>" class="<%= cycle("odd", "even") %> node">
-    <% if place %>
-      <%= render :partial => 'place_node.html.erb', :locals => { :node => node, :trail => trail } %>
+    <% if local_assigns[:place] %>
+      <%= render 'place_node', node: node, trail: trail %>
     <% else %>
-      <%= render :partial => 'node.html.erb', :locals => { :node => node, :trail => trail } %>
+      <%= render 'node', node: node, trail: trail %>
     <% end %>
   </li>
 <% end %>

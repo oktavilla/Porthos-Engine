@@ -30,7 +30,7 @@ protected
 
   def create_section
     visit admin_items_path(:with_page_template => @page_template.id)
-    click_link I18n.t(:'admin.items.index.add_section')
+    click_link I18n.t(:'admin.items.index_for_page_template.add_section')
 
     fill_in 'item_title', :with => 'A title for the section page'
     click_button I18n.t(:save)

@@ -48,7 +48,7 @@ private
   def create_page
     visit admin_items_path
     click_link CustomPage.model_name.human(count: 2)
-    click_link I18n.t(:'admin.items.index.create_new', :template => CustomPage.model_name.human)
+    click_link I18n.t(:'admin.items.default.create_new', :template => CustomPage.model_name.human)
     fill_in 'item_title', with: 'A bloody custom page'
     click_button I18n.t(:save)
   end

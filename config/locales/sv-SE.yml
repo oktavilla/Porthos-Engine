@@ -479,9 +479,12 @@
     items:
       index:
         all_pages: "Alla sidor"
-        create_new: "Skapa ny %{template}sida"
-        add_section: Lägg till indexsida
         add_custom_page: Lägg till
+      default:
+        create_new: "Skapa ny %{template}"
+      index_for_page_template:
+        create_new: "Skapa ny %{template}ssida"
+        add_section: Lägg till indexsida
       page:
         choose: Välj
         add_content: Lägg till innehåll

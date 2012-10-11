@@ -54,7 +54,7 @@ class PagesTest < ActiveSupport::IntegrationCase
     end
 
     within('.tools') do
-      click_link I18n.t(:'admin.items.index.create_new', :template => @page_template.label.downcase)
+      click_link I18n.t(:'admin.items.index_for_page_template.create_new', :template => @page_template.label.downcase)
     end
 
     assert_equal new_admin_item_path, current_path

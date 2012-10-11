@@ -1,0 +1,9 @@
+<%= form_tag admin_items_path, :method => :get do |f| %>
+  <div class="sort">
+    <label for="filters_order_by">Sortering:</label>
+    <% current_scopes.except(:order_by).each do |filter, value| -%>
+      <%= hidden_field_tag filter, value %>
+    <% end -%>
+    <%= select_tag 'order_by', options_for_select({ 'Välj sortering' => '', 'Senast ändrad' => 'updated_at desc', 'Publicerad' => 'published_on desc', 'A-Z' => 'title asc' }, current_scopes[:order_by]) %>
+  </div>
+<% end %>

@@ -34,6 +34,7 @@ module Porthos
     autoload :RedirectApp,         'porthos/middleware/redirect_app'
     autoload :TagsAutocompleteApp, 'porthos/middleware/tags_autocomplete_app'
     autoload :RoutingCache,        'porthos/middleware/routing_cache'
+    autoload :ShellCache,          'porthos/middleware/shell_cache'
   end
 
   module Routing
@@ -43,6 +44,14 @@ module Porthos
     autoload :Recognize, 'porthos/routing/recognize'
     autoload :Resolver,  'porthos/routing/resolver'
     autoload :Filters,   'porthos/routing/filters'
+  end
+
+  autoload :Caching, 'porthos/caching'
+
+  module Caching
+    autoload :ShellCache, 'porthos/caching/shell_cache'
+    autoload :Shell,      'porthos/caching/shell'
+    autoload :Shelled,    'porthos/caching/shelled'
   end
 
   autoload :S3Storage, 'porthos/s3_storage'

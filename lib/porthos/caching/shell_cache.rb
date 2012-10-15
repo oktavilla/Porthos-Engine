@@ -1,10 +1,6 @@
 module Porthos
   module Caching
 
-    def self.shell_cache
-      @cache ||= ShellCache.new
-    end
-
     class ShellCache
       include Singleton
 
@@ -26,5 +22,6 @@ module Porthos
         @_cache ||= {}
       end
     end
+
   end
 end

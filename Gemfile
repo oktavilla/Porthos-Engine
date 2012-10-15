@@ -1,9 +1,12 @@
 source :rubygems
 
 group :development, :test do
-  gem 'minitest', '~> 3.5.0'
-  gem 'mocha', '0.12.6', require: false
   gem 'show_me_the_cookies'
+end
+
+group :test do
+  gem 'minitest', '~> 4.1.0'
+  gem 'mocha', '~> 0.12.7', require: false
 end
 gemspec
 

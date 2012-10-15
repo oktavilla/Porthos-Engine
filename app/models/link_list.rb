@@ -1,5 +1,7 @@
 class LinkList
   include MongoMapper::Document
+  include CachingShell::Shelled
+
   key :title, String
   key :handle, String
   timestamps!

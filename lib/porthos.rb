@@ -34,6 +34,7 @@ module Porthos
     autoload :RedirectApp,         'porthos/middleware/redirect_app'
     autoload :TagsAutocompleteApp, 'porthos/middleware/tags_autocomplete_app'
     autoload :RoutingCache,        'porthos/middleware/routing_cache'
+    autoload :ShellCache,          'porthos/middleware/shell_cache'
   end
 
   module Routing
@@ -73,5 +74,6 @@ module Porthos
   autoload :Tanking,      'porthos/tanking'
 
 end
+require 'caching_shell'
 require 'porthos/validators'
 require 'porthos/engine'

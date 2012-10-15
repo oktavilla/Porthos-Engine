@@ -21,6 +21,10 @@ module Porthos
       app.middleware.insert_before ::MongoMapper::Middleware::IdentityMap, Porthos::Middleware::RoutingCache
     end
 
+    initializer "porthos.caching_shells" do |app|
+      app.middleware.use Porthos::Middleware::ShellCache
+    end
+
     initializer "porthos.routing_filters" do |app|
       RoutingFilter.send :include, Porthos::Routing::Filters
     end

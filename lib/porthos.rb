@@ -46,14 +46,6 @@ module Porthos
     autoload :Filters,   'porthos/routing/filters'
   end
 
-  autoload :Caching, 'porthos/caching'
-
-  module Caching
-    autoload :ShellCache, 'porthos/caching/shell_cache'
-    autoload :Shell,      'porthos/caching/shell'
-    autoload :Shelled,    'porthos/caching/shelled'
-  end
-
   autoload :S3Storage, 'porthos/s3_storage'
 
   autoload :Authentication, 'porthos/authentication'
@@ -82,5 +74,6 @@ module Porthos
   autoload :Tanking,      'porthos/tanking'
 
 end
+require 'caching_shell'
 require 'porthos/validators'
 require 'porthos/engine'

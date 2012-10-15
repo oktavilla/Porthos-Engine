@@ -1,7 +1,6 @@
 require_relative '../../test_helper'
-require_relative '../../../lib/porthos/caching/shelled'
+require_relative '../../../lib/caching_shell/shelled'
 require_relative '../../support/models/shelled'
-require 'mocha'
 
 require 'minitest/autorun'
 
@@ -17,7 +16,7 @@ describe "Shelled" do
   end
 
   it "can access the shell" do
-    Shelled.shell.must_equal Porthos::Caching::Shell.with_handle 'shelleds'
+    Shelled.shell.must_equal CachingShell::Shell.with_handle 'shelleds'
   end
 
   it "uses the same shell from instances" do

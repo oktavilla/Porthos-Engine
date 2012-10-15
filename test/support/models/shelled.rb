@@ -1,4 +1,4 @@
-require_relative '../../../lib/porthos/caching/shelled'
+require_relative '../../../lib/caching_shell'
 module StoreCallbacks
   extend ActiveSupport::Concern
 
@@ -16,12 +16,12 @@ end
 
 class Shelled
   include StoreCallbacks
-  include Porthos::Caching::Shelled
+  include CachingShell::Shelled
 end
 
 class NamedShelled
   include StoreCallbacks
-  include Porthos::Caching::Shelled
+  include CachingShell::Shelled
 
   shell_handle 'a-handle'
 end

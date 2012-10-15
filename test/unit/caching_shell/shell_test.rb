@@ -1,38 +1,38 @@
 require_relative '../../test_helper'
-require_relative '../../../lib/porthos/caching/shell'
+require_relative '../../../lib/caching_shell'
 require 'mocha'
 require 'minitest/autorun'
 
-describe Porthos::Caching::Shell do
+describe CachingShell::Shell do
   before :each do
-    Porthos::Caching.shell_cache.clear
+    CachingShell.object_cache.clear
     DatabaseCleaner.clean
   end
 
   describe "with_handle" do
     describe "with a new handle" do
       subject do
-        Porthos::Caching::Shell.with_handle 'new-handle'
+        CachingShell::Shell.with_handle 'new-handle'
       end
 
       it "creates a new shell" do
-        Porthos::Caching::Shell.expects(:create).with handle: 'new-handle'
+        CachingShell::Shell.expects(:create).with handle: 'new-handle'
         subject
       end
 
       it "stores the shell in memory" do
         handle = subject.handle
-        Porthos::Caching.shell_cache.get(handle).must_equal subject
+        CachingShell.object_cache.get(handle).must_equal subject
       end
     end
 
     describe "with an existing handle" do
       before :each do
-        @shell = Porthos::Caching::Shell.create handle: 'existing-handle'
+        @shell = CachingShell::Shell.create handle: 'existing-handle'
       end
 
       subject do
-        Porthos::Caching::Shell.with_handle 'existing-handle'
+        CachingShell::Shell.with_handle 'existing-handle'
       end
 
       it "finds the shell from the database" do
@@ -41,15 +41,15 @@ describe Porthos::Caching::Shell do
 
       it "stores the shell in memory" do
         handle = subject.handle
-        Porthos::Caching.shell_cache.get(handle).must_equal @shell
+        CachingShell.object_cache.get(handle).must_equal @shell
       end
     end
 
     describe "when already loaded" do
       it "fetches the shell from memory" do
-        shell = Porthos::Caching::Shell.new
-        Porthos::Caching.shell_cache.set 'stored', shell
-        Porthos::Caching::Shell.with_handle('stored').must_equal shell
+        shell = CachingShell::Shell.new
+        CachingShell.object_cache.set 'stored', shell
+        CachingShell::Shell.with_handle('stored').must_equal shell
       end
     end
   end

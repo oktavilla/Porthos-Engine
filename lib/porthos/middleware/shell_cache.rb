@@ -6,12 +6,12 @@ module Porthos
       end
 
       def call(env)
-        Porthos::Caching.shell_cache.clear
+        ::CachingShell.object_cache.clear
 
         @app.call(env)
 
       ensure
-        Porthos::Caching.shell_cache.clear
+        ::CachingShell.object_cache.clear
       end
     end
   end

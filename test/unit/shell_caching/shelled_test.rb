@@ -7,12 +7,27 @@ require 'minitest/autorun'
 
 
 describe "Shelled" do
+
+  it "defaults shell handle to the class name" do
+    Shelled.shell_handle.must_equal "shelleds"
+  end
+
+  it "sets the shell handle" do
+    NamedShelled.shell_handle.must_equal 'a-handle'
+  end
+
   it "can access the shell" do
-    Shelled.shell.must_equal Porthos::Caching::Shell.with_handle 'shell-handle'
+    Shelled.shell.must_equal Porthos::Caching::Shell.with_handle 'shelleds'
   end
 
   it "uses the same shell from instances" do
     Shelled.new.shell.must_equal Shelled.shell
+  end
+
+  # Sanity check
+  it "adds callbacks" do
+    Shelled.after_save :lol
+    Shelled.after_save_callbacks.must_include :lol
   end
 
   it "should run touch_shell after save" do

@@ -17,12 +17,12 @@ module Porthos
       private :touch_shell
 
       module ClassMethods
-        def use_shell handle
-          @shell_handle = handle
+        def shell_handle handle = nil
+          @shell_handle ||= handle.presence || self.to_s.pluralize.parameterize
         end
 
         def shell
-          Shell.with_handle @shell_handle
+          Shell.with_handle shell_handle
         end
       end
 

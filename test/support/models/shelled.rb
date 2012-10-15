@@ -1,6 +1,8 @@
 require_relative '../../../lib/porthos/caching/shelled'
-class Shelled
-  class << self
+module StoreCallbacks
+  extend ActiveSupport::Concern
+
+  module ClassMethods
     def after_save method
       after_save_callbacks << method
     end
@@ -10,6 +12,16 @@ class Shelled
     end
   end
 
+end
+
+class Shelled
+  include StoreCallbacks
   include Porthos::Caching::Shelled
-  use_shell 'shell-handle'
+end
+
+class NamedShelled
+  include StoreCallbacks
+  include Porthos::Caching::Shelled
+
+  shell_handle 'a-handle'
 end

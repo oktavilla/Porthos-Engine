@@ -26,42 +26,4 @@ class ItemTest < ActiveSupport::TestCase
     @item.valid?
     assert_equal 'A title with spaces', @item.title
   end
-
-  should 'find all association ids' do
-    @item.data = [
-      PageAssociation.new(:page_id => 1, :active => true),
-      DatumCollection.new({
-        :data => [
-          PageAssociation.new(:page_id => 2, :active => true),
-          PageAssociation.new(:page_id => 3, :active => false)
-        ],
-        :active => true
-      }),
-      PageAssociation.new(:page_id => 4, :active => true)
-    ]
-      
-    assert_equal [1, 2, 4], @item.send(:find_association_ids)
-  end
-
-  context 'with associations to other items' do
-    setup do
-      @another_item = FactoryGirl.create(:item)
-      @item.data << PageAssociation.new(:page_id => @another_item.id, :active => true)
-    end
-
-    should 'persist association ids' do
-      assert_equal [], @item.association_ids
-      @item.save
-      assert_equal [@another_item.id], @item.association_ids
-    end
-     
-    should 'touch associated items' do
-      @item.save
-      def @another_item.updated_at
-        Time.local(2009, 8, 15, 14, 0, 0)
-      end
-      @another_item.update_attribute(:title, 'I am Void')
-      assert_equal @another_item.updated_at, @item.reload.updated_at
-    end
-  end
 end

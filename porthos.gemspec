@@ -25,9 +25,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-rails'
 
   # Mongo
-  s.add_dependency 'bson', '~> 1.6.0'
-  s.add_dependency 'bson_ext', '~> 1.6.0'
-  s.add_dependency 'mongo_mapper', '~> 0.11.0'
+  s.add_dependency 'bson', '~> 1.7.0'
+  s.add_dependency 'bson_ext', '~> 1.7.0'
+  s.add_dependency 'mongo_mapper', '~> 0.11'
   s.add_dependency 'mongo_mapper_tree', '~> 1.0.0'
   s.add_dependency 'mm-multi-parameter-attributes'
 
@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
 
   # Dev dependencies
   s.add_development_dependency 'sqlite3'
-  s.add_development_dependency 'mongo-rails-instrumentation', '~> 0.2'
+  s.add_development_dependency 'mongo-rails-instrumentation', '~> 0.2.4'
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'factory_girl', '~> 3.6.1'

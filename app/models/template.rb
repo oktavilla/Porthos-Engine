@@ -4,6 +4,7 @@ class Template
   key :label, String
   key :description, String
   key :position, Integer
+  timestamps!
 
   many :datum_templates, :order => 'position asc' do
     def [](handle)

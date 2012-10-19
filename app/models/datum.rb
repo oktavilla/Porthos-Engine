@@ -2,6 +2,17 @@ class Datum
   include MongoMapper::EmbeddedDocument
   include Porthos::DatumMethods
 
+  class_attribute :datum_classes
+  self.datum_classes = [
+    { type: 'StringField', attrs: { input_type: 'string' }},
+    { type: 'Field', attrs: { input_type: 'boolean' }},
+    { type: 'Field', attrs: { input_type: 'date' }},
+    { type: 'LinkField' },
+    { type: 'AssetAssociation' },
+    { type: 'PageAssociation' },
+    { type: 'DatumCollection' }
+  ]
+
   key :datum_template_id, ObjectId
   key :active, Boolean, :default => lambda { true }
 

@@ -437,6 +437,9 @@
     data:
       index:
         new: Lägg till fält
+        string: Sträng
+        date: Datum
+        boolean: Ja/Nej
       asset_association:
         edit_asset: Ändra filen
         choose_asset: Välj fil

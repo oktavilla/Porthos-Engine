@@ -45,16 +45,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'tanker', '~> 1.1.4'
   s.add_dependency 'stringex'
   s.add_dependency 'addressable', '~> 2.2'
-
-  # Dev dependencies
-  s.add_development_dependency 'sqlite3'
-  s.add_development_dependency 'mongo-rails-instrumentation', '~> 0.2.4'
-  s.add_development_dependency 'shoulda'
-  s.add_development_dependency 'launchy'
-  s.add_development_dependency 'factory_girl', '~> 3.6.1'
-  s.add_development_dependency 'capybara', '~> 1.1.2'
-  s.add_development_dependency 'capybara-webkit'
-  s.add_development_dependency 'database_cleaner'
-  s.add_development_dependency 'rack-test'
-  s.add_development_dependency 'webmock', '~> 1.7'
 end

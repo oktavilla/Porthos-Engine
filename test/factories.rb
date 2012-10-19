@@ -1,3 +1,4 @@
+require 'factory_girl'
 # Sequences
 
 FactoryGirl.define do

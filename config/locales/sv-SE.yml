@@ -178,7 +178,7 @@
           document: Dokument
       asset_association:
         description: Beskrivning
-        should_revert_to_asset_attributes: Radera den ändrade beskrivningen
+        should_revert_to_asset_attributes: Återgå till bildens originaltext
       content_template:
         label: Namn
         description: Beskrivning
@@ -421,6 +421,9 @@
             not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
             restricted: Avstängd, inte tillgänglig på internet
   admin:
+    display_options:
+      index:
+        new: "Lägg till ny"
     redirects:
       index: 
         title: Vidarebefordringar

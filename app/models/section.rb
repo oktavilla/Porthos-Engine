@@ -1,6 +1,7 @@
 class Section < Item
   key :page_template_id, ObjectId
   key :association_ids, Array, typecast: 'ObjectId'
+  key :display_option_ids, Array, typecast: 'ObjectId'
 
   tankit Porthos.config.tanking.index_name do
     indexes :title
@@ -19,7 +20,9 @@ class Section < Item
   delegate :template,
            :to => :page_template
 
-  before_save :store_association_ids
+  before_save :store_association_ids,
+              :store_display_option_ids
+
   after_save :touch_associations
 
   class << self
@@ -38,20 +41,32 @@ class Section < Item
     self.association_ids = find_association_ids
   end
 
+  def store_display_option_ids
+    self.display_option_ids = find_display_option_ids
+  end
+
   def touch_associations
     # Touch items associated to us
     Item.where(association_ids: self.id).each &:touch
   end
 
-  def find_association_ids(source = nil)
+  def find_association_ids
+    recursive_find_in_datum :page_id
+  end
+
+  def find_display_option_ids
+    recursive_find_in_datum :display_option_id
+  end
+
+  def recursive_find_in_datum field, source = nil
     collection = source || self.data
     result = []
 
     collection.find_all { |d| d.active? }.each do |d|
-      if d.respond_to?(:page_id)
-        result << d.page_id
+      if d.respond_to? field
+        result << d.public_send(field)
       elsif d.respond_to?(:data) && d.data.any?
-        result += find_association_ids(d.data)
+        result += recursive_find_in_datum(field, d.data)
       end
     end
 

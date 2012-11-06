@@ -1,0 +1,15 @@
+<% @page_title = "Inställningar" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-settings' -%>
+<div id="sub_nav">
+  <%= render :partial => 'admin/shared/settings_sub_nav' %>
+</div>
+<div id="workspace">
+  <div class="header">
+    <h1>Ändra <%= @display_option.name %></h1>
+  </div>
+  <div id="content">
+    <%= render 'form', display_option: @display_option %>
+  </div>
+</div>
+

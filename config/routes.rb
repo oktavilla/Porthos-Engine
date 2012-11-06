@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     resources :site_settings
     resources :redirects
     resources :tags
+    resources :display_options
 
     resources :nodes do
       member do

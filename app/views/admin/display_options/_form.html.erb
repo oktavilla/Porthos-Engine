@@ -1,0 +1,15 @@
+<%= form_for [:admin, display_option] do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+
+  <%= f.label :css_class %>
+  <%= f.text_field :css_class %>
+
+  <%= f.label :format %>
+  <%= f.text_field :format %>
+
+  <%= f.label :group_handle %>
+  <%= f.select :group_handle, DisplayOption.groups %>
+
+  <%= f.submit t(:save) %>
+<% end %>

@@ -15,6 +15,13 @@
     <%= datum.class.human_attribute_name :should_revert_to_asset_attributes %>
   </label>
 
+  <% if datum.display_options.any? %>
+    <label for="datum_<%= datum.id %>_display_option_id">
+      <%= datum.class.human_attribute_name :display_option_id %>:
+      <%= f.select :display_option_id, datum.display_options.map { |d| [ d.name, d.id ] }, include_blank: t(".default_display_option") %>
+    </label>
+  <% end %>
+
   <% if datum.instruction_body.present? %>
     <p class="instructions"><%= datum.instruction_body %></p>
   <% end %>

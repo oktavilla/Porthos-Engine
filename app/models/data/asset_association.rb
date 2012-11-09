@@ -10,6 +10,7 @@ class AssetAssociation < Datum
   key :asset_id, ObjectId
   key :allowed_asset_filetypes, Array, :default => lambda { [] }
   belongs_to :asset
+  belongs_to :display_option
 
   before_save :notify_asset
   before_validation :clear_association
@@ -27,8 +28,39 @@ class AssetAssociation < Datum
     @author ||= self_or_asset_attribute 'author'
   end
 
+  def url options = {}
+    default_size = options.delete :default_size
+    if ! options[:size]
+      if display_option.present? && image?
+        options.merge! size: display_option.format
+      elsif default_size
+        options[:size] = default_size
+      end
+    end
+
+    asset.url options
+  end
+
+  def css_class
+    display_option.try(:css_class)
+  end
+
+  def display_options
+    @display_options ||= begin
+      if _parent_document && _parent_document.is_a?(DatumCollection) && image?
+        DisplayOption.by_group('image').ordered
+      else
+        []
+      end
+    end
+  end
+
+  def image?
+    asset_id.present? && asset.of_the_type("image")
+  end
+
   private
-  
+
   def self_or_asset_attribute(attribute)
     if self[attribute].present?
       self[attribute]

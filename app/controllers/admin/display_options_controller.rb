@@ -3,7 +3,7 @@ class Admin::DisplayOptionsController < ApplicationController
   include Porthos::Admin
 
   def index
-    @display_options = DisplayOption.all
+    @display_options = DisplayOption.ordered
   end
 
   def new
@@ -33,4 +33,16 @@ class Admin::DisplayOptionsController < ApplicationController
 
     respond_with @display_option, location: admin_display_options_path
   end
+
+  def sort
+    params[:display_option].each_with_index do |id, index|
+      object_id = BSON::ObjectId.from_string id
+      DisplayOption.set object_id, position: index+1
+    end
+
+    respond_to do |format|
+      format.js { render :nothing => true }
+    end
+  end
+
 end

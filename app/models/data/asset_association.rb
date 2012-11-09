@@ -48,7 +48,7 @@ class AssetAssociation < Datum
   def display_options
     @display_options ||= begin
       if _parent_document && _parent_document.is_a?(DatumCollection) && image?
-        DisplayOption.by_group('image')
+        DisplayOption.by_group('image').ordered
       else
         []
       end

@@ -5,7 +5,9 @@ class DisplayOption
   key :css_class, String
   key :format, String
   key :group_handle, String
+  key :position, Integer
 
+  before_create :move_to_list_bottom
   after_save :touch_associated_items
 
   timestamps!
@@ -23,5 +25,17 @@ class DisplayOption
     def by_group group
       where group_handle: group
     end
+
+    def ordered
+      sort :position.asc
+    end
   end
+
+  private
+
+  def move_to_list_bottom
+    last_in_list = DisplayOption.sort(:position.desc).fields(:position).limit(1).first
+    self.position = last_in_list ? last_in_list.position.to_i + 1 : 1
+  end
+
 end

@@ -17,8 +17,7 @@
 
   <% if datum.display_options.any? %>
     <label for="datum_<%= datum.id %>_display_option_id">
-      <%= f.select :display_option_id, datum.display_options.map { |d| [ d.name, d.id ] } %>
-      <%= datum.class.human_attribute_name :display_option_id %>
+      <%= datum.class.human_attribute_name :display_option_id %>: <%= f.select :display_option_id, datum.display_options.map { |d| [ d.name, d.id ] } %>
     </label>
   <% end %>
 

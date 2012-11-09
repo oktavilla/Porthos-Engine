@@ -179,6 +179,7 @@
       asset_association:
         description: Beskrivning
         should_revert_to_asset_attributes: Återgå till bildens originaltext
+        display_option_id: Visningsalternativ
       content_template:
         label: Namn
         description: Beskrivning

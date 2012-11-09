@@ -448,6 +448,8 @@
         edit_asset: Ändra filen
         choose_asset: Välj fil
         remove: Ta bort
+      asset_association_form:
+        default_display_option: Inget val
       image_form:
         edit_asset: Ändra bildtext
         choose_image: Välj bild

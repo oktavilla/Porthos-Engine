@@ -38,7 +38,10 @@ describe AssetAssociation do
         collection.data << subject
 
         display_option = stub
-        DisplayOption.expects(:by_group).with('image').returns [display_option]
+        image_display_options = stub
+
+        image_display_options.expects(:ordered).returns [display_option]
+        DisplayOption.expects(:by_group).with('image').returns image_display_options
 
         subject.display_options.must_equal [display_option]
       end

@@ -1,0 +1,50 @@
+<% @page_title = "Inställningar" %>
+<% @page_class = 'layout2' -%>
+<% @page_id = 'site-options' -%>
+  <div id="sub_nav">
+    <%= render :partial => 'admin/shared/settings_sub_nav' %>
+  </div>
+  <div id="workspace">
+    <div class="header">
+      <h1><%= t ".title" %></h1>
+    </div>
+    <div class="tools">
+      <div class="add">
+        <%= link_to t(".new"), new_admin_display_option_path %>
+      </div>
+    </div>
+    <div id="content">
+      <% if @display_options.any? %>
+        <table class="sortable">
+          <thead>
+            <tr>
+              <th class="sort"></th>
+              <th><%= DisplayOption.human_attribute_name :name %></th>
+              <th><%= DisplayOption.human_attribute_name :css_class %></th>
+              <th><%= DisplayOption.human_attribute_name :format %></th>
+              <th colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody id="display_options" data-sort-uri="<%= sort_admin_display_options_path %>">
+            <% @display_options.each do |option| %>
+              <tr id="display_option_<%= option.id %>">
+                <td class="sort"><span class="drag_handle"></span></td>
+                <td><%= option.name %></td>
+                <td><%= option.css_class %></td>
+                <td><%= option.format %></td>
+                <td>
+                  <%= link_to t(:edit), edit_admin_display_option_path(option) %>
+                </td>
+                <td>
+                  <%= link_to t(:destroy), admin_display_option_path(option), method: :delete, class: 'delete', data: { confirm: 'Är du säker?' } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p class="blank-slate"><%= t(".no_data") %></p>
+      <% end %>
+    </div>
+  </div>
+

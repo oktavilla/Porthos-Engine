@@ -19,7 +19,8 @@
 .contents li.content:after,
 #content.datums .datum:after,
 #crop:after,
-.asset_association_form:after {
+.asset_association_form:after,
+.datums .image:after {
   content:".";
   display:block;
   height:0;

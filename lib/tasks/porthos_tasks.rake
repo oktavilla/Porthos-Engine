@@ -9,10 +9,11 @@ namespace :porthos do
       Item.ensure_index :updated_by_id
       Item.ensure_index [[:created_at, -1]]
       Item.ensure_index [[:updated_at, -1]]
+      Item.ensure_index [[:type, 1], [:published_on, -1]]
 
       Template.ensure_index [['_type', 1], ['position', 1]]
 
-      Node.ensure_index :resource_id
+      Node.ensure_index [['resource_type', 1], ['resource_id', 1]]
       Node.ensure_index [['handle', 1], ['action', 1], ['controller', 1]]
       Node.ensure_index [['parent_id', 1], ['position', 1]]
 

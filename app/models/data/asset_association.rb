@@ -56,7 +56,7 @@ class AssetAssociation < Datum
   end
 
   def image?
-    asset_id.present? && asset.of_the_type("image")
+    asset_id.present? && asset && asset.of_the_type("image")
   end
 
   private

@@ -24,7 +24,8 @@ class DatumCollection < Datum
   end
 
   def pages
-    @pages ||= Item.published.where(:id.in => self.page_ids)
+    query = self.page_ids.map {|id| { id: id } }
+    @pages ||= Item.published.where("$or" => query) # $or is needed to ensure order is the same as passed ids
   end
 
   def page_ids

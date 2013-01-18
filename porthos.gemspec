@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# encoding: UTF-8
 $:.push File.expand_path('../lib', __FILE__)
 require 'porthos/version'
 Gem::Specification.new do |s|
@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version  = Porthos::VERSION.dup
   s.platform = Gem::Platform::RUBY
   s.homepage = 'http://github.com/Oktavilla/Porthos-Engine'
-  s.authors  = ['Joel Junström', 'Arvid Andersson', 'Alexis Fellenius']
+  s.authors  = ['Joel Junstrom', 'Arvid Andersson', 'Alexis Fellenius']
   s.email    = ['bender@oktavilla.se']
 
   s.summary     = 'A CMS engine for Ruby On Rails projects'

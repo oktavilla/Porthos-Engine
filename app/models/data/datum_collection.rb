@@ -24,8 +24,7 @@ class DatumCollection < Datum
   end
 
   def pages
-    query = self.page_ids.map {|id| { id: id } }
-    @pages ||= Item.published.where("$or" => query) # $or is needed to ensure order is the same as passed ids
+    @pages ||= self.page_ids.any? ? items_by_page_ids : []
   end
 
   def page_ids
@@ -36,6 +35,11 @@ protected
 
   def sort_data
     self.data.sort_by!(&:position)
+  end
+
+  def items_by_page_ids
+    query = self.page_ids.map {|id| { id: id } }
+    Item.published.where("$or" => query) # $or is needed to ensure order is the same as passed ids
   end
 
 end

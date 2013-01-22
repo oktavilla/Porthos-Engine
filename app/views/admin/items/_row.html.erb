@@ -1,4 +1,4 @@
-<% cache ['v1', item, local_assigns.values] do %>
+<% cache [ 'v1', 'admin-row', item.cache_key, local_assigns.except(:item).map { |k, v| "#{k}-#{v}" }.join("/") ] do %>
   <tr id="item_<%= item.id %>">
     <% if local_assigns[:sortable] %>
       <td class="sort">

@@ -1,2 +1,3 @@
-#= require 'lib/ckeditor/ckeditor'
-#= require 'lib/ckeditor/adapters/jquery'
+//= require ckeditor/basepath
+//= require ckeditor/ckeditor
+//= require ckeditor/jquery

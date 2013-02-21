@@ -27,48 +27,51 @@
   </div>
   <% end -%>
   <div id="content">
-    <% if @content || @asset_usage -%>
+    <% if @content || @asset_usage %>
     <p>
       <span style="background:#ffb">Välj vilken bild/film du vill använda eller ladda upp en ny.</span>
       <%= link_to "Avbryt", previous_view_path(@context_params[:return_to]) %>
     </p>
-    <% end -%>
+    <% end %>
+
     <% if @assets.any? -%>
     <ul class="items thumbnails">
-      <% @assets.each do |asset| -%><li><div class="inner <%= asset.extension %>" id="asset_<%= asset.id %>">
-        <a href="<%= edit_admin_asset_path(asset.id) %>">
-        <% if asset.is_a?(ImageAsset) %>
-          <%= image_tag asset.version_url(:size => '100'), :id => "asset_#{asset.id}" %>
-        <% elsif asset.respond_to?(:thumbnail) and not asset.thumbnail.blank? %>
-          <%= image_tag display_image_path(:size => '100', :id => asset.thumbnail, :format => asset.thumbnail.extension), :id => "asset_#{asset.id}" %>
-        <% else %>
-          <span class="icon"></span>
-        <% end %>
-        </a>
-        <div class="title"><%= link_to asset.title, edit_admin_asset_path(asset.id) %></div>
-        <div class="description<%= ' blank' if asset.description.blank? %>">
-          <%= asset.description.blank? ? link_to('Ingen beskrivning, skriv en ...', edit_admin_asset_path(asset.id)) : truncate(asset.description, :length => 200) %>
-        </div>
-        <% if asset.tag_names.present? %>
-        <div class="tags"><%= asset.tags.collect { |tag| @current_tags.include?(tag) ? tag.name : link_to(tag.name, admin_assets_path(:tags => [tag.name])) }.join(', ').html_safe -%></div>
-        <% end %>
-        <div class="meta">
-          <span>Uppladdad</span> den <%= asset.created_at.strftime("%d %b %Y") %>
-          <% if !asset.created_by.nil? && asset.created_by.respond_to?(:name) -%>
-          <span>av</span> <%= asset.created_by.name %>
-          <% end -%>
-        </div>
-        <div class="edit">
-          <%= link_to t(:edit), edit_admin_asset_path(asset.id, :return_to => request.path+"#asset_#{asset.id}") %>
-          <%= link_to t(:destroy), admin_asset_path(asset.id), class: 'delete', data: { confirm: "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig." }, method: :delete %>
-        </div>
-        <% if @create_callback.present? %>
-        <div class="add">
-          <%= render :partial => 'create_callback_form', :locals => {:create_callback => @create_callback, :asset => asset} %>
-        </div>
+      <% @assets.each do |asset| %><li><div class="inner <%= asset.extension %>" id="asset_<%= asset.id %>">
+        <% cache [ "v1", asset, "admin", @create_callback.present?.to_s] do %>
+          <a href="<%= edit_admin_asset_path(asset.id) %>">
+          <% if asset.is_a?(ImageAsset) %>
+            <%= image_tag asset.version_url(:size => '100'), :id => "asset_#{asset.id}" %>
+          <% elsif asset.respond_to?(:thumbnail) and not asset.thumbnail.blank? %>
+            <%= image_tag display_image_path(:size => '100', :id => asset.thumbnail, :format => asset.thumbnail.extension), :id => "asset_#{asset.id}" %>
+          <% else %>
+            <span class="icon"></span>
+          <% end %>
+          </a>
+          <div class="title"><%= link_to asset.title, edit_admin_asset_path(asset.id) %></div>
+          <div class="description<%= ' blank' if asset.description.blank? %>">
+            <%= asset.description.blank? ? link_to('Ingen beskrivning, skriv en ...', edit_admin_asset_path(asset.id)) : truncate(asset.description, :length => 200) %>
+          </div>
+          <% if asset.tag_names.present? %>
+          <div class="tags"><%= asset.tags.collect { |tag| @current_tags.include?(tag) ? tag.name : link_to(tag.name, admin_assets_path(:tags => [tag.name])) }.join(', ').html_safe -%></div>
+          <% end %>
+          <div class="meta">
+            <span>Uppladdad</span> den <%= asset.created_at.strftime("%d %b %Y") %>
+            <% if !asset.created_by.nil? && asset.created_by.respond_to?(:name) -%>
+            <span>av</span> <%= asset.created_by.name %>
+            <% end -%>
+          </div>
+          <div class="edit">
+            <%= link_to t(:edit), edit_admin_asset_path(asset.id, :return_to => request.path+"#asset_#{asset.id}") %>
+            <%= link_to t(:destroy), admin_asset_path(asset.id), class: 'delete', data: { confirm: "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig." }, method: :delete %>
+          </div>
+          <% if @create_callback.present? %>
+            <div class="add">
+              <%= render :partial => 'create_callback_form', :locals => { :create_callback => @create_callback, :asset => asset} %>
+            </div>
+          <% end %>
         <% end %>
       </div></li>
-      <% end -%>
+      <% end %>
     </ul>
     <%= paginate @assets %>
     <% end -%>

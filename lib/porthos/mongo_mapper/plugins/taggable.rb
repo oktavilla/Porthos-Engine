@@ -43,10 +43,15 @@ module Porthos
             end
 
             def all_tags_collection_name
-              "#{self.name}_tags".downcase
+              "#{self.collection_name.singularize}_tags".downcase
             end
 
             def cache_tags!
+              database[all_tags_collection_name].create_index([
+                [ "value.namespace", Mongo::ASCENDING ],
+                [ "value.count", Mongo::DESCENDING ]
+              ], background: true)
+
               options = { :raw => true, :out => { :merge => all_tags_collection_name } }
               collection.map_reduce(self.tags_with_count_map, self.tags_with_count_reduce, options)
             end

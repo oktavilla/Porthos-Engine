@@ -4,5 +4,7 @@
 <% if @page_template %>
   <%= render 'index_for_page_template', page_template: @page_template, items: @items %>
 <% else %>
-  <%= render 'default', items: @items %>
+  <% cache [ "v2", Item.shell, ParamsCacheKey.key(params), "items", "admin" ] do %>
+    <%= render 'default', items: @items %>
+  <% end %>
 <% end %>

@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 class Page < Section
+  shell_handle "items"
+
   class_attribute :sortable_keys
   self.sortable_keys = [
     :created_at,

@@ -1,6 +1,10 @@
 class Item
   include MongoMapper::Document
   plugin MongoMapper::Plugins::IdentityMap
+
+  include CachingShell::Shelled
+  shell_handle "items"
+
   include Tanker
 
   tankit Porthos.config.tanking.index_name do

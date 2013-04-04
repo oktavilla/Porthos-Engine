@@ -25,9 +25,9 @@
           </tr>
         </thead>
         <tbody>
-        <% items.each do |item| %>
-          <%= render partial: 'row', locals: { item: item } %>
-        <% end %>
+          <% items.each do |item| %>
+            <%= render partial: 'row', locals: { item: item } %>
+          <% end %>
         </tbody>
       </table>
     </div>

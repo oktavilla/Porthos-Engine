@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   get 'pages/:id/category' => 'pages#category', :as => 'pages_category'
 
   namespace :admin do
-    root :to => 'items#index'
+    root :to => 'dashboard#index'
     get '/login' => 'sessions#new', :as => 'login'
     get '/logout' => 'sessions#destroy', :as => 'logout'
     resources :sessions

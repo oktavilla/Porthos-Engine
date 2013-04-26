@@ -12,7 +12,7 @@ group :test do
   gem 'shoulda'
   gem 'launchy'
   gem 'capybara', '~> 1.1.2'
-  gem 'capybara-webkit'
+  gem 'capybara-webkit', '~> 0.12.1'
   gem 'database_cleaner'
   gem 'rack-test'
   gem 'webmock', '~> 1.7'

@@ -1,6 +1,5 @@
 require_relative '../../test_helper'
 require_relative '../../../lib/caching_shell'
-require 'mocha'
 require 'minitest/autorun'
 
 describe CachingShell::Shell do

@@ -16,7 +16,7 @@ group :test do
   gem 'database_cleaner'
   gem 'rack-test'
   gem 'webmock', '~> 1.7'
-  gem 'mocha', '~> 0.12.7', require: false
+  gem 'mocha', '~> 0.13.3', require: false
 end
 gemspec
 

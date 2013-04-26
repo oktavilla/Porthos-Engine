@@ -16,7 +16,7 @@ require 'capybara/rails'
 require 'capybara-webkit'
 require File.dirname(__FILE__) + '/factories.rb'
 
-require 'mocha'
+require 'mocha/setup'
 
 WebMock.allow_net_connect!
 

@@ -37,7 +37,7 @@
     <% if @assets.any? -%>
     <ul class="items thumbnails">
       <% @assets.each do |asset| %><li><div class="inner <%= asset.extension %>" id="asset_<%= asset.id %>">
-        <% cache [ "v1", asset, "admin", @create_callback.present?.to_s] do %>
+        <% cache [ "v2", asset, "admin" ] do %>
           <a href="<%= edit_admin_asset_path(asset.id) %>">
           <% if asset.is_a?(ImageAsset) %>
             <%= image_tag asset.version_url(:size => '100'), :id => "asset_#{asset.id}" %>
@@ -64,11 +64,11 @@
             <%= link_to t(:edit), edit_admin_asset_path(asset.id, :return_to => request.path+"#asset_#{asset.id}") %>
             <%= link_to t(:destroy), admin_asset_path(asset.id), class: 'delete', data: { confirm: "Är du säker att du vill ta bort filen? Den kommer försvinna från alla sidor. Du kan INTE ångra dig." }, method: :delete %>
           </div>
-          <% if @create_callback.present? %>
-            <div class="add">
-              <%= render :partial => 'create_callback_form', :locals => { :create_callback => @create_callback, :asset => asset} %>
-            </div>
-          <% end %>
+        <% end %>
+        <% if @create_callback.present? %>
+          <div class="add">
+            <%= render :partial => 'create_callback_form', :locals => { :create_callback => @create_callback, :asset => asset} %>
+          </div>
         <% end %>
       </div></li>
       <% end %>

@@ -16,10 +16,10 @@
           <%= link_to t('.add_section'), new_admin_item_path(type: 'Section', page_template_id: page_template.id) %>
         </div>
       <% end %>
-      <table class="pages<%= ' sortable' if page_template.sorted_manually? %>">
+      <table class="pages<%= ' sortable' if manually_sortable? %>">
         <thead>
           <tr>
-            <% if page_template.sorted_manually? %>
+            <% if manually_sortable? %>
               <th class="sort"></th>
             <% end %>
             <th><%= Page.human_attribute_name(:title) %></th>
@@ -30,22 +30,22 @@
         </thead>
         <% if current_tags.empty? && page_template.section %>
           <tbody class="section">
-            <%= render 'row', item: page_template.section, sortable: page_template.sorted_manually? %>
+            <%= render 'row', item: page_template.section, sortable: manually_sortable? %>
           </tbody>
         <% end %>
-        <% if page_template.sorted_manually? %>
+        <% if manually_sortable? %>
           <%= tag 'tbody', :'data-sort-uri' => sort_admin_items_path(page_template_id: page_template.id), :id => 'pages' %>
         <% else %>
           <tbody>
         <% end %>
         <% cache ['v1', page_template, params[:page], current_scopes.values, 'admin-list'] do %>
           <% items.each do |item| %>
-            <%= render 'row', item: item, sortable: page_template.sorted_manually? %>
+            <%= render 'row', item: item, sortable: manually_sortable? %>
           <% end %>
         <% end %>
         </tbody>
       </table>
     </div>
-    <%= paginate items if items.any? && !page_template.sorted_manually? %>
+    <%= paginate items unless items.empty? || manually_sortable? %>
   </div>
 </div>

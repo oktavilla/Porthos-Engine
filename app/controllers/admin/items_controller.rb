@@ -108,9 +108,22 @@ class Admin::ItemsController < ApplicationController
   helper_method :current_page_template
 
   def categories
-    @categories ||= current_page_template ? Page.tags_by_count(namespace: current_page_template.handle) : []
+    @categories ||= if current_page_template.try(:allow_categories?)
+      Page.tags_by_count namespace: current_page_template.handle
+    else
+      []
+    end
   end
   helper_method :categories
+
+  def manually_sortable?
+    if current_page_template.try(:sorted_manually?)
+      !current_page_template.allow_categories? || current_tags.any?
+    else
+      false
+    end
+  end
+  helper_method :manually_sortable?
 
   def tags
     @tags ||= Page.tags_by_count
@@ -139,7 +152,7 @@ class Admin::ItemsController < ApplicationController
   end
 
   def paginate_collection collection_scope
-    if current_page_template.try :sorted_manually?
+    if manually_sortable?
       collection_scope
     else
       collection_scope.page params[:page]

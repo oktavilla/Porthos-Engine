@@ -1,8 +1,8 @@
 <% @page_title = 'Sidor' -%>
 <% @page_class = 'layout3' -%>
 <%= render :partial => 'admin/items/sub_nav' %>
-<% if @page_template %>
-  <%= render 'index_for_page_template', page_template: @page_template, items: @items %>
+<% if current_page_template %>
+  <%= render 'index_for_page_template', page_template: current_page_template, items: @items %>
 <% else %>
   <% cache [ "v2", Item.shell, ParamsCacheKey.key(params), "items", "admin" ] do %>
     <%= render 'default', items: @items %>

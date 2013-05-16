@@ -28,7 +28,7 @@
             <th><%= t(:status) %></th>
           </tr>
         </thead>
-        <% if !@current_tags.any? && page_template.section %>
+        <% if current_tags.empty? && page_template.section %>
           <tbody class="section">
             <%= render 'row', item: page_template.section, sortable: page_template.sorted_manually? %>
           </tbody>

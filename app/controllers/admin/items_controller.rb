@@ -11,25 +11,8 @@ class Admin::ItemsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @page_templates = PageTemplate.sort(:position).all
-        @page_template = PageTemplate.find(params[:with_page_template]) if params[:with_page_template]
-        order = @page_template && @page_template.sortable? ? @page_template.sortable : :updated_on.desc
-        @tags = Page.tags_by_count
-        if @page_template
-          @categories = Page.tags_by_count(namespace: @page_template.handle)
-        end
-        @current_tags = params[:tags] || []
-        @items = unless @current_tags.any?
-          klass = params[:type] ? params[:type].constantize : Page
-          scoped = apply_scopes(klass)
-          unless current_scopes.include?(:order_by)
-            scoped = scoped.sort(order)
-          end
-          scoped.page(params[:page])
-        else
-          tagging_options = (@page_template ? { :namespace => @page_template.handle } : {}).merge(params[:taggings] || {}).to_options
-          Page.tagged_with(@current_tags, tagging_options).sort(:updated_at.desc).page(params[:page])
-        end
+        @page_templates = PageTemplate.sort :position
+        @items = current_tags.empty? ? find_items_by_scope : find_items_by_tags
       end
 
       format.json do
@@ -115,5 +98,51 @@ class Admin::ItemsController < ApplicationController
     respond_to do |format|
       format.js { render :nothing => true }
     end
+  end
+
+  protected
+
+  def current_page_template
+    @current_page_template ||= PageTemplate.find(params[:with_page_template]) if params[:with_page_template]
+  end
+  helper_method :current_page_template
+
+  def categories
+    @categories ||= current_page_template ? Page.tags_by_count(namespace: current_page_template.handle) : []
+  end
+  helper_method :categories
+
+  def tags
+    @tags ||= Page.tags_by_count
+  end
+  helper_method :tags
+
+  def current_tags
+    params[:tags] || []
+  end
+  helper_method :current_tags
+
+  def item_order
+    current_page_template.try(:sortable?) ? current_page_template.sortable : :updated_on.desc
+  end
+
+  def find_items_by_scope
+    klass = params[:type] ? params[:type].constantize : Page
+    scoped = apply_scopes klass
+    scoped = scoped.sort item_order unless current_scopes.include? :order_by
+
+    scoped.page params[:page]
+  end
+
+  def find_items_by_tags
+    Page.tagged_with(current_tags, tagging_options)
+      .sort(item_order).page(params[:page])
+  end
+
+  def tagging_options
+    {}.tap do |options|
+      options.merge! namespace: current_page_template.handle if current_page_template
+      options.merge! params.fetch(:taggings, {})
+    end.to_options
   end
 end

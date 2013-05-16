@@ -46,6 +46,6 @@
         </tbody>
       </table>
     </div>
-    <%= paginate items if items.any? %>
+    <%= paginate items if items.any? && !page_template.sorted_manually? %>
   </div>
 </div>

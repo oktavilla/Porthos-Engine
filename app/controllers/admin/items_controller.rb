@@ -131,12 +131,19 @@ class Admin::ItemsController < ApplicationController
     scoped = apply_scopes klass
     scoped = scoped.sort item_order unless current_scopes.include? :order_by
 
-    scoped.page params[:page]
+    paginate_collection scoped
   end
 
   def find_items_by_tags
-    Page.tagged_with(current_tags, tagging_options)
-      .sort(item_order).page(params[:page])
+    paginate_collection Page.tagged_with(current_tags, tagging_options).sort(item_order)
+  end
+
+  def paginate_collection collection_scope
+    if current_page_template.try :sorted_manually?
+      collection_scope
+    else
+      collection_scope.page params[:page]
+    end
   end
 
   def tagging_options

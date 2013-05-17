@@ -106,9 +106,11 @@ class Admin::NodesController < ApplicationController
 
   def sort
     params[:node].each_with_index do |id, i|
-      Node.set(id, :position => i+1)
+      object_id = BSON::ObjectId.from_string id
+      Node.set(object_id, position: i+1)
     end
-    render :nothing => true
+
+    render nothing: true
   end
 
 end

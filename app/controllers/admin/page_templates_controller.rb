@@ -46,11 +46,11 @@ class Admin::PageTemplatesController < ApplicationController
 
   def sort
     params[:page_template].each_with_index do |id, i|
-      PageTemplate.set(id, :position => i+1)
+      object_id = BSON::ObjectId.from_string id
+      PageTemplate.set(object_id, position: i+1)
     end if params[:page_template]
-    respond_to do |format|
-      format.js { render :nothing => true }
-    end
+
+    render nothing: true
   end
 
 end

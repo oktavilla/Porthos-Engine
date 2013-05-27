@@ -448,20 +448,6 @@
           show:
             title: Nyckelord - ”%{name}”
             edit_tag: Ändra
-        nodes:
-          index:
-            title: Struktur och navigation
-            no_data: Det finns inga navigationsnoder inlagda
-            add_root_node: Skapa startsida
-          new:
-            title: Placera i strukturen
-          edit:
-            title: Ändra
-          shared:
-            move: Flytta
-            show_in_nav: Syns i navigationen och är tillgänglig på internet
-            not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
-            restricted: Avstängd, inte tillgänglig på internet
   admin:
     display_options:
       index:
@@ -590,6 +576,24 @@
     nodes:
       sub_nav:
         redirects: Vidarebefordringar
+      index:
+        title: Struktur och navigation
+        no_data: Det finns inga navigationsnoder inlagda
+        add_root_node: Skapa startsida
+      new:
+        title: Placera i strukturen
+      edit:
+        title: Ändra
+        toggle_active: Aktivera
+        toggle_inactive: Avaktivera
+        inactive: Avstängd, inte tillgänglig på internet
+        active: Aktiv, syns i navigationen
+        hidden: Aktiv, syns inte i navigationen
+      shared:
+        move: Flytta
+        show_in_nav: Syns i navigationen och är tillgänglig på internet
+        not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
+        restricted: Avstängd, inte tillgänglig på internet
   admins: Redaktörer
   save: Spara
   or: eller

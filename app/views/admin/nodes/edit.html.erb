@@ -1,10 +1,26 @@
 <% @page_title = "#{Node.model_name.human} > #{@node.name}" %>
-<% @page_class = "A content" -%>
+<% @page_class = "layout3" -%>
+
+<div id="sub_nav">
+  <h2 class="label">
+    Synlighet
+  </h2>
+  <p><strong><%= t ".#{@node.access_status}" %></strong></p>
+  <p>
+    <% if @node.inactive? %>
+      <%= button_to t('.toggle_active'), toggle_admin_node_path(@node), :method => :put, :class => 'new' %>
+    <% else %>
+      <%= button_to t('.toggle_inactive'), toggle_admin_node_path(@node), :method => :put, :class => 'new' %>
+    <% end %>
+  </p>
+</div>
 <div id="workspace">
   <div class="header">
     <h1><span class="pre"><%= t('.title')  %></span> <%= @node.name %></h1>
   </div>
   <div id="content">
-    <%= render 'form' %>
+    <div class="inner">
+      <%= render 'form' %>
+    </div>
   </div>
 </div>

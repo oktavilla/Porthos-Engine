@@ -86,8 +86,30 @@ class Item
     published_on.present? && published_on <= DateTime.now
   end
 
+  def unpublish
+    self.published_on = nil
+  end
+
+  def publish
+    self.published_on = Time.current
+  end
+
+  def toggle!
+    if node
+      node.toggle!
+    else
+      published? ? unpublish : publish
+    end
+
+    self.save!
+  end
+
   def can_have_a_node?
     false
+  end
+
+  def missing_node?
+    can_have_a_node? && !self.node
   end
 
   def node

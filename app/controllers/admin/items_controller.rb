@@ -71,16 +71,25 @@ class Admin::ItemsController < ApplicationController
   end
 
   def toggle
-    @item = Item.find(params[:id])
-    @item.update_attributes(:published_on => (@item.published? ? nil : Time.now))
-    respond_to do |format|
-      format.html do
-        if @item.published? && @item.can_have_a_node? && !@item.node
-          redirect_to new_admin_node_path(:resource_id => @item.id)
-        else
-          redirect_to admin_item_path(@item.id)
-        end
-      end
+    item = Item.find(params[:id])
+    item.toggle!
+
+    if item.published? && item.missing_node?
+      redirect_to new_admin_node_path(:resource_id => item.id)
+    else
+      redirect_to admin_item_path(item.id)
+    end
+  end
+
+  def publish
+    item = Item.find(params[:id])
+    item.publish
+    item.save
+
+    if item.missing_node?
+      redirect_to new_admin_node_path(:resource_id => item.id)
+    else
+      redirect_to admin_item_path(item.id)
     end
   end
 

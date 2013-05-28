@@ -212,7 +212,7 @@ class PagesTest < ActiveSupport::IntegrationCase
     assert has_flash_message?(I18n.t(:'app.admin_general.deleted'))
   end
 
-protected
+  protected
 
   def create_page(attrs = {})
     Page.create_from_template(@page_template, { title: 'Batman' }.merge(attrs))

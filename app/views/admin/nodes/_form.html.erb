@@ -32,6 +32,7 @@
         :include_blank => 'Välj en sidtyp' %>
     <% end %>
 
+    <% unless @node.inactive? %>
     <ul class="multiple_choice">
       <li>
         <label for="shown_in_nav">
@@ -46,42 +47,37 @@
         </label>
       </li>
       <li>
-        <label for="restricted">
-          <%= f.radio_button :status, -1, :id => 'restricted' %>
-          <%= t(:restricted, :scope => [:app, :views, :admin, :nodes, :shared])  %>
-        </label>
-      </li>
-      <li>
         <label class="restricted_field" for="node_restricted">
           <%= f.check_box :restricted %>
           <%= t(:restricted, :scope => [:activerecord, :attributes, :node])  %>
         </label>
       </li>
     </ul>
-
-    <% if @nodes && @nodes.any? %>
-    <div id="navigation">
-      <%= nested_list_of(@nodes, {
-          :end_points => @nodes,
-          :allow_inactive => true,
-          :except => @node
-        }, {
-          :id => 'nodes'
-      }) do |node| %>
-        <div>
-          <% if node != @nodes.first && node.children.any? -%>
-            <%= link_to "+", admin_nodes_path(:nodes => [node.id], :place => true), :class => 'toggle_handle' %>
-          <% end -%>
-          <% unless node == @node %>
-            <%= radio_button_tag('node[parent_id]', node.id, (node.id == @node.parent_id), :id => "node_parent_id_#{node.id}") %>
-          <% end %>
-          <span class="name"><%= node.name %></span>
-        </div>
-      <% end %>
-    </div>
     <% end %>
-
   </fieldset>
+
+  <% if @nodes && @nodes.any? %>
+  <div id="navigation">
+    <%= nested_list_of(@nodes, {
+        :end_points => @nodes,
+        :allow_inactive => true,
+        :except => @node
+      }, {
+        :id => 'nodes'
+    }) do |node| %>
+      <div>
+        <% if node != @nodes.first && node.children.any? -%>
+          <%= link_to "+", admin_nodes_path(:nodes => [node.id], :place => true), :class => 'toggle_handle' %>
+        <% end -%>
+        <% unless node == @node %>
+          <%= radio_button_tag('node[parent_id]', node.id, (node.id == @node.parent_id), :id => "node_parent_id_#{node.id}") %>
+        <% end %>
+        <span class="name"><%= node.name %></span>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
   <div class="submit">
     <%= submit_tag t(:save) %> <%= t(:or) %> <%= link_to t(:cancel), previous_view_path(admin_nodes_path(:nodes => @node)) %>
   </div>

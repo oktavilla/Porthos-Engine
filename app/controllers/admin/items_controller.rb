@@ -74,7 +74,7 @@ class Admin::ItemsController < ApplicationController
     item = Item.find(params[:id])
     item.toggle!
 
-    if item.published? && item.can_have_a_node? && !item.node
+    if item.published? && item.missing_node?
       redirect_to new_admin_node_path(:resource_id => item.id)
     else
       redirect_to admin_item_path(item.id)
@@ -86,7 +86,7 @@ class Admin::ItemsController < ApplicationController
     item.publish
     item.save
 
-    if item.can_have_a_node? && !item.node
+    if item.missing_node?
       redirect_to new_admin_node_path(:resource_id => item.id)
     else
       redirect_to admin_item_path(item.id)

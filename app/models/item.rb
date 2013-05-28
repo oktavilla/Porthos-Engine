@@ -108,6 +108,10 @@ class Item
     false
   end
 
+  def missing_node?
+    can_have_a_node? && !self.node
+  end
+
   def node
     @node ||= Node.where(:resource_type => self.class.model_name, :resource_id => self.id).first
   end

@@ -92,26 +92,30 @@
     };
 
     var Ready = function(container) {
-      $('#asset_tag_names').smartAutoComplete({
-        minCharLimit: 3,
-        source: '/admin/tags/autocomplete.json?taggable=ImageAsset'
-      });
-      $('#asset_tag_names').bind({
-        keyIn: function(ev) {
-          var tag_list = ev.smartAutocompleteData.query.split(" ");
-          ev.smartAutocompleteData.query = $.trim(tag_list[tag_list.length - 1]);
-        },
-        itemSelect: function(ev, selected_item) {
-          var options = $(this).smartAutoComplete();
-          var selected_value = $(selected_item).text();
-          var cur_list = $(this).val().split(" ");
+      $("#asset_form").find("input.asset_tags").each(function(_, el){
+        var $el = $(el);
+        $el.smartAutoComplete({
+          minCharLimit: 2,
+          source: '/admin/tags/autocomplete.json?taggable=ImageAsset'
+        });
 
-          cur_list[cur_list.length - 1] = selected_value;
-          $(this).val(cur_list.join(" ") + " ");
-          options.setItemSelected(true);
-          $(this).trigger('lostFocus');
-          ev.preventDefault();
-        }
+        $el.bind({
+          keyIn: function(ev) {
+            var tag_list = ev.smartAutocompleteData.query.split(" ");
+            ev.smartAutocompleteData.query = $.trim(tag_list[tag_list.length - 1]);
+          },
+          itemSelect: function(ev, selected_item) {
+            var options = $(this).smartAutoComplete();
+            var selected_value = $(selected_item).text();
+            var cur_list = $(this).val().split(" ");
+
+            cur_list[cur_list.length - 1] = selected_value;
+            $(this).val(cur_list.join(" ") + " ");
+            options.setItemSelected(true);
+            $(this).trigger('lostFocus');
+            ev.preventDefault();
+          }
+        });
       });
 
       $('#content').delegate('ul.items img', 'click', function(event) {

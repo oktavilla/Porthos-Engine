@@ -38,7 +38,7 @@ class Node
   before_validation :generate_url
 
   def access_status
-    @access_status ||= case status
+    case status
     when -1 then 'inactive'
     when  0 then 'hidden'
     when  1 then 'active'
@@ -55,6 +55,29 @@ class Node
 
   def inactive?
     access_status == 'inactive'
+  end
+
+  def toggle!
+    inactive? ? activate : inactivate
+
+    if self.resource && self.resource.is_a?(Item)
+      if inactive?
+        self.resource.unpublish
+      else
+        self.resource.publish
+      end
+      self.resource.save!
+    end
+
+    save!
+  end
+
+  def inactivate
+    self.status = -1
+  end
+
+  def activate
+    self.status = 0
   end
 
   class << self

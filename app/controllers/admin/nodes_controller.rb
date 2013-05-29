@@ -70,6 +70,13 @@ class Admin::NodesController < ApplicationController
     end
   end
 
+  def toggle
+    node = Node.find(params[:id])
+    node.toggle!
+
+    redirect_to params[:return_to] || edit_admin_node_path(node)
+  end
+
   def edit
     @node = Node.find(params[:id])
     @nodes = [Node.root]

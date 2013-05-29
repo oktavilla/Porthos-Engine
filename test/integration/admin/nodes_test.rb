@@ -70,12 +70,31 @@ class NodesTest < ActiveSupport::IntegrationCase
     refute page.find("#content").has_content?(new_node.name), "Should not see delete row name"
   end
 
-protected
+  test 'toggling a node' do
+    new_node = create_page_node status: -1
+    visit admin_nodes_path
+    within("#node_#{new_node.id}") do
+      click_link I18n.t(:edit)
+    end
+    assert edit_admin_node_path(new_node), current_path
 
-  def create_page_node
-    FactoryGirl.create(:node, :name => 'Node',
+    click_button I18n.t("admin.nodes.edit.toggle_active")
+
+    assert_equal edit_admin_node_path(new_node), current_path
+    assert page.find("#sub_nav").has_content? I18n.t("admin.nodes.edit.hidden")
+  end
+
+  protected
+
+  def create_page_node attrs = {}
+    page = FactoryGirl.create(:page, :page_template_id => @page_template.id)
+    node_attrs = {
+      :name => 'Node',
       :parent => @root_node,
-      :resource => FactoryGirl.create(:page, :page_template_id => @page_template.id))
+      :resource => page
+    }.merge(attrs)
+
+    FactoryGirl.create :node, node_attrs
   end
 
 end

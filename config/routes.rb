@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     resources :nodes do
       member do
         get 'place'
+        put 'toggle'
       end
       collection do
         put 'sort'
@@ -76,6 +77,7 @@ Rails.application.routes.draw do
       end
       member do
         put 'toggle'
+        put 'publish'
       end
       resources :data do
         collection do

@@ -304,6 +304,24 @@ ul.sortable {margin-left:-25px;}
     top:4px;
     left:0; }
 
+.smart_autocomplete_container {
+  margin-top: 12px;
+  list-style: none;
+  padding: 0;
+  box-shadow: 1px 1px 5px rgba(50, 50, 50, 0.2);
+
+  & li {
+    margin: 0;
+    padding: 4px 5px;
+    border-top: 1px solid rgba(128,128,128,.1);
+    background: rgba(55,128,199,.1);
+  }
+  .smart_autocomplete_highlight { 
+    padding-left: 6px;
+    background: rgba(55,128,199,.2);
+  }
+}
+
 table.sortable {
   margin-left:-30px; }
   table.sortable .sort {

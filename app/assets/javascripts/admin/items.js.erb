@@ -139,7 +139,7 @@
         event.preventDefault();
         $('#page_tags_list, #page_tags_form').toggle();
       }).find('#page_tags_list').append('<p><a href="#" class="edit">Ändra</a></p>');
-      $('#item_tag_names').smartAutoComplete({minCharLimit: 3, source: '/admin/tags/autocomplete.json?taggable=Page'});
+      $('#item_tag_names').smartAutoComplete({minCharLimit: 2, source: '/admin/tags/autocomplete.json?taggable=Page'});
       $('#item_tag_names').bind({
         keyIn: function(ev) {
           var tag_list = ev.smartAutocompleteData.query.split(" ");

@@ -4,7 +4,7 @@
     <h1>Beskriv de uppladdade filerna</h1>
   </div>
   <div id="content">
-    <%= form_for @assets, :url => update_multiple_admin_assets_path, :html => { :method => :put } do |f| %>
+    <%= form_for @assets, :url => update_multiple_admin_assets_path, :html => { :method => :put, id: "asset_form" } do |f| %>
       <% @assets.each_with_index do |asset, index| -%>
       <div class="describe_asset">
         <div class="preview">

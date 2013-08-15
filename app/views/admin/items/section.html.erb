@@ -5,7 +5,12 @@
   <div class="header" id="item_attributes">
     <span class="away">
       <a href="#" class="edit_settings toggler action"><span><%=t 'edit' %></span></a>
-      <%= link_to t(:destroy), admin_item_path(@item.id), method: :delete, data: { confirm: "Är du säker att du vill ta bort sidan. Det går inte att ångra." }, class: 'action delete' %>
+      <% if @item.node %>
+        <%= link_to t(:move, :scope => [:app, :views, :admin, :nodes, :shared]), place_admin_node_path(@item.node), class: "action delete" %>
+        <%= link_to t(:destroy), admin_node_path(@item.node), method: :delete, data: { confirm: t(:'app.general.destroy_confirmation', target_name: @item.node.name) }, class: "action delete" %>
+      <% else %>
+        <%= link_to t(:destroy), admin_item_path(@item.id), method: :delete, data: { confirm: "Är du säker att du vill ta bort sidan. Det går inte att ångra." }, class: 'action delete' %>
+      <% end %>
     </span>
     <div class="page_title">
       <h1><%= @item.title %></h1>

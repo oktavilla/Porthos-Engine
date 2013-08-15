@@ -15,14 +15,16 @@
     <% end -%>
 
     <span class="edit">
+
       <% if node.controller == 'pages' && node.action == 'index' -%>
         <%= link_to "#{t(:show_all)}", admin_items_path(:with_page_template => PageTemplate.where(handle: node.handle).first), :class => 'edit' %>
       <% elsif node.controller == 'pages' and node.action == 'show' and node.resource.present? -%>
-        <%= link_to t(:show), admin_item_path(node.resource), :class => 'edit' %>
+        <%= link_to t(:edit), admin_item_path(node.resource), :class => 'edit' %>
+      <% else %>
+        <%= link_to t(:edit), edit_admin_node_path(node), :class => 'settings' %>
+        <%= link_to t(:destroy), admin_node_path(node), method: :delete, class: "delete", data: { confirm: t(:'app.general.destroy_confirmation', target_name: node.name) } %>
       <% end -%>
-      <%= link_to t(:edit), edit_admin_node_path(node), :class => 'settings' %>
-      <%= link_to t(:move, :scope => [:app, :views, :admin, :nodes, :shared]), place_admin_node_path(node) %>
-      <%= link_to t(:destroy), admin_node_path(node), method: :delete, class: "delete", data: { confirm: t(:'app.general.destroy_confirmation', target_name: node.name) } %>
+
     </span>
   <% end %>
 </div>

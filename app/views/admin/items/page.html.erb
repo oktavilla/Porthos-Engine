@@ -39,14 +39,16 @@
       <% if @item.instruction_body.present? %>
       <p class="instructions"><%= @item.instruction_body %></p>
       <% end %>
+
       <% if @item.index_node.present? %>
-      <div class="uri_field">
-        <label for="item_uri">Adress:</label>
-        <%= page_url_parent(@item) %>
-        <%= f.text_field :uri %>
-      </div>
+        <div class="uri_field">
+          <label for="item_uri">Adress:</label>
+          <%= page_url_parent(@item) %>
+          <%= f.text_field :uri %>
+        </div>
       <% end %>
-      <div class="restricted_field">
+
+      <div class="restricted_field" style="margin-top: 1em;">
         <label for="item_restricted">
           <%= f.check_box :restricted %>
           Kräv inlogging för att se denna sida

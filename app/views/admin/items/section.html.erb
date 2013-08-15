@@ -10,12 +10,14 @@
     <div class="page_title">
       <h1><%= @item.title %></h1>
     </div>
+
     <% if @item.node -%>
     <div class="navigation">
       <span class="key">Namn i navigationen:</span>
       <span class="value"><%= @item.node.name %></span>
     </div>
     <% end %>
+
     <% if @item.has_url? -%>
     <div class="uri">
       <span class="key">Adress:</span>
@@ -38,7 +40,8 @@
         <%= f.select :template_name, PageFileTemplate.all.collect { |t| [t.name.titlecase, t.handle] } %>
       </label>
       <% end %>
-      <div class="restricted_field">
+
+      <div class="restricted_field" style="margin-top: 1em;">
         <label for="item_restricted">
           <%= f.check_box :restricted %>
           Kräv inlogging för att se denna sida

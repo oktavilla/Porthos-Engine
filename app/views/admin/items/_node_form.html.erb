@@ -1,0 +1,24 @@
+<div class="node_fields" style="margin-top: 1em;">
+  <label for="node_name">Namn i navigationen</label>
+  <input type="text" value="Node name" id="node_name" size="50">
+
+  <div class="uri_field">
+    <label for="node_slug">Adress:</label>
+    http://unicef.dev/node/slug/ <input type="text" value="the-slug-in-question" id="node_slug">
+  </div>
+
+  <ul class="multiple_choice">
+    <li>
+      <label for="shown_in_nav">
+        <input checked="checked" id="shown_in_nav" name="node[status]" type="radio" value="1">
+        Visas i navigationen
+      </label>
+    </li>
+    <li>
+      <label for="not_shown_in_nav">
+        <input id="not_shown_in_nav" name="node[status]" type="radio" value="0">
+        Visas inte i navigationen
+      </label>
+    </li>
+  </ul>
+</div>

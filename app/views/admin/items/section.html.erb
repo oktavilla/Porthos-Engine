@@ -41,6 +41,10 @@
       </label>
       <% end %>
 
+      <% if @item.node.present? %>
+        <%= render partial: "node_form" -%>
+      <% end %>
+
       <div class="restricted_field" style="margin-top: 1em;">
         <label for="item_restricted">
           <%= f.check_box :restricted %>

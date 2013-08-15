@@ -54,6 +54,11 @@
           Kräv inlogging för att se denna sida
         </label>
       </div>
+  
+      <% if @item.node.present? %>
+        <%= render partial: "node_form" -%>
+      <% end %>
+
       <div class="submit">
         <input type="submit" value="<%=t :save %>">
         <%=t :or %>

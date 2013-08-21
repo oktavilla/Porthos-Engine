@@ -1,11 +1,11 @@
 class DatumCollection < Datum
-  key :allow_texts, Boolean, :default => lambda { false }
+  key :allow_texts, Boolean, default: -> { false }
   key :allow_links, Boolean
-  key :allowed_asset_filetypes,   Array, :default => lambda { [] }
-  key :allowed_page_template_ids, Array, :typecast => 'ObjectId'
-  key :content_templates_ids,     Array, :typecast => 'ObjectId'
+  key :allowed_asset_filetypes,   Array, default: -> { [] }
+  key :allowed_page_template_ids, Array, typecast: 'ObjectId'
+  key :content_templates_ids,     Array, typecast: 'ObjectId'
 
-  many :content_templates, :in => :content_templates_ids
+  many :content_templates, in: :content_templates_ids
   many :data do
     def active
       find_all { |d| d.active? }

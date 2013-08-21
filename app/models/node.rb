@@ -11,7 +11,7 @@ class Node
   key :controller, String
   key :action, String
   key :status, Integer
-  key :restricted, Boolean, :default => lambda{ false }
+  key :restricted, Boolean, default: -> { false }
   key :position, Integer
 
   key :resource_id, ObjectId

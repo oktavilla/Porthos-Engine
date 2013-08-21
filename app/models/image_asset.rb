@@ -2,7 +2,7 @@ class ImageAsset < Asset
   key :width, Integer
   key :height, Integer
   key :resizor_id, Integer
-  key :versions, Hash, :default => lambda { Hash.new }
+  key :versions, Hash, default: -> { Hash.new }
 
   tankit Porthos.config.tanking.index_name, :as => 'Asset' do
     indexes :name

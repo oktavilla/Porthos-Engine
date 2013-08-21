@@ -1,3 +1,3 @@
 class AssetAssociationTemplate < DatumTemplate
-  key :allowed_asset_filetypes, Array, :default => lambda { [] }
+  key :allowed_asset_filetypes, Array, default: -> { [] }
 end

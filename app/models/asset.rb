@@ -1,7 +1,7 @@
 class Asset
   include MongoMapper::Document
   plugin MongoMapper::Plugins::IdentityMap
-  
+
   include Tanker
 
   taggable
@@ -39,36 +39,25 @@ class Asset
     :document => []
   }
 
-  belongs_to :created_by,
-             :class_name => 'User'
+  belongs_to :created_by, class_name: "User"
 
-  scope :is_hidden,  lambda { |hidden|
-    where(:hidden => hidden)
-  }
+  scope :is_hidden, ->(hidden) { where(hidden: hidden) }
 
-  scope :created_by, lambda { |user_id|
-    where(:created_by_id => user_id)
-  }
+  scope :created_by, ->(user_id) { where(created_by_id: user_id) }
 
-  scope :by_type, lambda { |type|
-    where(:_type => type)
-  }
+  scope :by_type, ->(type) { where(_type: type) }
 
-  scope :by_filetype, lambda { |filetype|
-    where(:filetype => filetype)
-  }
+  scope :by_filetype, ->(filetype) { where(filetype: filetype) }
 
-  scope :by_extension, lambda { |extension|
+  scope :by_extension, ->(extension) {
     if extension.is_a?(Array)
       where(:extension.in => extension)
     else
-      where(:extension => extension)
+      where(extension: extension)
     end
   }
 
-  scope :order_by, lambda { |order|
-    sort(order)
-  }
+  scope :order_by, ->(order) { sort(order) }
 
   attr_accessor :file
   validates_presence_of :file, :if => :new_record?

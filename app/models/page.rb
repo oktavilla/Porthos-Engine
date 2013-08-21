@@ -21,20 +21,18 @@ class Page < Section
 
   before_create :move_to_list_bottom
 
-  scope :with_page_template, lambda { |page_template_id|
-    where(:page_template_id => page_template_id)
-  }
+  scope :with_page_template, ->(page_template_id) { where(page_template_id: page_template_id) }
 
-  scope :is_published, lambda { |is_published|
+  scope :is_published, ->(is_published) {
     if Boolean.to_mongo(is_published)
-      where(:published_on.lte => Time.now)
+      where(:published_on.lte => Time.current)
     else
-      where(:published_on => nil)
+      where(published_on: nil)
     end
   }
 
-  scope :include_restricted, lambda { |restricted|
-    where(:$or => [{:restricted => restricted}, { :restricted => false}])
+  scope :include_restricted, ->(restricted) {
+    where(:$or => [{ restricted: restricted }, { restricted: false }])
   }
 
   def section

@@ -54,27 +54,27 @@ class Item
   after_save proc { |page| page.delay.update_tank_indexes }
   after_destroy proc { |page| page.delete_tank_indexes }
 
-  scope :by_class, lambda { |klass_name| where(type: klass_name) }
+  scope :by_class, ->(klass_name) { where(type: klass_name) }
 
-  scope :order_by, lambda { |order_by| sort(order_by) }
+  scope :order_by, ->(order_by) { sort(order_by) }
 
-  scope :published, lambda { where(:published_on.lte => Time.now) }
+  scope :published, -> { where(:published_on.lte => Time.current) }
 
-  scope :unpublished, lambda {
-    where(:$or => [{:published_on => nil}, {:published_on.gt => Time.now}])
+  scope :unpublished, -> {
+    where(:$or => [{ published_on: nil }, { :published_on.gt => Time.current }])
   }
 
-  scope :published_within, lambda { |from, to|
+  scope :published_within, ->(from, to) {
     where(:published_on.gte => from, :published_on.lte => to)
   }
 
-  scope :created_latest, sort(:created_at.desc)
+  scope :created_latest, -> { sort(:created_at.desc) }
 
-  scope :updated_latest, where(:updated_at.gt => :created_at).sort(:updated_at.desc)
+  scope :updated_latest, -> { where(:updated_at.gt => :created_at).sort(:updated_at.desc) }
 
-  scope :created_by, lambda { |user_id| where(:created_by_id => user_id) }
+  scope :created_by, ->(user_id) { where(created_by_id: user_id) }
 
-  scope :updated_by, lambda { |user_id| where(:updated_by_id => user_id) }
+  scope :updated_by, ->(user_id) { where(updated_by_id: user_id) }
 
   class << self
     def contributors

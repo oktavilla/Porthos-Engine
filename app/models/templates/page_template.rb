@@ -6,8 +6,8 @@ class PageTemplate < Template
   key :page_label, String
   key :template_name, String
   key :sortable, SymbolOperator
-  key :allow_categories, Boolean, :default => lambda { false }
-  key :allow_node_placements, Boolean, :default => lambda { false }
+  key :allow_categories, Boolean, default: -> { false }
+  key :allow_node_placements, Boolean, default: -> { false }
 
   def section
     @section ||= Item.where(:page_template_id => self.id, :_type => 'Section').limit(1).first

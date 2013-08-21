@@ -8,7 +8,7 @@ class AssetAssociation < Datum
   key :description, String
   key :author, String
   key :asset_id, ObjectId
-  key :allowed_asset_filetypes, Array, :default => lambda { [] }
+  key :allowed_asset_filetypes, Array, default: -> { [] }
   belongs_to :asset
   belongs_to :display_option
 

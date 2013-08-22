@@ -47,7 +47,13 @@ class Admin::NodesController < ApplicationController
     @node = Node.new(params[:node])
     respond_to do |format|
       if @node.save
-        format.html { redirect_to admin_nodes_path(:nodes => [@node]) }
+        format.html {
+          if @node.resource
+            redirect_to admin_item_path(@node.resource.id)
+          else
+            redirect_to admin_nodes_path(:nodes => [@node])
+          end
+        }
       else
         @resource = @node.resource
         @nodes = [Node.root]
@@ -103,10 +109,13 @@ class Admin::NodesController < ApplicationController
   end
 
   def destroy
-    @node = Node.find(params[:id])
-    @node.destroy
+    node = Node.find(params[:id])
+    node.destroy_children
+    node.destroy_resource if node.resource
+    node.destroy
+
     respond_to do |format|
-      flash[:notice] = "#{@node.name} #{t(:deleted, :scope => [:app, :admin_nodes])}"
+      flash[:notice] = "#{node.name} #{t(:deleted, :scope => [:app, :admin_nodes])}"
       format.html { redirect_to admin_nodes_path }
     end
   end

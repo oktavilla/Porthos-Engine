@@ -47,6 +47,10 @@ class Page < Section
     published? and (node.present? or index_node.present?)
   end
 
+  def node
+    @node ||= Node.where(:resource_type => self.class.model_name, :resource_id => self.id).first
+  end
+
   def index_node
     @index_node ||= Node.where(controller: 'pages', action: 'index', handle: self.page_template.handle)
   end

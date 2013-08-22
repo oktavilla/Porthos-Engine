@@ -80,6 +80,30 @@ class Node
     self.status = 0
   end
 
+  def destroy_children
+    children.each do |node|
+      node.destroy_resource if node.resource
+      node.destroy_children
+      node.destroy
+    end
+  end
+
+  def destroy_resource
+    resource.destroy
+  end
+
+  def page_template
+    @page_template ||= PageTemplate.where(handle: self.handle).limit(1).first
+  end
+
+  def page_template_section
+    @page_template_section ||= page_template.section
+  end
+
+  def root?
+    self == Node.root
+  end
+
   class << self
 
     def for_item(item)

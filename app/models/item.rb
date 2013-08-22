@@ -121,10 +121,10 @@ class Item
   end
 
   def has_url?
-    published? and node.present?
+    published? && node.present?
   end
 
-private
+  private
 
   def sort_data
     self.data.sort_by!(&:position)

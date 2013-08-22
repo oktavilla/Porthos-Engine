@@ -32,7 +32,7 @@ class Admin::ItemsController < ApplicationController
   def show
     @item = Item.find(params[:id])
     respond_to do |format|
-      format.html { render template: (@item.class == Page ? 'admin/items/page' : 'admin/items/section') }
+      format.html { render template: find_show_template(@item) }
     end
   end
 
@@ -57,9 +57,10 @@ class Admin::ItemsController < ApplicationController
 
   def update
     @item = Item.find(params[:id])
-    if @item.update_attributes(params[:item])
+    if ItemUpdater.new(@item, params[:item]).update
       flash[:notice] = t(:saved, :scope => [:app, :admin_items])
     end
+
     respond_with @item, :location => (params[:return_to] || admin_item_path(@item.id))
   end
 
@@ -173,5 +174,16 @@ class Admin::ItemsController < ApplicationController
       options.merge! namespace: current_page_template.handle if current_page_template
       options.merge! params.fetch(:taggings, {})
     end.to_options
+  end
+
+  private
+
+  def find_show_template item
+    templates = {
+      "Page" => "admin/items/page",
+      "Section" => "admin/items/section",
+      "CustomPage" => "admin/items/custom_page"
+    }
+    templates[item.class.model_name]
   end
 end

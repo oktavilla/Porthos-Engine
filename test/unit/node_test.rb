@@ -16,5 +16,16 @@ class NodeTest < ActiveSupport::TestCase
     assert node.hidden?
   end
 
-end
+  test "#destroy_children" do
+    node = FactoryGirl.build :node
 
+    child = stub resource: stub
+    child.expects :destroy_resource
+    child.expects :destroy_children
+    child.expects :destroy
+
+    node.stubs children: [child]
+
+    node.destroy_children
+  end
+end

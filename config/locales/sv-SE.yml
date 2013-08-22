@@ -529,6 +529,10 @@
         edit_data_definitions: Ändra fält
         add_content: Lägg till innehåll
         add_datum: "Lägg till %{label}"
+      custom_page:
+        edit_data_definitions: Ändra fält
+        add_content: Lägg till innehåll
+        add_datum: "Lägg till %{label}"
       details:
         edit_category: Ändra kategori
         choose_category: Välj kategori
@@ -539,6 +543,9 @@
         add_note: Lägg till
       search:
         title: "Sökresultat för ”%{query}”"
+      node_form:
+        shown_in_nav: Syns i navigationen och är tillgänglig på internet
+        not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
     content_templates:
       index:
         title: Innehållstyper

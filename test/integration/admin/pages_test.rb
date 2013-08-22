@@ -67,22 +67,33 @@ class PagesTest < ActiveSupport::IntegrationCase
     assert_equal 'Batman', page.find('h1').text
   end
 
-  test 'updating page details' do
+  test 'updating page and node details' do
     Capybara.using_driver(:webkit) do
+      @page_template.update_attribute :allow_node_placements, true
+      root_node = FactoryGirl.create(:root_node, :handle => @page_template.handle)
       User.delete_all
       login!
       batman = create_page
+
       visit admin_item_path(batman)
+
+      publish
+      choose("node_parent_id_#{root_node.id}")
+      click_button I18n.t(:save)
+
       within '#item_attributes' do
         click_link I18n.t(:edit)
       end
+
       within 'form.edit_item' do
         fill_in 'item_title', :with => 'Robin'
+        fill_in 'item_node_name', :with => "The robin page"
         click_button I18n.t(:save)
       end
 
       assert page_was_saved?
       assert page.find('.header .page_title h1').has_content?('Robin')
+      assert page.find('.navigation').has_content?('The robin page')
     end
   end
 

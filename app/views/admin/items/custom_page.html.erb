@@ -7,7 +7,11 @@
       <a href="#" class="edit_settings toggler action"><span><%=t 'edit' %></span></a>
       <% if @item.node %>
         <%= link_to t(:move), place_admin_node_path(@item.node), class: "action delete" %>
-        <%= link_to t(:destroy), admin_node_path(@item.node), method: :delete, data: { confirm: t(:'app.general.destroy_confirmation', target_name: @item.node.name) }, class: "action delete" %>
+        <% if @item.node.children? %>
+          <%= link_to t(:destroy), confirm_delete_admin_node_path(@item.node), data: { confirm: t(:'app.general.destroy_confirmation', target_name: @item.node.name) }, class: "action delete" %>
+        <% else %>
+          <%= link_to t(:destroy), admin_node_path(@item.node), method: :delete, data: { confirm: t(:'app.general.destroy_confirmation', target_name: @item.node.name) }, class: "action delete" %>
+        <% end %>
       <% else %>
         <%= link_to t(:destroy), admin_item_path(@item.id), method: :delete, data: { confirm: "Är du säker att du vill ta bort sidan. Det går inte att ångra." }, class: 'action delete' %>
       <% end %>

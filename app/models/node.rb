@@ -80,6 +80,10 @@ class Node
     self.status = 0
   end
 
+  def children?
+    children.any?
+  end
+
   def destroy_children
     children.each do |node|
       node.destroy_resource if node.resource

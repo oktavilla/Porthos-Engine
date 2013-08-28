@@ -74,6 +74,31 @@ class NodesTest < ActiveSupport::IntegrationCase
     refute page.find("#content").has_content?(node.name)
   end
 
+  test "deleting a node with child nodes and pages" do
+    parent_page = FactoryGirl.create :page, page_template: @page_template, title: "My page"
+    parent_node = create_node controller: "pages", action: "show", resource: parent_page, name: "My node"
+    child_page = FactoryGirl.create :page, page_template: @page_template, title: "Child page"
+    child_node = create_node controller: "pages", action: "show", resource: child_page, name: "Child node", parent: parent_node
+
+    visit admin_item_path parent_page
+
+    within ".header" do
+      click_link I18n.t(:destroy)
+    end
+
+    assert_equal confirm_delete_admin_node_path(parent_node), current_path
+
+    within "#content" do
+      assert page.has_content? "My node"
+      assert page.has_content? "Child node"
+    end
+
+    click_button I18n.t("admin.nodes.confirm_delete.commit")
+
+    assert_equal admin_nodes_path, current_path
+    assert has_flash_message? I18n.t("app.admin_nodes.deleted")
+  end
+
   test 'toggling a node' do
     new_node = create_node status: -1
     visit admin_nodes_path

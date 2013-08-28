@@ -120,6 +120,10 @@ class Admin::NodesController < ApplicationController
     end
   end
 
+  def confirm_delete
+    @node = Node.find(params[:id])
+  end
+
   def sort
     params[:node].each_with_index do |id, i|
       object_id = BSON::ObjectId.from_string id

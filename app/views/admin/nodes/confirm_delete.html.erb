@@ -1,4 +1,5 @@
-<% @page_class = "layout3" -%> <% @page_id = 'site-structure' -%>
+<% @page_class = "layout3" -%> 
+<% @page_id = 'site-structure' -%>
 <% @page_title = t(".title")  -%>
 <div id="workspace">
   <div class="header">
@@ -6,6 +7,7 @@
   </div>
   <div id="content">
     <div class="inner">
+      <p style="margin-bottom: 2em;">Sidan du är på väg att ta bart har undersidor, om du tar bort sidan kommer även dessa tas bort. Följande sidor kommer tas bort:</p>
       <div id="root">
         <span class="name"><%= @node.name %></span>
       </div>

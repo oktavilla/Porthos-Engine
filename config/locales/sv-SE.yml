@@ -602,8 +602,8 @@
         not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
         restricted: Avstängd, inte tillgänglig på internet
       confirm_delete:
-        title: Följande noder och sidor kommer att raderas
-        commit: OK, jag vill radera noder och sidor
+        title: Är du säker att du vill ta bort sidan?
+        commit: Ja, jag vill ta bort sidorna ovan
   admins: Redaktörer
   save: Spara
   or: eller

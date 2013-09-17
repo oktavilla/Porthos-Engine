@@ -219,6 +219,9 @@ class PagesTest < ActiveSupport::IntegrationCase
       click_link I18n.t(:destroy)
     end
 
+    assert_equal confirm_delete_admin_item_path(a_page), current_path
+    click_button I18n.t("admin.items.confirm_delete.commit")
+
     assert_equal admin_items_path, current_path
     assert has_flash_message?(I18n.t(:'app.admin_general.deleted'))
   end

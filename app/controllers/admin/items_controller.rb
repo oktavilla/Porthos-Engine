@@ -71,6 +71,10 @@ class Admin::ItemsController < ApplicationController
     respond_with @item, :location => admin_items_path(:with_page_template => @item.page_template_id)
   end
 
+  def confirm_delete
+    @item = Item.find(params[:id])
+  end
+
   def toggle
     item = Item.find(params[:id])
     item.toggle!

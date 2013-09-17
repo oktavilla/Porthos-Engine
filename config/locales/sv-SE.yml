@@ -546,6 +546,9 @@
       node_form:
         shown_in_nav: Syns i navigationen och är tillgänglig på internet
         not_shown_in_nav: Syns inte i navigationen, men är tillgänglig på internet
+      confirm_delete:
+        title: Är du säker att du vill ta bort sidan?
+        commit: Ja, jag vill ta bort sidan ovan
     content_templates:
       index:
         title: Innehållstyper

@@ -99,8 +99,10 @@ class PagesTest < ActiveSupport::IntegrationCase
 
   test 'marking a page as restricted' do
     batman = create_page
-    node = Node.create(:controller => 'pages', :action => 'show', :resource => batman, :url => 'the-dark-knight')
+    node = Node.create(:controller => 'pages', :action => 'show', :resource => batman, :url => 'the-dark-knight', :status => -1)
+
     visit admin_item_path(batman)
+
     publish
 
     visit page_path(batman)

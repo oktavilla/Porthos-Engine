@@ -7,7 +7,7 @@
       <p>
         <a href="#" class="toggle_publish_date">Ändra</a>
         eller
-        <%= link_to t('.unpublish'), toggle_admin_item_path(@item.id), :method => :put, :class => 'new' %></p>
+        <%= link_to t('.unpublish'), toggle_admin_item_path(@item.id), :method => :put, :class => "new" %></p>
       </p>
       <% if @item.can_have_a_node? %>
         <p><%= link_to 'Placera i navigationen', new_admin_node_path(:resource_id => @item.id) %></p>
@@ -15,7 +15,7 @@
     <% else %>
       <p><strong><%=t '.not_published' %></strong></p>
       <p><a href="#" class="toggle_publish_date">Välj ett publiceringsdatum</a> eller
-      <%= link_to t('.publish_now'), publish_admin_item_path(@item.id), :method => :put, :class => 'new' %></p>
+      <%= link_to t('.publish_now'), toggle_admin_item_path(@item.id), :method => :put, :class => "new" %></p>
     <% end %>
     </div>
     <%= form_for [:admin, @item], :as => :item, :url => admin_item_path(@item), :html => { :id => 'page_published_on_form', :style => 'display:none;' } do |f| -%>

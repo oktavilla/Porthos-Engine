@@ -31,6 +31,10 @@ class Section < Item
     end
   end
 
+  def page_template_node
+    @node ||= page_template.node
+  end
+
   def can_have_a_node?
     false
   end

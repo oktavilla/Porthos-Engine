@@ -55,6 +55,7 @@ private
 
   def create_a_field
     create_page
+
     within '.tools' do
       click_link I18n.t(:'admin.items.section.edit_data_definitions')
     end

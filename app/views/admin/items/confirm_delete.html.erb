@@ -1,0 +1,19 @@
+<% @page_class = "layout3" -%>
+<% @page_id = 'site-structure' -%>
+<% @page_title = t(".title")  -%>
+<div id="workspace">
+  <div class="header">
+    <h1><%= t(".title")  %></h1>
+  </div>
+  <div id="content">
+    <div class="inner">
+      <p style="margin-bottom: 2em;">Följande sidor kommer tas bort:</p>
+      <div id="root">
+        <span class="name"><%= @item.title %></span>
+      </div>
+      <div class="submit">
+        <%= button_to t(".commit"), admin_item_path(@item), method: :delete %>
+      </div>
+    </div>
+  </div>
+</div>

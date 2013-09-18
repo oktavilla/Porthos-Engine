@@ -1,0 +1,37 @@
+<% @page_class = "layout3" -%>
+<% @page_id = 'site-structure' -%>
+<% @page_title = t(".title")  -%>
+<div id="workspace">
+  <div class="header">
+    <h1><%= t(".title")  %></h1>
+  </div>
+  <div id="content">
+    <div class="inner">
+      <% if @node.children.any? %>
+        <p style="margin-bottom: 2em;">Sidan du är på väg att ta bort har undersidor, om du tar bort sidan kommer även dessa tas bort. Följande sidor kommer tas bort:</p>
+      <% end %>
+      <div id="root">
+        <span class="name"><%= @node.name %></span>
+      </div>
+      <%= nested_list_of @node.children, { allow_inactive: true, expand_all: true }, id: "nodes" do |node| %>
+        <div class="<%= node.access_status %>">
+          <span class="name"><%= node.name %></span>
+          <span class="edit">
+            <% if node.controller == 'pages' && node.action == 'index' -%>
+              <%= link_to "#{t(:show_all)}", admin_items_path(with_page_template: PageTemplate.where(handle: node.handle).first), class: 'edit' %>
+              <% if node.page_template && node.page_template_section %>
+                <%= link_to t(:show), admin_item_path(node.page_template_section), class: 'edit' %>
+              <% end %>
+            <% elsif node.controller == 'pages' and node.action == 'show' and node.resource.present? -%>
+              <%= link_to t(:show), admin_item_path(node.resource), class: 'edit' %>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+
+      <div class="submit">
+        <%= button_to t(".commit"), admin_node_path(@node), method: :delete %>
+      </div>
+    </div>
+  </div>
+</div>

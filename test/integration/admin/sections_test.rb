@@ -26,6 +26,27 @@ class SectionsTest < ActiveSupport::IntegrationCase
     end
   end
 
+  test 'updating section and node details' do
+    Capybara.using_driver(:webkit) do
+      FactoryGirl.create(:node, :handle => @page_template.handle)
+      login!
+      create_section
+
+      within '#item_attributes' do
+        click_link I18n.t(:edit)
+      end
+
+      within 'form.edit_item' do
+        fill_in 'item_title', :with => 'All pages'
+        fill_in 'item_node_name', :with => "The pages page"
+        click_button I18n.t(:save)
+      end
+
+      assert page.find('.header .page_title h1').has_content?('All pages')
+      assert page.find('.navigation').has_content?('The pages page')
+    end
+  end
+
 protected
 
   def create_section

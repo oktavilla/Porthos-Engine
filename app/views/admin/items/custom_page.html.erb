@@ -16,7 +16,6 @@
         <%= link_to t(:destroy), confirm_delete_admin_item_path(@item.id), class: "action delete" %>
       <% end %>
     </span>
-    <div class="parents"><%= link_to @item.page_template.label, admin_items_path(with_page_template: @item.page_template) %></div>
     <div class="page_title">
       <h1><%= @item.title %></h1>
     </div>
@@ -26,6 +25,7 @@
       <span class="value"><%= @item.node.name %></span>
     </div>
     <% end %>
+
     <% if @item.has_url? -%>
     <div class="uri">
       <span class="key">Adress:</span>
@@ -33,27 +33,23 @@
       <span class="value"><%= link_to(url, url) %></span>
       <% end %>
     </div>
-    <% end %>
-  </div>
-
+    <% end %> </div>
   <div class="header" style="display:none;">
     <%= form_for [:admin, @item], as: :item, url: admin_item_path(@item.id) do |f| %>
       <%= render partial: 'admin/shared/error_messages', locals: { object: @item } %>
-      <%= render partial: 'admin/shared/error_messages', locals: { object: @item.node } %>
-      <label for="item_title" class="first_label"><%= @item.page_template.page_label.present? ? @item.page_template.page_label : "Titel" %></label>
+      <label for="item_title" class="first_label"><%= Item.human_attribute_name(:title) %></label>
       <div class="fullwidth">
         <%= f.text_field :title, :class => 'title' %>
       </div>
-      <% if @item.instruction_body.present? %>
-      <p class="instructions"><%= @item.instruction_body %></p>
-      <% end %>
+      <label for="item_template_name">
+        <%= @item.class.human_attribute_name(:template_name) %>
+        <%= f.select :template_name, PageFileTemplate.all.collect { |t| [t.name.titlecase, t.handle] } %>
+      </label>
 
-      <% if !@item.node %>
-        <div class="uri_field">
-          <label for="item_uri">Adress:</label>
-          <%= page_url_parent(@item) %>
-          <%= f.text_field :uri %>
-        </div>
+      <% if @item.node.present? %>
+        <%= f.fields_for @item.node do |node_fields| %>
+          <%= render "node_form", f: node_fields -%>
+        <% end %>
       <% end %>
 
       <div class="restricted_field" style="margin-top: 1em;">
@@ -62,13 +58,6 @@
           Kräv inlogging för att se denna sida
         </label>
       </div>
-
-      <% if @item.node %>
-        <%= f.fields_for @item.node do |node_fields| %>
-          <%= render "node_form", f: node_fields -%>
-        <% end %>
-      <% end %>
-
       <div class="submit">
         <input type="submit" value="<%=t :save %>">
         <%=t :or %>
@@ -76,8 +65,13 @@
       </div>
     <% end %>
   </div>
+  <div class="tools">
+    <div class="add">
+      <%= link_to t('.edit_data_definitions'), admin_item_data_path(@item) %>
+    </div>
+  </div>
   <div id="content" class="datums">
-  <% @item.data.sort_by { |d| @item.page_template.datum_templates[d.handle].position }.each_with_index do |datum, index| %>
+  <% @item.data.each_with_index do |datum, index| %>
     <%= render "content", datum: datum, index: index, item: @item %>
   <% end %>
   </div>

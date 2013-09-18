@@ -7,7 +7,7 @@
     <% end -%>
   <% end %>
 
-  <% cache ['v1', node, 'admin-list'] do %>
+  <% cache ['v2', node, 'admin-list'] do %>
     <span class="name"><%= node.name %></span>
 
     <% if node.restricted? -%>

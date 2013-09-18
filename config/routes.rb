@@ -36,11 +36,12 @@ Rails.application.routes.draw do
 
     resources :nodes do
       member do
-        get 'place'
-        put 'toggle'
+        get "place"
+        put "toggle"
+        get "confirm_delete"
       end
       collection do
-        put 'sort'
+        put "sort"
       end
     end
 
@@ -72,20 +73,21 @@ Rails.application.routes.draw do
 
     resources :items do
       collection do
-        get 'search'
-        put 'sort'
+        get "search"
+        put "sort"
       end
       member do
-        put 'toggle'
-        put 'publish'
+        put "toggle"
+        put "publish"
+        get "confirm_delete"
       end
       resources :data do
         collection do
-          put 'sort'
+          put "sort"
         end
         member do
-          put 'toggle'
-          get 'settings'
+          put "toggle"
+          get "settings"
         end
       end
     end

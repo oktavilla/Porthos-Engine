@@ -1,0 +1,26 @@
+<div class="node_fields" style="margin-top: 1em;">
+  <%= f.label :name %>
+  <%= f.text_field :name, size: 50 %>
+
+  <div class="uri_field">
+    <label for="item_node_slug">Adress:</label>
+    <%= f.object.parent ? node_url(f.object.parent) : base_url %>/ <%= f.text_field :slug %>
+  </div>
+
+  <% if @item.published_on %>
+    <ul class="multiple_choice">
+      <li>
+        <label for="shown_in_nav">
+          <%= f.radio_button :status, 1, :id => 'shown_in_nav' %>
+          <%= t(".shown_in_nav")  %>
+        </label>
+      </li>
+      <li>
+        <label for="not_shown_in_nav">
+          <%= f.radio_button :status, 0, :id => 'not_shown_in_nav' %>
+          <%= t(".not_shown_in_nav")  %>
+        </label>
+      </li>
+    </ul>
+  <% end %>
+</div>

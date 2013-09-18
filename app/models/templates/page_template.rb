@@ -13,6 +13,10 @@ class PageTemplate < Template
     @section ||= Item.where(:page_template_id => self.id, :_type => 'Section').limit(1).first
   end
 
+  def node
+    @node ||= Node.where(handle: self.handle, controller: "pages", action: "index").limit(1).first
+  end
+
   validates_presence_of :handle
   validates_uniqueness_of :handle,
                           :case_sensitive => false,

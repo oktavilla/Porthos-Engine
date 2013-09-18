@@ -10,7 +10,7 @@ class Node
   key :url, String
   key :controller, String
   key :action, String
-  key :status, Integer
+  key :status, Integer, default: 1
   key :restricted, Boolean, default: -> { false }
   key :position, Integer
 
@@ -78,6 +78,34 @@ class Node
 
   def activate
     self.status = 0
+  end
+
+  def children?
+    children.any?
+  end
+
+  def destroy_children
+    children.each do |node|
+      node.destroy_resource if node.resource
+      node.destroy_children
+      node.destroy
+    end
+  end
+
+  def destroy_resource
+    resource.destroy
+  end
+
+  def page_template
+    @page_template ||= PageTemplate.where(handle: self.handle).limit(1).first
+  end
+
+  def page_template_section
+    @page_template_section ||= page_template.section
+  end
+
+  def root?
+    self == Node.root
   end
 
   class << self

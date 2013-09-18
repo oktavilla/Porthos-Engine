@@ -17,7 +17,7 @@ class NodesTest < ActiveSupport::IntegrationCase
     choose('not_shown_in_nav')
     choose("node_parent_id_#{@root_node.id}")
     click_button I18n.t(:save)
-    assert page.find("#nodes li").has_content?('My page'), 'Should see node whitin nodes list'
+    assert page.find(".navigation").has_content?('My page'), 'Should see node whitin nodes list'
   end
 
   test 'adding a node pointing to a page template' do
@@ -42,14 +42,14 @@ class NodesTest < ActiveSupport::IntegrationCase
   end
 
   test 'listing nodes' do
-    new_node = create_page_node
+    new_node = create_node
     visit admin_nodes_path
     assert page.find("#root").has_content?('Start')
     assert page.find("#nodes li").has_content?(new_node.name)
   end
 
   test 'editing a node' do
-    new_node = create_page_node
+    new_node = create_node
     visit admin_nodes_path
     within("#node_#{new_node.id}") do
       click_link I18n.t(:edit)
@@ -62,16 +62,45 @@ class NodesTest < ActiveSupport::IntegrationCase
   end
 
   test 'deleting a node' do
-    new_node = create_page_node
+    node = create_node
+    child_node = create_node(:parent => node, :name => "The child node")
+
     visit admin_nodes_path
-    within("#node_#{new_node.id}") do
+
+    within("#node_#{node.id}") do
       click_link I18n.t(:destroy)
     end
-    refute page.find("#content").has_content?(new_node.name), "Should not see delete row name"
+
+    refute page.find("#content").has_content?(node.name)
+  end
+
+  test "deleting a node with child nodes and pages" do
+    parent_page = FactoryGirl.create :page, page_template: @page_template, title: "My page"
+    parent_node = create_node controller: "pages", action: "show", resource: parent_page, name: "My node"
+    child_page = FactoryGirl.create :page, page_template: @page_template, title: "Child page"
+    child_node = create_node controller: "pages", action: "show", resource: child_page, name: "Child node", parent: parent_node
+
+    visit admin_item_path parent_page
+
+    within ".header" do
+      click_link I18n.t(:destroy)
+    end
+
+    assert_equal confirm_delete_admin_node_path(parent_node), current_path
+
+    within "#content" do
+      assert page.has_content? "My node"
+      assert page.has_content? "Child node"
+    end
+
+    click_button I18n.t("admin.nodes.confirm_delete.commit")
+
+    assert_equal admin_nodes_path, current_path
+    assert has_flash_message? I18n.t("app.admin_nodes.deleted")
   end
 
   test 'toggling a node' do
-    new_node = create_page_node status: -1
+    new_node = create_node status: -1
     visit admin_nodes_path
     within("#node_#{new_node.id}") do
       click_link I18n.t(:edit)
@@ -86,12 +115,12 @@ class NodesTest < ActiveSupport::IntegrationCase
 
   protected
 
-  def create_page_node attrs = {}
-    page = FactoryGirl.create(:page, :page_template_id => @page_template.id)
+  def create_node attrs = {}
     node_attrs = {
       :name => 'Node',
       :parent => @root_node,
-      :resource => page
+      :controller => "controller",
+      :action => "action"
     }.merge(attrs)
 
     FactoryGirl.create :node, node_attrs

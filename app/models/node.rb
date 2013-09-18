@@ -10,8 +10,8 @@ class Node
   key :url, String
   key :controller, String
   key :action, String
-  key :status, Integer, :default  => 1
-  key :restricted, Boolean, :default -> { false }
+  key :status, Integer, default: 1
+  key :restricted, Boolean, default: -> { false }
   key :position, Integer
 
   key :resource_id, ObjectId

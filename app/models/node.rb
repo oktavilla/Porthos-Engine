@@ -18,6 +18,8 @@ class Node
   key :resource_type, String
   key :handle, String
 
+  timestamps!
+
   belongs_to :resource,
              :polymorphic => true
 

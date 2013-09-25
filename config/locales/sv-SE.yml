@@ -472,7 +472,8 @@
         date: Datum
         boolean: Ja/Nej
       asset_association:
-        edit_asset: Ändra filen
+        edit_asset: Ändra filinformation
+        change_asset: Välj ny fil
         choose_asset: Välj fil
         remove: Ta bort
       asset_association_form:
@@ -523,16 +524,13 @@
         add_section: Lägg till indexsida
       page:
         choose: Välj
-        add_content: Lägg till innehåll
-        add_datum: "Lägg till %{label}"
       section:
         edit_data_definitions: Ändra fält
-        add_content: Lägg till innehåll
-        add_datum: "Lägg till %{label}"
       custom_page:
         edit_data_definitions: Ändra fält
-        add_content: Lägg till innehåll
+      content:
         add_datum: "Lägg till %{label}"
+        add_content: Lägg till innehåll
       details:
         edit_category: Ändra kategori
         choose_category: Välj kategori

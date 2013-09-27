@@ -1,5 +1,5 @@
 #= require rails
-#= require chosen
+#= require chosen.jquery
 #= require ./lib/datetimepicker
 #= require admin/editor
 #= require admin/helpers

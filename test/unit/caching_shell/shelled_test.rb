@@ -33,6 +33,10 @@ describe "Shelled" do
     Shelled.after_save_callbacks.must_include :touch_shell
   end
 
+  it "should run touch_shell after destroy" do
+    Shelled.after_destroy_callbacks.must_include :touch_shell
+  end
+
   it "touches the shell" do
     shell = Shelled.shell
     shell.expects(:touch).once

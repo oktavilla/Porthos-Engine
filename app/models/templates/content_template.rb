@@ -68,7 +68,7 @@ private
       '$set' => {
         'datum_templates.$.template_name' => self.template_name
       }
-    }, safe: true, multiple: true)
+    }, w: 1, multiple: true)
 
     concerned_items.each do |item|
       find_matching_field_sets_in_item(item).each do |field_set|

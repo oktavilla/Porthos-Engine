@@ -17,10 +17,6 @@ module Porthos
       app.middleware.use Porthos::Middleware::RedirectApp
     end
 
-    initializer "porthos.routing_cache" do |app|
-      app.middleware.insert_before ::MongoMapper::Middleware::IdentityMap, Porthos::Middleware::RoutingCache
-    end
-
     initializer "porthos.caching_shells" do |app|
       app.middleware.use Porthos::Middleware::ShellCache
     end
@@ -44,6 +40,7 @@ module Porthos
 
     initializer 'porthos.mongo_mapper' do |app|
       ActiveSupport.on_load :mongo_mapper do
+        ::MongoMapper::Plugins::IdentityMap.enabled = true
         ::SymbolOperator.send :include, Porthos::MongoMapper::Extensions::SymbolOperator
         ::MongoMapper::Document.plugin ActiveModel::Observing
         ::MongoMapper::Document.plugin Porthos::MongoMapper::Plugins::ActsAsUri

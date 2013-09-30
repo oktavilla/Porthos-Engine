@@ -2,8 +2,13 @@ require_relative '../test_helper'
 require 'launchy'
 class PublicPagesTest < ActiveSupport::IntegrationCase
   setup do
+    Capybara.current_driver = :webkit
     @page_template = FactoryGirl.create(:hero_page_template)
     @root_node = FactoryGirl.create(:root_node)
+  end
+
+  teardown do
+    Capybara.current_driver = nil
   end
 
   test 'rendering a index node by url' do
@@ -34,19 +39,17 @@ class PublicPagesTest < ActiveSupport::IntegrationCase
 
   test 'visiting a restricted page' do
     my_page = create_restricted_page
-    visit page_path(my_page)
+    visit "/batman"
 
     assert_equal admin_login_path, current_path
   end
 
   test 'visiting a restricted page when logged in' do
-    Capybara.using_driver(:webkit) do
-      login!
-      my_page = create_restricted_page
-      visit page_path(my_page)
+    my_page = create_restricted_page
+    login!
+    visit "/batman"
 
-      assert_equal page_path(my_page), current_path
-    end
+    assert_equal "/batman", current_path
   end
 
 private

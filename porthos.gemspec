@@ -25,10 +25,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-rails'
 
   # Mongo
-  s.add_dependency 'bson', '~> 1.7.0'
-  s.add_dependency 'bson_ext', '~> 1.7.0'
-  s.add_dependency 'mongo_mapper', '~> 0.11'
-  s.add_dependency 'mongo_mapper_tree', '~> 1.0.0'
+  s.add_dependency 'bson', '~> 1.9.2'
+  s.add_dependency 'bson_ext', '~> 1.9.2'
+  s.add_dependency 'mongo_mapper', '~> 0.13.0.beta2'
+  s.add_dependency 'mongo_mapper_tree', '~> 1.1.0'
   s.add_dependency 'mm-multi-parameter-attributes'
 
   # Authentication

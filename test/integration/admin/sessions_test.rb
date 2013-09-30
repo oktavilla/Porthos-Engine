@@ -34,14 +34,17 @@ class SessionsTest < ActiveSupport::IntegrationCase
   end
 
   test 'login with invalid credentials' do
+    logout!
     visit admin_login_path
+
     fill_in User.human_attribute_name('username'), :with => 'wrong'
 
     click_button I18n.t(:'admin.sessions.new.login')
 
-    assert_equal admin_login_path, current_path
+    assert has_content?(I18n.t(:'admin.sessions.failed')), "Expected to show failure flash message"
 
-    assert has_content?(I18n.t(:'admin.sessions.failed')), "Expected to show flash message"
+    visit admin_root_path
+    assert_equal admin_login_path, current_path
   end
 
   test 'visiting the admin root when signed in' do

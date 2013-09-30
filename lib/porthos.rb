@@ -1,3 +1,4 @@
+require "sass"
 require 'bcrypt'
 require 'warden'
 require 'resizor'

@@ -2,8 +2,13 @@ require_relative '../../test_helper'
 
 class DatumTemplatesTest < ActiveSupport::IntegrationCase
   setup do
+    Capybara.current_driver = :webkit
     login!
     @page_template = FactoryGirl.create(:page_template)
+  end
+
+  teardown do
+    Capybara.current_driver = nil
   end
 
   # TODO: Add tests for the different kinds of datum_templates and their forms

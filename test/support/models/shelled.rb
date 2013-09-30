@@ -12,11 +12,19 @@ module StoreCallbacks
     end
 
     def after_touch method
-      after_save_callbacks << method
+      after_touch_callbacks << method
     end
 
     def after_touch_callbacks
       @after_touch_callbacks ||= []
+    end
+
+    def after_destroy method
+      after_destroy_callbacks << method
+    end
+
+    def after_destroy_callbacks
+      @after_destroy_callbacks ||= []
     end
   end
 

@@ -5,6 +5,7 @@ module CachingShell
     included do
       after_save :touch_shell
       after_touch :touch_shell
+      after_destroy :touch_shell
     end
 
     def shell

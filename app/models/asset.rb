@@ -62,7 +62,7 @@ class Asset
   attr_accessor :file
   validates_presence_of :file, :if => :new_record?
 
-  before_validation :process, :if => :new_record?
+  before_validation :process
   after_destroy :cleanup
 
   after_save proc { |asset| asset.delay.update_tank_indexes }
@@ -131,13 +131,17 @@ class Asset
     end
   end
 
-protected
+  protected
 
-  # before validation on create
   def process
-    extract_attributes_from_file
-    ensure_unique_name
-    store
+    if file.present?
+      extract_attributes_from_file
+      ensure_unique_name
+
+      cleanup unless new_record?
+
+      store
+    end
   end
 
   def extract_attributes_from_file

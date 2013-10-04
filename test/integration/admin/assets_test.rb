@@ -99,4 +99,33 @@ class AssetsTest < ActiveSupport::IntegrationCase
       assert assets_list.has_content?(asset3.title), 'Should display assets3 in the assets list'
     end
   end
+
+
+  test 'updating a image assets image file' do
+    original_resizor_id = 123
+    stub_resizor_post "original_image.jpg", original_resizor_id
+    original_image = new_tempfile "image", "original_image.jpg"
+    asset = FactoryGirl.create :image_asset, :file => original_image
+    stub_resizor_delete original_resizor_id
+
+    new_resizor_id = 543
+    new_image = new_tempfile "image"
+    stub_resizor_post "image.jpg", new_resizor_id
+
+    visit edit_admin_asset_path(asset)
+    assert page_has_image? "#{original_resizor_id}.jpg"
+
+    attach_file 'asset_file', stub_file_path("image.jpg")
+    click_button I18n.t(:save)
+
+    assert page_has_image? "#{new_resizor_id}.jpg"
+  end
+
+  private
+
+  def page_has_image? image_name
+    within ".ImageAsset" do
+      page.has_xpath?("//img[contains(@src, \"#{image_name}\")]")
+    end
+  end
 end

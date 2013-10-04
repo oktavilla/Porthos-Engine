@@ -46,6 +46,23 @@ class AssetTest < ActiveSupport::TestCase
       @asset.destroy
       assert_requested :delete, "http://#{Porthos.s3_storage.bucket_name}.s3.amazonaws.com/#{@asset.full_name}?"
     end
+
+    context "updating" do
+      should "cleanup and save new file if file attribute is present" do
+        @asset.expects :store
+        @asset.expects :cleanup
+
+        @asset.update_attributes file: new_tempfile('text')
+      end
+
+      should "not touch stored file if file attribute is empty" do
+        @asset.reload
+        @asset.expects(:store).never
+        @asset.expects(:cleanup).never
+
+        @asset.update_attributes title: "A file"
+      end
+    end
   end
 
   context 'the Asset class' do

@@ -1,5 +1,5 @@
 module PorthosAssetTestHelpers
-  def new_tempfile(type = 'image')
+  def new_tempfile(type = 'image', filename = nil)
     file = case type
     when 'image' then 'image.jpg'
     when 'text'  then 'page.txt'
@@ -7,7 +7,7 @@ module PorthosAssetTestHelpers
     tempfile = Tempfile.new(Time.now.to_s)
     tempfile.write IO.read(stub_file_path(file))
     tempfile.rewind
-    uploaded_file = ActionDispatch::Http::UploadedFile.new(:filename => file, :tempfile => tempfile)
+    uploaded_file = ActionDispatch::Http::UploadedFile.new(:filename => (filename || file), :tempfile => tempfile)
     uploaded_file
   end
 
@@ -16,14 +16,27 @@ module PorthosAssetTestHelpers
     File.join(path, filename)
   end
 
-  def stub_resizor_post(filename = 'image.jpg')
+  def stub_resizor_post(filename = 'image.jpg', returned_id = 1)
+    asset_response = {
+      asset: {
+        id: returned_id,
+        name: "image",
+        extension: "jpg",
+        mime_type: "image/jpeg",
+        height: 500,
+        width: 332,
+        file_size: 666,
+        created_at: "2010-10-23T13:07:25Z"
+      }
+    }
+
     stub_http_request(:post, "https://resizor.com:443/assets.json").with { |request|
       request.body.include?("Content-Disposition: form-data; name=\"file\"; filename=\"#{filename}")
-    }.to_return(:status => 201, :body => '{"asset": { "id":1, "name":"i", "extension":"jpg", "mime_type":"image/jpeg", "height":500, "width":332, "file_size":666, "created_at":"2010-10-23T13:07:25Z"}}')
+    }.to_return :status => 201, :body => asset_response.to_json
   end
 
-  def stub_resizor_delete
-    stub_http_request(:delete, /https\:\/\/resizor.com:443\/assets\/1.json\?api_key=/).to_return(:status => 200)
+  def stub_resizor_delete resizor_id = 1
+    stub_http_request(:delete, /https\:\/\/resizor.com:443\/assets\/#{resizor_id}.json\?api_key=/).to_return(:status => 200)
   end
 
   def stub_s3_put

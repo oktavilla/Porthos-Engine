@@ -25,6 +25,11 @@
           <div class="fullwidth"><%= f.text_field "reference_number", :size => 50 %></div>
           <label for="asset_tag_names">Nyckelord <span class="form_help">dela flera nyckelord med mellanslag</span></label>
           <div class="fullwidth"><%= f.text_field :tag_names, :class => 'asset_tags', :size => 50 %></div>
+
+          <% if @asset.is_a? ImageAsset %>
+            <label for="asset_file">Ändra bildfil</label>
+            <%= f.file_field :file, size: 15, accept: "image/*" %>
+          <% end %>
         </fieldset>
         <fieldset class="submit">
           <%= submit_tag I18n.t(:save) %> <%= I18n.t(:or) %> <%= link_to I18n.t(:cancel), previous_view_path(admin_assets_path) %>
@@ -85,7 +90,13 @@
         <h2>Används på:</h2>
         <ul>
         <% @asset.usages.each do |usage| %>
-          <li><%= link_to usage.title, admin_item_path(usage) %></li>
+          <li>
+            <% if usage.is_a?(Item) %>
+              <%= link_to usage.title, admin_item_path(usage) %>
+            <% else %>
+              <%= link_to usage.name, [:admin, usage] %>
+            <% end %>
+          </li>
         <% end %>
         </ul>
       </div>

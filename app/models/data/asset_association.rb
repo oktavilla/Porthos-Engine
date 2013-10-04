@@ -87,14 +87,15 @@ class AssetAssociation < Datum
 
   def notify_asset
     if changes.include?(:asset_id)
-      unless asset_id_was.nil?
-        if old_asset = Asset.find(asset_id_was)
-          old_asset.remove_usage(self)
+      if old_asset = Asset.find(asset_id_was)
+        old_asset.remove_usage _root_document, self.id
+      end
+
+      if asset_id.present?
+        if new_asset = Asset.find(asset_id)
+          new_asset.add_usage _root_document, self.id
         end
       end
-      Asset.find(asset_id).tap do |new_asset|
-        new_asset.add_usage(self) if new_asset
-      end if asset_id.present?
     end
   end
 

@@ -88,25 +88,19 @@ class Asset
   end
 
   def usages
-    @usages ||= _usages.map do |u|
-      u.except('container_id')
-    end.uniq.collect { |u| u['usage_type'].constantize.find(u['usage_id']) }
+    @usages ||= AssetUsages.new(self)
   end
 
-  def remove_usage(association)
-    usage = usage_from_association(association)
-    if _usages.include?(usage)
-      _usages.reject! { |u| u == usage }
-      save
-    end
+  def remove_usage object, context
+    usages.remove object, context
   end
 
-  def add_usage(association)
-    usage = usage_from_association(association)
-    unless _usages.include?(usage)
-      _usages << usage
-      save
-    end
+  def add_usage object, context
+    usages.add object, context
+  end
+
+  def touch_usages
+    usages.each &:touch
   end
 
   class << self
@@ -172,13 +166,4 @@ class Asset
   def cleanup
     Porthos.s3_storage.destroy(full_name)
   end
-
-  def usage_from_association(association)
-    {
-      'container_id' => association.id,
-      'usage_type' => association._root_document.class.model_name,
-      'usage_id' => association._root_document.id.to_s
-    }
-  end
-
 end

@@ -95,6 +95,7 @@ class Admin::AssetsController < ApplicationController
   def update
     @asset = Asset.find(params[:id])
     if @asset.update_attributes(params[:asset])
+      @asset.touch_usages
       flash[:notice] = "#{@asset.full_name} #{t(:saved, :scope => [:app, :admin_general])}"
     end
     respond_with @asset, :location => (params[:return_to] || edit_admin_asset_url(@asset))

@@ -90,7 +90,13 @@
         <h2>Används på:</h2>
         <ul>
         <% @asset.usages.each do |usage| %>
-          <li><%= link_to usage.title, admin_item_path(usage) %></li>
+          <li>
+            <% if usage.is_a?(Item) %>
+              <%= link_to usage.title, admin_item_path(usage) %>
+            <% else %>
+              <%= link_to usage.name, [:admin, usage] %>
+            <% end %>
+          </li>
         <% end %>
         </ul>
       </div>

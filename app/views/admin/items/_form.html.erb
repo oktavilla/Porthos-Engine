@@ -11,7 +11,7 @@
     <div class="fullwidth"><%= f.text_field :title, :class => "title" %></div>
 
     <%= f.label :template_name %>
-    <%= f.select :template_name, PageFileTemplate.all.collect { |t| [t.name.titlecase, t.handle] } %>
+    <%= f.select :template_name, PageFileTemplate.all.sort_by(&:name).map { |t| [t.name.titlecase, t.handle] }, {}, class: "choose_me" %>
 
     <div class="submit">
       <%= f.submit t(:save), :class => 'commit' %> eller <%= link_to t(:cancel), admin_items_path(type: @item.class.model_name) %>

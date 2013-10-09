@@ -26,7 +26,7 @@ class Admin::DataController < ApplicationController
     if @item.save
       flash[:notice] = t(:saved, :scope => [:app, :admin_general])
     end
-    respond_with(@datum, :location => admin_item_path(@item, :anchor => "datum_#{@datum.id}_edit"))
+    respond_with(@datum, location: params[:return_to] || admin_item_path(@item, :anchor => "datum_#{@datum.id}_edit"))
   end
 
   def edit
@@ -40,7 +40,7 @@ class Admin::DataController < ApplicationController
       if @datum.update_attributes(params[:datum])
         format.html do
           flash[:notice] = t(:saved, :scope => [:app, :admin_items])
-          redirect_to admin_item_path(@item, :anchor => "datum_#{@datum.id}")
+          redirect_to params[:return_to] || admin_item_path(@item, :anchor => "datum_#{@datum.id}")
         end
         format.json { render :json => @datum.to_json, :status => :ok }
       else

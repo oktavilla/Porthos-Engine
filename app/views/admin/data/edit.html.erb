@@ -6,6 +6,7 @@
   </div>
   <div id="content">
     <%= form_for [:admin, @item, @datum], as: :datum, url: admin_item_datum_path(@datum, item_id: @item) do |f| %>
+      <%= hidden_field_tag :return_to, admin_item_data_path(@item) %>
       <%= render 'admin/shared/error_messages', :object => f.object %>
       <%= render 'form', :f => f %>
       <% begin %>

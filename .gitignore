@@ -9,3 +9,4 @@ config/environment.rb
 .sass-cache
 coverage
 *.gem
+bin/
